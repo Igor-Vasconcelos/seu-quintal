@@ -1,8 +1,8 @@
 export const guias = [
   {
     id: "horta",
-    titulo: "Horta e pomar",
-    descricao: "Comece observando onde bate sol e onde é fácil levar água. Use o calendário para escolher o que plantar e registre no planejador o espaço disponível para vasos, canteiros e frutíferas.",
+    titulo: "Horta em pequenos espaços",
+    descricao: "Encontre opções de cultivo para a sua janela, varanda ou quintal.",
     fonte: "Horta em pequenos espaços · Embrapa",
     url: "https://www.infoteca.cnptia.embrapa.br/handle/doc/958531",
   },
@@ -22,7 +22,7 @@ export const guias = [
   },
   {
     id: "ferramentas",
-    titulo: "Ferramentas",
+    titulo: "Ferramentas e irrigação",
     descricao: "Uma pá de mão ajuda a mexer a terra em vasos. Um regador com crivo facilita distribuir a água em mudas. Escolha as ferramentas de acordo com as tarefas e o tamanho da horta.",
     fonte: "Horta em pequenos espaços · Embrapa",
     url: "https://www.infoteca.cnptia.embrapa.br/handle/doc/750396",
