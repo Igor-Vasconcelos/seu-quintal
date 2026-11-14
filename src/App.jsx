@@ -167,14 +167,16 @@ export default function App() {
       </CaixaDialogo>}
 
       {dialogo === "creditos" && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirDialogo(null)}>
-        <p>As quatro imagens dos cartões dos guias foram geradas por IA. O checklist de compostagem também inclui fotos do Wikimedia Commons com créditos e licenças junto a cada foto.</p>
+        <p>As imagens dos cartões da página inicial foram geradas por IA. Os guias de horta e de compostagem também incluem fotos do Wikimedia Commons, com créditos e licenças nos próprios guias.</p>
       </CaixaDialogo>}
 
       {dialogo?.titulo && <CaixaDialogo titulo={dialogo.titulo} fechar={() => definirDialogo(null)}>
-        <img className="foto-dialogo" src={`./imagens/${dialogo.id}.webp`} width="792" height="396" alt="" />
-        <p>{dialogo.descricao}</p>
-        {ConteudoGuia && <ConteudoGuia />}
-        <a className="link-fonte" href={dialogo.url} target="_blank" rel="noreferrer">{dialogo.fonte}</a>
+        {dialogo.id !== "horta" && <>
+          <img className="foto-dialogo" src={`./imagens/${dialogo.id}.webp`} width="792" height="396" alt="" />
+          <p>{dialogo.descricao}</p>
+        </>}
+        {ConteudoGuia && <ConteudoGuia guia={dialogo} />}
+        {dialogo.id !== "horta" && <a className="link-fonte" href={dialogo.url} target="_blank" rel="noreferrer">{dialogo.fonte}</a>}
       </CaixaDialogo>}
     </div>
   );

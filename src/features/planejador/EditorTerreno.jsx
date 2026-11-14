@@ -2,65 +2,113 @@ import { useState } from "react";
 import { cabeNoTerreno, formatarMedida, lerMedida, sobrepoe } from "./geometria.js";
 import Planta from "./Planta.jsx";
 
+const camposIniciais = { x: "0", y: "0", largura: "", comprimento: "" };
+const medidaParaCampo = (valor) => String(valor).replace(".", ",");
+
 export default function EditorTerreno({ terreno, itens, definirItens }) {
+  const [campos, definirCampos] = useState(camposIniciais);
   const [erro, definirErro] = useState("");
   const [edicao, definirEdicao] = useState(null);
-  const itemEditado = itens.find((item) => item.id === edicao);
+  const x = lerMedida(campos.x, 0);
+  const y = lerMedida(campos.y, 0);
+  const largura = lerMedida(campos.largura);
+  const comprimento = lerMedida(campos.comprimento);
+  const medidasValidas = [x, y, largura, comprimento].every((medida) => medida !== null);
+  const candidato = { id: edicao ?? "rascunho", x, y, largura, comprimento };
+  const cabe = medidasValidas && cabeNoTerreno(candidato, terreno);
+
+  function editar(item) {
+    definirEdicao(item?.id ?? null);
+    definirCampos(item ? {
+      x: medidaParaCampo(item.x),
+      y: medidaParaCampo(item.y),
+      largura: medidaParaCampo(item.largura),
+      comprimento: medidaParaCampo(item.comprimento),
+    } : camposIniciais);
+    definirErro("");
+  }
 
   function salvarCanteiro(evento) {
     evento.preventDefault();
-    const dados = new FormData(evento.currentTarget);
-    const x = lerMedida(dados.get("x"), 0);
-    const y = lerMedida(dados.get("y"), 0);
-    const largura = lerMedida(dados.get("largura"));
-    const comprimento = lerMedida(dados.get("comprimento"));
-    if ([x, y, largura, comprimento].includes(null)) {
-      definirErro("Confira as medidas. Use números com até duas casas decimais e comece as posições em 0.");
+    if (!medidasValidas) {
+      definirErro("Use números com até duas casas decimais. O tamanho deve ser maior que zero e a posição pode começar em zero.");
       return;
     }
-    if (!cabeNoTerreno({ x, y, largura, comprimento }, terreno)) {
-      definirErro("O canteiro ultrapassa os limites do terreno.");
+    if (!cabe) {
+      definirErro("O canteiro ultrapassa o terreno. Reduza o tamanho ou mude a posição.");
       return;
     }
-    const novo = { id: edicao ?? crypto.randomUUID(), x, y, largura, comprimento };
+
+    const novo = { ...candidato, id: edicao ?? crypto.randomUUID() };
     definirItens(edicao ? itens.map((item) => item.id === edicao ? novo : item) : [...itens, novo]);
-    definirEdicao(null);
-    definirErro("");
-    evento.currentTarget.reset();
+    editar(null);
   }
 
-  const itensNaPlanta = itens.map((item) => ({
+  function mudarCampo(evento) {
+    const { name, value } = evento.target;
+    definirCampos((atuais) => ({ ...atuais, [name]: value }));
+    definirErro("");
+  }
+
+  function posicionarNaPlanta(xClicado, yClicado) {
+    const limitar = (valor, lado, medida) => Math.round(Math.max(0, Math.min(valor, lado - (medida ?? 0))) * 100) / 100;
+    definirCampos((atuais) => ({
+      ...atuais,
+      x: medidaParaCampo(limitar(xClicado, terreno.largura, largura)),
+      y: medidaParaCampo(limitar(yClicado, terreno.comprimento, comprimento)),
+    }));
+    definirErro("");
+  }
+
+  const visiveis = cabe ? [...itens.filter((item) => item.id !== edicao), { ...candidato, rascunho: true }] : itens;
+  const itensNaPlanta = visiveis.map((item) => ({
     ...item,
-    sobreposto: itens.some((outro) => item.id !== outro.id && sobrepoe(item, outro)),
+    sobreposto: visiveis.some((outro) => item.id !== outro.id && sobrepoe(item, outro)),
   }));
-
-  function editar(id) {
-    definirEdicao(id);
-    definirErro("");
-  }
 
   return (
     <div className="editor">
-      <p><strong>{formatarMedida(terreno.largura)} × {formatarMedida(terreno.comprimento)} m</strong> · {formatarMedida(terreno.area)} m²</p>
-      <div className="editor-grade">
-        <div>
-          <Planta terreno={terreno} itens={itensNaPlanta} />
-          <p className="nota">Planta em escala. A frente fica na borda inferior.</p>
-        </div>
-        <form key={edicao ?? "novo"} onSubmit={salvarCanteiro}>
-          <h3>{edicao ? "Editar canteiro" : "Adicionar canteiro"}</h3>
-          <p className="nota">Meça a posição a partir do canto superior esquerdo da planta.</p>
+      <p><strong>Terreno de {formatarMedida(terreno.largura)} × {formatarMedida(terreno.comprimento)} m</strong> · {formatarMedida(terreno.area)} m²</p>
+      <form className="editor-grade" onSubmit={salvarCanteiro}>
+        <h3 className="editor-titulo">{edicao ? "Editar canteiro" : "Adicionar canteiro"}</h3>
+        <fieldset className="editor-tamanho">
+          <legend>Tamanho do canteiro</legend>
           <div className="editor-campos">
-            <label className="campo">Da esquerda (m)<input name="x" inputMode="decimal" required defaultValue={itemEditado?.x ?? "0"} /></label>
-            <label className="campo">Do topo (m)<input name="y" inputMode="decimal" required defaultValue={itemEditado?.y ?? "0"} /></label>
-            <label className="campo">Largura (m)<input name="largura" inputMode="decimal" required defaultValue={itemEditado?.largura ?? ""} /></label>
-            <label className="campo">Comprimento (m)<input name="comprimento" inputMode="decimal" required defaultValue={itemEditado?.comprimento ?? ""} /></label>
+            <label className="campo">Largura (m)
+              <input name="largura" inputMode="decimal" required value={campos.largura} onChange={mudarCampo} placeholder="Ex.: 1,20" />
+            </label>
+            <label className="campo">Comprimento (m)
+              <input name="comprimento" inputMode="decimal" required value={campos.comprimento} onChange={mudarCampo} placeholder="Ex.: 3" />
+            </label>
           </div>
-          <button className="botao" type="submit">{edicao ? "Salvar posição" : "Adicionar canteiro"}</button>
+          <p className="nota">A largura vai da esquerda para a direita na planta. 1,20 m é o mesmo que 120 cm.</p>
+        </fieldset>
+        <div className="editor-mapa">
+          <p className="marco-terreno">Fundo do terreno</p>
+          <Planta terreno={terreno} itens={itensNaPlanta} mostrarFrente aoPosicionar={posicionarNaPlanta} />
+          <p className="marco-terreno">Frente do terreno</p>
+          <p className="nota">Clique ou toque na planta para posicionar o canteiro.</p>
+        </div>
+        <fieldset className="editor-posicao">
+          <legend>Posição do canteiro</legend>
+          <p className="nota">Você também pode digitar as distâncias a partir das bordas do terreno.</p>
+          <div className="editor-campos">
+            <label className="campo">Da lateral esquerda (m)
+              <input name="x" inputMode="decimal" required value={campos.x} onChange={mudarCampo} />
+            </label>
+            <label className="campo">Do fundo (m)
+              <input name="y" inputMode="decimal" required value={campos.y} onChange={mudarCampo} />
+            </label>
+          </div>
+        </fieldset>
+        <div className="editor-acoes">
+          {erro ? <p role="alert" className="erro">{erro}</p> : medidasValidas && !cabe && (
+            <p className="aviso" role="status">O canteiro ultrapassa o terreno. Ajuste o tamanho ou a posição.</p>
+          )}
+          <button className="botao" type="submit">{edicao ? "Salvar canteiro" : "Adicionar canteiro"}</button>
           {edicao && <button className="botao botao-contorno" type="button" onClick={() => editar(null)}>Cancelar edição</button>}
-          {erro && <p role="alert" className="erro">{erro}</p>}
-        </form>
-      </div>
+        </div>
+      </form>
       <div aria-live="polite">
         {itensNaPlanta.some((item) => item.sobreposto) && <p className="aviso">Há canteiros sobrepostos. Veja o destaque na planta.</p>}
       </div>
@@ -68,7 +116,7 @@ export default function EditorTerreno({ terreno, itens, definirItens }) {
         {itens.map((item, indice) => (
           <li key={item.id}>
             <span>Canteiro {indice + 1} · {formatarMedida(item.largura)} × {formatarMedida(item.comprimento)} m</span>
-            <button type="button" onClick={() => editar(item.id)} aria-label={`Editar canteiro ${indice + 1}`}>Editar</button>
+            <button type="button" onClick={() => editar(item)} aria-label={`Editar canteiro ${indice + 1}`}>Editar</button>
             <button type="button" aria-label={`Remover canteiro ${indice + 1}`} onClick={() => {
               definirItens(itens.filter((outro) => outro.id !== item.id));
               if (edicao === item.id) editar(null);
