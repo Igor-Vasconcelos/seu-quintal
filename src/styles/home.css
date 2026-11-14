@@ -5,7 +5,8 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-width: 280px;
-  background: radial-gradient(ellipse at top, #e4e4cd, #ced4b9 85%);
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 52% 20%, #fffaed, #fff4d8 85%);
   color: var(--sq-text);
   font-family: "DM Sans Variable", var(--sq-font-ui);
   line-height: 1.45;
@@ -26,12 +27,9 @@ img { max-width: 100%; display: block; }
 }
 
 .pagina {
-  width: min(calc(100% - 3rem), var(--sq-container));
-  margin: 1rem auto;
-  padding: 0 clamp(1rem, 2.6vw, 1.75rem);
-  background: radial-gradient(ellipse at 52% 20%, #fffaed, #fff4d8 85%);
-  border: 1px solid #fff8e7;
-  border-radius: var(--sq-radius-card);
+  max-width: var(--sq-container);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 2.6vw, 1.75rem);
 }
 
 .pular {
@@ -267,7 +265,7 @@ img { max-width: 100%; display: block; }
 }
 
 @media (max-width: 767px) {
-  .pagina { width: min(calc(100% - 1rem), 35rem); margin: .5rem auto; padding: 0 .75rem; }
+  .pagina { max-width: 35rem; padding-inline: .75rem; }
   .topo { min-height: 3.6rem; gap: .5rem; }
   .topo .botao { padding-inline: .7rem; font-size: .84rem; }
   .menu, .seu-adao, .folhagem { display: none; }
