@@ -1,0 +1,203 @@
+.sisteminha-abertura {
+  display: grid;
+  grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+  align-items: center;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  padding-block: clamp(1rem, 3.5vw, 2.75rem);
+}
+
+.sisteminha-abertura h1 {
+  max-width: 9ch;
+  font-size: clamp(2.3rem, 6vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+}
+
+.sisteminha-intro p {
+  max-width: 40ch;
+  margin-block: .85rem 1.15rem;
+  color: var(--sq-text-muted);
+  font-size: clamp(1rem, 1.55vw, 1.18rem);
+  line-height: var(--sq-leading-body);
+}
+
+.sisteminha-abertura img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--sq-radius-card);
+}
+
+.pagina-sisteminha .botao { text-decoration: none; }
+.sisteminha-intro .icone { width: 1.15em; height: 1.15em; transform: rotate(90deg); }
+
+.sisteminha-secao {
+  margin: 0 0 clamp(1.75rem, 5vw, 3rem);
+  scroll-margin-top: 1rem;
+}
+
+.sisteminha-orientacao {
+  max-width: 65ch;
+  margin: .35rem 0 1rem;
+  color: var(--sq-text-muted);
+}
+
+.caminhos {
+  display: grid;
+  gap: .65rem;
+  margin-bottom: 1rem;
+}
+
+.caminho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem 1rem;
+  padding: .65rem .85rem;
+  border-radius: var(--sq-radius-media);
+}
+
+.caminho h3 { min-width: 10rem; font-size: 1rem; }
+.caminho-agua { background: var(--sq-info-bg); color: var(--sq-info-text); }
+.caminho-residuos { background: var(--sq-surface-soft); }
+
+.caminho-etapas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem .4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.caminho-etapas li { display: flex; align-items: center; gap: .4rem; }
+.caminho-conector { display: grid; place-items: center; width: 1.15rem; font-weight: 700; }
+.caminho-conector .icone { width: 1.15rem; height: 1.15rem; }
+
+.caminho-etapas a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--sq-control-min);
+  padding: .3rem .6rem;
+  border: 1px solid var(--sq-control-border);
+  border-radius: var(--sq-radius-control);
+  background: var(--sq-surface);
+  font-size: .9rem;
+  font-weight: 700;
+  text-underline-offset: .18em;
+}
+
+.caminho-etapas a:hover { border-color: currentColor; }
+
+.sisteminha-cartoes {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sisteminha-cartao {
+  display: block;
+  height: 100%;
+  padding: .4rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface);
+  text-decoration: none;
+}
+
+.sisteminha-cartao:hover {
+  border-color: var(--sq-focus);
+  text-decoration: underline;
+  text-underline-offset: .18em;
+}
+
+.sisteminha-cartao img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--sq-radius-control);
+}
+
+.sisteminha-cartao span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .25rem;
+  min-height: var(--sq-control-min);
+  padding: .3rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.sisteminha-cartao .icone { width: 1.15rem; height: 1.15rem; transform: rotate(90deg); }
+
+.sisteminha-detalhes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+
+.sisteminha-detalhe {
+  display: grid;
+  align-content: start;
+  gap: .4rem;
+  padding: var(--sq-card-padding);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface);
+  scroll-margin-top: 1rem;
+}
+
+.sisteminha-detalhe:target {
+  border-color: var(--sq-focus);
+  background: var(--sq-surface-soft);
+}
+
+.sisteminha-detalhe h3 {
+  font: 400 var(--sq-type-h3)/var(--sq-leading-heading) var(--sq-font-display);
+}
+
+.sisteminha-voltar {
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+  min-height: var(--sq-control-min);
+  color: var(--sq-accent-strong);
+  font-weight: 700;
+  text-underline-offset: .18em;
+}
+
+.sisteminha-fontes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem 1.25rem;
+  padding: var(--sq-card-padding);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface-soft);
+}
+
+.sisteminha-fontes p { max-width: 55ch; margin-top: .4rem; color: var(--sq-text-muted); }
+.sisteminha-fontes-links { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; }
+.sisteminha-rodape { flex-wrap: wrap; gap: 0 1rem; padding-block: .35rem .7rem; }
+
+@media (max-width: 767px) {
+  .sisteminha-abertura { grid-template-columns: 1fr; }
+  .sisteminha-abertura h1 { max-width: none; }
+  .sisteminha-abertura img { max-height: 21rem; }
+  .sisteminha-cartoes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sisteminha-detalhes { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .caminho { display: grid; }
+  .caminho-residuos .caminho-etapas { display: grid; justify-items: start; }
+  .caminho-residuos .caminho-etapas li:first-child { margin-inline-start: 1.55rem; }
+  .caminho-residuos .caminho-conector .icone { transform: rotate(90deg); }
+  .sisteminha-cartoes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
+}
