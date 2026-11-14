@@ -1,0 +1,86 @@
+/* Seu Quintal · Design system 1.0
+ * Carregue DM Serif Text e DM Sans no app. Abaixo estão as fontes de reserva.
+ * Importe este arquivo no layout global e aplique as variáveis nos componentes.
+ */
+:root {
+  color-scheme: light;
+
+  /* Marca e superfícies */
+  --sq-forest: #183C2B;
+  --sq-cream: #FFF4D8;
+  --sq-terracotta: #C96D42;
+  --sq-leaf: #4F8644;
+  --sq-sun: #F6CB45;
+  --sq-sky: #76BDE9;
+  --sq-background: #FFF9ED;
+  --sq-surface: #FFFDFA;
+  --sq-surface-soft: #E9F0E3;
+  --sq-text: var(--sq-forest);
+  --sq-text-muted: #456052;
+  --sq-border: #DED7C7;
+  --sq-control-border: #78877B;
+
+  /* Interação */
+  --sq-primary: var(--sq-forest);
+  --sq-primary-hover: #0E2B1F;
+  --sq-on-primary: var(--sq-surface);
+  --sq-link: #20583D;
+  --sq-focus: #20583D;
+  --sq-accent-strong: #8D3F26;
+  --sq-disabled-bg: #EAEBE4;
+  --sq-disabled-fg: #536157;
+
+  /* Estados e elementos do planejador */
+  --sq-success-bg: #E7F2E4;
+  --sq-success-text: #22583A;
+  --sq-warning-bg: #FFF0BF;
+  --sq-warning-text: #6B4300;
+  --sq-error-bg: #FBE9E3;
+  --sq-error-text: #842E23;
+  --sq-info-bg: #E5F2F5;
+  --sq-info-text: #235366;
+  --sq-plan-existing-bg: #DFE9D6;
+  --sq-plan-planned-bg: #F1E0CB;
+  --sq-plan-planned-stroke: #795839;
+
+  /* Tipografia; valores em rem a partir de uma base de 16 px */
+  --sq-font-display: "DM Serif Text", Georgia, serif;
+  --sq-font-ui: "DM Sans", system-ui, sans-serif;
+  --sq-type-h1: clamp(2rem, 5vw, 3.5rem);
+  --sq-type-h2: clamp(1.5rem, 3.2vw, 2.25rem);
+  --sq-type-h3: 1.25rem;
+  --sq-type-body: 1rem;
+  --sq-type-small: 0.875rem;
+  --sq-leading-display: 1.08;
+  --sq-leading-heading: 1.2;
+  --sq-leading-body: 1.55;
+  --sq-weight-regular: 400;
+  --sq-weight-label: 600;
+  --sq-weight-strong: 700;
+
+  /* Espaçamento, cantos e largura */
+  --sq-space-1: 0.25rem;
+  --sq-space-2: 0.5rem;
+  --sq-space-3: 0.75rem;
+  --sq-space-4: 1rem;
+  --sq-space-6: 1.5rem;
+  --sq-space-8: 2rem;
+  --sq-space-12: 3rem;
+  --sq-space-16: 4rem;
+  --sq-radius-control: 0.5rem;
+  --sq-radius-media: 0.75rem;
+  --sq-radius-card: 1.125rem;
+  --sq-radius-pill: 999px;
+  --sq-control-min: 2.75rem;
+  --sq-container: 75rem;
+  --sq-gutter: clamp(1rem, 4vw, 2rem);
+  --sq-card-padding: clamp(1rem, 2.5vw, 1.5rem);
+  --sq-focus-width: 2px;
+  --sq-focus-offset: 3px;
+}
+
+/*
+ * 0–767px: ferramentas em uma coluna. 768px+: duas colunas.
+ * Guias: uma coluna abaixo de 360px; duas de 360 a 1023px; quatro a partir de 1024px.
+ * Vírgulas decimais, textos e status são tratados pelos componentes, não pelos tokens.
+ */
