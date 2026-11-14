@@ -1,0 +1,110 @@
+.guia-interativo,
+.historico-cultivo,
+.form-guia {
+  display: grid;
+  gap: .75rem;
+}
+
+.guia-interativo { margin-block: 1rem; }
+.guia-interativo .nota, .historico-cultivo .nota { margin-top: 0; }
+
+.campos-guia {
+  display: grid;
+  gap: .65rem;
+}
+
+.campos-guia-duplo, .fotos-compostagem {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.painel-guia {
+  min-width: 0;
+  padding: .85rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface);
+}
+
+.painel-guia h3 + p, .painel-guia .lista-culturas, .painel-guia p + p, .painel-guia > .form-guia { margin-top: .5rem; }
+.painel-guia h4 { margin: 0; font-size: 1.05rem; }
+.painel-guia .resultado { padding-top: .5rem; margin-top: .65rem; }
+.painel-guia .erro { margin: 0; }
+.campo input[aria-invalid] { border-color: var(--sq-error-text); }
+
+.form-guia > .botao { justify-self: start; }
+
+.campo textarea {
+  min-width: 0;
+  width: 100%;
+  padding: .45rem .65rem;
+  border: 1px solid var(--sq-control-border);
+  border-radius: var(--sq-radius-control);
+  color: inherit;
+  background: var(--sq-surface);
+  font: inherit;
+  font-weight: 500;
+  resize: vertical;
+}
+
+.lista-materiais, .lista-cultivo {
+  display: grid;
+  gap: .55rem;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-materiais li {
+  padding: .65rem .75rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-control);
+  background: var(--sq-surface);
+}
+
+.lista-materiais li > div {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .25rem .5rem;
+}
+
+.lista-materiais li p { margin-top: .25rem; }
+.etiqueta-material { padding: .1rem .45rem; border-radius: .4rem; font-size: .8rem; font-weight: 750; }
+.etiqueta-material.pode { background: var(--sq-surface-soft); color: var(--sq-primary); }
+.etiqueta-material.cuidado { background: var(--sq-warning-bg); color: var(--sq-warning-text); }
+.etiqueta-material.evite { background: var(--sq-error-bg); color: var(--sq-error-text); }
+
+.fotos-compostagem { display: grid; gap: .65rem; }
+.fotos-compostagem img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--sq-radius-media);
+}
+
+.fotos-compostagem figcaption {
+  margin-top: .3rem;
+  color: var(--sq-text-muted);
+  font-size: .78rem;
+}
+
+.comparativo-rega dl { display: grid; gap: .7rem; margin: .65rem 0 0; }
+.comparativo-rega dt { font-weight: 750; }
+.comparativo-rega dd { margin: .1rem 0 0; }
+
+.acoes-guia {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.secoes-quintal { margin-bottom: .9rem; padding-bottom: .85rem; border-bottom: 1px solid var(--sq-border); }
+.lista-cultivo li { overflow-wrap: anywhere; }
+.lista-cultivo h4 { margin-bottom: .35rem; }
+.lista-cultivo .acoes-guia { margin-top: .55rem; }
+.observacoes-cultivo { white-space: pre-wrap; }
+
+@media (max-width: 480px) {
+  .campos-guia-duplo { grid-template-columns: minmax(0, 1fr); }
+  .secoes-quintal .botao { padding-inline: .65rem; font-size: .85rem; }
+}

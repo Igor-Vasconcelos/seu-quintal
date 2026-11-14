@@ -4,6 +4,10 @@ import Calendario from "./components/Calendario.jsx";
 import Icone from "./components/Icone.jsx";
 import Planejador from "./components/Planejador.jsx";
 import { guias } from "./data/guias.js";
+import HistoricoCultivo from "./features/cultivo/HistoricoCultivo.jsx";
+import ChecklistCompostagem from "./features/guias/ChecklistCompostagem.jsx";
+import ComparativoIrrigacao from "./features/guias/ComparativoIrrigacao.jsx";
+import GuiaHorta from "./features/guias/GuiaHorta.jsx";
 import EditorComProjetos from "./features/planejador/EditorComProjetos.jsx";
 import EditorTerreno from "./features/planejador/EditorTerreno.jsx";
 import { apiConfigurada } from "./features/planejador/api.js";
@@ -13,6 +17,11 @@ const dimensoesIniciais = criarTerreno("35", "65");
 const canteirosVazios = [];
 const Editor = apiConfigurada ? EditorComProjetos : EditorTerreno;
 const fonteSisteminha = "https://www.embrapa.br/web/meio-norte/sisteminha";
+const conteudosGuias = {
+  horta: GuiaHorta,
+  compostagem: ChecklistCompostagem,
+  ferramentas: ComparativoIrrigacao,
+};
 
 function chaveDoTerreno(terreno) {
   return `${terreno.largura}x${terreno.comprimento}`;
@@ -32,12 +41,14 @@ function terrenoDaUrl() {
 
 export default function App() {
   const [editor, definirEditor] = useState(terrenoDaUrl);
+  const [verHistorico, definirVerHistorico] = useState(false);
   const [dialogo, definirDialogo] = useState(null);
   const [projeto, definirProjeto] = useState({ terreno: null, itens: canteirosVazios });
 
   useEffect(() => {
     function sincronizarEditor() {
       definirDialogo(null);
+      definirVerHistorico(false);
       definirEditor(terrenoDaUrl());
     }
     window.addEventListener("popstate", sincronizarEditor);
@@ -46,6 +57,7 @@ export default function App() {
 
   function abrirEditor(terreno) {
     window.history.pushState({ editor: true }, "", urlDoTerreno(terreno));
+    definirVerHistorico(false);
     definirEditor(terreno);
   }
 
@@ -64,6 +76,7 @@ export default function App() {
   const chaveTerreno = editor ? chaveDoTerreno(editor) : null;
   const projetoAtivo = projeto.terreno === chaveTerreno ? projeto : null;
   const itens = projetoAtivo?.itens ?? canteirosVazios;
+  const ConteudoGuia = conteudosGuias[dialogo?.id];
 
   function atualizarProjeto(dados) {
     definirProjeto((anterior) => ({
@@ -159,10 +172,25 @@ export default function App() {
       </footer>
 
       {editor && <CaixaDialogo titulo="Meu Quintal" fechar={fecharEditor}>
-        <Editor key={projetoAtivo?.abertura ?? chaveTerreno} terreno={editor} itens={itens}
-          definirItens={(novosItens) => atualizarProjeto({ itens: novosItens })}
-          registro={projetoAtivo?.registro} gravarRegistro={(registro) => atualizarProjeto({ registro })}
-          abrirProjeto={abrirProjeto} />
+        <div className="acoes-guia secoes-quintal" role="group" aria-label="Seções do Meu Quintal">
+          <button className={`botao ${verHistorico ? "botao-contorno" : ""}`} type="button"
+            aria-controls="painel-terreno" aria-pressed={!verHistorico} onClick={() => definirVerHistorico(false)}>
+            Planejador de terreno
+          </button>
+          <button className={`botao ${verHistorico ? "" : "botao-contorno"}`} type="button"
+            aria-controls="historico-quintal" aria-pressed={verHistorico} onClick={() => definirVerHistorico(true)}>
+            Histórico de cultivo
+          </button>
+        </div>
+        <div id="painel-terreno" hidden={verHistorico}>
+          <Editor key={projetoAtivo?.abertura ?? chaveTerreno} terreno={editor} itens={itens}
+            definirItens={(novosItens) => atualizarProjeto({ itens: novosItens })}
+            registro={projetoAtivo?.registro} gravarRegistro={(registro) => atualizarProjeto({ registro })}
+            abrirProjeto={abrirProjeto} />
+        </div>
+        <div id="historico-quintal" hidden={!verHistorico}>
+          <HistoricoCultivo />
+        </div>
       </CaixaDialogo>}
 
       {dialogo === "sisteminha" && <CaixaDialogo titulo="Sisteminha Embrapa" fechar={() => definirDialogo(null)}>
@@ -176,12 +204,13 @@ export default function App() {
       </CaixaDialogo>}
 
       {dialogo === "creditos" && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirDialogo(null)}>
-        <p>As quatro imagens dos guias foram geradas por IA e ilustram os temas. As referências de leitura ficam em cada guia.</p>
+        <p>As quatro imagens dos cartões dos guias foram geradas por IA. O checklist de compostagem também inclui fotos do Wikimedia Commons com créditos e licenças junto a cada foto.</p>
       </CaixaDialogo>}
 
       {dialogo?.titulo && <CaixaDialogo titulo={dialogo.titulo} fechar={() => definirDialogo(null)}>
         <img className="foto-dialogo" src={`./imagens/${dialogo.id}.webp`} width="792" height="396" alt="" />
         <p>{dialogo.descricao}</p>
+        {ConteudoGuia && <ConteudoGuia />}
         <a className="link-fonte" href={dialogo.url} target="_blank" rel="noreferrer">{dialogo.fonte}</a>
       </CaixaDialogo>}
     </div>
