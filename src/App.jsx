@@ -4,11 +4,26 @@ import Calendario from "./components/Calendario.jsx";
 import Icone from "./components/Icone.jsx";
 import Planejador from "./components/Planejador.jsx";
 import { guias } from "./data/guias.js";
+import EditorComProjetos from "./features/planejador/EditorComProjetos.jsx";
 import EditorTerreno from "./features/planejador/EditorTerreno.jsx";
+import { apiConfigurada } from "./features/planejador/api.js";
 import { criarTerreno } from "./features/planejador/geometria.js";
 
 const dimensoesIniciais = criarTerreno("35", "65");
+const canteirosVazios = [];
+const Editor = apiConfigurada ? EditorComProjetos : EditorTerreno;
 const fonteSisteminha = "https://www.embrapa.br/web/meio-norte/sisteminha";
+
+function chaveDoTerreno(terreno) {
+  return `${terreno.largura}x${terreno.comprimento}`;
+}
+
+function urlDoTerreno(terreno) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("frente", String(terreno.largura));
+  url.searchParams.set("profundidade", String(terreno.comprimento));
+  return url;
+}
 
 function terrenoDaUrl() {
   const parametros = new URLSearchParams(window.location.search);
@@ -18,7 +33,7 @@ function terrenoDaUrl() {
 export default function App() {
   const [editor, definirEditor] = useState(terrenoDaUrl);
   const [dialogo, definirDialogo] = useState(null);
-  const [projeto, definirProjeto] = useState({ terreno: null, itens: [] });
+  const [projeto, definirProjeto] = useState({ terreno: null, itens: canteirosVazios });
 
   useEffect(() => {
     function sincronizarEditor() {
@@ -30,10 +45,7 @@ export default function App() {
   }, []);
 
   function abrirEditor(terreno) {
-    const url = new URL(window.location.href);
-    url.searchParams.set("frente", String(terreno.largura));
-    url.searchParams.set("profundidade", String(terreno.comprimento));
-    window.history.pushState({ editor: true }, "", url);
+    window.history.pushState({ editor: true }, "", urlDoTerreno(terreno));
     definirEditor(terreno);
   }
 
@@ -49,8 +61,31 @@ export default function App() {
     definirEditor(null);
   }
 
-  const chaveTerreno = editor ? `${editor.largura}x${editor.comprimento}` : null;
-  const itens = projeto.terreno === chaveTerreno ? projeto.itens : [];
+  const chaveTerreno = editor ? chaveDoTerreno(editor) : null;
+  const projetoAtivo = projeto.terreno === chaveTerreno ? projeto : null;
+  const itens = projetoAtivo?.itens ?? canteirosVazios;
+
+  function atualizarProjeto(dados) {
+    definirProjeto((anterior) => ({
+      ...(anterior.terreno === chaveTerreno ? anterior : { itens: canteirosVazios }),
+      terreno: chaveTerreno,
+      dimensoes: editor,
+      ...dados,
+    }));
+  }
+
+  function abrirProjeto(salvo) {
+    const terreno = criarTerreno(String(salvo.largura), String(salvo.profundidade));
+    window.history.replaceState(window.history.state, "", urlDoTerreno(terreno));
+    definirEditor(terreno);
+    definirProjeto({
+      terreno: chaveDoTerreno(terreno),
+      dimensoes: terreno,
+      itens: salvo.itens,
+      registro: { id: salvo.id, nome: salvo.nome, itens: salvo.itens },
+      abertura: crypto.randomUUID(),
+    });
+  }
 
   return (
     <div className="pagina" id="inicio">
@@ -124,8 +159,10 @@ export default function App() {
       </footer>
 
       {editor && <CaixaDialogo titulo="Meu Quintal" fechar={fecharEditor}>
-        <EditorTerreno key={chaveTerreno} terreno={editor} itens={itens}
-          definirItens={(novosItens) => definirProjeto({ terreno: chaveTerreno, dimensoes: editor, itens: novosItens })} />
+        <Editor key={projetoAtivo?.abertura ?? chaveTerreno} terreno={editor} itens={itens}
+          definirItens={(novosItens) => atualizarProjeto({ itens: novosItens })}
+          registro={projetoAtivo?.registro} gravarRegistro={(registro) => atualizarProjeto({ registro })}
+          abrirProjeto={abrirProjeto} />
       </CaixaDialogo>}
 
       {dialogo === "sisteminha" && <CaixaDialogo titulo="Sisteminha Embrapa" fechar={() => definirDialogo(null)}>
