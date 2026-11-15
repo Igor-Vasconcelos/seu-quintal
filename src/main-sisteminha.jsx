@@ -1,9 +1,11 @@
-import { StrictMode, useEffect } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "@fontsource-variable/dm-sans";
 import "@fontsource/dm-serif-text/latin-400.css";
 import Cabecalho from "./components/Cabecalho.jsx";
+import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Icone from "./components/Icone.jsx";
+import Rodape from "./components/Rodape.jsx";
 import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/sisteminha.css";
@@ -81,6 +83,8 @@ function Caminho({ id, titulo, etapas }) {
 }
 
 function Sisteminha() {
+  const [verCreditos, definirVerCreditos] = useState(false);
+
   useEffect(() => {
     const destino = document.getElementById(window.location.hash.slice(1));
     destino?.scrollIntoView();
@@ -148,10 +152,11 @@ function Sisteminha() {
         </aside>
       </main>
 
-      <footer className="rodape sisteminha-rodape">
-        <a href="./">Voltar para o Seu Quintal</a>
-        <p>Imagens ilustrativas geradas por IA.</p>
-      </footer>
+      <Rodape aoVerCreditos={() => definirVerCreditos(true)} />
+
+      {verCreditos && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirVerCreditos(false)}>
+        <p>O panorama e as imagens dos módulos do Sisteminha são ilustrações geradas por IA.</p>
+      </CaixaDialogo>}
     </div>
   );
 }

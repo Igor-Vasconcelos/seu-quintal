@@ -4,6 +4,7 @@ import Cabecalho from "./components/Cabecalho.jsx";
 import Calendario from "./components/Calendario.jsx";
 import Icone from "./components/Icone.jsx";
 import Planejador from "./components/Planejador.jsx";
+import Rodape from "./components/Rodape.jsx";
 import { guias } from "./data/guias.js";
 import HistoricoCultivo from "./features/cultivo/HistoricoCultivo.jsx";
 import ChecklistCompostagem from "./features/guias/ChecklistCompostagem.jsx";
@@ -69,7 +70,7 @@ export default function App() {
     <div className="pagina" id="inicio">
       <a className="pular" href="#conteudo">Pular para o conteúdo</a>
       <Cabecalho>
-        <button type="button" className="botao botao-contorno"
+        <button type="button" className="botao"
           onClick={() => abrirEditor(projeto.dimensoes ?? dimensoesIniciais)}>
           Meu Quintal
         </button>
@@ -125,10 +126,7 @@ export default function App() {
         </section>
       </main>
 
-      <footer className="rodape">
-        <a href="#inicio">Seu Quintal</a>
-        <button type="button" onClick={() => definirDialogo("creditos")}>Sobre as imagens</button>
-      </footer>
+      <Rodape inicio aoVerCreditos={() => definirDialogo("creditos")} />
 
       {editor && <CaixaDialogo titulo="Meu Quintal" fechar={fecharEditor}>
         <div className="acoes-guia secoes-quintal" role="group" aria-label="Seções do Meu Quintal">

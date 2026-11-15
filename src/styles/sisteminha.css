@@ -184,7 +184,6 @@
 
 .sisteminha-fontes p { max-width: 55ch; margin-top: .4rem; color: var(--sq-text-muted); }
 .sisteminha-fontes-links { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; }
-.sisteminha-rodape { flex-wrap: wrap; gap: 0 1rem; padding-block: .35rem .7rem; }
 
 @media (max-width: 767px) {
   .sisteminha-abertura { grid-template-columns: 1fr; }

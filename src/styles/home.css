@@ -230,9 +230,7 @@ img { max-width: 100%; display: block; }
 .sisteminha-acao .botao { text-decoration: none; }
 .sisteminha .icone { width: 1em; height: 1em; }
 
-.rodape { display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: var(--sq-text-muted); font-size: .82rem; }
-.rodape a, .rodape button { display: inline-flex; align-items: center; min-height: var(--sq-control-min); }
-.rodape button, .lista-canteiros button { border: 0; padding: .3rem .2rem; background: transparent; text-decoration: underline; text-underline-offset: .15em; }
+.lista-canteiros button { border: 0; padding: .3rem .2rem; background: transparent; text-decoration: underline; text-underline-offset: .15em; }
 
 .dialogo {
   --espaco-dialogo: clamp(.9rem, 3vw, 1.6rem);
