@@ -159,7 +159,34 @@ img { max-width: 100%; display: block; }
 .resultado { display: grid; gap: .45rem; margin-top: .8rem; padding-top: .65rem; border-top: 1px solid #c9bd9e; }
 .resultado strong { font-size: clamp(.94rem, 1.8vw, 1.15rem); }
 .lista-culturas { display: flex; flex-wrap: wrap; gap: .35rem; padding: 0; list-style: none; }
-.lista-culturas li { padding: .15rem .5rem; border-radius: .4rem; background: var(--sq-surface-soft); font-size: .85rem; }
+.resultado-instrucao { color: var(--sq-text-muted); font-size: var(--sq-type-small); }
+.cultura {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  min-height: var(--sq-control-min);
+  padding: .3rem .65rem;
+  border: 1px solid var(--sq-control-border);
+  border-radius: var(--sq-radius-pill);
+  color: var(--sq-primary);
+  background: var(--sq-plan-existing-bg);
+  font-size: var(--sq-type-small);
+  font-weight: 700;
+  text-align: left;
+}
+.cultura:hover { border-color: var(--sq-primary); background: color-mix(in srgb, var(--sq-plan-existing-bg), var(--sq-leaf) 14%); }
+.cultura .icone, .ficha-cultura-epoca .icone { width: 1.1em; height: 1.1em; }
+.ficha-cultura-epoca {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .65rem .8rem;
+  border-radius: var(--sq-radius-control);
+  background: var(--sq-surface-soft);
+}
+.ficha-cultura { display: grid; gap: .7rem; margin-block: .85rem; }
+.ficha-cultura dt { font-weight: 700; }
+.ficha-cultura dd { margin: .15rem 0 0; color: var(--sq-text-muted); }
 .resultado details { min-width: 0; }
 .resultado summary { min-height: var(--sq-control-min); align-content: center; width: fit-content; color: var(--sq-link); font-weight: 700; font-size: .875rem; cursor: pointer; }
 .nota a, .link-fonte { color: var(--sq-link); text-underline-offset: .18em; }

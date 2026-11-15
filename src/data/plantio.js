@@ -55,6 +55,16 @@ const periodos = {
 
 export const totalCulturas = Object.keys(periodos).length;
 
+export function descreverEpocaPlantio(nome, regiao) {
+  const periodo = periodos[nome]?.[regioes.indexOf(regiao)];
+  if (!periodo) return "Sem indicação na tabela para esta região.";
+
+  const [inicio, fim] = periodo;
+  if (inicio === 1 && fim === 12) return "O ano todo";
+  if (inicio === fim) return meses[inicio - 1];
+  return `De ${meses[inicio - 1].toLowerCase()} a ${meses[fim - 1].toLowerCase()}`;
+}
+
 export function consultarPlantio(regiao, mes) {
   const coluna = regioes.indexOf(regiao);
 
