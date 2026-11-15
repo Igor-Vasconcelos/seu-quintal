@@ -38,7 +38,6 @@ const modulos = {
   },
   galinheiro: {
     titulo: "Galinheiro",
-    guia: guiaAnimais,
     imagem: "animais.webp",
     resumo: "Fornece ovos e material para a compostagem.",
     explicacao: "Além dos ovos, o galinheiro fornece cama usada, uma mistura de material de forração e dejetos que pode seguir para compostagem com manejo adequado.",
@@ -81,6 +80,42 @@ function Caminho({ id, titulo, etapas }) {
         ))}
       </ol>
     </div>
+  );
+}
+
+function DetalheGalinheiro({ modulo }) {
+  return (
+    <article className="sisteminha-detalhe sisteminha-galinheiro" id="galinheiro"
+      tabIndex={-1} aria-labelledby="titulo-galinheiro">
+      <header className="galinheiro-intro">
+        <a className="sisteminha-voltar galinheiro-voltar" href="#ciclo">
+          <Icone nome="seta" /> Voltar ao ciclo
+        </a>
+        <h3 id="titulo-galinheiro">{modulo.titulo}</h3>
+        <p>{modulo.resumo}</p>
+      </header>
+
+      <img className="galinheiro-imagem" src={`./imagens/${modulo.imagem}`}
+        width="792" height="396" alt="Galinhas caipiras ciscando perto de um galinheiro de madeira." loading="lazy" />
+
+      <div className="galinheiro-orientacoes">
+        <div>
+          <h4>No ciclo do Sisteminha</h4>
+          <p>{modulo.explicacao}</p>
+        </div>
+        <div>
+          <h4>Antes de criar as aves</h4>
+          <p>{guiaAnimais.descricao}</p>
+        </div>
+      </div>
+
+      <div className="galinheiro-acoes">
+        <a className="botao" href={guiaAnimais.url} target="_blank" rel="noreferrer">
+          Ler o guia da Embrapa <Icone nome="seta" />
+        </a>
+        <a className="sisteminha-voltar" href="#compostagem">Ver compostagem</a>
+      </div>
+    </article>
   );
 }
 
@@ -132,15 +167,13 @@ function Sisteminha() {
           <h2 id="titulo-modulos">Conheça os módulos</h2>
           <p className="sisteminha-orientacao">Estes cinco componentes mostram uma das formas de integrar o Sisteminha. A escolha dos módulos pode variar conforme o espaço, os recursos e a rotina de quem vai cuidar.</p>
           <div className="sisteminha-detalhes">
-            {Object.entries(modulos).map(([id, modulo]) => (
+            {Object.entries(modulos).map(([id, modulo]) => id === "galinheiro" ? (
+              <DetalheGalinheiro key={id} modulo={modulo} />
+            ) : (
               <article className="sisteminha-detalhe" id={id} key={id} tabIndex={-1} aria-labelledby={`titulo-${id}`}>
                 <h3 id={`titulo-${id}`}>{modulo.titulo}</h3>
                 <p><strong>{modulo.resumo}</strong></p>
                 <p>{modulo.explicacao}</p>
-                {modulo.guia && <>
-                  <p>{modulo.guia.descricao}</p>
-                  <a className="link-fonte" href={modulo.guia.url} target="_blank" rel="noreferrer">{modulo.guia.fonte}</a>
-                </>}
                 <a className="sisteminha-voltar" href="#ciclo">Voltar ao ciclo</a>
               </article>
             ))}

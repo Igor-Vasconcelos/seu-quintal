@@ -171,6 +171,74 @@
   text-underline-offset: .18em;
 }
 
+.sisteminha-galinheiro {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .96fr);
+  grid-template-areas: "intro foto" "orientacoes foto" "acoes foto";
+  column-gap: clamp(1.25rem, 4vw, 3.25rem);
+  row-gap: 1.2rem;
+  align-content: stretch;
+  padding: clamp(1.2rem, 3vw, 2.25rem);
+  border-radius: var(--sq-radius-card);
+  background: linear-gradient(140deg, var(--sq-surface), var(--sq-surface-soft));
+}
+
+.sisteminha-galinheiro:target {
+  background: linear-gradient(140deg, var(--sq-surface), var(--sq-surface-soft));
+}
+
+.galinheiro-intro { grid-area: intro; }
+
+.galinheiro-voltar {
+  gap: .35rem;
+  color: var(--sq-link);
+  font-size: var(--sq-type-small);
+}
+
+.galinheiro-voltar .icone { width: 1.05em; height: 1.05em; transform: rotate(180deg); }
+
+.sisteminha-galinheiro h3 {
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  line-height: var(--sq-leading-display);
+}
+
+.galinheiro-intro p {
+  margin-top: .35rem;
+  color: var(--sq-text-muted);
+  font-weight: var(--sq-weight-label);
+}
+
+.galinheiro-imagem {
+  grid-area: foto;
+  width: 100%;
+  height: 100%;
+  min-height: 18rem;
+  border-radius: var(--sq-radius-media);
+  object-fit: cover;
+  object-position: 58% center;
+}
+
+.galinheiro-orientacoes {
+  grid-area: orientacoes;
+  display: grid;
+  gap: .9rem;
+  padding-block: .95rem;
+  border-block: 1px solid var(--sq-border);
+}
+
+.galinheiro-orientacoes h4 { margin: 0 0 .2rem; font-size: 1rem; }
+.galinheiro-orientacoes p { color: var(--sq-text-muted); line-height: var(--sq-leading-body); }
+
+.galinheiro-acoes {
+  grid-area: acoes;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem 1rem;
+}
+
+.galinheiro-acoes .icone { width: 1.1em; height: 1.1em; }
+
 .sisteminha-fontes {
   display: flex;
   flex-wrap: wrap;
@@ -191,6 +259,16 @@
   .sisteminha-abertura img { max-height: 21rem; }
   .sisteminha-cartoes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .sisteminha-detalhes { grid-template-columns: 1fr; }
+  .sisteminha-galinheiro {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "intro" "foto" "orientacoes" "acoes";
+    row-gap: .9rem;
+  }
+  .galinheiro-imagem {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
 }
 
 @media (max-width: 480px) {
