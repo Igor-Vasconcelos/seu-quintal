@@ -32,6 +32,16 @@ img { max-width: 100%; display: block; }
   padding-inline: clamp(1rem, 2.6vw, 1.75rem);
 }
 
+.pagina-home { --recuo-home: clamp(.75rem, 2.4vw, 2.5rem); }
+.pagina-home > .topo,
+.pagina-home > main { padding-inline: var(--recuo-home); }
+.pagina-home > .pular { inset-inline-start: var(--recuo-home); }
+.pagina-home > .rodape {
+  margin-bottom: 0;
+  padding-inline: var(--recuo-home);
+  border-radius: 0;
+}
+
 .pular {
   position: absolute;
   z-index: 2;
@@ -94,12 +104,13 @@ img { max-width: 100%; display: block; }
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, .31fr) minmax(0, 1fr);
+  grid-template-columns: clamp(10rem, 22vw, 20rem) minmax(0, 1fr);
   align-items: start;
   min-height: 11.5rem;
-  margin-inline: clamp(-1.75rem, -2.6vw, -1rem);
+  margin-inline: calc(-1 * var(--recuo-home));
   padding-right: clamp(3rem, 7vw, 7rem);
   overflow: hidden;
+  background: linear-gradient(110deg, var(--sq-cream), var(--sq-background) 52%, var(--sq-cream));
 }
 
 .abertura-texto { padding: 1.65rem 0 1.5rem .75rem; }
@@ -340,7 +351,7 @@ img { max-width: 100%; display: block; }
   .topo .botao { padding-inline: .7rem; font-size: .84rem; }
   .menu { order: 1; flex-basis: 100%; justify-content: center; margin: 0; gap: .65rem 1rem; flex-wrap: wrap; }
   .topo:not(.topo-sisteminha) .menu a:not(.menu-sisteminha), .seu-adao, .folhagem { display: none; }
-  .abertura { display: block; min-height: auto; margin-inline: 0; padding: 0; text-align: center; }
+  .abertura { display: block; min-height: auto; padding-inline: var(--recuo-home); text-align: center; }
   .abertura-texto { padding: .8rem 0 .65rem; }
   .abertura h1 { font-size: clamp(1.5rem, 6.4vw, 2.4rem); }
   .abertura p { font-size: .95rem; }

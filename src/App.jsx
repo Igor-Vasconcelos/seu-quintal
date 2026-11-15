@@ -67,7 +67,7 @@ export default function App() {
   const ConteudoGuia = conteudosGuias[dialogo?.id];
 
   return (
-    <div className="pagina" id="inicio">
+    <div className="pagina-home" id="inicio">
       <a className="pular" href="#conteudo">Pular para o conteúdo</a>
       <Cabecalho>
         <button type="button" className="botao"
