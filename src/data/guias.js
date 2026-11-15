@@ -1,3 +1,12 @@
+export const guiaAnimais = {
+  id: "animais",
+  titulo: "Criação de animais",
+  destino: "./sisteminha.html#galinheiro",
+  descricao: "Antes de escolher as aves, pense na rotina de manejo e no local do abrigo. O material da Embrapa traz critérios para avaliar drenagem, ventilação, sombra e acesso à água.",
+  fonte: "Criação de galinhas e codornas · Embrapa",
+  url: "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1102048/1/Doc248PerguntasRespostasCriacaoGalinhasCodornas.pdf",
+};
+
 export const guias = [
   {
     id: "horta",
@@ -6,13 +15,7 @@ export const guias = [
     fonte: "Horta em pequenos espaços · Embrapa",
     url: "https://www.infoteca.cnptia.embrapa.br/handle/doc/958531",
   },
-  {
-    id: "animais",
-    titulo: "Criação de animais",
-    descricao: "Antes de escolher as aves, pense na rotina de manejo e no local do abrigo. O material da Embrapa traz critérios para avaliar drenagem, ventilação, sombra e acesso à água.",
-    fonte: "Criação de galinhas e codornas · Embrapa",
-    url: "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1102048/1/Doc248PerguntasRespostasCriacaoGalinhasCodornas.pdf",
-  },
+  guiaAnimais,
   {
     id: "compostagem",
     titulo: "Solo e compostagem",

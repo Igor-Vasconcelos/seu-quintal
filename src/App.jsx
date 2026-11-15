@@ -101,14 +101,20 @@ export default function App() {
         <section className="guias" id="guias" aria-labelledby="titulo-guias">
           <h2 id="titulo-guias">Guias para começar</h2>
           <ul className="guias-grade">
-            {guias.map((guia) => (
-              <li key={guia.id}>
-                <button className="guia" type="button" onClick={() => definirDialogo(guia)}>
-                  <img src={`./imagens/${guia.id}.webp`} width="792" height="396" alt="" loading="lazy" />
-                  <span>{guia.titulo}</span>
-                </button>
-              </li>
-            ))}
+            {guias.map((guia) => {
+              const conteudo = <>
+                <img src={`./imagens/${guia.id}.webp`} width="792" height="396" alt="" loading="lazy" />
+                <span>{guia.titulo}</span>
+              </>;
+
+              return (
+                <li key={guia.id}>
+                  {guia.destino
+                    ? <a className="guia" href={guia.destino}>{conteudo}</a>
+                    : <button className="guia" type="button" onClick={() => definirDialogo(guia)}>{conteudo}</button>}
+                </li>
+              );
+            })}
           </ul>
         </section>
 

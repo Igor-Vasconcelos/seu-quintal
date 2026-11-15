@@ -249,6 +249,7 @@ img { max-width: 100%; display: block; }
   background: #fff5df;
   font-weight: 750;
 }
+a.guia { text-align: center; text-decoration: none; }
 .guia:hover { background: #eee9cd; border-color: var(--sq-focus); }
 .guia img { width: 100%; height: auto; aspect-ratio: 2.06; object-fit: cover; }
 .guia span { min-height: var(--sq-control-min); display: grid; place-items: center; width: 100%; padding: .15rem .35rem; line-height: 1.18; }

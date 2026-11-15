@@ -6,6 +6,7 @@ import Cabecalho from "./components/Cabecalho.jsx";
 import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Icone from "./components/Icone.jsx";
 import Rodape from "./components/Rodape.jsx";
+import { guiaAnimais } from "./data/guias.js";
 import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/sisteminha.css";
@@ -37,6 +38,7 @@ const modulos = {
   },
   galinheiro: {
     titulo: "Galinheiro",
+    guia: guiaAnimais,
     imagem: "animais.webp",
     resumo: "Fornece ovos e material para a compostagem.",
     explicacao: "Além dos ovos, o galinheiro fornece cama usada, uma mistura de material de forração e dejetos que pode seguir para compostagem com manejo adequado.",
@@ -87,6 +89,7 @@ function Sisteminha() {
 
   useEffect(() => {
     const destino = document.getElementById(window.location.hash.slice(1));
+    destino?.focus({ preventScroll: true });
     destino?.scrollIntoView();
   }, []);
 
@@ -134,6 +137,10 @@ function Sisteminha() {
                 <h3 id={`titulo-${id}`}>{modulo.titulo}</h3>
                 <p><strong>{modulo.resumo}</strong></p>
                 <p>{modulo.explicacao}</p>
+                {modulo.guia && <>
+                  <p>{modulo.guia.descricao}</p>
+                  <a className="link-fonte" href={modulo.guia.url} target="_blank" rel="noreferrer">{modulo.guia.fonte}</a>
+                </>}
                 <a className="sisteminha-voltar" href="#ciclo">Voltar ao ciclo</a>
               </article>
             ))}
