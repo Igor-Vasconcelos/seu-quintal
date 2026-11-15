@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Cabecalho from "./components/Cabecalho.jsx";
 import Calendario from "./components/Calendario.jsx";
@@ -10,15 +10,31 @@ import HistoricoCultivo from "./features/cultivo/HistoricoCultivo.jsx";
 import ChecklistCompostagem from "./features/guias/ChecklistCompostagem.jsx";
 import ComparativoIrrigacao from "./features/guias/ComparativoIrrigacao.jsx";
 import GuiaHorta from "./features/guias/GuiaHorta.jsx";
+import PlanejadorComConta from "./features/planejador/PlanejadorComConta.jsx";
 import EditorTerreno from "./features/planejador/EditorTerreno.jsx";
+import { apiConfigurada } from "./features/planejador/api.js";
 import { criarTerreno } from "./features/planejador/geometria.js";
 
 const dimensoesIniciais = criarTerreno("35", "65");
+const canteirosVazios = [];
+const projetoVazio = { terreno: null, itens: canteirosVazios };
+const Editor = apiConfigurada ? PlanejadorComConta : EditorTerreno;
 const conteudosGuias = {
   horta: GuiaHorta,
   compostagem: ChecklistCompostagem,
   ferramentas: ComparativoIrrigacao,
 };
+
+function chaveDoTerreno(terreno) {
+  return `${terreno.largura}x${terreno.comprimento}`;
+}
+
+function urlDoTerreno(terreno) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("frente", String(terreno.largura));
+  url.searchParams.set("profundidade", String(terreno.comprimento));
+  return url;
+}
 
 function terrenoDaUrl() {
   const parametros = new URLSearchParams(window.location.search);
@@ -29,7 +45,7 @@ export default function App() {
   const [editor, definirEditor] = useState(terrenoDaUrl);
   const [verHistorico, definirVerHistorico] = useState(false);
   const [dialogo, definirDialogo] = useState(null);
-  const [projeto, definirProjeto] = useState({ terreno: null, itens: [] });
+  const [projeto, definirProjeto] = useState(projetoVazio);
 
   useEffect(() => {
     function sincronizarEditor() {
@@ -42,10 +58,7 @@ export default function App() {
   }, []);
 
   function abrirEditor(terreno) {
-    const url = new URL(window.location.href);
-    url.searchParams.set("frente", String(terreno.largura));
-    url.searchParams.set("profundidade", String(terreno.comprimento));
-    window.history.pushState({ editor: true }, "", url);
+    window.history.pushState({ editor: true }, "", urlDoTerreno(terreno));
     definirVerHistorico(false);
     definirEditor(terreno);
   }
@@ -62,9 +75,34 @@ export default function App() {
     definirEditor(null);
   }
 
-  const chaveTerreno = editor ? `${editor.largura}x${editor.comprimento}` : null;
-  const itens = projeto.terreno === chaveTerreno ? projeto.itens : [];
+  const chaveTerreno = editor ? chaveDoTerreno(editor) : null;
+  const projetoAtivo = projeto.terreno === chaveTerreno ? projeto : null;
+  const itens = projetoAtivo?.itens ?? canteirosVazios;
   const ConteudoGuia = conteudosGuias[dialogo?.id];
+
+  function atualizarProjeto(dados) {
+    definirProjeto((anterior) => ({
+      ...(anterior.terreno === chaveTerreno ? anterior : { itens: canteirosVazios }),
+      terreno: chaveTerreno,
+      dimensoes: editor,
+      ...dados,
+    }));
+  }
+
+  const limparProjeto = useCallback(() => definirProjeto(projetoVazio), []);
+
+  function abrirProjeto(salvo, contaId) {
+    const terreno = criarTerreno(String(salvo.largura), String(salvo.profundidade));
+    window.history.replaceState(window.history.state, "", urlDoTerreno(terreno));
+    definirEditor(terreno);
+    definirProjeto({
+      terreno: chaveDoTerreno(terreno),
+      dimensoes: terreno,
+      itens: salvo.itens,
+      registro: { id: salvo.id, nome: salvo.nome, itens: salvo.itens, contaId },
+      abertura: crypto.randomUUID(),
+    });
+  }
 
   return (
     <div className="pagina" id="inicio">
@@ -140,8 +178,10 @@ export default function App() {
           </button>
         </div>
         <div id="painel-terreno" hidden={verHistorico}>
-          <EditorTerreno key={chaveTerreno} terreno={editor} itens={itens}
-            definirItens={(novosItens) => definirProjeto({ terreno: chaveTerreno, dimensoes: editor, itens: novosItens })} />
+          <Editor key={apiConfigurada ? undefined : chaveTerreno} chaveEdicao={projetoAtivo?.abertura ?? chaveTerreno}
+            terreno={editor} itens={itens} definirItens={(novosItens) => atualizarProjeto({ itens: novosItens })}
+            registro={projetoAtivo?.registro} gravarRegistro={(registro) => atualizarProjeto({ registro })}
+            abrirProjeto={abrirProjeto} limparProjeto={limparProjeto} />
         </div>
         <div id="historico-quintal" hidden={!verHistorico}>
           <HistoricoCultivo />

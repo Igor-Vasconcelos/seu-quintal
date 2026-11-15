@@ -320,6 +320,17 @@ img { max-width: 100%; display: block; }
 .planta-posicionavel { cursor: crosshair; }
 .editor-campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; margin: .55rem 0; }
 .editor .botao-contorno { margin-top: .35rem; }
+.editor-projeto-campos { min-width: 0; margin: 0; padding: 0; border: 0; }
+.editor-projeto-campos .botao:disabled {
+  color: var(--sq-disabled-fg);
+  background: var(--sq-disabled-bg);
+  border-color: var(--sq-border);
+  cursor: default;
+}
+.projetos-salvos { display: grid; justify-items: start; gap: .65rem; margin-top: 1rem; padding-top: .8rem; border-top: 1px solid var(--sq-border); }
+.projetos-salvos-linha { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: .5rem; width: 100%; }
+.form-conta-quintal { width: min(100%, 24rem); }
+.form-conta-quintal fieldset { display: grid; gap: .65rem; }
 .canteiro { position: absolute; background: var(--sq-plan-planned-bg); box-shadow: inset 0 0 0 1px var(--sq-plan-planned-stroke); }
 .canteiro.sobreposto { background: #f6cb45b8; box-shadow: inset 0 0 0 1px #6b4300; }
 .canteiro-rascunho { outline: 2px dashed var(--sq-focus); outline-offset: -1px; }
@@ -367,6 +378,7 @@ img { max-width: 100%; display: block; }
 }
 
 @media (max-width: 359px) {
+  .projetos-salvos-linha { grid-template-columns: 1fr; }
   .guias-grade { grid-template-columns: 1fr; }
   .planejador-grade { grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr); }
 }

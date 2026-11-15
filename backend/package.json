@@ -1,0 +1,19 @@
+{
+  "name": "seu-quintal-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "db:setup": "node --env-file-if-exists=.env migrar.js"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "pg": "^8.23.1"
+  }
+}
