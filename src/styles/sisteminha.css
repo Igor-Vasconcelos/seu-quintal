@@ -171,6 +171,55 @@
   text-underline-offset: .18em;
 }
 
+.sisteminha-modulo {
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  padding: 0;
+  border-radius: var(--sq-radius-card);
+}
+
+.sisteminha-modulo-imagem {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  border-radius: calc(var(--sq-radius-card) - 1px) calc(var(--sq-radius-card) - 1px) 0 0;
+}
+
+.sisteminha-modulo-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+  padding: clamp(1rem, 3vw, 1.65rem);
+}
+
+.sisteminha-modulo h3 {
+  font-size: var(--sq-type-h2);
+  line-height: 1.08;
+}
+
+.sisteminha-modulo-resumo {
+  margin-top: .35rem;
+  color: var(--sq-text);
+  font-weight: var(--sq-weight-strong);
+}
+
+.sisteminha-modulo-explicacao {
+  color: var(--sq-text-muted);
+  line-height: var(--sq-leading-body);
+}
+
+.sisteminha-modulo-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem 1rem;
+  margin-top: auto;
+  padding-top: .75rem;
+  border-top: 1px solid var(--sq-border);
+}
+
+.sisteminha-modulo-acoes .botao .icone { width: 1.1em; height: 1.1em; }
+
 .sisteminha-galinheiro {
   grid-column: 1 / -1;
   grid-template-columns: minmax(0, 1fr) minmax(0, .96fr);
@@ -189,13 +238,13 @@
 
 .galinheiro-intro { grid-area: intro; }
 
-.galinheiro-voltar {
+.sisteminha-link-ciclo {
   gap: .35rem;
   color: var(--sq-link);
   font-size: var(--sq-type-small);
 }
 
-.galinheiro-voltar .icone { width: 1.05em; height: 1.05em; transform: rotate(180deg); }
+.sisteminha-link-ciclo .icone { width: 1.05em; height: 1.05em; transform: rotate(180deg); }
 
 .sisteminha-galinheiro h3 {
   font-size: clamp(2.3rem, 5vw, 4rem);
@@ -259,6 +308,7 @@
   .sisteminha-abertura img { max-height: 21rem; }
   .sisteminha-cartoes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .sisteminha-detalhes { grid-template-columns: 1fr; }
+  .sisteminha-modulo-imagem { aspect-ratio: 16 / 9; }
   .sisteminha-galinheiro {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "intro" "foto" "orientacoes" "acoes";

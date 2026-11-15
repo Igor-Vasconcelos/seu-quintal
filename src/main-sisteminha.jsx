@@ -15,24 +15,32 @@ const modulos = {
   tanque: {
     titulo: "Tanque de peixes",
     imagem: "sisteminha/tanque.webp",
+    descricaoImagem: "Tanque circular com peixes e tubulação à beira da água.",
+    conexao: ["horta", "Ver horta"],
     resumo: "Fornece peixes e água rica em nutrientes para o cultivo.",
     explicacao: "A água circula pelo sistema de filtragem. O sedimentador ajuda a separar resíduos sólidos, que podem seguir para a compostagem. Parte da água rica em nutrientes pode ser aproveitada na irrigação.",
   },
   compostagem: {
     titulo: "Compostagem",
     imagem: "compostagem.webp",
+    descricaoImagem: "Mãos segurando composto ao lado de uma composteira de madeira.",
+    conexao: ["minhocario", "Ver minhocário"],
     resumo: "Transforma matéria orgânica em composto.",
     explicacao: "Resíduos do tanque, restos vegetais e material do galinheiro podem ser aproveitados na composteira conforme o manejo de cada material. O composto pode nutrir o solo, e parte do material já processado pode seguir para o minhocário.",
   },
   minhocario: {
     titulo: "Minhocário",
     imagem: "sisteminha/minhocario.webp",
+    descricaoImagem: "Minhocas sobre húmus em um minhocário.",
+    conexao: ["horta", "Ver horta"],
     resumo: "Produz húmus para adubar os canteiros.",
     explicacao: "As minhocas transformam material orgânico previamente preparado em húmus. O húmus pode ser incorporado ao solo para fornecer nutrientes às plantas. O minhocário complementa a compostagem.",
   },
   horta: {
     titulo: "Horta",
     imagem: "horta.webp",
+    descricaoImagem: "Canteiros com hortaliças cultivadas no quintal.",
+    conexao: ["compostagem", "Ver compostagem"],
     resumo: "Aproveita água e adubo para produzir alimentos.",
     explicacao: "Os canteiros podem receber água do tanque para irrigação e usar composto ou húmus no solo. Depois da colheita, restos vegetais adequados podem voltar à composteira, dando continuidade ao aproveitamento dos resíduos.",
   },
@@ -83,12 +91,41 @@ function Caminho({ id, titulo, etapas }) {
   );
 }
 
+function DetalheModulo({ id, modulo }) {
+  const [destino, rotulo] = modulo.conexao;
+
+  return (
+    <article className="sisteminha-detalhe sisteminha-modulo" id={id}
+      tabIndex={-1} aria-labelledby={`titulo-${id}`}>
+      <img className="sisteminha-modulo-imagem" src={`./imagens/${modulo.imagem}`}
+        alt={modulo.descricaoImagem} loading="lazy" />
+
+      <div className="sisteminha-modulo-conteudo">
+        <header>
+          <h3 id={`titulo-${id}`}>{modulo.titulo}</h3>
+          <p className="sisteminha-modulo-resumo">{modulo.resumo}</p>
+        </header>
+        <p className="sisteminha-modulo-explicacao">{modulo.explicacao}</p>
+
+        <div className="sisteminha-modulo-acoes">
+          <a className="botao botao-contorno" href={`#${destino}`}>
+            {rotulo} <Icone nome="seta" />
+          </a>
+          <a className="sisteminha-voltar sisteminha-link-ciclo" href="#ciclo">
+            <Icone nome="seta" /> Voltar ao ciclo
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function DetalheGalinheiro({ modulo }) {
   return (
     <article className="sisteminha-detalhe sisteminha-galinheiro" id="galinheiro"
       tabIndex={-1} aria-labelledby="titulo-galinheiro">
       <header className="galinheiro-intro">
-        <a className="sisteminha-voltar galinheiro-voltar" href="#ciclo">
+        <a className="sisteminha-voltar sisteminha-link-ciclo" href="#ciclo">
           <Icone nome="seta" /> Voltar ao ciclo
         </a>
         <h3 id="titulo-galinheiro">{modulo.titulo}</h3>
@@ -170,12 +207,7 @@ function Sisteminha() {
             {Object.entries(modulos).map(([id, modulo]) => id === "galinheiro" ? (
               <DetalheGalinheiro key={id} modulo={modulo} />
             ) : (
-              <article className="sisteminha-detalhe" id={id} key={id} tabIndex={-1} aria-labelledby={`titulo-${id}`}>
-                <h3 id={`titulo-${id}`}>{modulo.titulo}</h3>
-                <p><strong>{modulo.resumo}</strong></p>
-                <p>{modulo.explicacao}</p>
-                <a className="sisteminha-voltar" href="#ciclo">Voltar ao ciclo</a>
-              </article>
+              <DetalheModulo key={id} id={id} modulo={modulo} />
             ))}
           </div>
         </section>
