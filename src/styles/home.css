@@ -128,7 +128,12 @@ img { max-width: 100%; display: block; }
 }
 
 .atalhos { display: none; }
-.ferramentas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.ferramentas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem;
+}
 .ferramenta {
   min-width: 0;
   padding: clamp(.9rem, 2.4vw, 1.5rem);
@@ -192,14 +197,11 @@ img { max-width: 100%; display: block; }
 .nota a, .link-fonte { color: var(--sq-link); text-underline-offset: .18em; }
 .link-fonte { font-size: .9rem; }
 
-.ferramenta-planta { display: flex; flex-direction: column; }
-.ferramenta-planta form { display: flex; flex-direction: column; flex: 1; }
 .planejador-grade {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.03fr);
   align-items: start;
   gap: clamp(.55rem, 2vw, 1.25rem);
-  flex: 1;
   margin-bottom: 1rem;
 }
 .medidas { display: grid; gap: .7rem; padding-top: .15rem; }

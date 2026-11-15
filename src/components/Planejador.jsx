@@ -17,7 +17,7 @@ export default function Planejador({ abrirEditor }) {
   }
 
   return (
-    <section className="ferramenta ferramenta-planta" id="planejador" aria-labelledby="titulo-planejador">
+    <section className="ferramenta" id="planejador" aria-labelledby="titulo-planejador">
       <h2 id="titulo-planejador"><Icone nome="planta" />Planejador de Terreno</h2>
       <form onSubmit={continuar}>
         <div className="planejador-grade">
