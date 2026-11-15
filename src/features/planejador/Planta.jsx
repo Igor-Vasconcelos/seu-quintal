@@ -1,6 +1,6 @@
 import { formatarMedida } from "./geometria.js";
 
-export default function Planta({ terreno, itens = [], mostrarFrente = false }) {
+export default function Planta({ terreno, itens = [], mostrarFrente = false, aoPosicionar }) {
   // Usa o mesmo fator nos dois eixos para manter a proporção em qualquer tela.
   const maiorLado = Math.max(terreno.largura, terreno.comprimento);
   const estilo = {
@@ -12,10 +12,14 @@ export default function Planta({ terreno, itens = [], mostrarFrente = false }) {
 
   return (
     <div className="planta-moldura">
-      <div className={mostrarFrente ? "planta planta-com-frente" : "planta"} style={estilo} role="img"
+      <div className={`planta${mostrarFrente ? " planta-com-frente" : ""}${aoPosicionar ? " planta-posicionavel" : ""}`}
+        style={estilo} role="img" onClick={aoPosicionar && ((evento) => {
+          const { left, top, width, height } = evento.currentTarget.getBoundingClientRect();
+          aoPosicionar((evento.clientX - left) / width * terreno.largura, (evento.clientY - top) / height * terreno.comprimento);
+        })}
         aria-label={`Planta em escala de ${formatarMedida(terreno.largura)} por ${formatarMedida(terreno.comprimento)} metros${mostrarFrente ? ", com a frente na borda inferior" : ""}`}>
         {itens.map((item) => (
-          <span key={item.id} className={item.sobreposto ? "canteiro sobreposto" : "canteiro"}
+          <span key={item.id} className={`canteiro${item.sobreposto ? " sobreposto" : ""}${item.rascunho ? " canteiro-rascunho" : ""}`}
             style={{
               left: `${item.x / terreno.largura * 100}%`,
               top: `${item.y / terreno.comprimento * 100}%`,

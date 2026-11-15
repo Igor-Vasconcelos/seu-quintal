@@ -3,9 +3,10 @@ import EditorTerreno from "./EditorTerreno.jsx";
 import { solicitarProjetos } from "./api.js";
 import { formatarMedida } from "./geometria.js";
 
-export default function EditorComProjetos({ terreno, itens, definirItens, registro, gravarRegistro, abrirProjeto }) {
+export default function EditorComProjetos({ terreno, itens, definirItens, registro, gravarRegistro, abrirProjeto, contaId, sessaoExpirada }) {
   const [nome, definirNome] = useState(registro?.nome ?? "");
   const [projetos, definirProjetos] = useState(null);
+  const [proxima, definirProxima] = useState(null);
   const [escolhido, definirEscolhido] = useState("");
   const [operacao, definirOperacao] = useState("");
   const [mensagem, definirMensagem] = useState("");
@@ -27,7 +28,10 @@ export default function EditorComProjetos({ terreno, itens, definirItens, regist
     try {
       await tarefa(controle.signal);
     } catch (falha) {
-      if (!controle.signal.aborted) definirErro(falha.message);
+      if (!controle.signal.aborted) {
+        if (falha.status === 401) sessaoExpirada();
+        else definirErro(falha.message);
+      }
     } finally {
       requisicao.current = null;
       if (!controle.signal.aborted) definirOperacao("");
@@ -42,23 +46,25 @@ export default function EditorComProjetos({ terreno, itens, definirItens, regist
         id: registro?.id,
         metodo: registro?.id ? "PUT" : "POST",
         dados: { id, nome: nome.trim(), largura: terreno.largura, profundidade: terreno.comprimento, itens },
-        signal,
+        signal, contaId,
       });
       if (signal.aborted) return;
-      gravarRegistro({ id: salvo.id, nome: salvo.nome, itens });
+      gravarRegistro({ id: salvo.id, nome: salvo.nome, itens, contaId });
       definirNome(salvo.nome);
-      definirProjetos((lista) => lista && [salvo, ...lista.filter((projeto) => projeto.id !== salvo.id)]);
+      definirProjetos(null);
+      definirProxima(null);
       definirMensagem("Projeto salvo.");
     });
   }
 
-  function listar() {
+  function listar(depois) {
     executar("listar", async (signal) => {
-      const lista = await solicitarProjetos({ signal });
+      const pagina = await solicitarProjetos({ signal, contaId, depois });
       if (signal.aborted) return;
-      definirProjetos(lista);
-      definirEscolhido(lista[0]?.id ?? "");
-      definirMensagem(lista.length ? "" : "Você ainda não tem projetos salvos.");
+      definirProjetos((lista) => depois ? [...lista, ...pagina.projetos] : pagina.projetos);
+      definirProxima(pagina.proxima);
+      if (!depois) definirEscolhido(pagina.projetos[0]?.id ?? "");
+      definirMensagem(depois || pagina.projetos.length ? "" : "Você ainda não tem projetos salvos.");
     });
   }
 
@@ -66,8 +72,8 @@ export default function EditorComProjetos({ terreno, itens, definirItens, regist
     evento.preventDefault();
     if (alterado && !window.confirm("Abrir outro projeto e descartar as alterações atuais?")) return;
     executar("abrir", async (signal) => {
-      const salvo = await solicitarProjetos({ id: escolhido, signal });
-      if (!signal.aborted) abrirProjeto(salvo);
+      const salvo = await solicitarProjetos({ id: escolhido, signal, contaId });
+      if (!signal.aborted) abrirProjeto(salvo, contaId);
     });
   }
 
@@ -85,7 +91,7 @@ export default function EditorComProjetos({ terreno, itens, definirItens, regist
               {operacao === "salvar" ? "Salvando…" : "Salvar projeto"}
             </button>
           </form>
-          <button type="button" className="botao botao-contorno" onClick={listar}>
+          <button type="button" className="botao botao-contorno" onClick={() => listar()}>
             {operacao === "listar" ? "Buscando…" : "Ver projetos salvos"}
           </button>
           {projetos?.length > 0 && (
@@ -105,6 +111,9 @@ export default function EditorComProjetos({ terreno, itens, definirItens, regist
               </button>
             </form>
           )}
+          {proxima && <button type="button" className="botao botao-contorno" onClick={() => listar(proxima)}>
+            Carregar mais projetos
+          </button>}
         </section>
       </fieldset>
       <p role="status" className="nota">{registro && alterado ? "Há alterações por salvar." : mensagem}</p>

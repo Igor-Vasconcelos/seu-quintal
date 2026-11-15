@@ -104,7 +104,48 @@
 .lista-cultivo .acoes-guia { margin-top: .55rem; }
 .observacoes-cultivo { white-space: pre-wrap; }
 
+.guia-horta .secoes-quintal { margin-bottom: .85rem; }
+.escolhas-horta { margin-block: 0; }
+.escolhas-horta [aria-live] h3 { margin-top: .2rem; }
+.culturas-com-fotos {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: .55rem;
+  padding: 0;
+  margin: .5rem 0 .75rem;
+  list-style: none;
+}
+.culturas-com-fotos li {
+  overflow: hidden;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface);
+}
+.culturas-com-fotos img { width: 100%; height: auto; max-height: 8rem; aspect-ratio: 3 / 2; object-fit: cover; }
+.culturas-com-fotos strong {
+  display: block;
+  padding: .4rem;
+  font-size: .92rem;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.detalhes-horta { display: grid; gap: .55rem; margin: 0; }
+.detalhes-horta dt { font-weight: 750; }
+.detalhes-horta dd { margin: .12rem 0 0; }
+.creditos-culturas { font-size: .83rem; }
+.creditos-culturas summary { cursor: pointer; min-height: var(--sq-control-min); align-content: center; }
+.creditos-culturas ul { padding-left: 1.1rem; }
+.creditos-culturas .nota { margin-block: .35rem; }
+.form-terra { margin-top: .8rem; }
+.form-terra .nota { margin-top: -.45rem; }
+.campos-terra { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.saco-terra { width: min(100%, 18rem); }
+
 @media (max-width: 480px) {
   .campos-guia-duplo { grid-template-columns: minmax(0, 1fr); }
   .secoes-quintal .botao { padding-inline: .65rem; font-size: .85rem; }
+  .campos-terra { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .culturas-com-fotos { gap: .35rem; }
+  .culturas-com-fotos strong { padding-inline: .2rem; font-size: .82rem; }
 }

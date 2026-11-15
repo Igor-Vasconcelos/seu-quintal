@@ -1,25 +1,35 @@
-const endereco = import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, "");
+const enderecoConfigurado = import.meta.env.VITE_API_URL?.trim();
+export const apiConfigurada = import.meta.env.DEV ? Boolean(enderecoConfigurado) : enderecoConfigurado === "/api";
 
-export const apiConfigurada = Boolean(endereco);
+export async function solicitarApi(caminho, { metodo = "GET", dados, signal, contaId } = {}) {
+  const headers = new Headers();
+  if (dados) headers.set("Content-Type", "application/json");
+  if (contaId) headers.set("X-Conta-Esperada", contaId);
 
-export async function solicitarProjetos({ id, metodo = "GET", dados, signal } = {}) {
-  const caminho = id ? `/${encodeURIComponent(id)}` : "";
   let resposta;
   try {
-    resposta = await fetch(`${endereco}/planejamentos${caminho}`, {
+    resposta = await fetch(`/api${caminho}`, {
       method: metodo,
-      headers: dados ? { "Content-Type": "application/json" } : undefined,
+      headers,
       body: dados ? JSON.stringify(dados) : undefined,
       signal,
     });
   } catch (erro) {
     if (erro.name === "AbortError") throw erro;
-    throw new Error("Não foi possível acessar a API do Seu Quintal. Confira se o servidor está rodando.");
+    throw new Error("Não foi possível acessar a API do Seu Quintal. Tente novamente.");
   }
 
   const resultado = await resposta.json().catch(() => null);
   if (!resposta.ok || resultado === null) {
-    throw new Error(resultado?.erro ?? "A API não retornou uma resposta válida. Tente novamente.");
+    const erro = new Error(resultado?.erro ?? "A API não retornou uma resposta válida. Tente novamente.");
+    erro.status = resposta.status;
+    throw erro;
   }
   return resultado;
+}
+
+export function solicitarProjetos({ id, depois, ...opcoes } = {}) {
+  const caminho = id ? `/${encodeURIComponent(id)}` : "";
+  const pagina = depois ? `?depois=${encodeURIComponent(depois)}` : "";
+  return solicitarApi(`/planejamentos${caminho}${pagina}`, opcoes);
 }

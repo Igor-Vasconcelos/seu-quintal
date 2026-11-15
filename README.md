@@ -55,7 +55,7 @@ Copy-Item backend/.env.example backend/.env
 Copy-Item .env.example .env.local
 ```
 
-Abra `backend/.env` e preencha a `DATABASE_URL` com seu usuário, senha, porta e nome do banco. Se a senha contiver caracteres especiais, use a forma codificada para URLs. O arquivo `backend/.env` fica fora do Git. O `.env.local` aponta o React para a API local.
+Abra `backend/.env` e preencha a `DATABASE_URL` com seu usuário, senha, porta e nome do banco. Se a senha contiver caracteres especiais, use a forma codificada para URLs. O arquivo `backend/.env` fica fora do Git. O `.env.local` aponta o React para `/api` no mesmo endereço do site. O Vite encaminha os pedidos à API local.
 
 No primeiro terminal, instale as dependências, crie a tabela e inicie a API.
 
@@ -74,27 +74,41 @@ npm.cmd run dev
 ```
 
 1. Confira a conexão em [http://127.0.0.1:3001/api/health](http://127.0.0.1:3001/api/health). A resposta esperada é `{"status":"ok"}`.
-2. Abra [http://localhost:5173/](http://localhost:5173/), entre no **Meu Quintal**, adicione canteiros, dê um nome ao projeto e clique em **Salvar projeto**.
+2. Abra [http://localhost:5173/](http://localhost:5173/), entre no **Meu Quintal** e crie uma conta com nome de usuário e senha. Adicione canteiros, dê um nome ao projeto e use **Salvar projeto**.
 3. Recarregue, entre novamente no **Meu Quintal**, clique em **Ver projetos salvos**, selecione o projeto e use **Abrir projeto**.
-4. Mova ou remova um canteiro e salve novamente. Ao reabrir, confira que as mudanças foram gravadas no mesmo projeto.
+4. Mova ou remova um canteiro e salve novamente. Ao reabrir, confira as mudanças. Saia da conta, crie outra e confirme que ela tem a própria lista de projetos.
 
-Se trocar de porta ou abrir pelo IP em vez de `localhost`, ajuste `FRONTEND_ORIGIN` no `backend/.env` para a origem que abrir no navegador e reinicie a API. Se mudar a porta do backend, atualize também a `VITE_API_URL` em `.env.local` e reinicie o Vite.
+Se mudar o endereço do Vite, ajuste `FRONTEND_ORIGIN` no `backend/.env` para a origem exata e reinicie a API. Se mudar a porta do backend, use `VITE_API_URL=http://127.0.0.1:NOVA_PORTA/api` no desenvolvimento e reinicie o Vite.
+
+As migrações preservam os projetos locais criados na versão anterior. Como eles ainda não têm dono, ficam indisponíveis até que o administrador do banco associe cada projeto à conta correta pela coluna `dono_id`.
 
 | Método e caminho | Função |
 | --- | --- |
-| `GET /api/planejamentos` | Lista os projetos salvos |
+| `GET /api/planejamentos?depois=ID` | Lista os seus projetos em páginas de até 20. O cursor é opcional. |
 | `POST /api/planejamentos` | Cria um projeto |
 | `GET /api/planejamentos/:id` | Carrega um projeto com seus canteiros |
 | `PUT /api/planejamentos/:id` | Atualiza o projeto salvo |
 
 ## Publicar o salvamento online
 
-O site está no GitHub Pages. A API deste PR escuta apenas em `127.0.0.1` e foi preparada para desenvolvimento local. Para colocar os planejamentos online:
+O Express pode servir o site e a API juntos. Assim, o navegador envia o cookie de sessão por HTTPS ao mesmo domínio da página. A publicação estática no GitHub Pages continua disponível para consultar o conteúdo e usar o planejador temporário.
 
-1. Adicione login e associe cada planejamento a uma conta. A API deve obter a identidade do login e filtrar todas as leituras e alterações pelo dono do projeto.
-2. Crie um PostgreSQL hospedado, por exemplo no [Neon](https://neon.com/docs/connect/connect-from-any-app). Configure a `DATABASE_URL` no serviço de backend e rode as migrações no banco online.
-3. Hospede o Express como [Web Service no Render](https://render.com/docs/web-services). Adapte a inicialização para ler as variáveis do serviço, escutar em `0.0.0.0` e usar a porta fornecida pelo Render. Use a raiz do repositório no deploy, pois o backend importa as regras de geometria de `src/`.
-4. No Express, configure `FRONTEND_ORIGIN=https://igor-vasconcelos.github.io`. No workflow de publicação do GitHub Pages, passe `VITE_API_URL` para o passo de build do Vite. Use a URL pública da API com o caminho `/api`, como `https://seu-servico.onrender.com/api`. A credencial do PostgreSQL fica no backend.
-5. Publique novamente o front-end e teste na mesma conta em dois dispositivos. Abra uma segunda conta e verifique que ela só consegue acessar os próprios projetos.
+1. Crie o PostgreSQL hospedado, por exemplo no [Neon](https://neon.com/docs/connect/connect-from-any-app).
+2. Crie um [Web Service no Render](https://render.com/docs/web-services) conectado à branch que contém o backend. Deixe o diretório raiz em branco para usar o repositório inteiro.
+3. Configure os comandos e variáveis abaixo. O Render já informa o endereço HTTPS e a porta. Se usar domínio próprio, atribua a origem HTTPS dele a `FRONTEND_ORIGIN`, sem o caminho.
 
-Para sincronizar também o Histórico de cultivo, o backend precisará de uma tabela e rotas para os registros de plantio e colheita. Os registros existentes ficam disponíveis no navegador onde foram salvos e podem ser importados pela pessoa depois de entrar na conta.
+| Campo | Valor |
+| --- | --- |
+| Build Command | `npm ci --include=dev && npm ci --prefix backend && npm run build` |
+| Start Command | `npm run db:setup --prefix backend && npm start --prefix backend` |
+| Health Check Path | `/api/health` |
+| `NODE_VERSION` | `24` |
+| `NODE_ENV` | `production` |
+| `VITE_API_URL` | `/api` |
+| `DATABASE_URL` | Credencial do PostgreSQL, adicionada apenas às variáveis do serviço |
+
+4. Abra a URL HTTPS do serviço. Entre com a mesma conta em dois dispositivos e abra um projeto salvo. Em seguida, abra outra conta e confira que os projetos da primeira estão indisponíveis.
+
+O cadastro usa nome de usuário e senha. Essa versão não tem recuperação de senha. O limite de requisições usa memória do serviço e é aplicado por instância. O Histórico de cultivo guarda plantios e colheitas no navegador em que foram cadastrados.
+
+O build inclui uma política CSP para as páginas estáticas. Quando o Express serve o site, ele também envia os cabeçalhos HTTPS e de proteção contra incorporação em frames.
