@@ -27,7 +27,7 @@ export default function MeuQuintal() {
   }, []);
 
   return (
-    <div className="pagina" id="inicio">
+    <div className="pagina pagina-meu-quintal" id="inicio">
       <a href="#conteudo" className="pular">Pular para o conteúdo</a>
       <Cabecalho raiz={raiz} pagina="meu-quintal" />
       <main className="quintal-pagina" id="conteudo" tabIndex={-1}>
