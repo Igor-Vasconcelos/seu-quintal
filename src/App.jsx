@@ -160,6 +160,7 @@ export default function App() {
             aria-controls="historico-quintal" aria-pressed={verHistorico} onClick={() => definirVerHistorico(true)}>
             Histórico de cultivo
           </button>
+          <a className="botao botao-contorno" href="./horta/organizador/">Organizador de horta</a>
         </div>
         <div id="painel-terreno" hidden={verHistorico}>
           <EditorTerreno key={chaveTerreno} terreno={editor} abrirTerreno={abrirEditor}

@@ -1,0 +1,366 @@
+.organizador-abertura {
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, .8fr);
+  margin-bottom: 1rem;
+}
+
+.organizador-abertura img {
+  max-height: 9rem;
+  object-fit: cover;
+}
+
+.organizador {
+  display: grid;
+  gap: 1rem;
+}
+
+.organizador-barra,
+.organizador-secao-cabecalho,
+.organizador-cultivo-cabecalho,
+.organizador-acoes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem .85rem;
+}
+
+.organizador-barra {
+  align-items: start;
+}
+
+.organizador-barra > .nota {
+  margin-top: .65rem;
+}
+
+.organizador-montagem {
+  display: grid;
+  grid-template-columns: minmax(0, 1.21fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 1rem;
+}
+
+.organizador-cartao,
+.organizador-config {
+  min-width: 0;
+  padding: var(--sq-card-padding);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+}
+
+.organizador-cartao h2 {
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.15;
+}
+
+.organizador-previsao {
+  border-color: #bacbb4;
+  background: var(--sq-surface-soft);
+}
+
+.organizador-config {
+  flex: 1 1 18rem;
+  padding: .55rem .85rem;
+}
+
+.organizador summary {
+  align-content: center;
+  min-height: 2.75rem;
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.organizador-config form {
+  padding: .25rem 0 .55rem;
+}
+
+.organizador-config .botao {
+  margin-top: .65rem;
+}
+
+.organizador-status {
+  color: var(--sq-success-text);
+  font-weight: 650;
+}
+
+.organizador-status:empty { display: none; }
+
+.organizador-form,
+.organizador-resumo {
+  display: grid;
+  gap: .9rem;
+  margin-top: .85rem;
+}
+
+.organizador-campos,
+.organizador-filtros {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+  align-items: start;
+}
+
+.organizador-filtros {
+  grid-template-columns: minmax(8.5rem, .75fr) minmax(7rem, .6fr) minmax(0, 1fr);
+  margin-block: .9rem .4rem;
+}
+
+.organizador-com-unidade {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.organizador-com-unidade > span {
+  color: var(--sq-text-muted);
+  font-size: .85rem;
+}
+
+.organizador-meta {
+  min-width: 0;
+  margin: 0;
+  padding: .55rem .75rem .75rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-background);
+}
+
+.organizador-meta legend {
+  padding-inline: .15rem;
+  font-weight: 750;
+}
+
+.organizador .nota { margin-top: .25rem; }
+.organizador-meta > .nota { margin: 0 0 .45rem; }
+.organizador-acoes { justify-content: flex-start; }
+
+.organizador-quantidade {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+  padding: .7rem .85rem;
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-forest);
+  color: var(--sq-on-primary);
+  font-weight: 750;
+}
+
+.organizador-quantidade > strong {
+  font: 400 clamp(2rem, 5vw, 3.5rem)/1 var(--sq-font-display);
+  overflow-wrap: anywhere;
+}
+
+.organizador-quantidade small {
+  display: block;
+  font-weight: 500;
+  color: #e1ebd7;
+}
+
+.organizador-etapas,
+.organizador-cultivos,
+.organizador-atividades,
+.organizador-lotes ol {
+  display: grid;
+  gap: .45rem;
+  padding: 0;
+  list-style: none;
+}
+
+.organizador-etapas {
+  margin-top: -.45rem;
+}
+
+.organizador-etapas li {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .2rem .5rem;
+  padding: .48rem .6rem;
+  border-inline-start: 4px solid var(--etapa-borda);
+  border-radius: .25rem;
+  background: var(--etapa-fundo);
+  color: var(--etapa-texto);
+}
+
+.organizador [data-etapa="semear"] {
+  --etapa-borda: #927039;
+  --etapa-fundo: #f7ead0;
+  --etapa-texto: #624820;
+}
+
+.organizador [data-etapa="transplantar"] {
+  --etapa-borda: #4f8644;
+  --etapa-fundo: #e5efd9;
+  --etapa-texto: #314f2a;
+}
+
+.organizador [data-etapa="colher"] {
+  --etapa-borda: #9d5b3c;
+  --etapa-fundo: #fae9dd;
+  --etapa-texto: #733f27;
+}
+
+.organizador-etapas li > div > small {
+  display: block;
+  font-size: .78rem;
+  font-weight: 500;
+}
+
+.organizador-area-lote {
+  padding-top: .55rem;
+  border-top: 1px solid #c8d6c1;
+}
+
+.organizador-epoca,
+.organizador-area-total {
+  padding: .65rem .75rem;
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-background);
+}
+
+.organizador-area-total { margin-top: .75rem; }
+.organizador-epoca a { display: inline-block; margin-left: .3rem; }
+.organizador a { color: var(--sq-link); text-underline-offset: .18em; font-weight: 700; }
+
+.organizador-detalhes {
+  border-top: 1px solid var(--sq-border);
+}
+
+.organizador-guia {
+  display: grid;
+  gap: .55rem;
+  margin-block: .15rem .55rem;
+}
+
+.organizador-guia dt { font-weight: 750; }
+.organizador dd { margin: 0; }
+.organizador-fontes { padding-inline-start: 1.1rem; font-size: .82rem; }
+.organizador-fontes li + li { margin-top: .25rem; }
+
+.organizador-vazio {
+  margin-top: .65rem;
+  color: var(--sq-text-muted);
+}
+
+.organizador-cultivos { margin-top: .85rem; }
+
+.organizador-cultivo {
+  min-width: 0;
+  padding: .75rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+}
+
+.organizador-cultivo-cabecalho { align-items: start; }
+.organizador-cultivo h3, .organizador-atividade h3 { overflow-wrap: anywhere; }
+.organizador-cultivo .botao, .organizador-atividade .botao { padding-inline: .65rem; font-size: .85rem; }
+.organizador-meta-salva { margin-top: .45rem; font-weight: 700; }
+
+.organizador-lotes {
+  margin-top: .65rem;
+}
+
+.organizador-lotes ol {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.organizador-lotes li {
+  padding: .5rem .6rem;
+  border-radius: .5rem;
+  background: var(--sq-surface-soft);
+}
+
+.organizador-lotes dl {
+  display: grid;
+  gap: .25rem;
+  margin: .35rem 0 0;
+  font-size: .84rem;
+}
+
+.organizador-lotes dt { color: var(--sq-text-muted); }
+.organizador-lotes dd { font-weight: 750; }
+
+.organizador-confirmar {
+  padding: .55rem .65rem;
+  border-radius: .5rem;
+  background: var(--sq-error-bg);
+}
+
+.organizador-confirmar .organizador-acoes { margin-top: .35rem; }
+
+.organizador-concluidas {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 2.75rem;
+  font-size: .88rem;
+}
+
+.organizador-concluidas input {
+  accent-color: var(--sq-forest);
+  min-width: 1rem;
+  min-height: 1rem;
+}
+
+.organizador-atividades {
+  margin-block: .5rem .75rem;
+}
+
+.organizador-atividade {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, .57fr) minmax(0, 2.2fr) auto;
+  align-items: center;
+  gap: .35rem .7rem;
+  padding: .55rem .65rem;
+  border: 1px solid var(--sq-border);
+  border-radius: .55rem;
+}
+
+.organizador-atividade[data-feita="true"] {
+  background: var(--sq-surface-soft);
+}
+
+.organizador-atividade-data { font-size: .94rem; font-weight: 750; }
+
+.organizador-fase {
+  display: inline-block;
+  padding: .13rem .4rem;
+  border-radius: .3rem;
+  color: var(--etapa-texto);
+  background: var(--etapa-fundo);
+  font-size: .78rem;
+  font-weight: 750;
+}
+
+.organizador-atividade h3 { font-size: 1rem; }
+.organizador-atividade p { color: var(--sq-text-muted); font-size: .83rem; }
+.organizador-atividade .organizador-alerta-epoca { color: var(--sq-warning-text); }
+.organizador-atividade-status { padding-inline: .25rem; white-space: nowrap; }
+
+.organizador-historico summary {
+  font: 400 clamp(1.35rem, 3vw, 1.8rem)/1.2 var(--sq-font-display);
+}
+.organizador-historico .historico-cultivo { margin-top: 1rem; }
+
+@media (max-width: 767px) {
+  .organizador-montagem,
+  .organizador-abertura { grid-template-columns: minmax(0, 1fr); }
+  .organizador-abertura img { max-height: 6.5rem; }
+  .organizador-lotes ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 480px) {
+  .organizador-campos,
+  .organizador-filtros { grid-template-columns: minmax(0, 1fr); }
+
+  .organizador-meta .organizador-campos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .organizador-atividade {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .organizador-atividade-data { grid-column: 1 / -1; }
+  .organizador-secao-cabecalho { align-items: start; }
+}

@@ -15,6 +15,7 @@ createRoot(document.getElementById("rodape")).render(<Rodape raiz={raiz} pagina=
 
 const horta = document.getElementById("guia-horta");
 const calendario = document.getElementById("calendario-raiz");
+const organizador = document.getElementById("organizador-raiz");
 
 if (horta) {
   Promise.all([import("./features/guias/GuiaHorta.jsx"), import("./data/guias.js")])
@@ -26,5 +27,11 @@ if (horta) {
 if (calendario) {
   import("./components/Calendario.jsx").then(({ default: Calendario }) => {
     createRoot(calendario).render(<Calendario titulo="Consultar por mês e região" />);
+  });
+}
+
+if (organizador) {
+  import("./features/organizador/OrganizadorHorta.jsx").then(({ default: OrganizadorHorta }) => {
+    createRoot(organizador).render(<OrganizadorHorta />);
   });
 }

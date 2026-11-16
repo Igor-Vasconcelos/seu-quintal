@@ -17,6 +17,7 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
           <h2 id="titulo-rodape">Explore o site</h2>
           <ul>
             <li><a href={`${raiz}horta/`} aria-current={pagina === "horta" ? "page" : undefined}>Horta em pequenos espaços</a></li>
+            <li><a href={`${raiz}horta/organizador/`} aria-current={pagina === "organizador" ? "page" : undefined}>Organizador de horta</a></li>
             <li><a href={`${raiz}horta/calendario-de-plantio/`} aria-current={pagina === "calendario" ? "page" : undefined}>Calendário de plantio</a></li>
             <li><a href={`${home}#planejador`}>Planejador de terreno</a></li>
             <li><a href={`${home}#guias`}>Guias para começar</a></li>

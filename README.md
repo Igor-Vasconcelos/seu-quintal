@@ -23,6 +23,7 @@ Se você já criou um projeto Vite, copie o conteúdo desta pasta para a raiz do
 | `src/components/Cabecalho.jsx` e `src/components/Rodape.jsx` | Navegação compartilhada |
 | `src/styles/tokens.css` e `src/styles/home.css` | Design system e responsividade |
 | `src/components/Calendario.jsx` e `src/data/plantio.js` | Formulário, fonte e períodos de plantio |
+| `src/features/organizador/` | Metas semanais, escalonamento dos lotes, agenda e armazenamento dos planos de horta |
 | `src/components/Planejador.jsx` e `src/features/planejador/` | Medidas, geometria, planta e editor |
 | `src/data/guias.js` | Textos e fontes dos quatro cartões |
 
@@ -38,6 +39,7 @@ Os endereços abaixo são relativos à raiz do site. Cada página tem sua entrad
 | --- | --- |
 | `/` | `index.html` |
 | `/horta/` | `horta/index.html` |
+| `/horta/organizador/` | `horta/organizador/index.html` |
 | `/horta/calendario-de-plantio/` | `horta/calendario-de-plantio/index.html` |
 | `/sisteminha.html` | `sisteminha.html` |
 | `/mapa-do-site/` | `mapa-do-site/index.html` |

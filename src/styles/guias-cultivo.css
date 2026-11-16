@@ -99,6 +99,7 @@
 }
 
 .secoes-quintal { margin-bottom: .9rem; padding-bottom: .85rem; border-bottom: 1px solid var(--sq-border); }
+.secoes-quintal a.botao { text-decoration: none; }
 .lista-cultivo li { overflow-wrap: anywhere; }
 .lista-cultivo h4 { margin-bottom: .35rem; }
 .lista-cultivo .acoes-guia { margin-top: .55rem; }
