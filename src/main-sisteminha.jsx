@@ -6,7 +6,7 @@ import Cabecalho from "./components/Cabecalho.jsx";
 import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Icone from "./components/Icone.jsx";
 import Rodape from "./components/Rodape.jsx";
-import { guiaAnimais } from "./data/guias.js";
+import Galinheiro from "./features/galinheiro/Galinheiro.jsx";
 import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/editorial.css";
@@ -123,42 +123,6 @@ function DetalheModulo({ id, modulo }) {
   );
 }
 
-function DetalheGalinheiro({ modulo }) {
-  return (
-    <article className="sisteminha-detalhe sisteminha-galinheiro" id="galinheiro"
-      tabIndex={-1} aria-labelledby="titulo-galinheiro">
-      <header className="galinheiro-intro">
-        <a className="sisteminha-voltar sisteminha-link-ciclo" href="#ciclo">
-          <Icone nome="seta" /> Voltar ao ciclo
-        </a>
-        <h3 id="titulo-galinheiro">{modulo.titulo}</h3>
-        <p>{modulo.resumo}</p>
-      </header>
-
-      <img className="galinheiro-imagem" src={`./imagens/${modulo.imagem}`}
-        width="792" height="396" alt="Galinhas caipiras ciscando perto de um galinheiro de madeira." loading="lazy" />
-
-      <div className="galinheiro-orientacoes">
-        <div>
-          <h4>No ciclo do Sisteminha</h4>
-          <p>{modulo.explicacao}</p>
-        </div>
-        <div>
-          <h4>Antes de criar as aves</h4>
-          <p>{guiaAnimais.descricao}</p>
-        </div>
-      </div>
-
-      <div className="galinheiro-acoes">
-        <a className="botao" href={guiaAnimais.url} target="_blank" rel="noreferrer">
-          Ler o guia de criação de aves da Embrapa <Icone nome="seta" />
-        </a>
-        <a className="sisteminha-voltar" href="#compostagem">Ver compostagem</a>
-      </div>
-    </article>
-  );
-}
-
 function Sisteminha() {
   const [botaoCreditos, definirBotaoCreditos] = useState(null);
 
@@ -215,7 +179,7 @@ function Sisteminha() {
           <p className="sisteminha-orientacao">Estes cinco componentes mostram uma das formas de integrar o Sisteminha. A escolha dos módulos pode variar conforme o espaço, os recursos e a rotina de quem vai cuidar.</p>
           <div className="sisteminha-detalhes">
             {Object.entries(modulos).map(([id, modulo]) => id === "galinheiro" ? (
-              <DetalheGalinheiro key={id} modulo={modulo} />
+              <Galinheiro key={id} modulo={modulo} />
             ) : (
               <DetalheModulo key={id} id={id} modulo={modulo} />
             ))}

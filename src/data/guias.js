@@ -15,8 +15,7 @@ export const guiaAnimais = {
   destino: "sisteminha.html#galinheiro",
   assunto: "Criação de animais",
   simbolo: "🐓",
-  resumo: "Conheça os cuidados iniciais para montar um galinheiro.",
-  descricao: "Antes de escolher as aves, pense na rotina de manejo e no local do abrigo. O material da Embrapa traz critérios para avaliar drenagem, ventilação, sombra e acesso à água.",
+  resumo: "Calcule quantas aves criar e veja o consumo de ração, água e os cuidados diários.",
   fonte: "Criação de galinhas e codornas · Embrapa",
   url: "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1102048/1/Doc248PerguntasRespostasCriacaoGalinhasCodornas.pdf",
 };
