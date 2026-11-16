@@ -90,7 +90,7 @@ function ResumoCultivo({ plano, regiao }) {
   );
 }
 
-export default function FormularioCultivo({ edicao, regiao, aoSalvar, aoCancelar }) {
+export default function FormularioCultivo({ edicao, regiao, aoSalvar, aoCancelar, bloqueado }) {
   const [campos, definirCampos] = useState(() => formularioInicial(edicao));
   const [tentouSalvar, definirTentouSalvar] = useState(false);
   const ficha = culturasOrganizador[campos.cultura];
@@ -116,7 +116,7 @@ export default function FormularioCultivo({ edicao, regiao, aoSalvar, aoCancelar
   function salvar(evento) {
     evento.preventDefault();
     definirTentouSalvar(true);
-    if (plano) aoSalvar(plano);
+    if (plano && !bloqueado) aoSalvar(plano);
   }
 
   return (
@@ -177,7 +177,7 @@ export default function FormularioCultivo({ edicao, regiao, aoSalvar, aoCancelar
           </label>
           {tentouSalvar && erro && <p className="erro" role="alert">{erro}</p>}
           <div className="organizador-acoes">
-            <button className="botao" type="submit">{edicao ? "Salvar alterações" : "Adicionar ao plano"}</button>
+            <button className="botao" type="submit" disabled={bloqueado}>{edicao ? "Salvar alterações" : "Adicionar ao plano"}</button>
             {edicao && <button className="botao botao-contorno" type="button" onClick={aoCancelar}>Cancelar edição</button>}
           </div>
         </form>

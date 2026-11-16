@@ -10,7 +10,7 @@ import { guias } from "./data/guias.js";
 import { criarTerreno } from "./features/planejador/geometria.js";
 
 export default function App() {
-  const [verCreditos, definirVerCreditos] = useState(false);
+  const [botaoCreditos, definirBotaoCreditos] = useState(null);
 
   useEffect(() => {
     const parametros = new URLSearchParams(window.location.search);
@@ -105,9 +105,9 @@ export default function App() {
         </section>
       </main>
 
-      <Rodape inicio aoVerCreditos={() => definirVerCreditos(true)} />
+      <Rodape inicio aoVerCreditos={(evento) => definirBotaoCreditos(evento.currentTarget)} />
 
-      {verCreditos && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirVerCreditos(false)}>
+      {botaoCreditos && <CaixaDialogo titulo="Sobre as imagens" acionador={botaoCreditos} fechar={() => definirBotaoCreditos(null)}>
         <p>A imagem de abertura e os cartões da página inicial foram gerados por IA. Os guias de horta e de compostagem também incluem fotos do Wikimedia Commons, com créditos e licenças nos próprios guias.</p>
       </CaixaDialogo>}
 

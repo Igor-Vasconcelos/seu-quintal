@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import Cabecalho from "../../components/Cabecalho.jsx";
 import Icone from "../../components/Icone.jsx";
+import LimiteDaFerramenta from "../../components/LimiteDaFerramenta.jsx";
 import Rodape from "../../components/Rodape.jsx";
 import PlanejadorQuintal from "./PlanejadorQuintal.jsx";
 
@@ -45,14 +46,16 @@ export default function MeuQuintal() {
           ))}
         </nav>
         <div className="quintal-ferramenta">
-          <Suspense fallback={<p role="status">Carregando ferramenta…</p>}>
-            {secao === "terreno" && <PlanejadorQuintal />}
-            {secao === "historico" && <HistoricoCultivo />}
-            {secao === "horta" && <section aria-label="Organizador de horta">
-              <h2>Organizador de horta</h2>
-              <OrganizadorHorta />
-            </section>}
-          </Suspense>
+          <LimiteDaFerramenta key={secao}>
+            <Suspense fallback={<p role="status">Carregando ferramenta…</p>}>
+              {secao === "terreno" && <PlanejadorQuintal />}
+              {secao === "historico" && <HistoricoCultivo nivelTitulo={2} />}
+              {secao === "horta" && <section aria-label="Organizador de horta">
+                <h2>Organizador de horta</h2>
+                <OrganizadorHorta />
+              </section>}
+            </Suspense>
+          </LimiteDaFerramenta>
         </div>
       </main>
       <Rodape raiz={raiz} pagina="meu-quintal" />

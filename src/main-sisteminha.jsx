@@ -160,7 +160,7 @@ function DetalheGalinheiro({ modulo }) {
 }
 
 function Sisteminha() {
-  const [verCreditos, definirVerCreditos] = useState(false);
+  const [botaoCreditos, definirBotaoCreditos] = useState(null);
 
   useEffect(() => {
     const destino = document.getElementById(window.location.hash.slice(1));
@@ -185,6 +185,8 @@ function Sisteminha() {
           </div>
           <div className="sisteminha-panorama">
             <img src="./imagens/sisteminha/panorama.webp" width="1248" height="832"
+              srcSet="./imagens/sisteminha/panorama-720.webp 720w, ./imagens/sisteminha/panorama-960.webp 960w, ./imagens/sisteminha/panorama.webp 1248w"
+              sizes="(max-width: 560px) calc(100vw - 1.5rem), (max-width: 767px) 33.5rem, (min-width: 1200px) 41rem, 55vw"
               alt="Ilustração de um quintal com tanque circular de peixes, canteiros, composteira e galinheiro."
               fetchPriority="high" />
           </div>
@@ -232,9 +234,9 @@ function Sisteminha() {
         </aside>
       </main>
 
-      <Rodape sisteminha aoVerCreditos={() => definirVerCreditos(true)} />
+      <Rodape sisteminha aoVerCreditos={(evento) => definirBotaoCreditos(evento.currentTarget)} />
 
-      {verCreditos && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirVerCreditos(false)}>
+      {botaoCreditos && <CaixaDialogo titulo="Sobre as imagens" acionador={botaoCreditos} fechar={() => definirBotaoCreditos(null)}>
         <p>O panorama e as imagens dos módulos do Sisteminha são ilustrações geradas por IA.</p>
       </CaixaDialogo>}
     </div>

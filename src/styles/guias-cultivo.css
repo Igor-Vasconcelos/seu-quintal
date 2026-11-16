@@ -102,7 +102,9 @@
 .secoes-quintal { margin-bottom: .9rem; padding-bottom: .85rem; border-bottom: 1px solid var(--sq-border); }
 .secoes-quintal a.botao { text-decoration: none; }
 .lista-cultivo li { overflow-wrap: anywhere; }
-.lista-cultivo h4 { margin-bottom: .35rem; }
+.lista-cultivo :is(h3, h4) { margin-bottom: .35rem; }
+.aviso-ferramenta, .recuperacao-local { display: grid; gap: .55rem; justify-items: start; }
+.recuperacao-local [role="alert"] { font-weight: var(--sq-weight-strong); }
 .lista-cultivo .acoes-guia { margin-top: .55rem; }
 .observacoes-cultivo { white-space: pre-wrap; }
 

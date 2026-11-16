@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import RecuperarDados from "../../components/RecuperarDados.jsx";
 import { regioes } from "../../data/plantio.js";
 import HistoricoCultivo from "../cultivo/HistoricoCultivo.jsx";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import { novoId } from "../planejador/projetos.js";
 import AgendaHorta from "./AgendaHorta.jsx";
-import { chaveOrganizador, gravarOrganizador, hortaInicial, lerOrganizador } from "./armazenamento.js";
+import { chaveOrganizador, gravarOrganizador, hortaInicial, lerOrganizador, recuperarOrganizador } from "./armazenamento.js";
 import { culturasOrganizador } from "./culturas.js";
 import { avancarDias, dimensionarLote, janelaDeDatas, projetarLote, rotuloData } from "./escala.js";
 import FormularioCultivo from "./FormularioCultivo.jsx";
@@ -12,13 +13,13 @@ import "../../styles/organizador-horta.css";
 
 function abrirOrganizador() {
   try {
-    return { dados: lerOrganizador(), erro: "" };
+    return lerOrganizador();
   } catch {
-    return { dados: hortaInicial, erro: "O plano deste navegador está indisponível." };
+    return { dados: hortaInicial, corrompido: null, erro: "O plano deste navegador está indisponível." };
   }
 }
 
-function ConfiguracaoHorta({ dados, aoSalvar }) {
+function ConfiguracaoHorta({ dados, aoSalvar, bloqueado }) {
   const [erro, definirErro] = useState("");
   function salvar(evento) {
     evento.preventDefault();
@@ -48,13 +49,13 @@ function ConfiguracaoHorta({ dados, aoSalvar }) {
           </label>
         </div>
         {erro && <p className="erro" role="alert">{erro}</p>}
-        <button className="botao botao-contorno" type="submit">Salvar região e espaço</button>
+        <button className="botao botao-contorno" type="submit" disabled={bloqueado}>Salvar região e espaço</button>
       </form>
     </details>
   );
 }
 
-function CultivoSalvo({ plano, aoEditar, aoRemover }) {
+function CultivoSalvo({ plano, aoEditar, aoRemover, bloqueado }) {
   const [confirmar, definirConfirmar] = useState(false);
   const ficha = culturasOrganizador[plano.cultura];
   const { plantas } = dimensionarLote(plano);
@@ -67,9 +68,9 @@ function CultivoSalvo({ plano, aoEditar, aoRemover }) {
           {plano.canteiro && <p className="nota">{plano.canteiro}</p>}
         </div>
         <div className="organizador-acoes">
-          <button type="button" className="botao botao-contorno" onClick={() => aoEditar(plano.id)}
+          <button type="button" className="botao botao-contorno" disabled={bloqueado} onClick={() => aoEditar(plano.id)}
             aria-label={`Editar ${plano.cultura}`}>Editar</button>
-          <button type="button" className="botao botao-contorno" onClick={() => definirConfirmar(!confirmar)}
+          <button type="button" className="botao botao-contorno" disabled={bloqueado} onClick={() => definirConfirmar(!confirmar)}
             aria-label={`Remover ${plano.cultura}`} aria-expanded={confirmar}>Remover</button>
         </div>
       </div>
@@ -102,7 +103,7 @@ function CultivoSalvo({ plano, aoEditar, aoRemover }) {
       {confirmar && <div className="organizador-confirmar">
         <p>Remover este cultivo da agenda?</p>
         <div className="organizador-acoes">
-          <button type="button" className="botao botao-terracota" onClick={() => aoRemover(plano.id)}>Confirmar remoção</button>
+          <button type="button" className="botao botao-terracota" disabled={bloqueado} onClick={() => aoRemover(plano.id)}>Confirmar remoção</button>
           <button type="button" className="botao botao-contorno" onClick={() => definirConfirmar(false)}>Manter cultivo</button>
         </div>
       </div>}
@@ -110,7 +111,7 @@ function CultivoSalvo({ plano, aoEditar, aoRemover }) {
   );
 }
 
-function PlanoHorta({ dados, aoEditar, aoRemover }) {
+function PlanoHorta({ dados, aoEditar, aoRemover, bloqueado }) {
   const total = dados.planos.reduce((area, plano) => area + dimensionarLote(plano).areaSimultanea, 0);
   const temEstimativaParcial = dados.planos.some((plano) => culturasOrganizador[plano.cultura].colheitasSucessivas && !plano.duracao);
 
@@ -129,7 +130,7 @@ function PlanoHorta({ dados, aoEditar, aoRemover }) {
           {dados.area && total > dados.area && <p className="aviso">A estimativa ultrapassa a área informada. Revise as metas ou divida os cultivos por época.</p>}
         </div>
         <ul className="organizador-cultivos">
-          {dados.planos.map((plano) => <CultivoSalvo key={plano.id} plano={plano} aoEditar={aoEditar} aoRemover={aoRemover} />)}
+          {dados.planos.map((plano) => <CultivoSalvo key={plano.id} plano={plano} aoEditar={aoEditar} aoRemover={aoRemover} bloqueado={bloqueado} />)}
         </ul>
       </> : <p className="organizador-vazio">Adicione um primeiro cultivo para montar a agenda da sua horta.</p>}
     </section>
@@ -140,7 +141,9 @@ export default function OrganizadorHorta() {
   const [estado, definirEstado] = useState(abrirOrganizador);
   const [edicao, definirEdicao] = useState(null);
   const [mensagem, definirMensagem] = useState("");
-  const { dados, erro } = estado;
+  const [salvando, definirSalvando] = useState(false);
+  const { dados, erro, corrompido } = estado;
+  const bloqueado = salvando || corrompido !== null;
   const planoEmEdicao = dados.planos.find(({ id }) => id === edicao);
 
   useEffect(() => {
@@ -151,14 +154,35 @@ export default function OrganizadorHorta() {
     return () => window.removeEventListener("storage", sincronizar);
   }, []);
 
-  function atualizar(transformar, retorno = "") {
+  async function atualizar(transformar, retorno = "") {
+    if (bloqueado) return false;
+    definirSalvando(true);
     try {
-      definirEstado({ dados: gravarOrganizador(transformar), erro: "" });
+      definirEstado(await gravarOrganizador(transformar));
       definirMensagem(retorno);
       return true;
     } catch {
-      definirEstado((atual) => ({ ...atual, erro: "O navegador não conseguiu salvar o plano. Confira se o armazenamento local está disponível." }));
+      definirEstado({ ...abrirOrganizador(), erro: "O navegador não conseguiu salvar o plano. Confira se o armazenamento local está disponível." });
       return false;
+    } finally {
+      definirSalvando(false);
+    }
+  }
+
+  async function recuperar() {
+    definirSalvando(true);
+    definirMensagem("");
+    try {
+      const restaurado = await recuperarOrganizador(corrompido);
+      definirEstado(restaurado);
+      if (restaurado.corrompido === null) {
+        definirMensagem("Plano recuperado. Você já pode salvar cultivos.");
+        focar("titulo-form-cultivo");
+      }
+    } catch {
+      definirEstado((atual) => ({ ...atual, erro: "O navegador não conseguiu guardar a cópia dos dados. Confira o espaço disponível e tente novamente." }));
+    } finally {
+      definirSalvando(false);
     }
   }
 
@@ -172,9 +196,9 @@ export default function OrganizadorHorta() {
     focar("titulo-form-cultivo");
   }
 
-  function salvarPlano(plano) {
+  async function salvarPlano(plano) {
     const id = planoEmEdicao?.id ?? novoId();
-    const salvo = atualizar((atuais) => {
+    const salvo = await atualizar((atuais) => {
       const anterior = atuais.planos.find((item) => item.id === id);
       const concluidas = anterior?.cultura === plano.cultura && anterior.origem === plano.origem ? anterior.concluidas : [];
       const novo = { ...plano, id, concluidas };
@@ -189,8 +213,8 @@ export default function OrganizadorHorta() {
     }
   }
 
-  function remover(id) {
-    if (atualizar((atuais) => ({ ...atuais, planos: atuais.planos.filter((plano) => plano.id !== id) }), "Cultivo removido.")) {
+  async function remover(id) {
+    if (await atualizar((atuais) => ({ ...atuais, planos: atuais.planos.filter((plano) => plano.id !== id) }), "Cultivo removido.")) {
       if (id === edicao) definirEdicao(null);
       focar("titulo-plano-horta");
     }
@@ -213,15 +237,17 @@ export default function OrganizadorHorta() {
     <div className="organizador">
       <div className="organizador-barra">
         <ConfiguracaoHorta key={`${dados.regiao}/${dados.area}`} dados={dados}
-          aoSalvar={(regiao, area) => atualizar((atuais) => ({ ...atuais, regiao, area }), "Região e espaço salvos.")} />
+          aoSalvar={(regiao, area) => atualizar((atuais) => ({ ...atuais, regiao, area }), "Região e espaço salvos.")}
+          bloqueado={bloqueado} />
         <p className="nota">O plano fica salvo neste navegador.</p>
       </div>
       {erro && <p className="erro" role="alert">{erro}</p>}
+      {corrompido !== null && <RecuperarDados recuperar={recuperar} salvando={salvando} />}
       <p className="organizador-status" role="status">{mensagem}</p>
       <FormularioCultivo key={planoEmEdicao?.id ?? "novo"} edicao={planoEmEdicao} regiao={dados.regiao}
-        aoSalvar={salvarPlano} aoCancelar={() => definirEdicao(null)} />
-      <PlanoHorta dados={dados} aoEditar={editar} aoRemover={remover} />
-      {dados.planos.length > 0 && <AgendaHorta planos={dados.planos} regiao={dados.regiao} aoConcluir={concluir} />}
+        aoSalvar={salvarPlano} aoCancelar={() => definirEdicao(null)} bloqueado={bloqueado} />
+      <PlanoHorta dados={dados} aoEditar={editar} aoRemover={remover} bloqueado={bloqueado} />
+      {dados.planos.length > 0 && <AgendaHorta planos={dados.planos} regiao={dados.regiao} aoConcluir={concluir} bloqueado={bloqueado} />}
       <details className="organizador-cartao organizador-historico" id="historico-horta">
         <summary>Histórico de cultivo</summary>
         <p className="nota">Anote as colheitas para ajustar os próximos lotes com o rendimento da sua horta.</p>

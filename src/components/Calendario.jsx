@@ -12,7 +12,8 @@ function ListaCulturas({ nomes, abrirFicha, rotulo }) {
     <ul className="lista-culturas" aria-label={rotulo}>
       {nomes.map((nome) => (
         <li key={nome}>
-          <button className="cultura" type="button" aria-haspopup="dialog" onClick={() => abrirFicha(nome)}>
+          <button className="cultura" type="button" aria-haspopup="dialog"
+            onClick={(evento) => abrirFicha({ nome, acionador: evento.currentTarget })}>
             {nome} <Icone nome="seta" />
           </button>
         </li>
@@ -21,11 +22,11 @@ function ListaCulturas({ nomes, abrirFicha, rotulo }) {
   );
 }
 
-function FichaCultura({ nome, regiao, fechar }) {
+function FichaCultura({ nome, regiao, acionador, fechar }) {
   const ficha = buscaFichaCultura(nome);
 
   return (
-    <CaixaDialogo titulo={nome} fechar={fechar}>
+    <CaixaDialogo titulo={nome} acionador={acionador} fechar={fechar}>
       <div className="ficha-cultura-epoca">
         <Icone nome="muda" />
         <div>
@@ -112,7 +113,7 @@ export default function Calendario({ titulo = "Calendário de Plantio" }) {
           <a href={fontePlantio} target="_blank" rel="noreferrer">Tabela da Embrapa</a>
         </p>
       </section>
-      {cultura && <FichaCultura nome={cultura} regiao={consulta.regiao} fechar={() => definirCultura(null)} />}
+      {cultura && <FichaCultura {...cultura} regiao={consulta.regiao} fechar={() => definirCultura(null)} />}
     </>
   );
 }

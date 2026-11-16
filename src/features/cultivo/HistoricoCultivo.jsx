@@ -1,36 +1,45 @@
 import { useEffect, useRef, useState } from "react";
+import RecuperarDados from "../../components/RecuperarDados.jsx";
+import { armazenamentoRecuperavel } from "../armazenamentoLocal.js";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
+import { novoId } from "../planejador/projetos.js";
 
 const chave = "seu-quintal:historico-cultivo:v1";
 const unidades = { kg: "kg", g: "g", un: "un.", maco: "maço(s)" };
 const chaveArea = (texto) => texto.toLocaleLowerCase("pt-BR");
 const formatarData = (data) => data.split("-").reverse().join("/");
 
-function carregarRegistros() {
-  const dados = JSON.parse(window.localStorage.getItem(chave) ?? "[]");
-  if (!Array.isArray(dados) || dados.some((item) =>
-    !item || ["id", "area", "cultura", "plantio", "colheita", "unidade", "observacoes"].some((campo) => typeof item[campo] !== "string"))) {
-    throw new Error("Histórico inválido");
-  }
-  return dados;
+function normalizarRegistros(registros) {
+  if (!Array.isArray(registros)) return { dados: [], incompleto: true };
+  const dados = registros.filter((item) =>
+    item && ["id", "area", "cultura", "plantio", "colheita", "unidade", "observacoes"].every((campo) => typeof item[campo] === "string")
+    && Object.hasOwn(unidades, item.unidade)
+    && (item.quantidade == null || Number.isFinite(item.quantidade)));
+  return { dados, incompleto: dados.length !== registros.length };
 }
+
+const armazenamento = armazenamentoRecuperavel(chave, [], normalizarRegistros);
 
 function abrirHistorico() {
   try {
-    return { registros: carregarRegistros(), erro: "" };
+    return armazenamento.ler();
   } catch {
-    return { registros: [], erro: "O histórico deste navegador está indisponível." };
+    return { dados: [], corrompido: null, erro: "O histórico deste navegador está indisponível." };
   }
 }
 
-export default function HistoricoCultivo() {
+export default function HistoricoCultivo({ nivelTitulo = 3 }) {
   const [historico, definirHistorico] = useState(abrirHistorico);
   const [filtro, definirFiltro] = useState("");
   const [edicao, definirEdicao] = useState(null);
   const [remocao, definirRemocao] = useState(null);
   const [mensagem, definirMensagem] = useState("");
   const [erro, definirErro] = useState("");
+  const [salvando, definirSalvando] = useState(false);
   const formulario = useRef(null);
+  const bloqueado = salvando || historico.corrompido !== null;
+  const Titulo = `h${nivelTitulo}`;
+  const Subtitulo = `h${nivelTitulo + 1}`;
 
   useEffect(() => {
     function sincronizar(evento) {
@@ -40,27 +49,48 @@ export default function HistoricoCultivo() {
     return () => window.removeEventListener("storage", sincronizar);
   }, []);
 
-  const areas = [...new Map(historico.registros.map(({ area }) => [chaveArea(area), area]))]
+  const areas = [...new Map(historico.dados.map(({ area }) => [chaveArea(area), area]))]
     .sort((a, b) => a[1].localeCompare(b[1], "pt-BR", { numeric: true }));
   const filtroAtivo = areas.some(([id]) => id === filtro) ? filtro : "";
-  const registrosVisiveis = historico.registros
+  const registrosVisiveis = historico.dados
     .filter(({ area }) => !filtroAtivo || chaveArea(area) === filtroAtivo)
     .sort((a, b) => (b.colheita || b.plantio).localeCompare(a.colheita || a.plantio));
 
-  function salvarRegistros(atualizar) {
+  async function salvarRegistros(atualizar) {
+    definirSalvando(true);
     try {
-      const registros = atualizar(carregarRegistros());
-      window.localStorage.setItem(chave, JSON.stringify(registros));
-      definirHistorico({ registros, erro: "" });
+      definirHistorico(await armazenamento.gravar(atualizar));
       return true;
     } catch {
+      definirHistorico(abrirHistorico());
       definirErro("Não foi possível salvar no navegador. Confira se o armazenamento local está disponível e tente novamente.");
       return false;
+    } finally {
+      definirSalvando(false);
     }
   }
 
-  function salvarCultivo(evento) {
+  async function recuperar() {
+    definirSalvando(true);
+    definirErro("");
+    definirMensagem("");
+    try {
+      const restaurado = await armazenamento.recuperar(historico.corrompido);
+      definirHistorico(restaurado);
+      if (restaurado.corrompido === null) {
+        definirMensagem("Histórico recuperado. Você já pode salvar registros.");
+        requestAnimationFrame(() => formulario.current?.elements.namedItem("area")?.focus());
+      }
+    } catch {
+      definirErro("O navegador não conseguiu guardar a cópia dos dados. Confira o espaço disponível e tente novamente.");
+    } finally {
+      definirSalvando(false);
+    }
+  }
+
+  async function salvarCultivo(evento) {
     evento.preventDefault();
+    if (bloqueado) return;
     definirMensagem("");
     definirErro("");
     const dados = new FormData(evento.currentTarget);
@@ -93,14 +123,14 @@ export default function HistoricoCultivo() {
       return;
     }
     const registro = {
-      id: edicao?.id ?? crypto.randomUUID(),
+      id: edicao?.id ?? novoId(),
       area, cultura, plantio, colheita, quantidade, unidade,
       observacoes: dados.get("observacoes").trim(),
     };
-    if (!salvarRegistros((atuais) => [registro, ...atuais.filter(({ id }) => id !== registro.id)])) return;
+    if (!await salvarRegistros((atuais) => [registro, ...atuais.filter(({ id }) => id !== registro.id)])) return;
     definirFiltro(chaveArea(area));
     if (edicao) definirEdicao(null);
-    else formulario.current.reset();
+    else formulario.current?.reset();
     definirMensagem(edicao ? "Registro atualizado." : "Cultivo registrado.");
   }
 
@@ -113,9 +143,10 @@ export default function HistoricoCultivo() {
     requestAnimationFrame(() => formulario.current?.elements.namedItem("area")?.focus());
   }
 
-  function remover(registro) {
+  async function remover(registro) {
+    if (bloqueado) return;
     definirErro("");
-    if (!salvarRegistros((atuais) => atuais.filter(({ id }) => id !== registro.id))) return;
+    if (!await salvarRegistros((atuais) => atuais.filter(({ id }) => id !== registro.id))) return;
     if (edicao?.id === registro.id) definirEdicao(null);
     definirRemocao(null);
     definirMensagem("Registro removido.");
@@ -123,12 +154,13 @@ export default function HistoricoCultivo() {
 
   return (
     <section className="historico-cultivo" id="painel-cultivo" aria-labelledby="titulo-cultivo">
-      <h3 id="titulo-cultivo">Histórico de cultivo</h3>
+      <Titulo id="titulo-cultivo">Histórico de cultivo</Titulo>
       <p className="nota">Registre o que plantou e colheu em cada canteiro ou talhão. Os registros ficam salvos neste navegador.</p>
       {historico.erro && <p className="erro" role="alert">{historico.erro}</p>}
+      {historico.corrompido !== null && <RecuperarDados recuperar={recuperar} salvando={salvando} />}
 
       <form className="form-guia painel-guia" key={edicao?.id ?? "novo"} ref={formulario} onSubmit={salvarCultivo}>
-        <h4>{edicao ? "Editar registro" : "Registrar cultivo"}</h4>
+        <Subtitulo>{edicao ? "Editar registro" : "Registrar cultivo"}</Subtitulo>
         <div className="campos-guia campos-guia-duplo">
           <label className="campo">Canteiro ou talhão
             <input name="area" list="areas-de-cultivo" maxLength="60" required
@@ -153,7 +185,7 @@ export default function HistoricoCultivo() {
           <textarea name="observacoes" rows="2" maxLength="500" defaultValue={edicao?.observacoes} />
         </label>
         <div className="acoes-guia">
-          <button className="botao" type="submit">{edicao ? "Salvar alterações" : "Salvar cultivo"}</button>
+          <button className="botao" type="submit" disabled={bloqueado}>{edicao ? "Salvar alterações" : "Salvar cultivo"}</button>
           {edicao && <button className="botao botao-contorno" type="button" onClick={() => editar(null)}>Cancelar edição</button>}
         </div>
       </form>
@@ -169,24 +201,24 @@ export default function HistoricoCultivo() {
       {!historico.erro && (registrosVisiveis.length ? <ul className="lista-cultivo">
         {registrosVisiveis.map((registro) => (
           <li className="painel-guia" key={registro.id}>
-            <h4>{registro.cultura} · {registro.area}</h4>
+            <Subtitulo>{registro.cultura} · {registro.area}</Subtitulo>
             <p>Plantio em {formatarData(registro.plantio)}</p>
             <p>{registro.colheita ? `Colheita em ${formatarData(registro.colheita)}` : "Colheita ainda sem registro"}
-              {registro.quantidade !== null && ` · ${formatarMedida(registro.quantidade)} ${unidades[registro.unidade]}`}
+              {registro.quantidade != null && ` · ${formatarMedida(registro.quantidade)} ${unidades[registro.unidade]}`}
             </p>
             {registro.observacoes && <p className="observacoes-cultivo">{registro.observacoes}</p>}
             {remocao === registro.id ? (
               <div className="confirmar-remocao">
                 <p>Remover este registro do histórico?</p>
                 <div className="acoes-guia">
-                  <button className="botao botao-terracota" type="button" onClick={() => remover(registro)}>Confirmar remoção</button>
+                  <button className="botao botao-terracota" type="button" disabled={bloqueado} onClick={() => remover(registro)}>Confirmar remoção</button>
                   <button className="botao botao-contorno" type="button" onClick={() => definirRemocao(null)}>Manter registro</button>
                 </div>
               </div>
             ) : (
               <div className="acoes-guia">
-                <button className="botao botao-contorno" type="button" onClick={() => editar(registro)}>Editar registro</button>
-                <button className="botao botao-contorno" type="button" onClick={() => definirRemocao(registro.id)}>Remover registro</button>
+                <button className="botao botao-contorno" type="button" disabled={bloqueado} onClick={() => editar(registro)}>Editar registro</button>
+                <button className="botao botao-contorno" type="button" disabled={bloqueado} onClick={() => definirRemocao(registro.id)}>Remover registro</button>
               </div>
             )}
           </li>

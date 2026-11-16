@@ -5,7 +5,7 @@ import {
   janelaDeDatas, situacaoDoPlantio,
 } from "./escala.js";
 
-export default function AgendaHorta({ planos, regiao, aoConcluir }) {
+export default function AgendaHorta({ planos, regiao, aoConcluir, bloqueado }) {
   const [data, definirData] = useState(hojeCivil);
   const [semanas, definirSemanas] = useState(12);
   const [cultivo, definirCultivo] = useState("");
@@ -62,7 +62,7 @@ export default function AgendaHorta({ planos, regiao, aoConcluir }) {
                 {alerta && <p className="organizador-alerta-epoca">{alerta}</p>}
               </div>
               <label className="organizador-concluidas organizador-atividade-status">
-                <input type="checkbox" checked={concluida}
+                <input type="checkbox" checked={concluida} disabled={bloqueado}
                   aria-label={`${atividade.nome} · ${cultura} · lote ${numero}`}
                   onChange={(evento) => aoConcluir(plano.id, chave, evento.target.checked)} />
                 Feito

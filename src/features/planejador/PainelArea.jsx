@@ -13,8 +13,9 @@ function camposDoItem(item) {
 }
 
 export default function PainelArea({ item, terreno, aoSalvar, aoRemover }) {
-  const [campos, definirCampos] = useState(() => camposDoItem(item));
+  const [edicao, definirEdicao] = useState({});
   const [erro, definirErro] = useState("");
+  const campos = { ...camposDoItem(item), ...edicao };
   const eMuda = item.tipo === "muda";
   const medidas = [
     { nome: "largura", rotulo: "Largura (m)" },
@@ -25,11 +26,11 @@ export default function PainelArea({ item, terreno, aoSalvar, aoRemover }) {
 
   function mudarCampo(evento) {
     const { name, value, checked, type } = evento.target;
-    definirCampos((atuais) => ({ ...atuais, [name]: type === "checkbox" ? checked : value }));
+    definirEdicao((atuais) => ({ ...atuais, [name]: type === "checkbox" ? checked : value }));
     definirErro("");
   }
 
-  function salvar(evento) {
+  async function salvar(evento) {
     evento.preventDefault();
     const nome = campos.nome.trim();
     const x = lerMedida(campos.x, 0);
@@ -45,7 +46,7 @@ export default function PainelArea({ item, terreno, aoSalvar, aoRemover }) {
       definirErro("O item ultrapassa o terreno. Ajuste o tamanho ou a posição.");
       return;
     }
-    aoSalvar(novo);
+    if (await aoSalvar(novo)) definirEdicao((atual) => atual === edicao ? {} : atual);
   }
 
   return (

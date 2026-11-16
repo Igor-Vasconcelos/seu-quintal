@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CompararCenarios from "./CompararCenarios.jsx";
 import PainelArea from "./PainelArea.jsx";
 import Planta from "./Planta.jsx";
 import {
-  arredondarMedida, criarTerreno, distancia, formatarMedida, limitarPosicao, passoDaMalha, pontosEntreBordas,
+  arredondarMedida, criarTerreno, distancia, formatarMedida, lerMedida, limitarPosicao, passoDaMalha, pontosEntreBordas,
 } from "./geometria.js";
 import { conflitosEntreItens, criarItem, declives, novoId, tiposDeArea } from "./projetos.js";
 
@@ -53,9 +53,49 @@ function ConfigurarTerreno({ terreno, projeto, atualizar, abrirTerreno }) {
   );
 }
 
-function Regua({ modo, mudarModo, limpar, marcas, itensMedidos, pontos }) {
-  let instrucao = "Marque dois pontos na planta.";
-  if (modo === "pontos" && marcas.length === 1) instrucao = "Marque o segundo ponto na planta.";
+function CoordenadasRegua({ terreno, aoMarcar, faltaSegundo }) {
+  const [erro, definirErro] = useState("");
+
+  function marcar(evento) {
+    evento.preventDefault();
+    const formulario = evento.currentTarget;
+    const dados = new FormData(formulario);
+    const x = lerMedida(dados.get("x"), 0);
+    const y = lerMedida(dados.get("y"), 0);
+    const xInvalido = x === null || x > terreno.largura;
+    if (xInvalido || y === null || y > terreno.comprimento) {
+      definirErro(`Use até duas casas decimais. A frente vai de 0 a ${formatarMedida(terreno.largura)} m e a profundidade de 0 a ${formatarMedida(terreno.comprimento)} m.`);
+      formulario.elements.namedItem(xInvalido ? "x" : "y").focus();
+      return;
+    }
+    aoMarcar({ x, y });
+    definirErro("");
+    formulario.reset();
+    if (!faltaSegundo) formulario.elements.namedItem("x").focus();
+  }
+
+  return (
+    <details className="regua-coordenadas">
+      <summary>Medir por coordenadas</summary>
+      <form onSubmit={marcar} onChange={() => definirErro("")} aria-label="Marcar ponto pelas coordenadas">
+        <div className="campos-terreno">
+          <label className="campo">Da lateral esquerda (m)
+            <input name="x" inputMode="decimal" required />
+          </label>
+          <label className="campo">Do fundo (m)
+            <input name="y" inputMode="decimal" required />
+          </label>
+        </div>
+        {erro && <p className="erro" role="alert">{erro}</p>}
+        <button className="botao botao-contorno" type="submit">Marcar ponto</button>
+      </form>
+    </details>
+  );
+}
+
+function Regua({ modo, mudarModo, limpar, marcas, itensMedidos, pontos, terreno, aoMarcar }) {
+  let instrucao = "Marque dois pontos na planta ou informe as coordenadas.";
+  if (modo === "pontos" && marcas.length === 1) instrucao = "Marque o segundo ponto.";
   if (modo === "areas") {
     instrucao = itensMedidos.length
       ? `${itensMedidos[0].nome} selecionado. Escolha o segundo item.`
@@ -80,11 +120,13 @@ function Regua({ modo, mudarModo, limpar, marcas, itensMedidos, pontos }) {
         {pontos.length === 2 && <strong>{formatarMedida(arredondarMedida(distancia(...pontos)))} m</strong>}
         {instrucao}
       </p>
+      {modo === "pontos" && <CoordenadasRegua terreno={terreno} aoMarcar={aoMarcar} faltaSegundo={marcas.length === 1} />}
     </div>
   );
 }
 
 export default function EditorTerreno({ terreno, projeto, definirProjeto, salvamento, abrirTerreno }) {
+  const [ativoNaAba, definirAtivoNaAba] = useState(projeto.ativo);
   const [tipo, definirTipo] = useState("canteiro");
   const [selecionado, definirSelecionado] = useState(null);
   const [mostrarExistentes, definirMostrarExistentes] = useState(true);
@@ -96,7 +138,17 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
   const [marcas, definirMarcas] = useState([]);
   const [posicionando, definirPosicionando] = useState(false);
 
-  const cenario = projeto.cenarios.find(({ id }) => id === projeto.ativo);
+  const cenario = projeto.cenarios.find(({ id }) => id === ativoNaAba)
+    ?? projeto.cenarios.find(({ id }) => id === projeto.ativo);
+
+  useEffect(() => {
+    if (ativoNaAba === cenario.id) return;
+    definirAtivoNaAba(cenario.id);
+    definirAcaoCenario("");
+    definirSelecionado(null);
+    definirMarcas([]);
+    definirPosicionando(false);
+  }, [ativoNaAba, cenario.id]);
   const itens = cenario.itens;
   const visiveis = mostrarExistentes ? itens : itens.filter((item) => !item.existente);
   const itemSelecionado = itens.find(({ id }) => id === selecionado);
@@ -117,20 +169,27 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
     definirMarcas([]);
   }
 
-  function atualizar(novo) {
-    definirHistorico((atuais) => [...atuais.slice(-19), projeto]);
-    definirProjeto(novo);
+  async function atualizar(novo) {
+    const edicao = await definirProjeto(projeto, novo);
+    if (edicao && JSON.stringify(edicao.antes) !== JSON.stringify(edicao.depois)) {
+      definirHistorico((atuais) => [...atuais.slice(-19), edicao]);
+    }
+    return edicao;
   }
 
-  function desfazer() {
-    definirProjeto(historico.at(-1));
-    definirHistorico((atuais) => atuais.slice(0, -1));
+  async function desfazer() {
+    const edicao = historico.at(-1);
+    if (!edicao) return;
+    const revertida = await definirProjeto(edicao.depois, edicao.antes, true);
+    if (!revertida) return;
+    definirHistorico((atuais) => atuais.filter((registro) => registro !== edicao));
     definirMarcas([]);
     definirPosicionando(false);
   }
 
   function trocarCenario(id) {
-    definirProjeto({ ...projeto, ativo: id });
+    definirAtivoNaAba(id);
+    definirProjeto(projeto, { ...projeto, ativo: id });
     definirAcaoCenario("");
     definirSelecionado(null);
     definirMarcas([]);
@@ -143,13 +202,14 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
     definirNomeCenario(acao === "duplicar" ? `${cenario.nome.slice(0, 36)} · cópia` : cenario.nome);
   }
 
-  function salvarNome(evento) {
+  async function salvarNome(evento) {
     evento.preventDefault();
     const nome = nomeCenario.trim();
     if (!nome) return;
     if (acaoCenario === "duplicar") {
       const copia = { ...cenario, id: novoId(), nome };
-      atualizar({ ...projeto, ativo: copia.id, cenarios: [...projeto.cenarios, copia] });
+      if (!await atualizar({ ...projeto, ativo: copia.id, cenarios: [...projeto.cenarios, copia] })) return;
+      definirAtivoNaAba(copia.id);
       definirMarcas([]);
       definirPosicionando(false);
     } else {
@@ -158,9 +218,10 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
     definirAcaoCenario("");
   }
 
-  function excluirCenario() {
+  async function excluirCenario() {
     const restantes = projeto.cenarios.filter(({ id }) => id !== cenario.id);
-    atualizar({ ...projeto, cenarios: restantes, ativo: restantes[0].id });
+    const edicao = await atualizar({ ...projeto, cenarios: restantes, ativo: restantes[0].id });
+    if (edicao) definirAtivoNaAba(edicao.depois.ativo);
     definirAcaoCenario("");
     definirSelecionado(null);
     definirMarcas([]);
@@ -168,7 +229,7 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
   }
 
   function atualizarItens(novos) {
-    atualizar({
+    return atualizar({
       ...projeto,
       cenarios: projeto.cenarios.map((opcao) => opcao.id === cenario.id ? { ...opcao, itens: novos } : opcao),
     });
@@ -184,13 +245,16 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
   }
 
   function salvarItem(item) {
-    atualizarItens(itens.map((atual) => atual.id === item.id ? item : atual));
     if (item.existente) definirMostrarExistentes(true);
+    return atualizarItens(itens.map((atual) => atual.id === item.id ? item : atual));
   }
 
   function moverItem(item, posicao) {
-    definirSelecionado(item.id);
-    if (item.x !== posicao.x || item.y !== posicao.y) salvarItem({ ...item, ...posicao });
+    const atual = itens.find(({ id }) => id === item.id);
+    if (!atual) return;
+    const destino = limitarPosicao(posicao.x, posicao.y, atual, terreno);
+    definirSelecionado(atual.id);
+    if (atual.x !== destino.x || atual.y !== destino.y) salvarItem({ ...atual, ...destino });
   }
 
   function removerItem(id) {
@@ -238,7 +302,7 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
 
       <div className="faixa-cenarios">
         <label className="campo">Cenário ativo
-          <select value={projeto.ativo} onChange={(evento) => trocarCenario(evento.target.value)}>
+          <select value={cenario.id} onChange={(evento) => trocarCenario(evento.target.value)}>
             {projeto.cenarios.map(({ id, nome }) => <option key={id} value={id}>{nome}</option>)}
           </select>
         </label>
@@ -266,7 +330,8 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
       </form>}
 
       {comparando && podeComparar ? (
-        <CompararCenarios key={projeto.ativo} projeto={projeto} terreno={terreno} mostrarExistentes={mostrarExistentes} />
+        <CompararCenarios key={cenario.id} projeto={{ ...projeto, ativo: cenario.id }} terreno={terreno}
+          mostrarExistentes={mostrarExistentes} />
       ) : (
         <div className="terreno-grade">
           <form className="adicionar-area cartao-planta" onSubmit={adicionarItem}>
@@ -293,7 +358,7 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
               </div>
             </div>
             {modoRegua && <Regua modo={modoRegua} mudarModo={controlarRegua} limpar={() => definirMarcas([])}
-              marcas={marcas} itensMedidos={itensMedidos} pontos={pontos} />}
+              marcas={marcas} itensMedidos={itensMedidos} pontos={pontos} terreno={terreno} aoMarcar={marcarPonto} />}
             <div className="planta-quadro">
               <p className="marco-terreno">Fundo do terreno</p>
               <Planta terreno={terreno} itens={visiveis} mostrarFrente estrada={projeto.estrada}
@@ -331,7 +396,7 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
             </ul> : <p className="nota">Adicione a primeira área para começar a montar a planta.</p>}
 
             {itemSelecionado && !modoRegua && (
-              <PainelArea key={JSON.stringify(itemSelecionado)} item={itemSelecionado} terreno={terreno}
+              <PainelArea key={`${cenario.id}/${itemSelecionado.id}`} item={itemSelecionado} terreno={terreno}
                 aoSalvar={salvarItem} aoRemover={removerItem} />
             )}
             {conflitos.length > 0 && <div className="aviso conflitos-terreno" role="status">
