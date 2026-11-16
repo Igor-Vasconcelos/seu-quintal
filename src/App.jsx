@@ -11,6 +11,7 @@ import ChecklistCompostagem from "./features/guias/ChecklistCompostagem.jsx";
 import ComparativoIrrigacao from "./features/guias/ComparativoIrrigacao.jsx";
 import EditorTerreno from "./features/planejador/EditorTerreno.jsx";
 import { criarTerreno } from "./features/planejador/geometria.js";
+import { chaveDoTerreno, lerProjetos, projetoInicial, salvarProjetos } from "./features/planejador/projetos.js";
 
 const dimensoesIniciais = criarTerreno("35", "65");
 const conteudosGuias = {
@@ -27,7 +28,8 @@ export default function App() {
   const [editor, definirEditor] = useState(terrenoDaUrl);
   const [verHistorico, definirVerHistorico] = useState(false);
   const [dialogo, definirDialogo] = useState(null);
-  const [projeto, definirProjeto] = useState({ terreno: null, itens: [] });
+  const [projetos, definirProjetos] = useState(lerProjetos);
+  const [salvouProjeto, definirSalvouProjeto] = useState(true);
 
   useEffect(() => {
     function sincronizarEditor() {
@@ -43,7 +45,8 @@ export default function App() {
     const url = new URL(window.location.href);
     url.searchParams.set("frente", String(terreno.largura));
     url.searchParams.set("profundidade", String(terreno.comprimento));
-    window.history.pushState({ editor: true }, "", url);
+    if (editor) window.history.replaceState(window.history.state, "", url);
+    else window.history.pushState({ editor: true }, "", url);
     definirVerHistorico(false);
     definirEditor(terreno);
   }
@@ -60,8 +63,23 @@ export default function App() {
     definirEditor(null);
   }
 
-  const chaveTerreno = editor ? `${editor.largura}x${editor.comprimento}` : null;
-  const itens = projeto.terreno === chaveTerreno ? projeto.itens : [];
+  const chaveTerreno = editor ? chaveDoTerreno(editor) : null;
+  const projeto = projetos.terrenos[chaveTerreno];
+  const ultimoTerreno = projetos.ultimoTerreno ?? dimensoesIniciais;
+
+  function atualizarProjeto(novo) {
+    const salvos = lerProjetos().terrenos;
+    const outros = salvouProjeto
+      ? { ...projetos.terrenos, ...salvos }
+      : { ...salvos, ...projetos.terrenos };
+    const dados = {
+      ultimoTerreno: editor,
+      terrenos: { ...outros, [chaveTerreno]: novo },
+    };
+    definirProjetos(dados);
+    definirSalvouProjeto(salvarProjetos(dados));
+  }
+
   const ConteudoGuia = conteudosGuias[dialogo?.id];
 
   return (
@@ -69,7 +87,7 @@ export default function App() {
       <a className="pular" href="#conteudo">Pular para o conteúdo</a>
       <Cabecalho>
         <button type="button" className="botao"
-          onClick={() => abrirEditor(projeto.dimensoes ?? dimensoesIniciais)}>
+          onClick={() => abrirEditor(ultimoTerreno)}>
           Meu Quintal
         </button>
       </Cabecalho>
@@ -93,7 +111,7 @@ export default function App() {
 
         <div className="ferramentas">
           <Calendario />
-          <Planejador abrirEditor={abrirEditor} />
+          <Planejador abrirEditor={abrirEditor} dimensoesIniciais={ultimoTerreno} />
         </div>
 
         <section className="guias" id="guias" aria-labelledby="titulo-guias">
@@ -132,7 +150,7 @@ export default function App() {
 
       <Rodape inicio aoVerCreditos={() => definirDialogo("creditos")} />
 
-      {editor && <CaixaDialogo titulo="Meu Quintal" fechar={fecharEditor}>
+      {editor && <CaixaDialogo titulo="Meu Quintal" fechar={fecharEditor} largo>
         <div className="acoes-guia secoes-quintal" role="group" aria-label="Seções do Meu Quintal">
           <button className={`botao ${verHistorico ? "botao-contorno" : ""}`} type="button"
             aria-controls="painel-terreno" aria-pressed={!verHistorico} onClick={() => definirVerHistorico(false)}>
@@ -144,8 +162,9 @@ export default function App() {
           </button>
         </div>
         <div id="painel-terreno" hidden={verHistorico}>
-          <EditorTerreno key={chaveTerreno} terreno={editor} itens={itens}
-            definirItens={(novosItens) => definirProjeto({ terreno: chaveTerreno, dimensoes: editor, itens: novosItens })} />
+          <EditorTerreno key={chaveTerreno} terreno={editor} abrirTerreno={abrirEditor}
+            projeto={projeto ?? projetoInicial} definirProjeto={atualizarProjeto}
+            salvamento={salvouProjeto ? (projeto ? "Salvo neste navegador" : "Salvamento automático neste navegador") : "Salvamento indisponível. Projeto aberto nesta sessão."} />
         </div>
         <div id="historico-quintal" hidden={!verHistorico}>
           <HistoricoCultivo />

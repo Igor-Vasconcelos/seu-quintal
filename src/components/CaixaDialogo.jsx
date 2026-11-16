@@ -7,7 +7,7 @@ function clicouFora(evento) {
   return evento.clientX < left || evento.clientX > right || evento.clientY < top || evento.clientY > bottom;
 }
 
-export default function CaixaDialogo({ titulo, fechar, children }) {
+export default function CaixaDialogo({ titulo, fechar, largo = false, children }) {
   const dialogo = useRef(null);
   const iniciouFora = useRef(false);
 
@@ -18,7 +18,7 @@ export default function CaixaDialogo({ titulo, fechar, children }) {
   }, []);
 
   return (
-    <dialog ref={dialogo} className="dialogo" aria-labelledby="titulo-dialogo"
+    <dialog ref={dialogo} className={largo ? "dialogo dialogo-largo" : "dialogo"} aria-labelledby="titulo-dialogo"
       onPointerDown={(evento) => { iniciouFora.current = evento.button === 0 && clicouFora(evento); }}
       onPointerCancel={() => { iniciouFora.current = false; }}
       onClick={(evento) => {

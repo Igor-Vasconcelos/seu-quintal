@@ -1,0 +1,383 @@
+.dialogo-largo {
+  width: min(calc(100% - 1.5rem), 71rem);
+  overscroll-behavior: contain;
+}
+
+.editor-terreno {
+  --borda-mapa: #8c9d75;
+  display: grid;
+  gap: .85rem;
+}
+
+.terreno-resumo,
+.faixa-cenarios,
+.nomear-cenario,
+.planta-cabecalho,
+.acoes-planta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.terreno-resumo,
+.planta-cabecalho {
+  justify-content: space-between;
+}
+
+.terreno-resumo strong {
+  font: 400 clamp(1.35rem, 3vw, 1.9rem)/1 var(--sq-font-display);
+}
+
+.terreno-resumo span {
+  margin-inline-start: .55rem;
+  color: var(--sq-text-muted);
+}
+
+.terreno-resumo .nota,
+.planta-cabecalho .nota {
+  margin-top: 0;
+}
+
+.editor-terreno .botao {
+  padding-inline: .8rem;
+  font-size: .88rem;
+}
+
+.editor-terreno .botao:disabled {
+  border-color: var(--sq-border);
+  color: var(--sq-disabled-fg);
+  background: var(--sq-disabled-bg);
+  cursor: default;
+}
+
+.config-terreno,
+.faixa-cenarios,
+.nomear-cenario {
+  padding: .65rem .8rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+}
+
+.config-terreno,
+.faixa-cenarios {
+  background: var(--sq-surface-soft);
+}
+
+.config-terreno summary {
+  min-height: 1.8rem;
+  align-content: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.config-grade,
+.campos-terreno {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+}
+
+.config-grade { margin-top: .65rem; gap: 1rem; }
+.config-grade .botao { margin-top: .55rem; }
+
+.faixa-cenarios,
+.nomear-cenario {
+  align-items: end;
+  gap: .55rem .9rem;
+}
+
+.faixa-cenarios > .campo,
+.nomear-cenario > .campo { flex: 1 1 13rem; }
+.nomear-cenario { background: var(--sq-surface); }
+
+.terreno-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
+  grid-template-areas:
+    "mapa adicionar"
+    "mapa itens";
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  gap: .8rem;
+}
+
+.cartao-planta {
+  min-width: 0;
+  padding: clamp(.65rem, 2vw, 1rem);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+}
+
+.adicionar-area {
+  grid-area: adicionar;
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.adicionar-area > .campo { flex: 1 1 11rem; }
+.terreno-mapa { grid-area: mapa; }
+.terreno-itens { grid-area: itens; }
+
+.planta-quadro {
+  display: grid;
+  justify-items: center;
+  gap: .35rem;
+  margin-top: .75rem;
+  padding: .5rem;
+  border: 1px solid #dbe2cf;
+  border-radius: var(--sq-radius-media);
+  background: #f0f3e7;
+  text-align: center;
+}
+
+.planta-quadro .planta-moldura {
+  width: min(100%, 25rem, 55dvh);
+}
+
+.planta-quadro .planta,
+.comparacao-grade .planta {
+  overflow: visible;
+  outline-color: var(--borda-mapa);
+  background-color: #e3ebd4;
+}
+
+.planta-com-frente::after { pointer-events: none; }
+
+.planta-com-estrada::after {
+  height: 5px;
+  background: repeating-linear-gradient(90deg, #5a6054 0 12px, #727869 12px 17px);
+}
+
+.marco-terreno {
+  color: var(--sq-text-muted);
+  font-size: .78rem;
+  font-weight: 750;
+}
+
+.planta-declive {
+  position: absolute;
+  z-index: 1;
+  inset: .3rem .3rem auto auto;
+  display: grid;
+  place-items: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--sq-surface);
+  font-weight: 750;
+  pointer-events: none;
+}
+
+.planta-declive[data-direcao="esquerda"] { rotate: 90deg; }
+.planta-declive[data-direcao="direita"] { rotate: -90deg; }
+.planta-declive[data-direcao="fundo"] { rotate: 180deg; }
+.planta-posicionavel { cursor: crosshair; }
+
+[data-cor="horta"] { --peca-fundo: #bfd9a0; --peca-borda: #4f7034; }
+[data-cor="pomar"] { --peca-fundo: #acceb0; --peca-borda: #3f6e47; }
+[data-cor="construcao"] { --peca-fundo: #ecd2b5; --peca-borda: #7e5435; }
+[data-cor="caminho"] { --peca-fundo: #dedbd1; --peca-borda: #6c695d; }
+[data-cor="agua"] { --peca-fundo: #b5d9e7; --peca-borda: #376c80; }
+[data-cor="animais"] { --peca-fundo: #e2d3df; --peca-borda: #79567a; }
+[data-cor="fogueira"] { --peca-fundo: #f3c6ae; --peca-borda: #93482d; }
+[data-cor="cultivo"] { --peca-fundo: #f4dea1; --peca-borda: #815e24; }
+
+.planta-item {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  color: var(--sq-forest);
+  background: var(--peca-fundo);
+  box-shadow: inset 0 0 0 1px var(--peca-borda);
+}
+
+.planta-item:not(.planta-muda) { container-type: size; }
+.planta-item-movel { cursor: grab; touch-action: none; }
+.planta-item-movel:active { cursor: grabbing; }
+
+.planta-item-existente:not(.planta-muda) {
+  border: 1px dashed var(--peca-borda);
+  box-shadow: none;
+}
+
+.planta-item-conflito:not(.planta-muda) {
+  background: repeating-linear-gradient(135deg, #ffd871 0 5px, #f8e7b3 5px 10px);
+}
+
+.planta-item[aria-pressed="true"] {
+  z-index: 1;
+  outline: 2px solid var(--sq-forest);
+  outline-offset: 1px;
+}
+
+.planta-item:focus-visible { z-index: 2; }
+
+.planta-muda {
+  width: 1.55rem;
+  height: 1.55rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+}
+
+.planta-muda::before {
+  width: .65rem;
+  height: .65rem;
+  border: 1px solid var(--peca-borda);
+  border-radius: 50%;
+  background: var(--peca-fundo);
+  content: "";
+}
+
+.planta-muda.planta-item-conflito::before { background: #ffd871; }
+
+.planta-item-rotulo {
+  display: none;
+  width: 100%;
+  padding-inline: 2px;
+  overflow: hidden;
+  font-size: .68rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@container (min-width: 36px) and (min-height: 14px) {
+  .planta-item-rotulo { display: block; }
+}
+
+.regua-terreno {
+  display: grid;
+  gap: .45rem;
+  margin-top: .75rem;
+  padding: .55rem;
+  border-radius: .55rem;
+  background: var(--sq-info-bg);
+  color: var(--sq-info-text);
+  font-size: .85rem;
+}
+
+.regua-terreno strong { display: block; font-size: 1.2rem; }
+.marcas-regua { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+
+.regua-linha,
+.regua-ponto {
+  position: absolute;
+  background: #235366;
+}
+
+.regua-linha { height: 2px; transform-origin: left center; }
+.regua-ponto {
+  width: .64rem;
+  height: .64rem;
+  transform: translate(-50%, -50%);
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
+.controle-caixa {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 2.25rem;
+  margin-top: .3rem;
+  font-size: .88rem;
+  font-weight: 650;
+}
+
+.controle-caixa input { accent-color: var(--sq-primary); }
+
+.itens-terreno {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .55rem;
+  padding: 0;
+}
+
+.itens-terreno li { min-width: 0; max-width: 100%; }
+
+.itens-terreno button {
+  display: flex;
+  align-items: center;
+  gap: .34rem;
+  max-width: 100%;
+  min-height: var(--sq-control-min);
+  padding: .4rem .55rem;
+  border: 1px solid var(--sq-border);
+  border-radius: .55rem;
+  background: var(--sq-background);
+  font-size: .85rem;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+  text-align: start;
+}
+
+.itens-terreno button:hover,
+.itens-terreno button[aria-pressed="true"] { background: var(--sq-surface-soft); }
+.itens-terreno button[aria-pressed="true"] { border-color: var(--sq-focus); }
+.itens-terreno small { color: var(--sq-text-muted); font-weight: 550; }
+
+.item-terreno-cor {
+  flex: none;
+  width: .68rem;
+  height: .68rem;
+  border: 1px solid var(--peca-borda);
+  border-radius: .2rem;
+  background: var(--peca-fundo);
+}
+
+.painel-area {
+  display: grid;
+  gap: .5rem;
+  margin-top: .75rem;
+  padding-top: .75rem;
+  border-top: 1px solid var(--sq-border);
+}
+
+.painel-area .nota { margin-top: 0; }
+.conflitos-terreno ul { padding-inline-start: 1.1rem; overflow-wrap: anywhere; }
+
+.comparacao-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+  margin-top: .65rem;
+}
+
+.comparacao-grade .planta-moldura {
+  width: min(100%, 20rem, 45dvh);
+  margin-block: .75rem;
+}
+
+.comparacao-resumo { display: grid; gap: .4rem; font-size: .85rem; }
+.comparacao-resumo > div { padding-top: .32rem; border-top: 1px solid var(--sq-border); }
+.comparacao-resumo dd { margin: 0; font-weight: 750; }
+
+@media (max-width: 720px) {
+  .terreno-grade {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "adicionar" "mapa" "itens";
+  }
+
+  .config-grade { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 420px) {
+  .dialogo-largo { width: calc(100% - .65rem); max-height: calc(100% - .65rem); }
+  .dialogo-largo .dialogo-corpo { padding-inline: .65rem; }
+  .comparacao-grade { gap: .35rem; }
+  .comparacao-grade .cartao-planta { padding: .45rem; }
+}

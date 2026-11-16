@@ -3,9 +3,9 @@ import { criarTerreno, formatarMedida } from "../features/planejador/geometria.j
 import Planta from "../features/planejador/Planta.jsx";
 import Icone from "./Icone.jsx";
 
-export default function Planejador({ abrirEditor }) {
-  const [frente, definirFrente] = useState("35");
-  const [profundidade, definirProfundidade] = useState("65");
+export default function Planejador({ abrirEditor, dimensoesIniciais }) {
+  const [frente, definirFrente] = useState(() => String(dimensoesIniciais.largura).replace(".", ","));
+  const [profundidade, definirProfundidade] = useState(() => String(dimensoesIniciais.comprimento).replace(".", ","));
   const [mostrarErro, definirMostrarErro] = useState(false);
   const terreno = criarTerreno(frente, profundidade);
   const erro = mostrarErro && !terreno;

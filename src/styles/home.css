@@ -156,7 +156,7 @@ img { max-width: 100%; display: block; }
 }
 .ferramenta h2 { display: flex; align-items: center; gap: .4em; margin-bottom: 1rem; font-size: clamp(1.35rem, 3vw, 2.25rem); letter-spacing: -.025em; }
 .ferramenta h2 .icone { width: 1.2em; height: 1.2em; }
-.ferramenta .botao, .editor .botao { width: 100%; }
+.ferramenta .botao { width: 100%; }
 .form-calendario { display: grid; gap: .6rem; }
 .form-calendario .botao { margin-top: .15rem; }
 .campo { display: grid; gap: .25rem; min-width: 0; font-weight: 700; font-size: .94rem; }
@@ -272,8 +272,6 @@ a.guia { text-align: center; text-decoration: none; }
 .sisteminha-acao .botao { text-decoration: none; }
 .sisteminha .icone { width: 1em; height: 1em; }
 
-.lista-canteiros button { border: 0; padding: .3rem .2rem; background: transparent; text-decoration: underline; text-underline-offset: .15em; }
-
 .dialogo {
   --espaco-dialogo: clamp(.9rem, 3vw, 1.6rem);
   width: min(calc(100% - 1.5rem), 42rem);
@@ -305,44 +303,6 @@ a.guia { text-align: center; text-decoration: none; }
 .foto-dialogo { width: 100%; height: auto; max-height: 15rem; object-fit: cover; border-radius: var(--sq-radius-media); }
 .etapas { padding-left: 1.25rem; margin-block: .7rem; }
 .etapas li + li { margin-top: .45rem; }
-.editor-grade {
-  display: grid;
-  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
-  grid-template-areas: "mapa titulo" "mapa tamanho" "mapa posicao" "mapa acoes";
-  gap: .8rem 1rem;
-  align-items: start;
-  margin-top: .8rem;
-}
-.editor-titulo { grid-area: titulo; }
-.editor-tamanho { grid-area: tamanho; }
-.editor-posicao { grid-area: posicao; }
-.editor-acoes { grid-area: acoes; }
-.editor-mapa {
-  grid-area: mapa;
-  display: grid;
-  justify-items: center;
-  gap: .35rem;
-  padding: .65rem;
-  border: 1px solid var(--sq-border);
-  border-radius: var(--sq-radius-media);
-  background: var(--sq-surface);
-  text-align: center;
-}
-.marco-terreno { font-size: .82rem; font-weight: 750; }
-.editor fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
-.editor legend { padding: 0; font-weight: 750; }
-.editor .planta-moldura { width: min(100%, 13rem); }
-.planta-posicionavel { cursor: crosshair; }
-.editor-campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; margin: .55rem 0; }
-.editor .botao-contorno { margin-top: .35rem; }
-.canteiro { position: absolute; background: var(--sq-plan-planned-bg); box-shadow: inset 0 0 0 1px var(--sq-plan-planned-stroke); }
-.canteiro.sobreposto { background: #f6cb45b8; box-shadow: inset 0 0 0 1px #6b4300; }
-.canteiro-rascunho { outline: 2px dashed var(--sq-focus); outline-offset: -1px; }
-.lista-canteiros { list-style: none; padding: 0; margin-top: .7rem; }
-.lista-canteiros li { display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .6rem; border-top: 1px solid var(--sq-border); }
-.lista-canteiros span { margin-right: auto; }
-.lista-canteiros button { min-height: var(--sq-control-min); }
-
 @media (max-width: 1023px) {
   .guias-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -384,14 +344,6 @@ a.guia { text-align: center; text-decoration: none; }
 @media (max-width: 359px) {
   .guias-grade { grid-template-columns: 1fr; }
   .planejador-grade { grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr); }
-}
-
-@media (max-width: 540px) {
-  .editor-grade {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "titulo" "tamanho" "mapa" "posicao" "acoes";
-  }
-  .editor .planta-moldura { width: min(100%, 10rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {

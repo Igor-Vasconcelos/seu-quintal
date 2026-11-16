@@ -26,7 +26,7 @@ Se você já criou um projeto Vite, copie o conteúdo desta pasta para a raiz do
 | `src/components/Planejador.jsx` e `src/features/planejador/` | Medidas, geometria, planta e editor |
 | `src/data/guias.js` | Textos e fontes dos quatro cartões |
 
-O calendário contém 38 opções da Tabela 8 da Embrapa, consultáveis nas cinco regiões. O planejador aceita vírgula ou ponto e calcula a área. O editor permite criar, editar a posição e remover canteiros. Os canteiros ficam em memória enquanto a página está aberta e as medidas do terreno vão na URL.
+O calendário contém 38 opções da Tabela 8 da Embrapa, consultáveis nas cinco regiões. O planejador aceita vírgula ou ponto e calcula a área. No Meu Quintal, é possível adicionar, mover e dimensionar áreas e plantios, medir distâncias na planta e comparar cenários na mesma escala. O navegador salva os cenários por medidas do terreno. A URL contém as medidas para reabrir o editor.
 
 Os cartões de Horta e Criação de animais levam ao guia de horta e ao galinheiro do Sisteminha, respectivamente. Os outros cartões abrem introduções com referências. A seção do Sisteminha aponta para os materiais oficiais. As quatro imagens dos guias foram geradas por IA. A abertura e o banner do Sisteminha usam ilustrações da referência visual do projeto. A prévia do planejador é desenhada a partir das medidas informadas.
 
