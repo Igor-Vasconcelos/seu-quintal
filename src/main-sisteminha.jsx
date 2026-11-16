@@ -9,6 +9,7 @@ import Rodape from "./components/Rodape.jsx";
 import { guiaAnimais } from "./data/guias.js";
 import "./styles/tokens.css";
 import "./styles/home.css";
+import "./styles/editorial.css";
 import "./styles/sisteminha.css";
 
 const modulos = {

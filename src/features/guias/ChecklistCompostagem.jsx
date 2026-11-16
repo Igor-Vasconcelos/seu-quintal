@@ -44,7 +44,7 @@ const fotos = [
 
 const normalizar = (texto) => texto.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
-export default function ChecklistCompostagem() {
+export default function ChecklistCompostagem({ raiz }) {
   const [modelo, definirModelo] = useState("sem-minhocas");
   const [consulta, definirConsulta] = useState("");
   const [filtro, definirFiltro] = useState("");
@@ -61,7 +61,7 @@ export default function ChecklistCompostagem() {
 
   return (
     <div className="guia-interativo">
-      <h3>O que pode entrar na composteira?</h3>
+      <h2>O que pode entrar na composteira?</h2>
       <div className="campos-guia campos-guia-duplo">
         <label className="campo">Tipo de composteira
           <select value={modelo} onChange={(evento) => definirModelo(evento.target.value)}>
@@ -94,7 +94,7 @@ export default function ChecklistCompostagem() {
       <div className="fotos-compostagem">
         {fotos.map(({ arquivo, largura, alt, autor, url }) => (
           <figure key={arquivo}>
-            <img src={`./imagens/${arquivo}`} alt={alt} width={largura} height="640" loading="lazy" />
+            <img src={`${raiz}imagens/${arquivo}`} alt={alt} width={largura} height="640" loading="lazy" />
             <figcaption>
               <a href={url} target="_blank" rel="noreferrer">{autor} · Wikimedia Commons</a>
               {" · "}<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a>

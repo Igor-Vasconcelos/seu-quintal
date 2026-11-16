@@ -21,15 +21,15 @@ Se você já criou um projeto Vite, copie o conteúdo desta pasta para a raiz do
 | --- | --- |
 | `src/App.jsx` | Abertura e seções da página inicial |
 | `src/components/Cabecalho.jsx` e `src/components/Rodape.jsx` | Navegação compartilhada |
-| `src/styles/tokens.css` e `src/styles/home.css` | Design system e responsividade |
+| `src/styles/tokens.css`, `src/styles/home.css` e `src/styles/editorial.css` | Design system, componentes e layout |
 | `src/components/Calendario.jsx` e `src/data/plantio.js` | Formulário, fonte e períodos de plantio |
 | `src/features/organizador/` | Metas semanais, escalonamento dos lotes, agenda e armazenamento dos planos de horta |
 | `src/components/Planejador.jsx` e `src/features/planejador/` | Medidas, geometria, planta e editor |
-| `src/data/guias.js` | Textos e fontes dos quatro cartões |
+| `src/data/guias.js` | Títulos, resumos e destinos dos cartões dos guias |
 
 O calendário contém 38 opções da Tabela 8 da Embrapa, consultáveis nas cinco regiões. O planejador aceita vírgula ou ponto e calcula a área. No Meu Quintal, é possível adicionar, mover e dimensionar áreas e plantios, medir distâncias na planta e comparar cenários na mesma escala. O navegador salva os cenários por medidas do terreno. A URL contém as medidas para reabrir o editor.
 
-Os cartões de Horta e Criação de animais levam ao guia de horta e ao galinheiro do Sisteminha, respectivamente. Os outros cartões abrem introduções com referências. A seção do Sisteminha aponta para os materiais oficiais. As quatro imagens dos guias foram geradas por IA. A abertura e o banner do Sisteminha usam ilustrações da referência visual do projeto. A prévia do planejador é desenhada a partir das medidas informadas.
+Os cartões levam ao guia de horta, ao galinheiro do Sisteminha, ao guia de compostagem e ao comparativo de irrigação. A seção do Sisteminha aponta para os materiais oficiais. As quatro imagens dos guias foram geradas por IA. A abertura da home e a do Sisteminha usam o mesmo panorama do projeto. A prévia do planejador é desenhada a partir das medidas informadas.
 
 ## Páginas
 
@@ -41,6 +41,9 @@ Os endereços abaixo são relativos à raiz do site. Cada página tem sua entrad
 | `/horta/` | `horta/index.html` |
 | `/horta/organizador/` | `horta/organizador/index.html` |
 | `/horta/calendario-de-plantio/` | `horta/calendario-de-plantio/index.html` |
+| `/guias/` | `guias/index.html` |
+| `/guias/compostagem/` | `guias/compostagem/index.html` |
+| `/guias/irrigacao/` | `guias/irrigacao/index.html` |
 | `/sisteminha.html` | `sisteminha.html` |
 | `/mapa-do-site/` | `mapa-do-site/index.html` |
 

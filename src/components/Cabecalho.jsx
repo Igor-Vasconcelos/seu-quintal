@@ -1,24 +1,25 @@
 import Icone from "./Icone.jsx";
 
 export default function Cabecalho({ sisteminha = false, raiz = "./", pagina, children }) {
-  const inicio = sisteminha || pagina ? raiz : "";
+  const naHome = pagina === "inicio";
+  const inicio = naHome ? "#inicio" : raiz;
 
   return (
-    <header className={sisteminha ? "topo topo-sisteminha" : "topo"}>
-      <a href={inicio || "#inicio"} className="marca">
-        <Icone nome="muda" />Seu Quintal
-      </a>
-      <nav className="menu" aria-label="Menu principal">
-        <a href={`${raiz}horta/`} aria-current={pagina === "horta" ? "page" : undefined}>Horta</a>
-        <a href={`${raiz}horta/calendario-de-plantio/`} aria-current={pagina === "calendario" ? "page" : undefined}>Calendário</a>
-        <a href={`${inicio}#guias`}>Guias</a>
-        <a className="botao botao-terracota menu-sisteminha"
-          href={sisteminha ? "#inicio" : `${raiz}sisteminha.html`}
-          aria-current={sisteminha ? "page" : undefined}>
-          Sisteminha Embrapa
+    <header className="topo">
+      <div className="topo-miolo">
+        <a href={inicio} className="marca">
+          <Icone nome="muda" />Seu Quintal
         </a>
-      </nav>
-      {children}
+        <nav className="menu" aria-label="Menu principal">
+          <a href={inicio} aria-current={naHome ? "page" : undefined}>Início</a>
+          <a href={`${raiz}guias/`} aria-current={pagina === "guias" ? "page" : undefined}>Guias</a>
+          <a href={naHome ? "#categorias" : `${raiz}#categorias`}>Categorias</a>
+          <a href={`${raiz}horta/calendario-de-plantio/`} aria-current={pagina === "calendario" ? "page" : undefined}>Calendário</a>
+          <a href={sisteminha ? "#inicio" : `${raiz}sisteminha.html`}
+            aria-current={sisteminha ? "page" : undefined}>Sisteminha</a>
+        </nav>
+        {children ?? <a className="botao" href={`${raiz}#meu-quintal`}>Meu Quintal</a>}
+      </div>
     </header>
   );
 }

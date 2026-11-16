@@ -1,8 +1,10 @@
 export const guiaHorta = {
   id: "horta",
-  destino: "./horta/",
+  destino: "horta/",
+  assunto: "Horta",
+  simbolo: "🌱",
+  resumo: "Escolha o que plantar em uma janela, varanda ou quintal.",
   titulo: "Horta em pequenos espaços",
-  descricao: "Encontre opções de cultivo para a sua janela, varanda ou quintal.",
   fonte: "Horta em pequenos espaços · Embrapa",
   url: "https://www.infoteca.cnptia.embrapa.br/handle/doc/958531",
 };
@@ -10,7 +12,10 @@ export const guiaHorta = {
 export const guiaAnimais = {
   id: "animais",
   titulo: "Criação de animais",
-  destino: "./sisteminha.html#galinheiro",
+  destino: "sisteminha.html#galinheiro",
+  assunto: "Criação de animais",
+  simbolo: "🐓",
+  resumo: "Conheça os cuidados iniciais para montar um galinheiro.",
   descricao: "Antes de escolher as aves, pense na rotina de manejo e no local do abrigo. O material da Embrapa traz critérios para avaliar drenagem, ventilação, sombra e acesso à água.",
   fonte: "Criação de galinhas e codornas · Embrapa",
   url: "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1102048/1/Doc248PerguntasRespostasCriacaoGalinhasCodornas.pdf",
@@ -22,15 +27,17 @@ export const guias = [
   {
     id: "compostagem",
     titulo: "Solo e compostagem",
-    descricao: "A compostagem transforma resíduos orgânicos em composto. Veja quais materiais você tem em casa e conheça os modelos que cabem no seu espaço antes de escolher uma composteira.",
-    fonte: "Compostagem · Embrapa Hortaliças",
-    url: "https://www.embrapa.br/web/hortalicas/hortalica-nao-e-so-salada/secoes/compostagem",
+    destino: "guias/compostagem/",
+    assunto: "Compostagem",
+    simbolo: "♻️",
+    resumo: "Descubra o que pode ir para a composteira de casa.",
   },
   {
     id: "ferramentas",
     titulo: "Ferramentas e irrigação",
-    descricao: "Uma pá de mão ajuda a mexer a terra em vasos. Um regador com crivo facilita distribuir a água em mudas. Escolha as ferramentas de acordo com as tarefas e o tamanho da horta.",
-    fonte: "Horta em pequenos espaços · Embrapa",
-    url: "https://www.infoteca.cnptia.embrapa.br/handle/doc/750396",
+    destino: "guias/irrigacao/",
+    assunto: "Ferramentas",
+    simbolo: "🧤",
+    resumo: "Compare mangueira e gotejamento para o tamanho da sua horta.",
   },
 ];

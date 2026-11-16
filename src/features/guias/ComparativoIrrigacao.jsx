@@ -29,7 +29,7 @@ export default function ComparativoIrrigacao() {
 
   return (
     <section className="guia-interativo" aria-labelledby="titulo-irrigacao">
-      <h3 id="titulo-irrigacao">Mangueira ou gotejamento?</h3>
+      <h2 id="titulo-irrigacao">Mangueira ou gotejamento?</h2>
       <label className="campo">Qual é o tamanho da horta?
         <select value={cenario} onChange={(evento) => definirCenario(evento.target.value)}>
           {Object.entries(cenarios).map(([id, { nome }]) => <option key={id} value={id}>{nome}</option>)}
@@ -39,7 +39,7 @@ export default function ComparativoIrrigacao() {
       <div className="campos-guia campos-guia-duplo">
         {[["Mangueira", atual.mangueira], ["Gotejamento", atual.gotejamento]].map(([nome, valores]) => (
           <div className="painel-guia comparativo-rega" key={nome}>
-            <h4>{nome}</h4>
+            <h3>{nome}</h3>
             <dl>{criterios.map((criterio, indice) => (
               <div key={criterio}><dt>{criterio}</dt><dd>{valores[indice]}</dd></div>
             ))}</dl>

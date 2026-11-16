@@ -81,6 +81,6 @@
 
 /*
  * 0–767px: ferramentas em uma coluna. 768px+: duas colunas.
- * Guias: uma coluna abaixo de 360px; duas de 360 a 1023px; quatro a partir de 1024px.
+ * Guias e categorias: duas colunas até 900px, quatro em telas mais largas.
  * Vírgulas decimais, textos e status são tratados pelos componentes, não pelos tokens.
  */

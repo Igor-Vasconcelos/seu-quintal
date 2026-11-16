@@ -89,6 +89,7 @@
 }
 
 .comparativo-rega dl { display: grid; gap: .7rem; margin: .65rem 0 0; }
+.comparativo-rega h3 { font-size: 1.05rem; }
 .comparativo-rega dt { font-weight: 750; }
 .comparativo-rega dd { margin: .1rem 0 0; }
 

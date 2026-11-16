@@ -2,22 +2,17 @@ import { useEffect, useState } from "react";
 import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Cabecalho from "./components/Cabecalho.jsx";
 import Calendario from "./components/Calendario.jsx";
+import CartoesGuias from "./components/CartoesGuias.jsx";
 import Icone from "./components/Icone.jsx";
 import Planejador from "./components/Planejador.jsx";
 import Rodape from "./components/Rodape.jsx";
 import { guias } from "./data/guias.js";
 import HistoricoCultivo from "./features/cultivo/HistoricoCultivo.jsx";
-import ChecklistCompostagem from "./features/guias/ChecklistCompostagem.jsx";
-import ComparativoIrrigacao from "./features/guias/ComparativoIrrigacao.jsx";
 import EditorTerreno from "./features/planejador/EditorTerreno.jsx";
 import { criarTerreno } from "./features/planejador/geometria.js";
 import { chaveDoTerreno, lerProjetos, projetoInicial, salvarProjetos } from "./features/planejador/projetos.js";
 
 const dimensoesIniciais = criarTerreno("35", "65");
-const conteudosGuias = {
-  compostagem: ChecklistCompostagem,
-  ferramentas: ComparativoIrrigacao,
-};
 
 function terrenoDaUrl() {
   const parametros = new URLSearchParams(window.location.search);
@@ -27,13 +22,16 @@ function terrenoDaUrl() {
 export default function App() {
   const [editor, definirEditor] = useState(terrenoDaUrl);
   const [verHistorico, definirVerHistorico] = useState(false);
-  const [dialogo, definirDialogo] = useState(null);
+  const [verCreditos, definirVerCreditos] = useState(false);
   const [projetos, definirProjetos] = useState(lerProjetos);
   const [salvouProjeto, definirSalvouProjeto] = useState(true);
 
   useEffect(() => {
+    const destino = document.getElementById(window.location.hash.slice(1));
+    destino?.scrollIntoView({ behavior: "instant" });
+
     function sincronizarEditor() {
-      definirDialogo(null);
+      definirVerCreditos(false);
       definirVerHistorico(false);
       definirEditor(terrenoDaUrl());
     }
@@ -80,75 +78,93 @@ export default function App() {
     definirSalvouProjeto(salvarProjetos(dados));
   }
 
-  const ConteudoGuia = conteudosGuias[dialogo?.id];
-
   return (
     <div className="pagina-home" id="inicio">
       <a className="pular" href="#conteudo">Pular para o conteúdo</a>
-      <Cabecalho>
+      <Cabecalho pagina="inicio">
         <button type="button" className="botao"
           onClick={() => abrirEditor(ultimoTerreno)}>
           Meu Quintal
         </button>
       </Cabecalho>
 
-      <main id="conteudo">
-        <section className="abertura" aria-labelledby="titulo-home">
-          <img className="seu-adao" src="./imagens/seu-adao-home.webp" width="284" height="174"
-            alt="Seu Adão acena segurando uma muda." fetchPriority="high" />
-          <div className="abertura-texto">
-            <h1 id="titulo-home">Da primeira muda ao seu sítio</h1>
-            <p>Descubra o que plantar e planeje seu espaço.</p>
+      <main id="conteudo" tabIndex={-1}>
+        <section className="home-abertura" aria-labelledby="titulo-home">
+          <div className="home-miolo home-abertura-grade">
+            <div className="home-abertura-texto">
+              <h1 id="titulo-home">Tudo para o seu <em>quintal florescer.</em></h1>
+              <p>Aprenda a cuidar da horta e dos animais. Descubra o que plantar, organize seu terreno e acompanhe o cultivo.</p>
+              <div className="home-acoes">
+                <button className="botao" type="button" onClick={() => abrirEditor(ultimoTerreno)}>
+                  Abrir Meu Quintal <Icone nome="seta" />
+                </button>
+                <a className="home-link" href="#guias">Explorar guias <Icone nome="seta" /></a>
+              </div>
+            </div>
+            <figure className="home-abertura-imagem">
+              <img src="./imagens/sisteminha/panorama.webp" width="1248" height="832"
+                alt="Ilustração de um quintal com canteiros, galinhas e um tanque de peixes." fetchPriority="high" />
+            </figure>
           </div>
-          <img className="folhagem" src="./imagens/folhagem.webp" width="119" height="119" alt="" />
         </section>
 
-        <nav className="atalhos" aria-label="Atalhos da home">
-          <a href="#calendario"><Icone nome="muda" />Calendário</a>
-          <a href="#planejador"><Icone nome="planta" />Planejador</a>
-          <a href="#guias"><Icone nome="livro" />Guias</a>
-        </nav>
-
-        <div className="ferramentas">
-          <Calendario />
-          <Planejador abrirEditor={abrirEditor} dimensoesIniciais={ultimoTerreno} />
-        </div>
-
-        <section className="guias" id="guias" aria-labelledby="titulo-guias">
-          <h2 id="titulo-guias">Guias para começar</h2>
-          <ul className="guias-grade">
-            {guias.map((guia) => {
-              const conteudo = <>
-                <img src={`./imagens/${guia.id}.webp`} width="792" height="396" alt="" loading="lazy" />
-                <span>{guia.titulo}</span>
-              </>;
-
-              return (
-                <li key={guia.id}>
-                  {guia.destino
-                    ? <a className="guia" href={guia.destino}>{conteudo}</a>
-                    : <button className="guia" type="button" onClick={() => definirDialogo(guia)}>{conteudo}</button>}
-                </li>
-              );
-            })}
+        <section className="home-miolo home-secao" id="categorias" aria-labelledby="titulo-categorias">
+          <h2 id="titulo-categorias">Explore por assunto</h2>
+          <ul className="home-categorias">
+            {guias.map((guia) => (
+              <li key={guia.id}>
+                <a href={`./${guia.destino}`}>
+                  <span className="categoria-simbolo" aria-hidden="true">{guia.simbolo}</span>
+                  <span>{guia.assunto}</span>
+                  <Icone nome="seta" />
+                </a>
+              </li>
+            ))}
           </ul>
         </section>
 
-        <section className="sisteminha" id="sisteminha" aria-labelledby="titulo-sisteminha">
-          <img src="./imagens/sisteminha.webp" width="379" height="104" alt="" loading="lazy" />
-          <div className="sisteminha-texto">
-            <h2 id="titulo-sisteminha">Sisteminha Embrapa</h2>
-            <p>Veja como peixes, horta e compostagem se conectam.</p>
+        <section className="home-destaques" id="guias" aria-labelledby="titulo-guias">
+          <div className="home-miolo home-secao">
+            <div className="home-secao-topo">
+              <h2 id="titulo-guias">Guias para começar</h2>
+              <a className="home-link" href="./guias/">Ver todos os guias <Icone nome="seta" /></a>
+            </div>
+            <CartoesGuias itens={guias.slice(0, 3)} />
           </div>
-          <div className="sisteminha-acao">
-            <a className="botao botao-terracota" href="./sisteminha.html">
-              Conhecer o ciclo <Icone nome="seta" />
-            </a>
+        </section>
+
+        <section className="home-miolo home-secao" id="ferramentas" aria-labelledby="titulo-ferramentas-home">
+          <div className="home-secao-topo">
+            <h2 id="titulo-ferramentas-home">Planeje seu quintal</h2>
+            <a className="home-link" href="./horta/organizador/">Organizador de horta <Icone nome="seta" /></a>
+          </div>
+          <div className="ferramentas">
+            <Calendario />
+            <Planejador abrirEditor={abrirEditor} dimensoesIniciais={ultimoTerreno} />
+          </div>
+        </section>
+
+        <section className="home-miolo home-secao home-projetos" aria-label="Projetos para o quintal">
+          <div className="home-meu-quintal" id="meu-quintal">
+            <Icone nome="planta" />
+            <h2>Meu Quintal</h2>
+            <p>Desenhe o terreno, compare layouts e registre o que plantou e colheu.</p>
+            <button className="botao" type="button" onClick={() => abrirEditor(ultimoTerreno)}>
+              Abrir o painel <Icone nome="seta" />
+            </button>
+          </div>
+          <div className="home-sisteminha" id="sisteminha">
+            <img src="./imagens/sisteminha.webp" width="379" height="104" alt="" loading="lazy" />
+            <div>
+              <h2>Sisteminha Embrapa</h2>
+              <p>Veja como peixes, horta e compostagem se conectam.</p>
+              <a className="home-link" href="./sisteminha.html">Conhecer o ciclo <Icone nome="seta" /></a>
+            </div>
           </div>
         </section>
       </main>
 
-      <Rodape inicio aoVerCreditos={() => definirDialogo("creditos")} />
+      <Rodape inicio aoVerCreditos={() => definirVerCreditos(true)} />
 
       {editor && <CaixaDialogo titulo="Meu Quintal" fechar={fecharEditor} largo>
         <div className="acoes-guia secoes-quintal" role="group" aria-label="Seções do Meu Quintal">
@@ -172,16 +188,10 @@ export default function App() {
         </div>
       </CaixaDialogo>}
 
-      {dialogo === "creditos" && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirDialogo(null)}>
+      {verCreditos && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirVerCreditos(false)}>
         <p>As imagens dos cartões da página inicial foram geradas por IA. Os guias de horta e de compostagem também incluem fotos do Wikimedia Commons, com créditos e licenças nos próprios guias.</p>
       </CaixaDialogo>}
 
-      {dialogo?.titulo && <CaixaDialogo titulo={dialogo.titulo} fechar={() => definirDialogo(null)}>
-        <img className="foto-dialogo" src={`./imagens/${dialogo.id}.webp`} width="792" height="396" alt="" />
-        <p>{dialogo.descricao}</p>
-        {ConteudoGuia && <ConteudoGuia guia={dialogo} />}
-        <a className="link-fonte" href={dialogo.url} target="_blank" rel="noreferrer">{dialogo.fonte}</a>
-      </CaixaDialogo>}
     </div>
   );
 }
