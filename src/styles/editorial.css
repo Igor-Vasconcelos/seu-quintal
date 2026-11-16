@@ -109,6 +109,7 @@
 .home-acoes .botao,
 .home-meu-quintal .botao {
   min-height: 3rem;
+  text-decoration: none;
 }
 
 .home-acoes .icone,

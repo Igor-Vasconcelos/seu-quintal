@@ -8,7 +8,6 @@ import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/editorial.css";
 import "./styles/guias-cultivo.css";
-import "./styles/planejador.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

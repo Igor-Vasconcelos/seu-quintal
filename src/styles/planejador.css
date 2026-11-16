@@ -1,8 +1,3 @@
-.dialogo-largo {
-  width: min(calc(100% - 1.5rem), 71rem);
-  overscroll-behavior: contain;
-}
-
 .editor-terreno {
   --borda-mapa: #8c9d75;
   display: grid;
@@ -376,8 +371,6 @@
 }
 
 @media (max-width: 420px) {
-  .dialogo-largo { width: calc(100% - .65rem); max-height: calc(100% - .65rem); }
-  .dialogo-largo .dialogo-corpo { padding-inline: .65rem; }
   .comparacao-grade { gap: .35rem; }
   .comparacao-grade .cartao-planta { padding: .45rem; }
 }

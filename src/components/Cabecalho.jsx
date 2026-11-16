@@ -18,7 +18,9 @@ export default function Cabecalho({ sisteminha = false, raiz = "./", pagina, chi
           <a href={sisteminha ? "#inicio" : `${raiz}sisteminha.html`}
             aria-current={sisteminha ? "page" : undefined}>Sisteminha</a>
         </nav>
-        {children ?? <a className="botao" href={`${raiz}#meu-quintal`}>Meu Quintal</a>}
+        {children ?? (pagina === "meu-quintal"
+          ? <a className="botao" href="#terreno" aria-current="page">Meu Quintal</a>
+          : <a className="botao" href={`${raiz}meu-quintal/`} target="_blank" rel="noopener">Meu Quintal</a>)}
       </div>
     </header>
   );

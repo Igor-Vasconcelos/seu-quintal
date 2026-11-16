@@ -7,86 +7,24 @@ import Icone from "./components/Icone.jsx";
 import Planejador from "./components/Planejador.jsx";
 import Rodape from "./components/Rodape.jsx";
 import { guias } from "./data/guias.js";
-import HistoricoCultivo from "./features/cultivo/HistoricoCultivo.jsx";
-import EditorTerreno from "./features/planejador/EditorTerreno.jsx";
 import { criarTerreno } from "./features/planejador/geometria.js";
-import { chaveDoTerreno, lerProjetos, projetoInicial, salvarProjetos } from "./features/planejador/projetos.js";
-
-const dimensoesIniciais = criarTerreno("35", "65");
-
-function terrenoDaUrl() {
-  const parametros = new URLSearchParams(window.location.search);
-  return criarTerreno(parametros.get("frente") ?? "", parametros.get("profundidade") ?? "");
-}
 
 export default function App() {
-  const [editor, definirEditor] = useState(terrenoDaUrl);
-  const [verHistorico, definirVerHistorico] = useState(false);
   const [verCreditos, definirVerCreditos] = useState(false);
-  const [projetos, definirProjetos] = useState(lerProjetos);
-  const [salvouProjeto, definirSalvouProjeto] = useState(true);
 
   useEffect(() => {
-    const destino = document.getElementById(window.location.hash.slice(1));
-    destino?.scrollIntoView({ behavior: "instant" });
-
-    function sincronizarEditor() {
-      definirVerCreditos(false);
-      definirVerHistorico(false);
-      definirEditor(terrenoDaUrl());
-    }
-    window.addEventListener("popstate", sincronizarEditor);
-    return () => window.removeEventListener("popstate", sincronizarEditor);
-  }, []);
-
-  function abrirEditor(terreno) {
-    const url = new URL(window.location.href);
-    url.searchParams.set("frente", String(terreno.largura));
-    url.searchParams.set("profundidade", String(terreno.comprimento));
-    if (editor) window.history.replaceState(window.history.state, "", url);
-    else window.history.pushState({ editor: true }, "", url);
-    definirVerHistorico(false);
-    definirEditor(terreno);
-  }
-
-  function fecharEditor() {
-    if (window.history.state?.editor) {
-      window.history.back();
+    const parametros = new URLSearchParams(window.location.search);
+    if (criarTerreno(parametros.get("frente"), parametros.get("profundidade"))) {
+      window.location.replace(new URL(`./meu-quintal/${window.location.search}`, window.location.href));
       return;
     }
-    const url = new URL(window.location.href);
-    url.searchParams.delete("frente");
-    url.searchParams.delete("profundidade");
-    window.history.replaceState(null, "", url);
-    definirEditor(null);
-  }
-
-  const chaveTerreno = editor ? chaveDoTerreno(editor) : null;
-  const projeto = projetos.terrenos[chaveTerreno];
-  const ultimoTerreno = projetos.ultimoTerreno ?? dimensoesIniciais;
-
-  function atualizarProjeto(novo) {
-    const salvos = lerProjetos().terrenos;
-    const outros = salvouProjeto
-      ? { ...projetos.terrenos, ...salvos }
-      : { ...salvos, ...projetos.terrenos };
-    const dados = {
-      ultimoTerreno: editor,
-      terrenos: { ...outros, [chaveTerreno]: novo },
-    };
-    definirProjetos(dados);
-    definirSalvouProjeto(salvarProjetos(dados));
-  }
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: "instant" });
+  }, []);
 
   return (
     <div className="pagina-home" id="inicio">
       <a className="pular" href="#conteudo">Pular para o conteúdo</a>
-      <Cabecalho pagina="inicio">
-        <button type="button" className="botao"
-          onClick={() => abrirEditor(ultimoTerreno)}>
-          Meu Quintal
-        </button>
-      </Cabecalho>
+      <Cabecalho pagina="inicio" />
 
       <main id="conteudo" tabIndex={-1}>
         <section className="home-abertura" aria-labelledby="titulo-home">
@@ -95,9 +33,9 @@ export default function App() {
               <h1 id="titulo-home">Tudo para o seu <em>quintal florescer.</em></h1>
               <p>Aprenda a cuidar da horta e dos animais. Descubra o que plantar, organize seu terreno e acompanhe o cultivo.</p>
               <div className="home-acoes">
-                <button className="botao" type="button" onClick={() => abrirEditor(ultimoTerreno)}>
+                <a className="botao" href="./meu-quintal/" target="_blank" rel="noopener">
                   Abrir Meu Quintal <Icone nome="seta" />
-                </button>
+                </a>
                 <a className="home-link" href="#guias">Explorar guias <Icone nome="seta" /></a>
               </div>
             </div>
@@ -136,11 +74,11 @@ export default function App() {
         <section className="home-miolo home-secao" id="ferramentas" aria-labelledby="titulo-ferramentas-home">
           <div className="home-secao-topo">
             <h2 id="titulo-ferramentas-home">Planeje seu quintal</h2>
-            <a className="home-link" href="./horta/organizador/">Organizador de horta <Icone nome="seta" /></a>
+            <a className="home-link" href="./meu-quintal/#horta" target="_blank" rel="noopener">Organizador de horta <Icone nome="seta" /></a>
           </div>
           <div className="ferramentas">
             <Calendario />
-            <Planejador abrirEditor={abrirEditor} dimensoesIniciais={ultimoTerreno} />
+            <Planejador />
           </div>
         </section>
 
@@ -149,9 +87,9 @@ export default function App() {
             <Icone nome="planta" />
             <h2>Meu Quintal</h2>
             <p>Desenhe o terreno, compare layouts e registre o que plantou e colheu.</p>
-            <button className="botao" type="button" onClick={() => abrirEditor(ultimoTerreno)}>
+            <a className="botao" href="./meu-quintal/" target="_blank" rel="noopener">
               Abrir o painel <Icone nome="seta" />
-            </button>
+            </a>
           </div>
           <div className="home-sisteminha" id="sisteminha">
             <img src="./imagens/sisteminha.webp" width="379" height="104" alt="" loading="lazy" />
@@ -165,28 +103,6 @@ export default function App() {
       </main>
 
       <Rodape inicio aoVerCreditos={() => definirVerCreditos(true)} />
-
-      {editor && <CaixaDialogo titulo="Meu Quintal" fechar={fecharEditor} largo>
-        <div className="acoes-guia secoes-quintal" role="group" aria-label="Seções do Meu Quintal">
-          <button className={`botao ${verHistorico ? "botao-contorno" : ""}`} type="button"
-            aria-controls="painel-terreno" aria-pressed={!verHistorico} onClick={() => definirVerHistorico(false)}>
-            Planejador de terreno
-          </button>
-          <button className={`botao ${verHistorico ? "" : "botao-contorno"}`} type="button"
-            aria-controls="historico-quintal" aria-pressed={verHistorico} onClick={() => definirVerHistorico(true)}>
-            Histórico de cultivo
-          </button>
-          <a className="botao botao-contorno" href="./horta/organizador/">Organizador de horta</a>
-        </div>
-        <div id="painel-terreno" hidden={verHistorico}>
-          <EditorTerreno key={chaveTerreno} terreno={editor} abrirTerreno={abrirEditor}
-            projeto={projeto ?? projetoInicial} definirProjeto={atualizarProjeto}
-            salvamento={salvouProjeto ? (projeto ? "Salvo neste navegador" : "Salvamento automático neste navegador") : "Salvamento indisponível. Projeto aberto nesta sessão."} />
-        </div>
-        <div id="historico-quintal" hidden={!verHistorico}>
-          <HistoricoCultivo />
-        </div>
-      </CaixaDialogo>}
 
       {verCreditos && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirVerCreditos(false)}>
         <p>As imagens dos cartões da página inicial foram geradas por IA. Os guias de horta e de compostagem também incluem fotos do Wikimedia Commons, com créditos e licenças nos próprios guias.</p>

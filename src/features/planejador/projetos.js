@@ -1,6 +1,7 @@
 import { arredondarMedida, cabeNoTerreno, criarTerreno, limitarPosicao, sobrepoe } from "./geometria.js";
+import { chavesQuintal, gravarDado, lerDado } from "../quintal/dados.js";
 
-const chave = "seu-quintal:projetos-terreno:v1";
+const chave = chavesQuintal.terrenos;
 
 export const tiposDeArea = {
   canteiro: { nome: "Canteiro", largura: 1.2, comprimento: 3, cor: "horta" },
@@ -47,7 +48,7 @@ export function novoId() {
 
 export function lerProjetos() {
   try {
-    const dados = JSON.parse(window.localStorage.getItem(chave));
+    const dados = JSON.parse(lerDado(chave));
     if (!dados?.terrenos || typeof dados.terrenos !== "object") return projetosIniciais;
     const terrenos = {};
     for (const [id, projeto] of Object.entries(dados.terrenos)) {
@@ -83,7 +84,7 @@ export function lerProjetos() {
 
 export function salvarProjetos(dados) {
   try {
-    window.localStorage.setItem(chave, JSON.stringify(dados));
+    gravarDado(chave, JSON.stringify(dados));
     return true;
   } catch {
     return false;

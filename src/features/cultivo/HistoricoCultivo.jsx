@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
+import { chavesQuintal, gravarDado, lerDado } from "../quintal/dados.js";
 
-const chave = "seu-quintal:historico-cultivo:v1";
+const chave = chavesQuintal.historico;
 const unidades = { kg: "kg", g: "g", un: "un.", maco: "maço(s)" };
 const chaveArea = (texto) => texto.toLocaleLowerCase("pt-BR");
 const formatarData = (data) => data.split("-").reverse().join("/");
 
 function carregarRegistros() {
-  const dados = JSON.parse(window.localStorage.getItem(chave) ?? "[]");
+  const dados = JSON.parse(lerDado(chave) ?? "[]");
   if (!Array.isArray(dados) || dados.some((item) =>
     !item || ["id", "area", "cultura", "plantio", "colheita", "unidade", "observacoes"].some((campo) => typeof item[campo] !== "string"))) {
     throw new Error("Histórico inválido");
@@ -23,7 +24,7 @@ function abrirHistorico() {
   }
 }
 
-export default function HistoricoCultivo() {
+export default function HistoricoCultivo({ naConta = false }) {
   const [historico, definirHistorico] = useState(abrirHistorico);
   const [filtro, definirFiltro] = useState("");
   const [edicao, definirEdicao] = useState(null);
@@ -50,7 +51,7 @@ export default function HistoricoCultivo() {
   function salvarRegistros(atualizar) {
     try {
       const registros = atualizar(carregarRegistros());
-      window.localStorage.setItem(chave, JSON.stringify(registros));
+      gravarDado(chave, JSON.stringify(registros));
       definirHistorico({ registros, erro: "" });
       return true;
     } catch {
@@ -124,7 +125,7 @@ export default function HistoricoCultivo() {
   return (
     <section className="historico-cultivo" id="painel-cultivo" aria-labelledby="titulo-cultivo">
       <h3 id="titulo-cultivo">Histórico de cultivo</h3>
-      <p className="nota">Registre o que plantou e colheu em cada canteiro ou talhão. Os registros ficam salvos neste navegador.</p>
+      <p className="nota">Registre o que plantou e colheu em cada canteiro ou talhão. {naConta ? "O histórico está vinculado à sua conta." : "Os registros ficam salvos neste navegador."}</p>
       {historico.erro && <p className="erro" role="alert">{historico.erro}</p>}
 
       <form className="form-guia painel-guia" key={edicao?.id ?? "novo"} ref={formulario} onSubmit={salvarCultivo}>

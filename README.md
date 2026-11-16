@@ -38,6 +38,7 @@ Os endereços abaixo são relativos à raiz do site. Cada página tem sua entrad
 | Endereço | Arquivo de entrada |
 | --- | --- |
 | `/` | `index.html` |
+| `/meu-quintal/` | `meu-quintal/index.html` |
 | `/horta/` | `horta/index.html` |
 | `/horta/organizador/` | `horta/organizador/index.html` |
 | `/horta/calendario-de-plantio/` | `horta/calendario-de-plantio/index.html` |
@@ -52,3 +53,9 @@ Para gerar uma versão de produção em `dist`:
 ```powershell
 npm.cmd run build
 ```
+
+## Dados do Meu Quintal
+
+A área abre em uma página própria. Os visitantes que usam a versão local guardam seus terrenos, registros e planos de horta no armazenamento do navegador. A opção Entrar com ChatGPT abre a área da conta hospedada no Seu Quintal, onde a API vincula os dados ao usuário autenticado.
+
+Em **Cópia dos meus dados**, a pessoa pode baixar os dados locais e importá-los em seções vazias da conta. O mesmo código da interface gera a versão da conta com `npm run build -- --mode conta`.

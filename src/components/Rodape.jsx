@@ -19,7 +19,7 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
             <li><a href={`${raiz}horta/`} aria-current={pagina === "horta" ? "page" : undefined}>Horta em pequenos espaços</a></li>
             <li><a href={`${raiz}horta/organizador/`} aria-current={pagina === "organizador" ? "page" : undefined}>Organizador de horta</a></li>
             <li><a href={`${raiz}horta/calendario-de-plantio/`} aria-current={pagina === "calendario" ? "page" : undefined}>Calendário de plantio</a></li>
-            <li><a href={`${home}#planejador`}>Planejador de terreno</a></li>
+            <li><a href={`${raiz}meu-quintal/`} target="_blank" rel="noopener">Meu Quintal</a></li>
             <li><a href={`${raiz}guias/`} aria-current={pagina === "guias" ? "page" : undefined}>Todos os guias</a></li>
             <li><a href={sisteminha ? "#inicio" : `${raiz}sisteminha.html`} aria-current={sisteminha ? "page" : undefined}>Sisteminha Embrapa</a></li>
             <li><a href={`${raiz}mapa-do-site/`} aria-current={pagina === "mapa" ? "page" : undefined}>Mapa do site</a></li>
