@@ -90,8 +90,8 @@ function ResumoCultivo({ plano, regiao }) {
   );
 }
 
-export default function FormularioCultivo({ edicao, regiao, aoSalvar, aoCancelar, bloqueado }) {
-  const [campos, definirCampos] = useState(() => formularioInicial(edicao));
+export default function FormularioCultivo({ edicao, culturaSugerida, regiao, aoSalvar, aoCancelar, bloqueado }) {
+  const [campos, definirCampos] = useState(() => formularioInicial(edicao, culturaSugerida));
   const [tentouSalvar, definirTentouSalvar] = useState(false);
   const ficha = culturasOrganizador[campos.cultura];
   const { plano, erro } = lerPlano(campos);

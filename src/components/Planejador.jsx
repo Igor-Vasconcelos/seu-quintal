@@ -23,9 +23,11 @@ export default function Planejador({ aoCriar, noPainel = false }) {
   }
 
   return (
-    <section className="ferramenta" id="planejador" aria-labelledby="titulo-planejador">
-      {noPainel ? <h3 id="titulo-planejador">Crie seu terreno</h3>
-        : <h2 id="titulo-planejador"><Icone nome="planta" />Planejador de Terreno</h2>}
+    <section className="ferramenta" id="planejador" aria-labelledby="titulo-planejador" tabIndex={-1}>
+      <h3 className="ferramenta-titulo" id="titulo-planejador">
+        <Icone nome="planta" />{noPainel ? "Crie seu terreno" : "Planejador de terreno"}
+      </h3>
+      <p className="ferramenta-intro">Use as medidas da frente e do fundo para ver a área.</p>
       <form action={noPainel ? undefined : "./meu-quintal/"} target={noPainel ? undefined : "_blank"} rel="noopener" onSubmit={continuar}>
         <div className="planejador-grade">
           <div className="medidas">
@@ -45,13 +47,17 @@ export default function Planejador({ aoCriar, noPainel = false }) {
             {terreno ? <>
               <Planta terreno={terreno} mostrarFrente />
               <strong className="area">{formatarMedida(terreno.area)} m²</strong>
-            </> : <span className="nota">Preencha as medidas para ver a planta.</span>}
+            </> : <>
+              <Icone nome="planta" />
+              <span className="nota">A planta aparece aqui</span>
+            </>}
           </div>
         </div>
         {erro && <p id="erro-medidas" className="erro" role="alert">Informe medidas de 0,01 a 10.000 m, com até dois decimais.</p>}
-        <button className="botao" type="submit">{noPainel ? "Criar terreno" : "Continuar no planejador"}</button>
+        <button className="botao" type="submit">{noPainel ? "Criar terreno" : <>Continuar no planejador <Icone nome="novaAba" />
+          <span className="visualmente-oculto"> (abre em nova aba)</span></>}</button>
       </form>
-      <p className="nota">A linha verde marca a frente do terreno.</p>
+      {terreno && <p className="nota">A linha verde marca a frente do terreno.</p>}
     </section>
   );
 }

@@ -8,8 +8,7 @@
 .quintal-pagina .botao { text-decoration: none; }
 
 .quintal-titulo,
-.quintal-secao-topo,
-.quintal-secoes {
+.quintal-secao-topo {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -21,8 +20,11 @@
 
 .quintal-titulo {
   align-items: end;
-  padding-block: .25rem .75rem;
-  border-bottom: 1px solid var(--sq-border);
+  gap: .6rem 1.5rem;
+  padding: clamp(1rem, 3.5vw, 2rem);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface-soft);
 }
 
 .quintal-titulo h1 {
@@ -35,16 +37,10 @@
   color: var(--sq-text-muted);
 }
 
-.quintal-titulo a {
-  display: inline-flex;
-  align-items: center;
-  gap: .3rem;
-  min-height: var(--sq-control-min);
-  font-size: .88rem;
-  font-weight: 700;
-}
+.quintal-titulo .quintal-salvamento { margin-top: .65rem; font-size: var(--sq-type-small); }
+.quintal-titulo a { font-size: .9rem; }
 
-.quintal-titulo a .icone { width: 1rem; }
+.quintal-titulo a .icone { width: 1rem; height: 1rem; transform: rotate(180deg); }
 
 .quintal-ferramenta {
   min-width: 0;
@@ -55,24 +51,46 @@
 }
 
 .quintal-secoes {
-  padding: .55rem;
-  border: 1px solid var(--sq-border);
-  border-radius: var(--sq-radius-media);
-  background: var(--sq-background);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.35rem, 1.4vw, .75rem);
 }
 
-.quintal-secoes .botao { font-size: .9rem; }
+.quintal-secoes a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  min-height: 3.15rem;
+  padding: .5rem .4rem;
+  border: 1px solid var(--sq-control-border);
+  border-radius: var(--sq-radius-media);
+  color: var(--sq-link);
+  background: var(--sq-surface);
+  font-size: .94rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  text-underline-offset: .22em;
+}
+
+.quintal-secoes a:hover { background: var(--sq-surface-soft); }
+.quintal-secoes a[aria-current] {
+  border-color: var(--sq-primary);
+  color: var(--sq-on-primary);
+  background: var(--sq-primary);
+  text-decoration: underline;
+}
+
+.quintal-secoes .icone { width: 1.2rem; height: 1.2rem; }
 .quintal-terreno { display: grid; gap: .8rem; }
 .quintal-terrenos { max-width: 21rem; }
-.quintal-terreno .ferramenta { max-width: 36rem; }
+.quintal-terreno .ferramenta { max-width: 36rem; box-shadow: none; }
 .quintal-ferramenta > section[aria-label="Organizador de horta"] > h2 { margin-bottom: .75rem; }
 
 @media (max-width: 767px) {
   .pagina-meu-quintal { --sq-control-min: 3rem; }
-  .pagina-meu-quintal .menu a {
-    min-width: var(--sq-control-min);
-    justify-content: center;
-  }
   .pagina-meu-quintal :is(.config-terreno summary, .controle-caixa, .organizador summary, .organizador-concluidas) {
     min-height: var(--sq-control-min);
   }
@@ -80,6 +98,11 @@
 
 @media (max-width: 600px) {
   .quintal-titulo { align-items: start; }
-  .quintal-secoes { display: grid; grid-template-columns: minmax(0, 1fr); }
-  .quintal-secoes .botao { justify-content: flex-start; }
+  .quintal-titulo a { min-height: var(--sq-control-min); }
+  .quintal-secoes a {
+    flex-direction: column;
+    gap: .3rem;
+    min-height: 4rem;
+    font-size: .83rem;
+  }
 }

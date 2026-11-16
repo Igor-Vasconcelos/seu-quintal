@@ -42,7 +42,7 @@ if (horta) {
 if (calendario) {
   montarFerramenta(calendario, async () => {
     const { default: Calendario } = await import("./components/Calendario.jsx");
-    return <Calendario titulo="Consultar por mês e região" />;
+    return <Calendario titulo="Consultar por mês e região" raiz={raiz} />;
   });
 }
 

@@ -137,7 +137,7 @@ function PlanoHorta({ dados, aoEditar, aoRemover, bloqueado }) {
   );
 }
 
-export default function OrganizadorHorta() {
+export default function OrganizadorHorta({ culturaSugerida }) {
   const [estado, definirEstado] = useState(abrirOrganizador);
   const [edicao, definirEdicao] = useState(null);
   const [mensagem, definirMensagem] = useState("");
@@ -239,13 +239,12 @@ export default function OrganizadorHorta() {
         <ConfiguracaoHorta key={`${dados.regiao}/${dados.area}`} dados={dados}
           aoSalvar={(regiao, area) => atualizar((atuais) => ({ ...atuais, regiao, area }), "Região e espaço salvos.")}
           bloqueado={bloqueado} />
-        <p className="nota">O plano fica salvo neste navegador.</p>
       </div>
       {erro && <p className="erro" role="alert">{erro}</p>}
       {corrompido !== null && <RecuperarDados recuperar={recuperar} salvando={salvando} />}
       <p className="organizador-status" role="status">{mensagem}</p>
       <FormularioCultivo key={planoEmEdicao?.id ?? "novo"} edicao={planoEmEdicao} regiao={dados.regiao}
-        aoSalvar={salvarPlano} aoCancelar={() => definirEdicao(null)} bloqueado={bloqueado} />
+        culturaSugerida={culturaSugerida} aoSalvar={salvarPlano} aoCancelar={() => definirEdicao(null)} bloqueado={bloqueado} />
       <PlanoHorta dados={dados} aoEditar={editar} aoRemover={remover} bloqueado={bloqueado} />
       {dados.planos.length > 0 && <AgendaHorta planos={dados.planos} regiao={dados.regiao} aoConcluir={concluir} bloqueado={bloqueado} />}
       <details className="organizador-cartao organizador-historico" id="historico-horta">

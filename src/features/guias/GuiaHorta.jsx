@@ -69,6 +69,7 @@ export default function GuiaHorta({ guia, raiz = "./" }) {
               </dl>
             </>}
           </div>
+          {sugestao && <a className="home-link" href={`${raiz}horta/calendario-de-plantio/`}>Conferir a época de plantio</a>}
           {sugestao && <details className="creditos-culturas">
             <summary>Fontes e créditos das fotos</summary>
             <a className="link-fonte" href="https://www.sistemafaep.org.br/wp-content/uploads/2026/01/PR.0390-Jardins-produtivos-horas-e-pomares_web.pdf" target="_blank" rel="noreferrer">

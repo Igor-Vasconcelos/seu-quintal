@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { buscaFichaCultura, fonteFichaCultura } from "../data/fichas-culturas.js";
 import { consultarPlantio, descreverEpocaPlantio, fontePlantio, meses, regioes, totalCulturas } from "../data/plantio.js";
+import { culturasOrganizador } from "../features/organizador/culturas.js";
 import CaixaDialogo from "./CaixaDialogo.jsx";
 import Icone from "./Icone.jsx";
 
-const inicial = { regiao: "Sudeste", mes: 11 };
+const inicial = { regiao: "Sudeste", mes: new Date().getMonth() + 1 };
 const limiteResumo = 4;
 
 function ListaCulturas({ nomes, abrirFicha, rotulo }) {
@@ -22,8 +23,9 @@ function ListaCulturas({ nomes, abrirFicha, rotulo }) {
   );
 }
 
-function FichaCultura({ nome, regiao, acionador, fechar }) {
+function FichaCultura({ nome, regiao, raiz, acionador, fechar }) {
   const ficha = buscaFichaCultura(nome);
+  const parametros = new URLSearchParams({ cultura: nome });
 
   return (
     <CaixaDialogo titulo={nome} acionador={acionador} fechar={fechar}>
@@ -41,6 +43,14 @@ function FichaCultura({ nome, regiao, acionador, fechar }) {
           <div><dt>Quando colher</dt><dd>{ficha.colheita}</dd></div>
         </dl>
       )}
+      {Object.hasOwn(culturasOrganizador, nome) && (
+        <div className="ficha-cultura-acoes">
+          <a className="botao" href={`${raiz}meu-quintal/?${parametros}#horta`} target="_blank" rel="noopener"
+            aria-label="Planejar este cultivo (abre em nova aba)">
+            Planejar este cultivo <Icone nome="novaAba" />
+          </a>
+        </div>
+      )}
       <p className="nota">
         A época e o ciclo variam conforme a variedade, o clima local e o manejo.
       </p>
@@ -52,7 +62,8 @@ function FichaCultura({ nome, regiao, acionador, fechar }) {
   );
 }
 
-export default function Calendario({ titulo = "Calendário de Plantio" }) {
+export default function Calendario({ titulo = "Calendário de plantio", nivelTitulo = 2, raiz = "./" }) {
+  const Titulo = `h${nivelTitulo}`;
   const [regiao, definirRegiao] = useState(inicial.regiao);
   const [mes, definirMes] = useState(inicial.mes);
   const [consulta, definirConsulta] = useState(inicial);
@@ -69,17 +80,18 @@ export default function Calendario({ titulo = "Calendário de Plantio" }) {
 
   return (
     <>
-      <section className="ferramenta" id="calendario" aria-labelledby="titulo-calendario">
-        <h2 id="titulo-calendario"><Icone nome="muda" />{titulo}</h2>
+      <section className="ferramenta" id="calendario" aria-labelledby="titulo-calendario" tabIndex={-1}>
+        <Titulo className="ferramenta-titulo" id="titulo-calendario"><Icone nome="calendario" />{titulo}</Titulo>
+        <p className="ferramenta-intro">Veja as culturas indicadas para a sua região e época do ano.</p>
 
         <form className="form-calendario" onSubmit={consultar}>
-          <label className="campo linha-campo">
+          <label className="campo">
             Região
             <select value={regiao} onChange={(evento) => definirRegiao(evento.target.value)}>
               {regioes.map((opcao) => <option key={opcao}>{opcao}</option>)}
             </select>
           </label>
-          <label className="campo linha-campo">
+          <label className="campo">
             Mês
             <select value={mes} onChange={(evento) => definirMes(Number(evento.target.value))}>
               {meses.map((opcao, indice) => <option key={opcao} value={indice + 1}>{opcao}</option>)}
@@ -113,7 +125,7 @@ export default function Calendario({ titulo = "Calendário de Plantio" }) {
           <a href={fontePlantio} target="_blank" rel="noreferrer">Tabela da Embrapa</a>
         </p>
       </section>
-      {cultura && <FichaCultura {...cultura} regiao={consulta.regiao} fechar={() => definirCultura(null)} />}
+      {cultura && <FichaCultura {...cultura} regiao={consulta.regiao} raiz={raiz} fechar={() => definirCultura(null)} />}
     </>
   );
 }

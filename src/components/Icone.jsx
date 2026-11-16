@@ -10,7 +10,16 @@ const desenhos = {
   livro: <>
     <path d="M12 6v14m0-14C9 4 6 4 2 5v14c4-1 7-1 10 1 3-2 6-2 10-1V5c-4-1-7-1-10 1Z" />
   </>,
+  calendario: <>
+    <rect x="3.5" y="5" width="17" height="16" rx="2" />
+    <path d="M7.5 3v4m9-4v4M3.5 10h17m-13 5h2m5 0h2" />
+  </>,
+  historico: <>
+    <path d="M8 4H5v17h14V4h-3M8 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2H8V4Zm0 7h8m-8 5h8" />
+  </>,
+  menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   fechar: <path d="m6 6 12 12M18 6 6 18" />,
+  novaAba: <path d="M13 5h6v6m0-6-8 8m6 0v6H5V7h6" />,
   seta: <path d="M4 12h15m-6-6 6 6-6 6" />,
 };
 

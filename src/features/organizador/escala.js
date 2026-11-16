@@ -40,10 +40,14 @@ function semanasValidas(valor, maximo) {
   return Number.isInteger(valor) && valor >= 1 && valor <= maximo;
 }
 
-export function formularioInicial(plano) {
+export function formularioInicial(plano, culturaSugerida) {
+  const escolha = plano?.cultura ?? culturaSugerida;
+  const cultura = Object.hasOwn(culturasOrganizador, escolha) ? escolha : "Alface de verão";
+  const ficha = culturasOrganizador[cultura];
   const iniciais = {
-    cultura: "Alface de verão", origem: "semente", inicio: hojeCivil(), canteiro: "",
-    casa: 4, venda: 0, intervalo: 1, rendimento: null, duracao: null, teste: 2,
+    cultura, origem: "semente", inicio: hojeCivil(), canteiro: "",
+    casa: ficha.unidade === "kg" ? .5 : 4, venda: 0, intervalo: ficha.colheitasSucessivas ? 4 : 1,
+    rendimento: null, duracao: null, teste: 2,
   };
   return Object.entries(iniciais).reduce((campos, [nome, valorInicial]) => {
     const valor = plano?.[nome] ?? valorInicial;
