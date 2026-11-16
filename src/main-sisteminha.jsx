@@ -113,6 +113,7 @@ function DetalheModulo({ id, modulo }) {
             {rotulo} <Icone nome="seta" />
           </a>
           {id === "horta" && <a className="sisteminha-voltar" href="./horta/">Abrir guia de horta</a>}
+          {id === "compostagem" && <a className="sisteminha-voltar" href="./guias/compostagem/">Ver o que pode ser compostado</a>}
           <a className="sisteminha-voltar sisteminha-link-ciclo" href="#ciclo">
             <Icone nome="seta" /> Voltar ao ciclo
           </a>
@@ -150,7 +151,7 @@ function DetalheGalinheiro({ modulo }) {
 
       <div className="galinheiro-acoes">
         <a className="botao" href={guiaAnimais.url} target="_blank" rel="noreferrer">
-          Ler o guia da Embrapa <Icone nome="seta" />
+          Ler o guia de criação de aves da Embrapa <Icone nome="seta" />
         </a>
         <a className="sisteminha-voltar" href="#compostagem">Ver compostagem</a>
       </div>
@@ -176,7 +177,7 @@ function Sisteminha() {
         <section className="sisteminha-abertura" aria-labelledby="titulo-sisteminha">
           <div className="sisteminha-intro">
             <h1 id="titulo-sisteminha">Sisteminha Embrapa</h1>
-            <p>O Sisteminha Embrapa, UFU e Fapemig integra diferentes formas de produzir alimentos no quintal. Veja como o tanque, a horta, o galinheiro e a compostagem aproveitam água e matéria orgânica.</p>
+            <p>O Sisteminha Embrapa, UFU e Fapemig combina diferentes formas de produzir alimentos no quintal. Entenda como a água do tanque pode ajudar na irrigação e como resíduos podem virar composto para a horta.</p>
             <div className="sisteminha-intro-acoes">
               <a className="botao sisteminha-cta" href="#ciclo">Ver o ciclo <Icone nome="seta" /></a>
               <a className="sisteminha-intro-link" href="#modulos">Conhecer os módulos</a>
@@ -191,7 +192,7 @@ function Sisteminha() {
 
         <section className="sisteminha-secao" id="ciclo" aria-labelledby="titulo-ciclo" tabIndex={-1}>
           <h2 id="titulo-ciclo">Como funciona o ciclo</h2>
-          <p className="sisteminha-orientacao">Escolha um tópico para entender sua função.</p>
+          <p className="sisteminha-orientacao">Siga a água do tanque até a horta ou veja como resíduos de diferentes módulos podem voltar aos canteiros na forma de adubo.</p>
           <div className="caminhos">
             {caminhos.map((caminho) => <Caminho key={caminho.id} {...caminho} />)}
           </div>

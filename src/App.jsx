@@ -30,18 +30,21 @@ export default function App() {
         <section className="home-abertura" aria-labelledby="titulo-home">
           <div className="home-miolo home-abertura-grade">
             <div className="home-abertura-texto">
-              <h1 id="titulo-home">Tudo para o seu <em>quintal florescer.</em></h1>
-              <p>Aprenda a cuidar da horta e dos animais. Descubra o que plantar, organize seu terreno e acompanhe o cultivo.</p>
+              <h1 id="titulo-home">Cultive e planeje <em>seu quintal.</em></h1>
+              <p>Descubra o que plantar na sua região, aprenda a cuidar da horta e organize seus canteiros, do primeiro plantio à colheita.</p>
               <div className="home-acoes">
                 <a className="botao" href="./meu-quintal/" target="_blank" rel="noopener">
                   Abrir Meu Quintal <Icone nome="seta" />
                 </a>
-                <a className="home-link" href="#guias">Explorar guias <Icone nome="seta" /></a>
+                <a className="home-link" href="#guias">Explorar guias de cultivo <Icone nome="seta" /></a>
               </div>
             </div>
             <figure className="home-abertura-imagem">
-              <img src="./imagens/sisteminha/panorama.webp" width="1248" height="832"
-                alt="Ilustração de um quintal com canteiros, galinhas e um tanque de peixes." fetchPriority="high" />
+              <img src="./imagens/abertura-horta-1200.webp"
+                srcSet="./imagens/abertura-horta-768.webp 768w, ./imagens/abertura-horta-1200.webp 1200w"
+                sizes="(max-width: 540px) 92vw, (max-width: 767px) 510px, (max-width: 1240px) 42vw, 520px"
+                width="1200" height="900"
+                alt="Canteiro de madeira com alfaces verdes e roxas, cebolinha e um vaso de temperos." fetchPriority="high" />
             </figure>
           </div>
         </section>
@@ -73,7 +76,7 @@ export default function App() {
 
         <section className="home-miolo home-secao" id="ferramentas" aria-labelledby="titulo-ferramentas-home">
           <div className="home-secao-topo">
-            <h2 id="titulo-ferramentas-home">Planeje seu quintal</h2>
+            <h2 id="titulo-ferramentas-home">O que plantar e onde plantar</h2>
             <a className="home-link" href="./meu-quintal/#horta" target="_blank" rel="noopener">Organizador de horta <Icone nome="seta" /></a>
           </div>
           <div className="ferramentas">
@@ -86,7 +89,7 @@ export default function App() {
           <div className="home-meu-quintal" id="meu-quintal">
             <Icone nome="planta" />
             <h2>Meu Quintal</h2>
-            <p>Desenhe o terreno, compare layouts e registre o que plantou e colheu.</p>
+            <p>Desenhe o terreno, compare posições para os canteiros e registre semeaduras e colheitas. Seus planos ficam salvos neste navegador.</p>
             <a className="botao" href="./meu-quintal/" target="_blank" rel="noopener">
               Abrir o painel <Icone nome="seta" />
             </a>
@@ -95,8 +98,8 @@ export default function App() {
             <img src="./imagens/sisteminha.webp" width="379" height="104" alt="" loading="lazy" />
             <div>
               <h2>Sisteminha Embrapa</h2>
-              <p>Veja como peixes, horta e compostagem se conectam.</p>
-              <a className="home-link" href="./sisteminha.html">Conhecer o ciclo <Icone nome="seta" /></a>
+              <p>Veja como o tanque de peixes, o galinheiro, a horta e a compostagem se conectam num quintal produtivo.</p>
+              <a className="home-link" href="./sisteminha.html">Conhecer o ciclo do Sisteminha <Icone nome="seta" /></a>
             </div>
           </div>
         </section>
@@ -105,7 +108,7 @@ export default function App() {
       <Rodape inicio aoVerCreditos={() => definirVerCreditos(true)} />
 
       {verCreditos && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirVerCreditos(false)}>
-        <p>As imagens dos cartões da página inicial foram geradas por IA. Os guias de horta e de compostagem também incluem fotos do Wikimedia Commons, com créditos e licenças nos próprios guias.</p>
+        <p>A imagem de abertura e os cartões da página inicial foram gerados por IA. Os guias de horta e de compostagem também incluem fotos do Wikimedia Commons, com créditos e licenças nos próprios guias.</p>
       </CaixaDialogo>}
 
     </div>

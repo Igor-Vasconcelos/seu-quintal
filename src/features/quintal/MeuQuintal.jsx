@@ -34,7 +34,7 @@ export default function MeuQuintal() {
         <header className="quintal-titulo">
           <div>
             <h1>Meu Quintal</h1>
-            <p>Planeje seu terreno e acompanhe o que você planta e colhe.</p>
+            <p>Desenhe o terreno, registre plantios e colheitas ou monte uma agenda para a horta. Os registros ficam salvos neste navegador.</p>
           </div>
           <a href={raiz}>Voltar ao Seu Quintal <Icone nome="seta" /></a>
         </header>

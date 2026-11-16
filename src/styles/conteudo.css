@@ -58,6 +58,22 @@
 
 .area-tematica { margin-block: 1.3rem 1.6rem; }
 
+.orientacao-tematica {
+  max-width: 72ch;
+  margin-block: clamp(1.25rem, 3vw, 2rem);
+}
+
+.orientacao-tematica h2 { font-size: clamp(1.35rem, 2.4vw, 1.85rem); }
+.orientacao-tematica p,
+.orientacao-tematica ol {
+  margin-block: .55rem 0;
+  color: var(--sq-text-muted);
+  line-height: var(--sq-leading-body);
+}
+.orientacao-tematica ol { padding-inline-start: 1.4rem; }
+.orientacao-tematica li + li { margin-top: .3rem; }
+.orientacao-tematica a { color: var(--sq-link); text-underline-offset: .2em; }
+
 .calendario-pagina,
 .mapa-site {
   display: grid;
