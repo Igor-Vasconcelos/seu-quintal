@@ -56,6 +56,4 @@ npm.cmd run build
 
 ## Dados do Meu Quintal
 
-A área abre em uma página própria. Os visitantes que usam a versão local guardam seus terrenos, registros e planos de horta no armazenamento do navegador. A opção Entrar com ChatGPT abre a área da conta hospedada no Seu Quintal, onde a API vincula os dados ao usuário autenticado.
-
-Em **Cópia dos meus dados**, a pessoa pode baixar os dados locais e importá-los em seções vazias da conta. O mesmo código da interface gera a versão da conta com `npm run build -- --mode conta`.
+O painel abre em uma página própria. Os terrenos, o histórico de cultivo e os planos da horta ficam salvos no navegador em que foram registrados.

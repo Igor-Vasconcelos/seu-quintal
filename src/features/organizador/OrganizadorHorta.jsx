@@ -136,7 +136,7 @@ function PlanoHorta({ dados, aoEditar, aoRemover }) {
   );
 }
 
-export default function OrganizadorHorta({ naConta = false }) {
+export default function OrganizadorHorta() {
   const [estado, definirEstado] = useState(abrirOrganizador);
   const [edicao, definirEdicao] = useState(null);
   const [mensagem, definirMensagem] = useState("");
@@ -214,7 +214,7 @@ export default function OrganizadorHorta({ naConta = false }) {
       <div className="organizador-barra">
         <ConfiguracaoHorta key={`${dados.regiao}/${dados.area}`} dados={dados}
           aoSalvar={(regiao, area) => atualizar((atuais) => ({ ...atuais, regiao, area }), "Região e espaço salvos.")} />
-        <p className="nota">{naConta ? "O plano está vinculado à sua conta." : "O plano fica salvo neste navegador."}</p>
+        <p className="nota">O plano fica salvo neste navegador.</p>
       </div>
       {erro && <p className="erro" role="alert">{erro}</p>}
       <p className="organizador-status" role="status">{mensagem}</p>
@@ -225,7 +225,7 @@ export default function OrganizadorHorta({ naConta = false }) {
       <details className="organizador-cartao organizador-historico" id="historico-horta">
         <summary>Histórico de cultivo</summary>
         <p className="nota">Anote as colheitas para ajustar os próximos lotes com o rendimento da sua horta.</p>
-        <HistoricoCultivo naConta={naConta} />
+        <HistoricoCultivo />
       </details>
     </div>
   );

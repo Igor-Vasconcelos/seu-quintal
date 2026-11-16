@@ -9,7 +9,7 @@ function terrenoDaUrl() {
   return criarTerreno(parametros.get("frente") ?? "", parametros.get("profundidade") ?? "");
 }
 
-export default function PlanejadorQuintal({ naConta }) {
+export default function PlanejadorQuintal() {
   const [projetos, definirProjetos] = useState(lerProjetos);
   const [terreno, definirTerreno] = useState(() => terrenoDaUrl() ?? projetos.ultimoTerreno);
   const [falhou, definirFalhou] = useState(false);
@@ -67,8 +67,7 @@ export default function PlanejadorQuintal({ naConta }) {
       </label>}
       {terreno ? <EditorTerreno key={chave} terreno={terreno} abrirTerreno={abrir}
         projeto={projeto ?? projetoInicial} definirProjeto={(novo) => guardar(terreno, novo)}
-        salvamento={falhou ? "O salvamento está indisponível." : naConta ? "Salvamento automático na conta"
-          : "Salvamento automático neste navegador"} />
+        salvamento={falhou ? "O salvamento está indisponível." : "Salvamento automático neste navegador"} />
         : <Planejador noPainel aoCriar={abrir} />}
     </section>
   );

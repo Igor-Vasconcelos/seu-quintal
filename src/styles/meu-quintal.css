@@ -9,7 +9,6 @@
 
 .quintal-titulo,
 .quintal-secao-topo,
-.quintal-acoes,
 .quintal-secoes {
   display: flex;
   flex-wrap: wrap;
@@ -31,8 +30,7 @@
   line-height: 1.05;
 }
 
-.quintal-titulo p,
-.quintal-conta p {
+.quintal-titulo p {
   margin-top: .35rem;
   color: var(--sq-text-muted);
 }
@@ -48,33 +46,12 @@
 
 .quintal-titulo a .icone { width: 1rem; }
 
-.quintal-conta,
 .quintal-ferramenta {
   min-width: 0;
   padding: var(--sq-card-padding);
   border: 1px solid var(--sq-border);
   border-radius: var(--sq-radius-card);
   background: var(--sq-surface);
-}
-
-.quintal-conta { background: var(--sq-surface-soft); }
-.quintal-conta h2 { font-size: clamp(1.4rem, 3vw, 1.8rem); }
-.quintal-conta > .quintal-acoes { margin-top: .8rem; }
-.quintal-email { overflow-wrap: anywhere; }
-.quintal-copia { margin-top: .55rem; border-top: 1px solid var(--sq-border); }
-.quintal-copia summary {
-  align-content: center;
-  min-height: 2.75rem;
-  cursor: pointer;
-  font-size: .9rem;
-  font-weight: 700;
-}
-.quintal-copia-conteudo { padding-bottom: .5rem; }
-.quintal-copia form {
-  margin-top: .75rem;
-  display: grid;
-  justify-items: start;
-  gap: .45rem;
 }
 
 .quintal-secoes {

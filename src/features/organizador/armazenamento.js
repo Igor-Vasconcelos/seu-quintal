@@ -1,12 +1,11 @@
 import { regioes } from "../../data/plantio.js";
-import { chavesQuintal, gravarDado, lerDado } from "../quintal/dados.js";
 import { formularioInicial, lerPlano } from "./escala.js";
 
-export const chaveOrganizador = chavesQuintal.horta;
+export const chaveOrganizador = "seu-quintal:organizador-horta:v1";
 export const hortaInicial = { regiao: "Sudeste", area: null, planos: [] };
 
 export function lerOrganizador() {
-  const dados = JSON.parse(lerDado(chaveOrganizador) ?? "null");
+  const dados = JSON.parse(window.localStorage.getItem(chaveOrganizador) ?? "null");
   if (dados === null) return hortaInicial;
   if (!Array.isArray(dados.planos)) throw new Error("O plano salvo está em um formato inválido.");
 
@@ -25,6 +24,6 @@ export function lerOrganizador() {
 
 export function gravarOrganizador(transformar) {
   const atualizado = transformar(lerOrganizador());
-  gravarDado(chaveOrganizador, JSON.stringify(atualizado));
+  window.localStorage.setItem(chaveOrganizador, JSON.stringify(atualizado));
   return atualizado;
 }

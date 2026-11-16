@@ -11,5 +11,5 @@ import "./styles/planejador.css";
 import "./styles/meu-quintal.css";
 
 createRoot(document.getElementById("quintal-raiz")).render(
-  <MeuQuintal hospedado={document.body.dataset.armazenamento === "conta"} />,
+  <MeuQuintal />,
 );

@@ -1,13 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   plugins: [react()],
   base: "./",
-  publicDir: mode === "conta" ? false : "public",
   build: {
     rolldownOptions: {
-      input: mode === "conta" ? ["meu-quintal/index.html"] : [
+      input: [
         "index.html",
         "meu-quintal/index.html",
         "sisteminha.html",
@@ -21,4 +20,4 @@ export default defineConfig(({ mode }) => ({
       ],
     },
   },
-}));
+});
