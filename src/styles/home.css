@@ -77,7 +77,8 @@ img { max-width: 100%; display: block; }
 
 .menu { display: flex; align-items: center; gap: clamp(.65rem, 3.2vw, 2.25rem); margin-left: auto; margin-right: clamp(0rem, 3vw, 2rem); }
 .menu a { display: grid; align-items: center; min-height: var(--sq-control-min); text-decoration: none; font-weight: 700; }
-.menu a:hover { text-decoration: underline; text-underline-offset: .26em; }
+.menu a:hover,
+.menu a[aria-current="page"]:not(.menu-sisteminha) { text-decoration: underline; text-underline-offset: .26em; }
 .menu .menu-sisteminha { display: inline-flex; text-align: center; }
 
 .botao {
@@ -350,8 +351,8 @@ a.guia { text-align: center; text-decoration: none; }
   .pagina { max-width: 35rem; padding-inline: .75rem; }
   .topo { min-height: 3.6rem; gap: .4rem .5rem; flex-wrap: wrap; padding-block: .4rem; }
   .topo .botao { padding-inline: .7rem; font-size: .84rem; }
-  .menu { order: 1; flex-basis: 100%; justify-content: center; margin: 0; gap: .65rem 1rem; flex-wrap: wrap; }
-  .topo:not(.topo-sisteminha) .menu a:not(.menu-sisteminha), .seu-adao, .folhagem { display: none; }
+  .menu { order: 1; flex-basis: 100%; justify-content: center; margin: 0; gap: .3rem .65rem; flex-wrap: wrap; font-size: .84rem; }
+  .seu-adao, .folhagem { display: none; }
   .abertura { display: block; min-height: auto; padding-inline: var(--recuo-home); text-align: center; }
   .abertura-texto { padding: .8rem 0 .65rem; }
   .abertura h1 { font-size: clamp(1.5rem, 6.4vw, 2.4rem); }

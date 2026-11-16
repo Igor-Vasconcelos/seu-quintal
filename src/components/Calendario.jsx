@@ -51,7 +51,7 @@ function FichaCultura({ nome, regiao, fechar }) {
   );
 }
 
-export default function Calendario() {
+export default function Calendario({ titulo = "Calendário de Plantio" }) {
   const [regiao, definirRegiao] = useState(inicial.regiao);
   const [mes, definirMes] = useState(inicial.mes);
   const [consulta, definirConsulta] = useState(inicial);
@@ -69,7 +69,7 @@ export default function Calendario() {
   return (
     <>
       <section className="ferramenta" id="calendario" aria-labelledby="titulo-calendario">
-        <h2 id="titulo-calendario"><Icone nome="muda" />Calendário de Plantio</h2>
+        <h2 id="titulo-calendario"><Icone nome="muda" />{titulo}</h2>
 
         <form className="form-calendario" onSubmit={consultar}>
           <label className="campo linha-campo">

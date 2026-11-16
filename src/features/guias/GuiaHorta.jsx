@@ -19,7 +19,7 @@ const secoes = [
   { id: "terra", rotulo: "Calculadora de terra" },
 ];
 
-export default function GuiaHorta({ guia }) {
+export default function GuiaHorta({ guia, raiz = "./" }) {
   const [secao, definirSecao] = useState("plantas");
   const [espaco, definirEspaco] = useState("");
   const [luz, definirLuz] = useState("");
@@ -58,7 +58,7 @@ export default function GuiaHorta({ guia }) {
               <ul className="culturas-com-fotos">
                 {sugestao.culturas.map((id) => (
                   <li key={id}>
-                    <img src={`./imagens/horta/${id}.webp`} width="360" height="240" alt="" />
+                    <img src={`${raiz}imagens/horta/${id}.webp`} width="360" height="240" alt="" />
                     <strong>{plantasHorta[id].nome}</strong>
                   </li>
                 ))}

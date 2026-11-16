@@ -111,6 +111,7 @@ function DetalheModulo({ id, modulo }) {
           <a className="botao botao-contorno" href={`#${destino}`}>
             {rotulo} <Icone nome="seta" />
           </a>
+          {id === "horta" && <a className="sisteminha-voltar" href="./horta/">Abrir guia de horta</a>}
           <a className="sisteminha-voltar sisteminha-link-ciclo" href="#ciclo">
             <Icone nome="seta" /> Voltar ao ciclo
           </a>
@@ -175,11 +176,16 @@ function Sisteminha() {
           <div className="sisteminha-intro">
             <h1 id="titulo-sisteminha">Sisteminha Embrapa</h1>
             <p>O Sisteminha Embrapa, UFU e Fapemig integra diferentes formas de produzir alimentos no quintal. Veja como o tanque, a horta, o galinheiro e a compostagem aproveitam água e matéria orgânica.</p>
-            <a className="botao" href="#ciclo">Ver como funciona <Icone nome="seta" /></a>
+            <div className="sisteminha-intro-acoes">
+              <a className="botao sisteminha-cta" href="#ciclo">Ver o ciclo <Icone nome="seta" /></a>
+              <a className="sisteminha-intro-link" href="#modulos">Conhecer os módulos</a>
+            </div>
           </div>
-          <img src="./imagens/sisteminha/panorama.webp" width="1248" height="832"
-            alt="Ilustração de um quintal com tanque circular de peixes, canteiros, composteira e galinheiro."
-            fetchPriority="high" />
+          <div className="sisteminha-panorama">
+            <img src="./imagens/sisteminha/panorama.webp" width="1248" height="832"
+              alt="Ilustração de um quintal com tanque circular de peixes, canteiros, composteira e galinheiro."
+              fetchPriority="high" />
+          </div>
         </section>
 
         <section className="sisteminha-secao" id="ciclo" aria-labelledby="titulo-ciclo" tabIndex={-1}>
@@ -200,7 +206,7 @@ function Sisteminha() {
           </ul>
         </section>
 
-        <section className="sisteminha-secao" aria-labelledby="titulo-modulos">
+        <section className="sisteminha-secao" id="modulos" aria-labelledby="titulo-modulos" tabIndex={-1}>
           <h2 id="titulo-modulos">Conheça os módulos</h2>
           <p className="sisteminha-orientacao">Estes cinco componentes mostram uma das formas de integrar o Sisteminha. A escolha dos módulos pode variar conforme o espaço, os recursos e a rotina de quem vai cuidar.</p>
           <div className="sisteminha-detalhes">
@@ -224,7 +230,7 @@ function Sisteminha() {
         </aside>
       </main>
 
-      <Rodape aoVerCreditos={() => definirVerCreditos(true)} />
+      <Rodape sisteminha aoVerCreditos={() => definirVerCreditos(true)} />
 
       {verCreditos && <CaixaDialogo titulo="Sobre as imagens" fechar={() => definirVerCreditos(false)}>
         <p>O panorama e as imagens dos módulos do Sisteminha são ilustrações geradas por IA.</p>

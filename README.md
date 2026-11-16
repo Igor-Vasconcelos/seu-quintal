@@ -1,6 +1,6 @@
 # Seu Quintal
 
-Home em React, JavaScript e Vite, baseada no design system Quintal Acolhedor.
+Site em React, JavaScript e Vite, baseado no design system Quintal Acolhedor.
 
 ## Rodar no Windows
 
@@ -19,7 +19,8 @@ Se você já criou um projeto Vite, copie o conteúdo desta pasta para a raiz do
 
 | Arquivo | Conteúdo |
 | --- | --- |
-| `src/App.jsx` | Cabeçalho, abertura, seções e navegação |
+| `src/App.jsx` | Abertura e seções da página inicial |
+| `src/components/Cabecalho.jsx` e `src/components/Rodape.jsx` | Navegação compartilhada |
 | `src/styles/tokens.css` e `src/styles/home.css` | Design system e responsividade |
 | `src/components/Calendario.jsx` e `src/data/plantio.js` | Formulário, fonte e períodos de plantio |
 | `src/components/Planejador.jsx` e `src/features/planejador/` | Medidas, geometria, planta e editor |
@@ -27,7 +28,19 @@ Se você já criou um projeto Vite, copie o conteúdo desta pasta para a raiz do
 
 O calendário contém 38 opções da Tabela 8 da Embrapa, consultáveis nas cinco regiões. O planejador aceita vírgula ou ponto e calcula a área. O editor permite criar, editar a posição e remover canteiros. Os canteiros ficam em memória enquanto a página está aberta e as medidas do terreno vão na URL.
 
-Os cartões abrem introduções com referências. A seção do Sisteminha aponta para os materiais oficiais. As quatro imagens dos guias foram geradas por IA. A abertura e o banner do Sisteminha usam ilustrações da referência visual do projeto. A prévia do planejador é desenhada a partir das medidas informadas.
+Os cartões de Horta e Criação de animais levam ao guia de horta e ao galinheiro do Sisteminha, respectivamente. Os outros cartões abrem introduções com referências. A seção do Sisteminha aponta para os materiais oficiais. As quatro imagens dos guias foram geradas por IA. A abertura e o banner do Sisteminha usam ilustrações da referência visual do projeto. A prévia do planejador é desenhada a partir das medidas informadas.
+
+## Páginas
+
+Os endereços abaixo são relativos à raiz do site. Cada página tem sua entrada HTML no Vite.
+
+| Endereço | Arquivo de entrada |
+| --- | --- |
+| `/` | `index.html` |
+| `/horta/` | `horta/index.html` |
+| `/horta/calendario-de-plantio/` | `horta/calendario-de-plantio/index.html` |
+| `/sisteminha.html` | `sisteminha.html` |
+| `/mapa-do-site/` | `mapa-do-site/index.html` |
 
 Para gerar uma versão de produção em `dist`:
 

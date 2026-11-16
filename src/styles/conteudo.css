@@ -1,0 +1,89 @@
+.conteudo-tematico { padding-block: 1rem clamp(1.5rem, 4vw, 3rem); }
+
+.trilha-site ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem .6rem;
+  padding: 0;
+  list-style: none;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-type-small);
+}
+
+.trilha-site li + li::before {
+  content: "/" / "";
+  margin-inline-end: .6rem;
+}
+
+.trilha-site a,
+.conteudo-relacionado a {
+  color: var(--sq-link);
+  font-weight: var(--sq-weight-strong);
+  text-underline-offset: .2em;
+}
+
+.abertura-horta,
+.titulo-tematico {
+  margin-block: .85rem clamp(1rem, 3vw, 2rem);
+}
+
+.conteudo-tematico h1 {
+  font-size: var(--sq-type-h1);
+  line-height: var(--sq-leading-display);
+  letter-spacing: -.025em;
+}
+
+.abertura-horta {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: var(--sq-card-padding);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface-soft);
+}
+
+.abertura-horta p,
+.titulo-tematico p,
+.conteudo-relacionado p {
+  margin-top: .55rem;
+  max-width: 60ch;
+  color: var(--sq-text-muted);
+  line-height: var(--sq-leading-body);
+}
+
+.abertura-horta .botao { margin-top: .85rem; text-decoration: none; }
+.abertura-horta img { width: 100%; height: auto; border-radius: var(--sq-radius-media); }
+
+.area-tematica { margin-block: 1.3rem 1.6rem; }
+
+.calendario-pagina,
+.mapa-site {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem;
+}
+
+.calendario-pagina > :first-child { grid-column: span 2; }
+
+.conteudo-relacionado {
+  padding: var(--sq-card-padding);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+}
+
+.conteudo-relacionado h2 { font-size: clamp(1.35rem, 2.4vw, 1.85rem); }
+.conteudo-relacionado ul { padding-inline-start: 1.15rem; margin-top: .45rem; }
+.conteudo-relacionado a { display: inline-flex; min-height: 2.75rem; align-items: center; }
+.conteudo-relacionado p + a { margin-top: .3rem; }
+
+@media (max-width: 767px) {
+  .abertura-horta,
+  .calendario-pagina,
+  .mapa-site { grid-template-columns: minmax(0, 1fr); }
+
+  .calendario-pagina > :first-child { grid-column: auto; }
+}

@@ -1,3 +1,12 @@
+export const guiaHorta = {
+  id: "horta",
+  destino: "./horta/",
+  titulo: "Horta em pequenos espaços",
+  descricao: "Encontre opções de cultivo para a sua janela, varanda ou quintal.",
+  fonte: "Horta em pequenos espaços · Embrapa",
+  url: "https://www.infoteca.cnptia.embrapa.br/handle/doc/958531",
+};
+
 export const guiaAnimais = {
   id: "animais",
   titulo: "Criação de animais",
@@ -8,13 +17,7 @@ export const guiaAnimais = {
 };
 
 export const guias = [
-  {
-    id: "horta",
-    titulo: "Horta em pequenos espaços",
-    descricao: "Encontre opções de cultivo para a sua janela, varanda ou quintal.",
-    fonte: "Horta em pequenos espaços · Embrapa",
-    url: "https://www.infoteca.cnptia.embrapa.br/handle/doc/958531",
-  },
+  guiaHorta,
   guiaAnimais,
   {
     id: "compostagem",

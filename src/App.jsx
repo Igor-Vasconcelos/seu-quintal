@@ -9,13 +9,11 @@ import { guias } from "./data/guias.js";
 import HistoricoCultivo from "./features/cultivo/HistoricoCultivo.jsx";
 import ChecklistCompostagem from "./features/guias/ChecklistCompostagem.jsx";
 import ComparativoIrrigacao from "./features/guias/ComparativoIrrigacao.jsx";
-import GuiaHorta from "./features/guias/GuiaHorta.jsx";
 import EditorTerreno from "./features/planejador/EditorTerreno.jsx";
 import { criarTerreno } from "./features/planejador/geometria.js";
 
 const dimensoesIniciais = criarTerreno("35", "65");
 const conteudosGuias = {
-  horta: GuiaHorta,
   compostagem: ChecklistCompostagem,
   ferramentas: ComparativoIrrigacao,
 };
@@ -159,12 +157,10 @@ export default function App() {
       </CaixaDialogo>}
 
       {dialogo?.titulo && <CaixaDialogo titulo={dialogo.titulo} fechar={() => definirDialogo(null)}>
-        {dialogo.id !== "horta" && <>
-          <img className="foto-dialogo" src={`./imagens/${dialogo.id}.webp`} width="792" height="396" alt="" />
-          <p>{dialogo.descricao}</p>
-        </>}
+        <img className="foto-dialogo" src={`./imagens/${dialogo.id}.webp`} width="792" height="396" alt="" />
+        <p>{dialogo.descricao}</p>
         {ConteudoGuia && <ConteudoGuia guia={dialogo} />}
-        {dialogo.id !== "horta" && <a className="link-fonte" href={dialogo.url} target="_blank" rel="noreferrer">{dialogo.fonte}</a>}
+        <a className="link-fonte" href={dialogo.url} target="_blank" rel="noreferrer">{dialogo.fonte}</a>
       </CaixaDialogo>}
     </div>
   );

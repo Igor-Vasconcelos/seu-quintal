@@ -6,7 +6,13 @@ export default defineConfig({
   base: "./",
   build: {
     rolldownOptions: {
-      input: ["index.html", "sisteminha.html"],
+      input: [
+        "index.html",
+        "sisteminha.html",
+        "horta/index.html",
+        "horta/calendario-de-plantio/index.html",
+        "mapa-do-site/index.html",
+      ],
     },
   },
 });
