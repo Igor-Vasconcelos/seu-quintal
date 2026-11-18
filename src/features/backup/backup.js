@@ -36,7 +36,7 @@ function validarProjetos(projetos) {
       "Um terreno não tem cenários válidos.");
     exigir(typeof projeto.estrada === "boolean" && Object.hasOwn(declives, projeto.declive),
       "As configurações de um terreno estão inválidas.");
-    exigir(projeto.cenarios.some((c) => c.id === projeto.ativo), "O cenário ativo é inválido.");
+    exigir(projeto.cenarios.some((c) => objeto(c) && c.id === projeto.ativo), "O cenário ativo é inválido.");
     for (const cenario of projeto.cenarios) {
       exigir(objeto(cenario) && texto(cenario.id) && texto(cenario.nome) && Array.isArray(cenario.itens),
         "Um cenário do backup está inválido.");
