@@ -26,8 +26,10 @@ function validarProjetos(projetos) {
   exigir(objeto(projetos) && objeto(projetos.terrenos), "Os terrenos do backup estão inválidos.");
   if (projetos.ultimoTerreno != null) {
     const ultimo = projetos.ultimoTerreno;
-    exigir(objeto(ultimo) && criarTerreno(String(ultimo.largura), String(ultimo.comprimento)),
-      "As medidas do último terreno estão inválidas.");
+    const medidas = objeto(ultimo)
+      ? criarTerreno(String(ultimo.largura), String(ultimo.comprimento)) : null;
+    exigir(medidas && ultimo.area === medidas.area,
+      "As medidas ou a área do último terreno estão inválidas.");
   }
   for (const [chave, projeto] of Object.entries(projetos.terrenos)) {
     const dimensoes = criarTerreno(...chave.split("x"));
