@@ -15,7 +15,7 @@ export default function BackupDados() {
     try {
       const { criarBackup } = await import("../backup/backup.js");
       const pacote = await criarBackup();
-      const arquivo = new Blob([JSON.stringify(pacote, null, 2)], { type: "application/json;charset=utf-8" });
+      const arquivo = new Blob([JSON.stringify(pacote)], { type: "application/json;charset=utf-8" });
       const endereco = URL.createObjectURL(arquivo);
       const link = document.createElement("a");
       link.href = endereco;
