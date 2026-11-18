@@ -60,6 +60,12 @@ test("bloqueia versões incompatíveis e arquivos que não são do Seu Quintal",
   assert.throws(() => validarBackup({ ...pacote, aplicacao: "outro" }), /Seu Quintal/);
 });
 
+test("rejeita backups com área do terreno inconsistente", () => {
+  const pacote = exemplo();
+  pacote.dados.projetos.ultimoTerreno.area = 1;
+  assert.throws(() => validarBackup(pacote), /último terreno/i);
+});
+
 test("recusa posições inválidas, sem truncar os dados importados", () => {
   const pacote = exemplo();
   pacote.dados.projetos.terrenos["20x30"].cenarios[0].itens[0].x = 19;
