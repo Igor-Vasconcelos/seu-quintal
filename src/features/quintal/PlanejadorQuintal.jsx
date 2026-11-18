@@ -5,37 +5,63 @@ import EditorTerreno from "../planejador/EditorTerreno.jsx";
 import { gravarProjetosSalvos, lerProjetosSalvos } from "../planejador/bancoProjetos.js";
 import { criarTerreno, formatarMedida } from "../planejador/geometria.js";
 import { mesclarProjeto } from "../planejador/mesclarProjeto.js";
-import { chaveDoTerreno, chaveProjetos, lerProjetos, projetoInicial } from "../planejador/projetos.js";
+import {
+  chaveProjetos, criarRegistroTerreno, lerProjetos, migrarProjetos, nomeDoTerreno, projetoInicial,
+} from "../planejador/projetos.js";
 
 function terrenoDaUrl() {
   const parametros = new URLSearchParams(window.location.search);
   return criarTerreno(parametros.get("frente") ?? "", parametros.get("profundidade") ?? "");
 }
 
-function aplicarEdicao(dados, { terreno, antes, depois, desfazendo }) {
-  const chave = chaveDoTerreno(terreno);
-  const atual = dados.terrenos[chave] ?? projetoInicial;
-  const projeto = antes ? mesclarProjeto(atual, antes, depois, terreno, desfazendo) : atual;
-  return { ultimoTerreno: terreno, terrenos: { ...dados.terrenos, [chave]: projeto } };
+function aplicarEdicao(originais, edicao) {
+  const dados = migrarProjetos(originais);
+  if (edicao.tipo === "criar") {
+    const { registro } = edicao;
+    if (dados.terrenos[registro.id]) return { ...dados, terrenoAtivo: registro.id };
+    return {
+      ...dados, terrenoAtivo: registro.id,
+      terrenos: { ...dados.terrenos, [registro.id]: registro },
+    };
+  }
+  const atual = dados.terrenos[edicao.id];
+  if (!atual) return dados;
+  if (edicao.tipo === "selecionar") return { ...dados, terrenoAtivo: edicao.id };
+  if (edicao.tipo === "renomear") {
+    return {
+      ...dados,
+      terrenos: { ...dados.terrenos, [edicao.id]: { ...atual, nome: nomeDoTerreno(edicao.nome, atual.medidas) } },
+    };
+  }
+  if (edicao.tipo === "projeto") {
+    const projeto = mesclarProjeto(atual.projeto, edicao.antes, edicao.depois, atual.medidas, edicao.desfazendo);
+    return {
+      ...dados, terrenoAtivo: edicao.id,
+      terrenos: { ...dados.terrenos, [edicao.id]: { ...atual, projeto } },
+    };
+  }
+  return dados;
 }
 
 export default function PlanejadorQuintal() {
   const [projetos, definirProjetos] = useState(lerProjetos);
-  const [terreno, definirTerreno] = useState(() => terrenoDaUrl() ?? projetos.ultimoTerreno);
+  const [idSelecionado, definirIdSelecionado] = useState(() => lerProjetos().terrenoAtivo);
   const [falhou, definirFalhou] = useState(false);
   const pendentes = useRef([]);
   const escolheuTerreno = useRef(false);
   const canal = useRef(null);
-  const chave = terreno ? chaveDoTerreno(terreno) : "";
-  const projeto = projetos.terrenos[chave];
+  const registro = projetos.terrenos[idSelecionado];
+  const alternativas = Object.values(projetos.terrenos);
 
   async function guardar(edicao) {
     try {
       return await comBloqueioLocal(chaveProjetos, async () => {
-        const chaveEditada = chaveDoTerreno(edicao.terreno);
         const { antes, dados, salvo } = await gravarProjetosSalvos((persistidos) => {
           const atuais = pendentes.current.reduce(aplicarEdicao, persistidos);
-          return { antes: atuais.terrenos[chaveEditada] ?? projetoInicial, dados: aplicarEdicao(atuais, edicao) };
+          return {
+            antes: edicao.tipo === "projeto" ? atuais.terrenos[edicao.id]?.projeto ?? projetoInicial : null,
+            dados: aplicarEdicao(atuais, edicao),
+          };
         });
 
         if (salvo) pendentes.current = [];
@@ -43,7 +69,7 @@ export default function PlanejadorQuintal() {
         definirProjetos(dados);
         definirFalhou(!salvo);
         if (salvo) canal.current?.postMessage("atualizado");
-        return { antes, depois: dados.terrenos[chaveEditada] };
+        return edicao.tipo === "projeto" ? { antes, depois: dados.terrenos[edicao.id]?.projeto } : null;
       });
     } catch {
       definirFalhou(true);
@@ -51,14 +77,40 @@ export default function PlanejadorQuintal() {
     }
   }
 
-  function abrir(novo) {
-    escolheuTerreno.current = true;
-    definirTerreno(novo);
-    guardar({ terreno: novo });
+  function limparParametros() {
     const url = new URL(window.location.href);
     url.searchParams.delete("frente");
     url.searchParams.delete("profundidade");
     window.history.replaceState(null, "", url);
+  }
+
+  function criarNovo(medidas, nome = "") {
+    const novo = criarRegistroTerreno(medidas, nome);
+    const edicao = { tipo: "criar", registro: novo };
+    escolheuTerreno.current = true;
+    definirIdSelecionado(novo.id);
+    definirProjetos((dados) => aplicarEdicao(dados, edicao));
+    guardar(edicao);
+    limparParametros();
+  }
+
+  function selecionar(id) {
+    if (!projetos.terrenos[id]) return;
+    const edicao = { tipo: "selecionar", id };
+    escolheuTerreno.current = true;
+    definirIdSelecionado(id);
+    definirProjetos((dados) => aplicarEdicao(dados, edicao));
+    guardar(edicao);
+    limparParametros();
+  }
+
+  function renomear(evento) {
+    evento.preventDefault();
+    if (!registro) return;
+    const nome = evento.currentTarget.elements.namedItem("nome").value;
+    const edicao = { tipo: "renomear", id: registro.id, nome };
+    definirProjetos((dados) => aplicarEdicao(dados, edicao));
+    guardar(edicao);
   }
 
   useEffect(() => {
@@ -69,7 +121,7 @@ export default function PlanejadorQuintal() {
       definirProjetos(pendentes.current.reduce(aplicarEdicao, dados));
       if (!escolheuTerreno.current) {
         escolheuTerreno.current = true;
-        definirTerreno(dados.ultimoTerreno);
+        definirIdSelecionado(dados.terrenoAtivo);
       }
     }
     function sincronizar(evento) {
@@ -80,7 +132,7 @@ export default function PlanejadorQuintal() {
     if (comunicacao) comunicacao.onmessage = carregar;
     window.addEventListener("storage", sincronizar);
     const recebido = terrenoDaUrl();
-    if (recebido) abrir(recebido);
+    if (recebido) criarNovo(recebido);
     else carregar();
     return () => {
       montado = false;
@@ -90,35 +142,40 @@ export default function PlanejadorQuintal() {
     };
   }, []);
 
-  const alternativas = Object.keys(projetos.terrenos).map((id) => [id, criarTerreno(...id.split("x"))])
-    .filter(([, medida]) => medida);
-
   return (
     <section className="quintal-terreno" aria-labelledby="titulo-painel-terreno">
       <div className="quintal-secao-topo">
         <h2 id="titulo-painel-terreno">Planejador de terreno</h2>
-        {terreno && <button className="botao botao-contorno" type="button" onClick={() => {
+        {registro && <button className="botao botao-contorno" type="button" onClick={() => {
           escolheuTerreno.current = true;
-          definirTerreno(null);
+          definirIdSelecionado(null);
         }}>Novo terreno</button>}
       </div>
       {alternativas.length > 0 && <label className="campo quintal-terrenos">
         Terrenos salvos
-        <select aria-label="Terrenos salvos" value={chave} onChange={(evento) => {
-          const escolhido = alternativas.find(([id]) => id === evento.target.value);
-          if (escolhido) abrir(escolhido[1]);
-        }}>
-          <option value="" disabled>Escolha um terreno</option>
-          {alternativas.map(([id, medida]) => (
-            <option key={id} value={id}>{formatarMedida(medida.largura)} × {formatarMedida(medida.comprimento)} m</option>
+        <select aria-label="Terrenos salvos" value={registro ? registro.id : ""} onChange={(evento) => selecionar(evento.target.value)}>
+          <option value="" disabled>Selecione um terreno</option>
+          {alternativas.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.nome} · {formatarMedida(item.medidas.largura)} × {formatarMedida(item.medidas.comprimento)} m
+            </option>
           ))}
         </select>
       </label>}
-      {terreno ? <EditorTerreno key={chave} terreno={terreno} abrirTerreno={abrir}
-        projeto={projeto ?? projetoInicial}
-        definirProjeto={(antes, depois, desfazendo) => guardar({ terreno, antes, depois, desfazendo })}
-        salvamento={falhou ? "O salvamento está indisponível." : "Salvamento automático neste navegador"} />
-        : <Planejador noPainel aoCriar={abrir} />}
+      {falhou && <p className="erro" role="alert">Não foi possível salvar. Faça um backup antes de fechar o navegador.</p>}
+      {registro ? <>
+        <form key={registro.id} className="quintal-nome-terreno" onSubmit={renomear}>
+          <label className="campo">Nome do terreno
+            <input name="nome" maxLength="80" defaultValue={registro.nome} aria-label="Nome do terreno" />
+          </label>
+          <button className="botao botao-contorno" type="submit">Salvar nome</button>
+        </form>
+        <EditorTerreno key={registro.id} terreno={registro.medidas} abrirTerreno={criarNovo}
+          projeto={registro.projeto}
+          definirProjeto={(antes, depois, desfazendo) =>
+            guardar({ tipo: "projeto", id: registro.id, antes, depois, desfazendo })}
+          salvamento={falhou ? "O salvamento está indisponível." : "Salvamento automático neste navegador"} />
+      </> : <Planejador noPainel aoCriar={criarNovo} />}
     </section>
   );
 }
