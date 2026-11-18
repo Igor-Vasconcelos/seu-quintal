@@ -4,6 +4,7 @@ import Icone from "../../components/Icone.jsx";
 import LimiteDaFerramenta from "../../components/LimiteDaFerramenta.jsx";
 import Rodape from "../../components/Rodape.jsx";
 import PlanejadorQuintal from "./PlanejadorQuintal.jsx";
+import BackupDados from "./BackupDados.jsx";
 
 const HistoricoCultivo = lazy(() => import("../cultivo/HistoricoCultivo.jsx"));
 const OrganizadorHorta = lazy(() => import("../organizador/OrganizadorHorta.jsx"));
@@ -53,6 +54,7 @@ export default function MeuQuintal() {
             </a>
           ))}
         </nav>
+        <BackupDados />
         <div className="quintal-ferramenta" id="quintal-ferramenta">
           <LimiteDaFerramenta key={secao}>
             <Suspense fallback={<p role="status">Carregando ferramenta…</p>}>
