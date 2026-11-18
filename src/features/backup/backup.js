@@ -145,7 +145,8 @@ export function resumoBackup(pacote) {
   const { projetos, historico, organizador } = validarBackup(pacote).dados;
   return {
     terrenos: Object.keys(projetos.terrenos).length,
-    cenarios: Object.values(projetos.terrenos).reduce((total, terreno) => total + terreno.cenarios.length, 0),
+    cenarios: Object.values(projetos.terrenos).reduce((total, terreno) =>
+      total + (pacote.versao === 1 ? terreno.cenarios.length : terreno.projeto.cenarios.length), 0),
     registros: historico.length,
     planos: organizador.planos.length,
   };
