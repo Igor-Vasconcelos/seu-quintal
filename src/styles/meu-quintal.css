@@ -154,3 +154,23 @@
   .quintal-backup-acoes { align-items: stretch; flex-direction: column; }
   .quintal-backup-acoes .botao { width: 100%; }
 }
+
+/* Identificação individual de terrenos, sem alterar a escala do editor. */
+.quintal-nome-terreno {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: .75rem;
+  padding: .9rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface-soft);
+}
+.quintal-nome-terreno .campo { flex: 1 1 15rem; }
+.quintal-nome-terreno .botao { flex: 0 0 auto; }
+
+@media (max-width: 600px) {
+  .quintal-nome-terreno { align-items: stretch; }
+  .quintal-nome-terreno .campo { flex-basis: 100%; }
+  .quintal-nome-terreno .botao { width: 100%; }
+}

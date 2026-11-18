@@ -6,6 +6,7 @@ import Icone from "./Icone.jsx";
 export default function Planejador({ aoCriar, noPainel = false }) {
   const [frente, definirFrente] = useState("");
   const [profundidade, definirProfundidade] = useState("");
+  const [nome, definirNome] = useState("");
   const [mostrarErro, definirMostrarErro] = useState(false);
   const terreno = criarTerreno(frente, profundidade);
   const erro = mostrarErro && !terreno;
@@ -18,7 +19,7 @@ export default function Planejador({ aoCriar, noPainel = false }) {
     }
     if (aoCriar) {
       evento.preventDefault();
-      aoCriar(terreno);
+      aoCriar(terreno, nome);
     }
   }
 
@@ -29,6 +30,10 @@ export default function Planejador({ aoCriar, noPainel = false }) {
       </h3>
       <p className="ferramenta-intro">Use as medidas da frente e do fundo para ver a área.</p>
       <form action={noPainel ? undefined : "./meu-quintal/"} target={noPainel ? undefined : "_blank"} rel="noopener" onSubmit={continuar}>
+        {noPainel && <label className="campo">Nome do terreno (opcional)
+          <input value={nome} onChange={(evento) => definirNome(evento.target.value)}
+            maxLength="80" placeholder="Ex.: Minha chácara" />
+        </label>}
         <div className="planejador-grade">
           <div className="medidas">
             <label className="campo">

@@ -10,13 +10,14 @@ import { conflitosEntreItens, criarItem, declives, novoId, tiposDeArea } from ".
 function ConfigurarTerreno({ terreno, projeto, atualizar, abrirTerreno }) {
   const [frente, definirFrente] = useState(() => String(terreno.largura).replace(".", ","));
   const [profundidade, definirProfundidade] = useState(() => String(terreno.comprimento).replace(".", ","));
+  const [nomeNovo, definirNomeNovo] = useState("");
   const [erro, definirErro] = useState(false);
 
   function abrir(evento) {
     evento.preventDefault();
     const novo = criarTerreno(frente, profundidade);
     definirErro(!novo);
-    if (novo) abrirTerreno(novo);
+    if (novo) abrirTerreno(novo, nomeNovo);
   }
 
   return (
@@ -32,9 +33,13 @@ function ConfigurarTerreno({ terreno, projeto, atualizar, abrirTerreno }) {
               <input inputMode="decimal" value={profundidade} onChange={(evento) => definirProfundidade(evento.target.value)} required />
             </label>
           </div>
+          <label className="campo">Nome do novo terreno (opcional)
+            <input value={nomeNovo} onChange={(evento) => definirNomeNovo(evento.target.value)}
+              maxLength="80" placeholder="Ex.: Horta da família" />
+          </label>
           {erro && <p className="erro" role="alert">Informe medidas de 0,01 a 10.000 m, com até duas casas decimais.</p>}
-          <button className="botao botao-contorno" type="submit">Abrir terreno com estas medidas</button>
-          <p className="nota">Para voltar a um terreno salvo, informe as medidas dele.</p>
+          <button className="botao botao-contorno" type="submit">Criar novo terreno com estas medidas</button>
+          <p className="nota">O terreno atual não será alterado. Para voltar a um terreno salvo, use a lista de terrenos.</p>
         </form>
         <div>
           <label className="campo">Sentido do declive

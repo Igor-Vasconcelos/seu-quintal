@@ -1,4 +1,4 @@
-import { arredondarMedida, cabeNoTerreno, criarTerreno, limitarPosicao, sobrepoe } from "./geometria.js";
+import { arredondarMedida, cabeNoTerreno, criarTerreno, formatarMedida, limitarPosicao, sobrepoe } from "./geometria.js";
 
 export const chaveProjetos = "seu-quintal:projetos-terreno:v1";
 
@@ -35,8 +35,10 @@ export const projetoInicial = {
   cenarios: [{ id: "inicial", nome: "Cenário inicial", itens: [] }],
 };
 
-const projetosIniciais = { ultimoTerreno: null, terrenos: {} };
+export const versaoProjetos = 2;
+const projetosIniciais = { versao: versaoProjetos, terrenoAtivo: null, terrenos: {} };
 
+// Mantida para ler o formato antigo, que identificava terrenos pelas dimensões.
 export function chaveDoTerreno(terreno) {
   return `${terreno.largura}x${terreno.comprimento}`;
 }
@@ -45,45 +47,84 @@ export function novoId() {
   return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
+export function nomeDoTerreno(nome, medidas) {
+  const informado = typeof nome === "string" ? nome.trim().replace(/\s+/g, " ").slice(0, 80) : "";
+  return informado || `Terreno ${formatarMedida(medidas.largura)} × ${formatarMedida(medidas.comprimento)} m`;
+}
+
+export function criarRegistroTerreno(medidas, nome = "", id = novoId()) {
+  return {
+    id,
+    nome: nomeDoTerreno(nome, medidas),
+    medidas,
+    projeto: {
+      ...projetoInicial,
+      cenarios: projetoInicial.cenarios.map((cenario) => ({ ...cenario, itens: [] })),
+    },
+  };
+}
+
+function normalizarProjetoAntigo(projeto, medidas) {
+  if (!Array.isArray(projeto?.cenarios)) return null;
+  const cenarios = projeto.cenarios.filter((cenario) =>
+    typeof cenario?.id === "string" && typeof cenario.nome === "string" && Array.isArray(cenario.itens)
+  ).map((cenario) => ({
+    ...cenario,
+    itens: cenario.itens.filter((item) => item && Object.hasOwn(tiposDeArea, item.tipo)
+      && typeof item.id === "string" && typeof item.nome === "string"
+      && [item.x, item.y, item.largura, item.comprimento].every(Number.isFinite)
+      && (item.tipo === "muda" ? item.largura === 0 && item.comprimento === 0
+        : item.largura > 0 && item.comprimento > 0)
+      && cabeNoTerreno(item, medidas)),
+  }));
+  if (!cenarios.length) return null;
+  return {
+    ativo: cenarios.find(({ id }) => id === projeto.ativo)?.id ?? cenarios[0].id,
+    estrada: projeto.estrada !== false,
+    declive: Object.hasOwn(declives, projeto.declive) ? projeto.declive : "",
+    cenarios,
+  };
+}
+
+// O ID legado é determinístico: a mesma chave antiga produz sempre o mesmo ID.
+export function migrarProjetos(dados) {
+  if (dados?.versao === versaoProjetos && dados.terrenos
+    && typeof dados.terrenos === "object" && !Array.isArray(dados.terrenos)) return dados;
+  if (!dados?.terrenos || typeof dados.terrenos !== "object" || Array.isArray(dados.terrenos)) {
+    return { ...projetosIniciais, terrenos: {} };
+  }
+  const terrenos = {};
+  for (const [chave, projetoAntigo] of Object.entries(dados.terrenos)) {
+    const medidas = criarTerreno(...chave.split("x"));
+    if (!medidas || chaveDoTerreno(medidas) !== chave) continue;
+    const projeto = normalizarProjetoAntigo(projetoAntigo, medidas);
+    if (!projeto) continue;
+    const id = `legado-${chave}`;
+    terrenos[id] = { id, nome: nomeDoTerreno("", medidas), medidas, projeto };
+  }
+  const ultimo = dados.ultimoTerreno && criarTerreno(
+    String(dados.ultimoTerreno.largura), String(dados.ultimoTerreno.comprimento),
+  );
+  const idAtivo = ultimo ? `legado-${chaveDoTerreno(ultimo)}` : null;
+  return {
+    versao: versaoProjetos,
+    terrenoAtivo: idAtivo && terrenos[idAtivo] ? idAtivo : Object.keys(terrenos)[0] ?? null,
+    terrenos,
+  };
+}
+
 export function lerProjetos() {
   try {
-    const dados = JSON.parse(window.localStorage.getItem(chaveProjetos));
-    if (!dados?.terrenos || typeof dados.terrenos !== "object") return projetosIniciais;
-    const terrenos = {};
-    for (const [id, projeto] of Object.entries(dados.terrenos)) {
-      const dimensoes = criarTerreno(...id.split("x"));
-      if (!dimensoes || !Array.isArray(projeto?.cenarios)) continue;
-      const cenarios = projeto.cenarios.filter((cenario) =>
-        typeof cenario?.id === "string" && typeof cenario.nome === "string" && Array.isArray(cenario.itens)
-      ).map((cenario) => ({
-        ...cenario,
-        itens: cenario.itens.filter((item) => item && Object.hasOwn(tiposDeArea, item.tipo)
-          && typeof item.id === "string" && typeof item.nome === "string"
-          && [item.x, item.y, item.largura, item.comprimento].every(Number.isFinite)
-          && (item.tipo === "muda" ? item.largura === 0 && item.comprimento === 0
-            : item.largura > 0 && item.comprimento > 0)
-          && cabeNoTerreno(item, dimensoes)),
-      }));
-      if (!cenarios.length) continue;
-      terrenos[id] = {
-        ativo: cenarios.find(({ id }) => id === projeto.ativo)?.id ?? cenarios[0].id,
-        estrada: projeto.estrada !== false,
-        declive: Object.hasOwn(declives, projeto.declive) ? projeto.declive : "",
-        cenarios,
-      };
-    }
-    const ultimoTerreno = dados.ultimoTerreno && criarTerreno(
-      String(dados.ultimoTerreno.largura), String(dados.ultimoTerreno.comprimento),
-    );
-    return { terrenos, ultimoTerreno: ultimoTerreno || null };
+    const bruto = window.localStorage.getItem(chaveProjetos);
+    return migrarProjetos(bruto === null ? null : JSON.parse(bruto));
   } catch {
-    return projetosIniciais;
+    return { ...projetosIniciais, terrenos: {} };
   }
 }
 
 export function salvarProjetos(dados) {
   try {
-    window.localStorage.setItem(chaveProjetos, JSON.stringify(dados));
+    window.localStorage.setItem(chaveProjetos, JSON.stringify(migrarProjetos(dados)));
     return true;
   } catch {
     return false;
