@@ -74,3 +74,61 @@ test("salva e reabre a versão 2 sem modificar os dados", (t) => {
   assert.equal(salvarProjetos(dados), true);
   assert.deepEqual(lerProjetos(), dados);
 });
+
+test("migra o IndexedDB antigo ao salvar sem perder as áreas existentes", async (t) => {
+  let salvoNoBanco = legado();
+  const banco = {
+    transaction() {
+      const transacao = {
+        oncomplete: null, onabort: null, error: null,
+        objectStore() {
+          return {
+            get() {
+              const pedido = { result: null, onsuccess: null };
+              queueMicrotask(() => {
+                pedido.result = salvoNoBanco;
+                pedido.onsuccess();
+                queueMicrotask(() => transacao.oncomplete?.());
+              });
+              return pedido;
+            },
+            put(dados) { salvoNoBanco = dados; },
+          };
+        },
+      };
+      return transacao;
+    },
+  };
+  globalThis.window = {
+    indexedDB: {
+      open() {
+        const pedido = { result: banco, onsuccess: null, onerror: null };
+        queueMicrotask(() => pedido.onsuccess());
+        return pedido;
+      },
+    },
+    localStorage: {
+      getItem: () => null,
+      setItem: () => {},
+    },
+  };
+  t.after(() => delete globalThis.window);
+  const { lerProjetosSalvos, gravarProjetosSalvos } =
+    await import("../src/features/planejador/bancoProjetos.js");
+  const antes = await lerProjetosSalvos();
+  assert.equal(antes.terrenoAtivo, "legado-35x65");
+  assert.equal(antes.terrenos["legado-35x65"].projeto.cenarios[0].itens[0].nome, "Goiabeira");
+
+  const novo = criarRegistroTerreno(medidas, "Outro sítio", "novo-uuid");
+  const gravacao = await gravarProjetosSalvos((dados) => ({
+    dados: {
+      ...dados,
+      terrenoAtivo: novo.id,
+      terrenos: { ...dados.terrenos, [novo.id]: novo },
+    },
+  }));
+  assert.equal(gravacao.salvo, true);
+  assert.equal(salvoNoBanco.versao, 2);
+  assert.equal(Object.keys(salvoNoBanco.terrenos).length, 3);
+  assert.equal(salvoNoBanco.terrenos["legado-35x65"].projeto.cenarios[0].itens[0].nome, "Goiabeira");
+});
