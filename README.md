@@ -27,7 +27,7 @@ Se você já criou um projeto Vite, copie o conteúdo desta pasta para a raiz do
 | `src/components/Planejador.jsx` e `src/features/planejador/` | Medidas, geometria, planta e editor |
 | `src/data/guias.js` | Títulos, resumos e destinos dos cartões dos guias |
 
-O calendário contém 38 opções da Tabela 8 da Embrapa, consultáveis nas cinco regiões. O planejador aceita vírgula ou ponto e calcula a área. No Meu Quintal, é possível adicionar, mover e dimensionar áreas e plantios, medir distâncias na planta e comparar cenários na mesma escala. O navegador salva os cenários por medidas do terreno. A URL contém as medidas para reabrir o editor.
+O calendário contém 38 opções da Tabela 8 da Embrapa, consultáveis nas cinco regiões. O planejador aceita vírgula ou ponto e calcula a área. No Meu Quintal, é possível adicionar, mover e dimensionar áreas e plantios, medir distâncias na planta e comparar cenários na mesma escala. O navegador salva os cenários por um identificador único de cada terreno. Vários terrenos podem ter as mesmas dimensões. A URL contém as medidas para reabrir o editor.
 
 Os cartões levam ao guia de horta, ao galinheiro do Sisteminha, ao guia de compostagem e ao comparativo de irrigação. A seção do Sisteminha aponta para os materiais oficiais. As quatro imagens dos guias foram geradas por IA. A abertura da home e a do Sisteminha usam o mesmo panorama do projeto. A prévia do planejador é desenhada a partir das medidas informadas.
 
@@ -56,7 +56,7 @@ npm.cmd run build
 
 ## Dados do Meu Quintal
 
-O painel abre em uma página própria. Os terrenos, o histórico de cultivo e os planos da horta ficam salvos no navegador em que foram registrados.
+O painel abre em uma página própria. Os terrenos, o histórico de cultivo e os planos da horta ficam salvos no navegador em que foram registrados. Cada terreno tem ID e nome próprios, mesmo que dois terrenos tenham medidas iguais.
 
 
 ## Backup e restauração dos dados locais
@@ -67,3 +67,11 @@ Na página **Meu Quintal**, abra **Backup e recuperação dos meus dados**.
 - **Cuidados:** antes de restaurar, baixe uma cópia dos dados atuais e feche outras abas do site. O navegador recarrega após uma restauração bem-sucedida.
 
 O arquivo contém informações pessoais do planejamento; guarde-o em local privado. Esta função não sincroniza dispositivos automaticamente e não substitui o futuro banco de dados online.
+
+## Terrenos com nome e ID (modelo v2)
+
+O Meu Quintal permite criar terrenos independentes com as mesmas medidas e alternar entre eles pela lista **Terrenos salvos**. É possível nomeá-los ao criar e alterar o nome depois. A opção de medidas dentro do editor cria um **novo** terreno, sem alterar ou apagar o terreno atual.
+
+Ao abrir o planejador, os dados da versão anterior (chaves como `35x65`) são convertidos em memória para IDs determinísticos, preservando cenários e itens. A cópia em IndexedDB e a cópia no localStorage só passam para o novo formato após uma gravação bem-sucedida.
+
+A exportação de backup passa a usar a versão 2. A importação aceita versões 1 e 2: arquivos antigos são convertidos automaticamente para o modelo novo, após validação. Antes de atualizar e realizar a primeira importação, recomendamos guardar um backup da versão publicada.
