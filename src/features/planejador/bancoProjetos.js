@@ -1,4 +1,4 @@
-import { lerProjetos, salvarProjetos } from "./projetos.js";
+import { lerProjetos, migrarProjetos, salvarProjetos } from "./projetos.js";
 
 const nomeBanco = "seu-quintal-terrenos";
 const colecao = "projetos";
@@ -33,10 +33,10 @@ function consultarBanco(banco, atualizar) {
     transacao.onabort = () => rejeitar(transacao.error);
     pedido.onsuccess = () => {
       // O primeiro salvamento importa o terreno e os cenários da versão anterior.
-      const dados = pedido.result ?? lerProjetos();
+      const dados = migrarProjetos(pedido.result ?? lerProjetos());
       try {
         resultado = atualizar ? atualizar(dados) : dados;
-        if (atualizar) projetos.put(resultado.dados, registro);
+        if (atualizar) projetos.put(migrarProjetos(resultado.dados), registro);
       } catch (erro) {
         rejeitar(erro);
         transacao.abort();
