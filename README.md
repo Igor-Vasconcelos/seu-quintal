@@ -57,3 +57,13 @@ npm.cmd run build
 ## Dados do Meu Quintal
 
 O painel abre em uma página própria. Os terrenos, o histórico de cultivo e os planos da horta ficam salvos no navegador em que foram registrados.
+
+
+## Backup e restauração dos dados locais
+
+Na página **Meu Quintal**, abra **Backup e recuperação dos meus dados**.
+- **Baixar backup:** salva um arquivo `.json` com terrenos, cenários, histórico de cultivo e planos da horta. O arquivo fica no seu dispositivo; não há envio a servidor.
+- **Restaurar:** escolha um backup compatível de até 2 MB. O site valida o conteúdo, mostra um resumo e exige confirmação antes de substituir os dados deste navegador.
+- **Cuidados:** antes de restaurar, baixe uma cópia dos dados atuais e feche outras abas do site. O navegador recarrega após uma restauração bem-sucedida.
+
+O arquivo contém informações pessoais do planejamento; guarde-o em local privado. Esta função não sincroniza dispositivos automaticamente e não substitui o futuro banco de dados online.

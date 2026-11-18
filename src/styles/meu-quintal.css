@@ -106,3 +106,51 @@
     font-size: .83rem;
   }
 }
+
+/* Backup: mantém uma ação opcional, sem competir com as ferramentas principais. */
+.quintal-backup {
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+  min-width: 0;
+}
+
+.quintal-backup > summary {
+  padding: 1rem var(--sq-card-padding);
+  min-height: var(--sq-control-min);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.quintal-backup-conteudo {
+  display: grid;
+  gap: .8rem;
+  padding: 0 var(--sq-card-padding) var(--sq-card-padding);
+  border-top: 1px solid var(--sq-border);
+}
+
+.quintal-backup-conteudo > p:first-child { padding-top: .85rem; }
+
+.quintal-backup-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: .75rem;
+}
+
+.quintal-backup-arquivo { min-width: min(100%, 18rem); max-width: 100%; }
+.quintal-backup-arquivo input { width: 100%; }
+.quintal-backup-previa { display: grid; gap: .75rem; }
+.quintal-backup-confirmar {
+  display: flex;
+  align-items: start;
+  gap: .6rem;
+  cursor: pointer;
+}
+.quintal-backup-confirmar input { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; }
+.quintal-backup :focus-visible { outline: var(--sq-focus-width) solid var(--sq-focus); outline-offset: var(--sq-focus-offset); }
+
+@media (max-width: 600px) {
+  .quintal-backup-acoes { align-items: stretch; flex-direction: column; }
+  .quintal-backup-acoes .botao { width: 100%; }
+}
