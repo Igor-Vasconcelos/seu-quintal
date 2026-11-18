@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { criarBackup, restaurarBackup, resumoBackup, validarBackup } from "../src/features/backup/backup.js";
-import { chaveProjetos } from "../src/features/planejador/projetos.js";
+import { chaveProjetos, migrarProjetos, criarRegistroTerreno } from "../src/features/planejador/projetos.js";
 import { chaveHistorico } from "../src/features/backup/backup.js";
 import { chaveOrganizador } from "../src/features/organizador/armazenamento.js";
 
@@ -85,11 +85,14 @@ test("restaura terrenos, histórico e organizador no navegador e permite exporta
   const dados = ambienteLocal(t);
   const pacote = exemplo();
   await restaurarBackup(pacote);
-  assert.deepEqual(JSON.parse(dados.get(chaveProjetos)), pacote.dados.projetos);
+  assert.deepEqual(JSON.parse(dados.get(chaveProjetos)), migrarProjetos(pacote.dados.projetos));
   assert.deepEqual(JSON.parse(dados.get(chaveHistorico)), pacote.dados.historico);
   assert.deepEqual(JSON.parse(dados.get(chaveOrganizador)), pacote.dados.organizador);
   const reexportado = await criarBackup();
-  assert.deepEqual(reexportado.dados, pacote.dados);
+  assert.equal(reexportado.versao, 2);
+  assert.deepEqual(reexportado.dados.projetos, migrarProjetos(pacote.dados.projetos));
+  assert.deepEqual(reexportado.dados.historico, pacote.dados.historico);
+  assert.deepEqual(reexportado.dados.organizador, pacote.dados.organizador);
 });
 
 test("restaura valores anteriores se o navegador falhar durante a importação", async (t) => {
@@ -110,4 +113,34 @@ test("restaura valores anteriores se o navegador falhar durante a importação",
   };
   await assert.rejects(restaurarBackup(exemplo()), /Sem espaço/);
   assert.deepEqual([...dados], [...originais]);
+});
+
+test("backup v2 guarda terrenos distintos com as mesmas medidas e nomes próprios", () => {
+  const pacote = exemplo();
+  const medidas = { largura: 35, comprimento: 65, area: 2275 };
+  const primeiro = criarRegistroTerreno(medidas, "Chácara da família", "terreno-1");
+  const segundo = criarRegistroTerreno(medidas, "Área de produção", "terreno-2");
+  pacote.versao = 2;
+  pacote.dados.projetos = {
+    versao: 2, terrenoAtivo: "terreno-2",
+    terrenos: { "terreno-1": primeiro, "terreno-2": segundo },
+  };
+  assert.equal(validarBackup(pacote), pacote);
+  assert.deepEqual(resumoBackup(pacote), {
+    terrenos: 2, cenarios: 2, registros: 1, planos: 0,
+  });
+});
+
+test("rejeita backup v2 com ID ou área incoerentes", () => {
+  const pacote = exemplo();
+  pacote.versao = 2;
+  const medidas = { largura: 35, comprimento: 65, area: 2275 };
+  pacote.dados.projetos = {
+    versao: 2, terrenoAtivo: "um",
+    terrenos: { um: criarRegistroTerreno(medidas, "Chácara", "outro") },
+  };
+  assert.throws(() => validarBackup(pacote), /identificação/i);
+  pacote.dados.projetos.terrenos.um.id = "um";
+  pacote.dados.projetos.terrenos.um.medidas.area = 1;
+  assert.throws(() => validarBackup(pacote), /medidas ou área/i);
 });
