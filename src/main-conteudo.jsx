@@ -16,6 +16,7 @@ createRoot(document.getElementById("cabecalho")).render(<Cabecalho raiz={raiz} p
 createRoot(document.getElementById("rodape")).render(<Rodape raiz={raiz} pagina={pagina} />);
 
 const horta = document.getElementById("guia-horta");
+const canteiroVisual = document.getElementById("canteiro-visual-raiz");
 const calendario = document.getElementById("calendario-raiz");
 const organizador = document.getElementById("organizador-raiz");
 const catalogo = document.getElementById("catalogo-guias");
@@ -28,6 +29,13 @@ async function montarFerramenta(elemento, carregar) {
   } catch {
     montagem.render(<FalhaAoCarregar />);
   }
+}
+
+if (canteiroVisual) {
+  montarFerramenta(canteiroVisual, async () => {
+    const { default: PlanejadorVisualCanteiro } = await import("./features/organizador/PlanejadorVisualCanteiro.jsx");
+    return <PlanejadorVisualCanteiro />;
+  });
 }
 
 if (horta) {
@@ -49,7 +57,8 @@ if (calendario) {
 if (organizador) {
   montarFerramenta(organizador, async () => {
     const { default: OrganizadorHorta } = await import("./features/organizador/OrganizadorHorta.jsx");
-    return <OrganizadorHorta />;
+    const cultura = new URLSearchParams(window.location.search).get("cultura");
+    return <OrganizadorHorta culturaSugerida={cultura} />;
   });
 }
 

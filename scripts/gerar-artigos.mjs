@@ -7,7 +7,7 @@ const SOURCE = join(ROOT, "content", "artigos");
 const TARGET = join(ROOT, "artigos");
 const ORIGIN = "https://igor-vasconcelos.github.io/seu-quintal";
 const REQUIRED = ["titulo", "descricao", "categoria", "autor", "imagem", "imagemAlt", "ferramentaUrl", "ferramentaTexto", "status"];
-const EXISTING = ["/", "/horta/", "/horta/calendario-de-plantio/", "/horta/organizador/", "/guias/",
+const EXISTING = ["/", "/horta/", "/horta/calendario-de-plantio/", "/horta/organizador/", "/horta/canteiros/", "/guias/",
   "/guias/compostagem/", "/guias/irrigacao/", "/meu-quintal/", "/sisteminha.html", "/mapa-do-site/"];
 
 export function escapeHtml(value) {
