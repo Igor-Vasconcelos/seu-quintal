@@ -522,3 +522,64 @@
   .caminho-residuos .caminho-conector .icone { transform: rotate(90deg); }
   .sisteminha-cartoes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
 }
+
+/* DS 2.0: navegação contextual do Sisteminha com área de leitura trocável. */
+.sisteminha-nav-local {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  margin: 0 0 clamp(1.25rem, 3vw, 2rem);
+  border-block: 1px solid var(--sq-border);
+  background: var(--sq-surface);
+  border-radius: var(--sq-radius-control);
+  box-shadow: 0 4px 14px rgb(24 60 43 / .04);
+}
+.sisteminha-nav-rolagem {
+  display: flex;
+  gap: var(--sq-space-2);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  padding: var(--sq-space-2);
+}
+.sisteminha-nav-rolagem a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--sq-control-min);
+  padding: .55rem .85rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-surface);
+  color: var(--sq-text);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.sisteminha-nav-rolagem a:hover {
+  border-color: var(--sq-primary);
+  background: var(--sq-brand-100);
+}
+.sisteminha-nav-rolagem a[aria-current="page"] {
+  border-color: var(--sq-primary);
+  background: var(--sq-primary);
+  color: var(--sq-on-primary);
+}
+.sisteminha-nav-rolagem a:focus-visible {
+  outline: 2px solid var(--sq-focus);
+  outline-offset: 3px;
+}
+.sisteminha-secao[hidden] { display: none !important; }
+.sisteminha-detalhes { grid-template-columns: minmax(0, 1fr); }
+#ciclo, #modulos, #fontes, .sisteminha-detalhe, .galinheiro-calculadora, .galinheiro-secao {
+  scroll-margin-top: 5rem;
+}
+@media (max-width: 767px) {
+  .sisteminha-nav-local {
+    margin-inline: -.25rem;
+    border-radius: 0;
+  }
+  .sisteminha-nav-rolagem a { padding-inline: .8rem; }
+}
