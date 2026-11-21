@@ -6,3 +6,6 @@ dist/
 
 # Páginas editoriais geradas no build
 artigos/
+
+# Gerado a partir dos artigos Markdown durante dev/build
+src/data/artigos-publicados.json

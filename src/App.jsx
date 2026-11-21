@@ -7,12 +7,20 @@ import Icone from "./components/Icone.jsx";
 import Planejador from "./components/Planejador.jsx";
 import Rodape from "./components/Rodape.jsx";
 import { guias } from "./data/guias.js";
+import artigosPublicados from "./data/artigos-publicados.json";
 import { criarTerreno } from "./features/planejador/geometria.js";
 
 const atalhos = [
   { destino: "./horta/", icone: "muda", titulo: "Começar uma horta", resumo: "Escolha plantas para o seu espaço e as horas de sol." },
   { destino: "#planejador", icone: "planta", titulo: "Planejar meu terreno", resumo: "Informe as medidas e desenhe onde vai cada área." },
-  { destino: "./meu-quintal/#horta", icone: "calendario", titulo: "Montar uma agenda", resumo: "Planeje os lotes e acompanhe as datas da horta.", novaAba: true },
+  { destino: "./horta/organizador/", icone: "calendario", titulo: "Montar uma agenda", resumo: "Planeje os lotes e acompanhe as datas da horta." },
+];
+
+const jornadas = [
+  { etapa: "01", titulo: "Sonhando", descricao: "Descubra como usar cada metro do terreno.", destino: "#planejador", acao: "Planejar meu espaço" },
+  { etapa: "02", titulo: "Começando", descricao: "Aprenda a plantar em vasos ou canteiros.", destino: "./horta/", acao: "Começar minha horta" },
+  { etapa: "03", titulo: "Crescendo", descricao: "Organize os plantios e as próximas colheitas.", destino: "./horta/organizador/", acao: "Montar minha agenda" },
+  { etapa: "04", titulo: "Expandindo", descricao: "Conheça formas de integrar a produção.", destino: "./sisteminha.html", acao: "Explorar o Sisteminha" },
 ];
 
 export default function App() {
@@ -38,15 +46,14 @@ export default function App() {
         <section className="home-abertura" aria-labelledby="titulo-home">
           <div className="home-miolo home-abertura-grade">
             <div className="home-abertura-texto">
-              <h1 id="titulo-home">Cultive e planeje <em>seu quintal.</em></h1>
-              <p>Descubra o que plantar na sua região, aprenda a cuidar da horta e organize seus canteiros, do primeiro plantio à colheita.</p>
+              <h1 id="titulo-home">Aprenda, planeje e cultive <em>seu espaço.</em></h1>
+              <p>Da primeira muda ao seu sítio: artigos confiáveis, ferramentas gratuitas e planejamento para aproveitar melhor o espaço que você tem.</p>
               <div className="home-acoes">
-                <a className="botao" href="#calendario">
-                  Ver calendário <Icone nome="seta" />
+                <a className="botao" href="#ferramentas">
+                  Explorar ferramentas <Icone nome="seta" />
                 </a>
-                <a className="botao botao-contorno" href="./meu-quintal/" target="_blank" rel="noopener"
-                  aria-label="Abrir Meu Quintal (abre em nova aba)">
-                  Meu Quintal <Icone nome="novaAba" />
+                <a className="botao botao-contorno" href="./artigos/">
+                  Ler artigos
                 </a>
               </div>
             </div>
@@ -80,9 +87,36 @@ export default function App() {
           </ul>
         </section>
 
+        <section className="home-miolo home-secao home-jornada" aria-labelledby="titulo-jornada">
+          <div className="home-secao-topo">
+            <div>
+              <p className="home-sobretitulo">SEU MOMENTO</p>
+              <h2 id="titulo-jornada">Um caminho para cada fase</h2>
+            </div>
+          </div>
+          <ul className="home-jornada-grade">
+            {jornadas.map(({ etapa, titulo, descricao, destino, acao }) => (
+              <li key={etapa}>
+                <a className="home-jornada-card" href={destino}>
+                  <span className="home-jornada-numero" aria-hidden="true">{etapa}</span>
+                  <strong>{titulo}</strong>
+                  <span>{descricao}</span>
+                  <span className="home-jornada-acao">{acao} <Icone nome="seta" /></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="home-ferramentas" id="ferramentas" aria-labelledby="titulo-ferramentas-home" tabIndex={-1}>
           <div className="home-miolo home-secao">
-            <h2 id="titulo-ferramentas-home">Ferramentas do quintal</h2>
+            <div className="home-secao-topo">
+              <div>
+                <p className="home-sobretitulo">GRATUITAS E SEM CADASTRO</p>
+                <h2 id="titulo-ferramentas-home">Ferramentas para planejar</h2>
+                <p className="home-secao-descricao">Experimente o calendário de plantio e o planejador antes de criar qualquer conta.</p>
+              </div>
+            </div>
             <div className="ferramentas">
               <Calendario nivelTitulo={3} />
               <Planejador />
@@ -112,14 +146,40 @@ export default function App() {
           </div>
         </section>
 
+        <section className="home-miolo home-secao home-artigos" id="artigos" aria-labelledby="titulo-artigos" tabIndex={-1}>
+          <div className="home-secao-topo">
+            <div>
+              <p className="home-sobretitulo">CONHECIMENTO QUE VIRA AÇÃO</p>
+              <h2 id="titulo-artigos">Aprenda com nossos artigos</h2>
+              <p className="home-secao-descricao">Respostas práticas para começar e cuidar melhor da sua produção.</p>
+            </div>
+            <a className="home-link" href="./artigos/">Ver todos os artigos <Icone nome="seta" /></a>
+          </div>
+          <ul className="home-artigos-grade">
+            {artigosPublicados.slice(0, 3).map((artigo) => (
+              <li key={artigo.slug}>
+                <a className="home-artigo-cartao" href={`./artigos/${artigo.slug}/`}>
+                  <img src={`.${artigo.imagem}`} width="792" height="446"
+                    alt="" loading="lazy" />
+                  <div>
+                    <span className="home-artigo-categoria">{artigo.categoria}</span>
+                    <h3>{artigo.titulo}</h3>
+                    <p>{artigo.descricao}</p>
+                    <span className="home-artigo-acao">Ler artigo <Icone nome="seta" /></span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="home-miolo home-secao home-projetos" aria-label="Projetos para o quintal">
           <div className="home-meu-quintal" id="meu-quintal">
             <Icone nome="planta" />
             <h2>Meu Quintal</h2>
-            <p>Reabra seus terrenos, veja a agenda e registre suas colheitas. Os dados ficam salvos neste navegador.</p>
-            <a className="botao" href="./meu-quintal/" target="_blank" rel="noopener"
-              aria-label="Abrir meus planos (abre em nova aba)">
-              Abrir meus planos <Icone nome="novaAba" />
+            <p>Guarde seus terrenos, organize tarefas e acompanhe as colheitas. Por enquanto, os dados ficam salvos neste navegador e podem ser exportados por backup.</p>
+            <a className="botao" href="./meu-quintal/">
+              Abrir Meu Quintal <Icone nome="seta" />
             </a>
           </div>
           <div className="home-sisteminha" id="sisteminha">

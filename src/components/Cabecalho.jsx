@@ -35,8 +35,8 @@ export default function Cabecalho({ sisteminha = false, raiz = "./", pagina }) {
           }}>
           <div className="menu-links">
             <a href={inicio} aria-current={naHome ? "page" : undefined}>Início</a>
-            <a href={`${raiz}horta/calendario-de-plantio/`}
-              aria-current={pagina === "calendario" ? "page" : undefined}>Calendário</a>
+            <a href={`${raiz}horta/`} aria-current={pagina === "horta" ? "page" : undefined}>Horta</a>
+            <a href={naHome ? "#ferramentas" : `${raiz}#ferramentas`}>Ferramentas</a>
             <a href={`${raiz}artigos/`} aria-current={pagina === "artigos" ? "page" : undefined}>Artigos</a>
             <a href={`${raiz}guias/`} aria-current={pagina === "guias" ? "page" : undefined}
               data-secao-atual={nosGuias || undefined}>Guias</a>
@@ -45,8 +45,7 @@ export default function Cabecalho({ sisteminha = false, raiz = "./", pagina }) {
           </div>
           {noPainel
             ? <a className="botao menu-quintal" href="#terreno" aria-current="page">Meu Quintal</a>
-            : <a className="botao menu-quintal" href={`${raiz}meu-quintal/`} target="_blank" rel="noopener"
-                aria-label="Meu Quintal (abre em nova aba)">Meu Quintal <Icone nome="novaAba" /></a>}
+            : <a className="botao menu-quintal" href={`${raiz}meu-quintal/`}>Meu Quintal</a>}
         </nav>
       </div>
     </header>
