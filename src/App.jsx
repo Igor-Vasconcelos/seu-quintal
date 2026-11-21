@@ -121,6 +121,7 @@ export default function App() {
               <Calendario nivelTitulo={3} />
               <Planejador />
             </div>
+            <p className="nota">Também pode <a href="./horta/canteiros/">desenhar um canteiro com as plantas e seus espaçamentos</a> — gratuito e sem cadastro.</p>
           </div>
         </section>
 

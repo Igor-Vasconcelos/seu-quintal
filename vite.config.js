@@ -20,6 +20,7 @@ export default defineConfig({
         "sisteminha.html",
         "horta/index.html",
         "horta/organizador/index.html",
+        "horta/canteiros/index.html",
         "horta/calendario-de-plantio/index.html",
         "guias/index.html",
         "guias/compostagem/index.html",
