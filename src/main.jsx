@@ -7,6 +7,7 @@ import App from "./App.jsx";
 import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/editorial.css";
+import "./styles/editorial-mockup.css";
 import "./styles/guias-cultivo.css";
 
 createRoot(document.getElementById("root")).render(

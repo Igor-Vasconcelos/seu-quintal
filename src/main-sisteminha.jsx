@@ -15,6 +15,7 @@ import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/editorial.css";
 import "./styles/sisteminha.css";
+import "./styles/editorial-mockup.css";
 
 const modulos = {
   tanque: {
