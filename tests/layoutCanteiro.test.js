@@ -72,7 +72,7 @@ test("layout mantém as opções de acesso, edição e exportação reais", () =
   const css = file("src/styles/visual-canteiro.css");
   const html = file("horta/canteiros/index.html");
   assert.match(html, /<h1>Planejador Visual de Canteiros<\/h1>/);
-  assert.match(jsx, /gravarRascunho/);
+  assert.match(jsx, /gravarColecaoCanteiros/);
   assert.match(jsx, /await imagem\.decode\(\)/);
   assert.match(jsx, /toBlob\(/);
   assert.match(jsx, /selecionada/);

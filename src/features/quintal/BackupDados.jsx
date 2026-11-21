@@ -72,7 +72,7 @@ export default function BackupDados() {
     <details className="quintal-backup">
       <summary>Backup e recuperação dos meus dados</summary>
       <div className="quintal-backup-conteudo">
-        <p>Salve uma cópia dos seus terrenos, cenários, históricos e planos da horta em um arquivo JSON.
+        <p>Salve uma cópia dos terrenos, canteiros, desenhos, histórico e planos da horta em um arquivo JSON.
           Os dados não são enviados para um servidor.</p>
         <div className="quintal-backup-acoes">
           <button className="botao botao-contorno" type="button" onClick={baixarBackup} disabled={ocupado}>
@@ -88,7 +88,8 @@ export default function BackupDados() {
           <p><strong>Arquivo:</strong> {selecionado.nome}</p>
           <p>Backup de {new Date(selecionado.pacote.criadoEm).toLocaleString("pt-BR")}.
             Contém {selecionado.resumo.terrenos} terreno(s), {selecionado.resumo.cenarios} cenário(s),
-            {" "}{selecionado.resumo.registros} registro(s) de cultivo e {selecionado.resumo.planos} plano(s) de horta.</p>
+            {" "}{selecionado.resumo.registros} registro(s) de cultivo e {selecionado.resumo.planos} plano(s) de horta.
+            {selecionado.resumo.canteiros !== undefined ? ` Inclui ${selecionado.resumo.canteiros} canteiro(s).` : " Este backup antigo não contém desenhos de canteiros; os atuais serão preservados."}</p>
           <p className="aviso"><strong>Atenção:</strong> restaurar substitui os dados deste navegador.
             Baixe primeiro uma cópia dos dados atuais e feche outras abas do Seu Quintal.</p>
           <label className="quintal-backup-confirmar">

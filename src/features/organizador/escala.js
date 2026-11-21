@@ -45,7 +45,7 @@ export function formularioInicial(plano, culturaSugerida) {
   const cultura = Object.hasOwn(culturasOrganizador, escolha) ? escolha : "Alface de verão";
   const ficha = culturasOrganizador[cultura];
   const iniciais = {
-    cultura, origem: "semente", inicio: hojeCivil(), canteiro: "",
+    cultura, origem: "semente", inicio: hojeCivil(), canteiro: "", canteiroId: "",
     casa: ficha.unidade === "kg" ? .5 : 4, venda: 0, intervalo: ficha.colheitasSucessivas ? 4 : 1,
     rendimento: null, duracao: null, teste: 2,
   };
@@ -81,10 +81,15 @@ export function lerPlano(campos) {
     }
   }
 
+  if (campos.canteiroId !== undefined &&
+    (typeof campos.canteiroId !== "string" || campos.canteiroId.length > 80)) {
+    return { erro: "Identificador do canteiro inválido." };
+  }
+
   return {
     plano: {
       cultura: campos.cultura, origem: ficha.mudas && campos.origem === "muda" ? "muda" : "semente",
-      inicio: campos.inicio, canteiro: campos.canteiro.trim(), casa, venda, intervalo,
+      inicio: campos.inicio, canteiro: campos.canteiro.trim(), canteiroId: campos.canteiroId || "", casa, venda, intervalo,
       rendimento, duracao, teste: rendimento ? 2 : teste,
     },
   };

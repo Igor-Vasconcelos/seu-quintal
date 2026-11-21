@@ -4,6 +4,7 @@ import { criarBackup, restaurarBackup, resumoBackup, validarBackup } from "../sr
 import { chaveProjetos } from "../src/features/planejador/projetos.js";
 import { chaveHistorico } from "../src/features/backup/backup.js";
 import { chaveOrganizador } from "../src/features/organizador/armazenamento.js";
+import { chaveCanteiros, colecaoInicial } from "../src/features/organizador/canteiros.js";
 
 function exemplo() {
   return {
@@ -110,4 +111,60 @@ test("restaura valores anteriores se o navegador falhar durante a importação",
   };
   await assert.rejects(restaurarBackup(exemplo()), /Sem espaço/);
   assert.deepEqual([...dados], [...originais]);
+});
+
+
+test("backup novo inclui canteiros, restaura desenhos e aceita arquivos antigos", async (t) => {
+  const armazenamento = ambienteLocal(t);
+  const pacote = exemplo();
+  const canteiros = colecaoInicial();
+  canteiros.itens[0].nome = "Horta da casa";
+  canteiros.itens[0].medidas = { largura: 100, comprimento: 200 };
+  canteiros.itens[0].plantas = [{
+    id: "p1", cultura: "Alface de verão", x: 12.5, y: 12.5,
+    largura: 25, comprimento: 25,
+  }];
+  pacote.dados.canteiros = canteiros;
+  validarBackup(pacote);
+  assert.equal(resumoBackup(pacote).canteiros, 1);
+  await restaurarBackup(pacote);
+  assert.deepEqual(JSON.parse(armazenamento.get(chaveCanteiros)), canteiros);
+  const exportado = await criarBackup();
+  assert.deepEqual(exportado.dados.canteiros, canteiros);
+
+  const antigo = exemplo();
+  await restaurarBackup(antigo);
+  assert.deepEqual(JSON.parse(armazenamento.get(chaveCanteiros)), canteiros,
+    "restaurar backup antigo não deve apagar desenhos novos");
+});
+
+test("backup rejeita canteiros inválidos sem perda dos dados anteriores", async (t) => {
+  const armazenamento = ambienteLocal(t);
+  const pacote = exemplo();
+  const valido = colecaoInicial();
+  pacote.dados.canteiros = { ...valido, itens: [{ ...valido.itens[0], nome: "" }] };
+  assert.throws(() => validarBackup(pacote), /canteiros do backup/);
+  armazenamento.set(chaveCanteiros, JSON.stringify(valido));
+  await assert.rejects(restaurarBackup(pacote), /canteiros do backup/);
+  assert.equal(armazenamento.get(chaveCanteiros), JSON.stringify(valido));
+});
+
+test("reverte canteiros e outros campos se escrita do backup falhar", async (t) => {
+  const armazenamento = ambienteLocal(t);
+  const original = colecaoInicial();
+  armazenamento.set(chaveCanteiros, JSON.stringify(original));
+  const pacote = exemplo();
+  pacote.dados.canteiros = colecaoInicial();
+  pacote.dados.canteiros.itens[0].nome = "Novo canteiro";
+  const setItem = window.localStorage.setItem;
+  let falhar = true;
+  window.localStorage.setItem = (key, value) => {
+    if (key === chaveCanteiros && falhar) {
+      falhar = false;
+      throw new Error("Falha proposital ao gravar canteiros");
+    }
+    setItem(key, value);
+  };
+  await assert.rejects(restaurarBackup(pacote), /Falha proposital/);
+  assert.equal(armazenamento.get(chaveCanteiros), JSON.stringify(original));
 });
