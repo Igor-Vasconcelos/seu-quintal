@@ -27,6 +27,9 @@ test("o Markdown gera HTML estático acessível e evita scripts injetados", () =
 test("publicação gera catálogo, artigos e sitemap sem depender de React", () => {
   const count = generateArticles();
   assert.equal(count, 2);
+  const catalogo = JSON.parse(read("src/data/artigos-publicados.json"));
+  assert.equal(catalogo.length, 2);
+  assert.ok(catalogo.every(a => a.slug && a.titulo && a.imagem));
   const index = read("artigos/index.html");
   assert.match(index, /Artigos e guias para seu quintal/);
   assert.match(index, /Como organizar uma horta pequena/);

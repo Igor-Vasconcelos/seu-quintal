@@ -106,6 +106,7 @@ export function renderMarkdown(markdown, prefix) {
 
 function layout({ title, description, path, prefix, body, image, kind = "website", extraHead = "" }) {
   const nav = '<a href="' + prefix + '">Início</a><a href="' + prefix + 'horta/">Horta</a>' +
+    '<a href="' + prefix + '#ferramentas">Ferramentas</a>' +
     '<a href="' + prefix + 'guias/">Guias</a><a href="' + prefix + 'artigos/">Artigos</a>' +
     '<a href="' + prefix + 'sisteminha.html">Sisteminha</a>';
   return [
@@ -208,6 +209,11 @@ export function generateArticles() {
     mkdirSync(folder, { recursive: true });
     writeFileSync(join(folder, "index.html"), renderArticle(article));
   }
+  // A Home usa o mesmo catálogo editorial; nenhum card precisa ser cadastrado duas vezes.
+  const destaques = articles.map(({ slug, titulo, descricao, categoria, imagem, imagemAlt }) =>
+    ({ slug, titulo, descricao, categoria, imagem, imagemAlt }));
+  writeFileSync(join(ROOT, "src", "data", "artigos-publicados.json"),
+    JSON.stringify(destaques, null, 2) + "\n");
   const urls = [...EXISTING, "/artigos/", ...articles.map(x => "/artigos/" + x.slug + "/")];
   const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
     urls.map(x => "  <url><loc>" + ORIGIN + x + "</loc></url>").join("\n") + "\n</urlset>\n";
