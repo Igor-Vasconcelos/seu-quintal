@@ -39,6 +39,7 @@ export default function App() {
         <section className="home-abertura" aria-labelledby="titulo-home">
           <div className="home-miolo home-abertura-grade">
             <div className="home-abertura-texto">
+              <span className="home-hero-selo"><Icone nome="muda"/> SEU ESPAÇO, SUAS POSSIBILIDADES</span>
               <h1 id="titulo-home">Aprenda, planeje e cultive <em>seu espaço.</em></h1>
               <p>Da primeira muda ao seu sítio: artigos confiáveis, ferramentas gratuitas e planejamento para aproveitar melhor o espaço que você tem.</p>
               <div className="home-acoes">
@@ -49,6 +50,7 @@ export default function App() {
                   Ler artigos
                 </a>
               </div>
+              <span className="home-hero-garantia"><Icone nome="muda"/> Ferramentas gratuitas e sem cadastro</span>
             </div>
             <figure className="home-abertura-imagem">
               <img src="./imagens/abertura-horta-1200.webp"

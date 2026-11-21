@@ -1,0 +1,195 @@
+/* Seu Quintal DS3 • Etapa 2: componentes visuais da Home e do Sisteminha.
+   Estilos com escopo: não alteram campos, editor de terreno ou calendários. */
+.pagina-home .home-abertura {
+  position: relative; isolation: isolate; overflow: hidden;
+  color: #fff; background: var(--sq-forest);
+}
+.pagina-home .home-abertura-grade {
+  position: static; display: grid; grid-template-columns: minmax(0,1fr);
+  min-height: clamp(23rem, 38vw, 33rem);
+  padding-block: clamp(2.2rem, 5vw, 5rem);
+}
+.pagina-home .home-abertura-texto {
+  position: relative; z-index: 2; max-width: 45rem; align-self: center;
+}
+.pagina-home .home-abertura h1 {
+  max-width: 17ch; color: #fff;
+  font-size: clamp(2.45rem, 5.1vw, 4.5rem); line-height: 1.03;
+}
+.pagina-home .home-abertura h1 em { color: var(--sq-cream); display: inline; font-style: normal; }
+.pagina-home .home-abertura-texto > p {
+  max-width: 56ch; color: #fff;
+  font-size: clamp(1rem,1.5vw,1.13rem); line-height: 1.55;
+}
+.pagina-home .home-abertura-imagem {
+  position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%;
+  border: 0; border-radius: 0; box-shadow: none;
+  background: var(--sq-forest); overflow: hidden;
+}
+.pagina-home .home-abertura-imagem img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 68% 45%; aspect-ratio: auto;
+}
+.pagina-home .home-abertura-imagem::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(90deg,
+    rgb(8 31 17 / .94) 0%, rgb(12 38 24 / .84) 40%,
+    rgb(12 38 24 / .51) 70%, rgb(12 38 24 / .27) 100%);
+}
+.home-hero-selo,.sisteminha-hero-selo {
+  display: inline-flex; align-items: center; gap: .4rem;
+  min-height: 2.3rem; padding: .3rem .75rem;
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-cream); color: var(--sq-forest);
+  font-size: .76rem; font-weight: 800; letter-spacing: .06em;
+  margin-bottom: .8rem;
+}
+.home-hero-selo .icone,.sisteminha-hero-selo .icone { width: 1.2rem; height: 1.2rem; color: var(--sq-primary); }
+.pagina-home .home-acoes .botao:first-child {
+  background: var(--sq-cream); border-color: var(--sq-cream); color: var(--sq-forest);
+}
+.pagina-home .home-acoes .botao:first-child:hover { background: #FFF9ED; }
+.pagina-home .home-acoes .botao.botao-contorno {
+  border-color: var(--sq-cream); color: #fff; background: rgb(24 60 43 / .24);
+}
+.pagina-home .home-acoes .botao.botao-contorno:hover { background: rgb(255 255 255 / .15); }
+.home-hero-garantia {
+  display: inline-flex; align-items: center; gap: .35rem;
+  margin-top: 1.1rem; font-size: .84rem; color: var(--sq-cream);
+}
+.home-hero-garantia .icone { width: 1.2rem; height: 1.2rem; }
+.pagina-home .home-atalho,.pagina-home .guia-cartao,.pagina-home .home-artigo-cartao {
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.pagina-home :is(.home-atalho,.guia-cartao,.home-artigo-cartao):hover {
+  transform: translateY(-3px); box-shadow: 0 12px 28px rgb(24 60 43 / .09);
+}
+.pagina-home .guia-cartao img { aspect-ratio: 3 / 2; }
+.pagina-home .home-ferramentas { background: var(--sq-surface-warm); }
+
+.sisteminha-ds3 .sisteminha-abertura {
+  position: relative; isolation: isolate;
+  display: block; min-height: clamp(21rem, 34vw, 30rem);
+  overflow: hidden; border-radius: var(--sq-radius-card);
+  background: var(--sq-forest); color: #fff;
+  margin-block: clamp(1rem,2vw,1.5rem) 0;
+}
+.sisteminha-ds3 .sisteminha-intro {
+  position: relative; z-index: 2; min-height: inherit;
+  display: flex; flex-direction: column; justify-content: center; align-items: start;
+  max-width: 51rem; padding: clamp(1.5rem,4vw,3.75rem);
+}
+.sisteminha-ds3 .sisteminha-abertura h1 {
+  color: #fff; max-width: 18ch; font-size: clamp(2.5rem,4.5vw,4rem);
+}
+.sisteminha-ds3 .sisteminha-intro p { color: #fff; max-width: 56ch; margin-top: .85rem; line-height: 1.55; }
+.sisteminha-ds3 .sisteminha-panorama { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.sisteminha-ds3 .sisteminha-panorama img {
+  position: absolute; inset: 0; object-fit: cover; object-position: 60% 54%;
+}
+.sisteminha-ds3 .sisteminha-panorama::after {
+  content: ""; position: absolute; z-index: 1; inset: 0;
+  background: linear-gradient(90deg, rgb(8 31 17 / .95) 0%,
+    rgb(8 31 17 / .79) 43%, rgb(8 31 17 / .36) 76%, rgb(8 31 17 / .15) 100%);
+}
+.sisteminha-ds3 .sisteminha-nav-local {
+  position: sticky; top: 0; z-index: 6;
+  margin: -1rem .5rem clamp(1.4rem,3vw,2rem);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+  box-shadow: 0 6px 22px rgb(24 60 43 / .11);
+}
+.sisteminha-ds3 .sisteminha-nav-rolagem {
+  display: grid; grid-template-columns: repeat(8,minmax(7.5rem,1fr));
+  gap: .15rem; padding: .45rem;
+  scrollbar-width: thin;
+}
+.sisteminha-ds3 .sisteminha-nav-rolagem a {
+  min-height: 5rem; display: flex; flex-direction: column; gap: .3rem;
+  padding: .6rem .4rem; border: 1px solid transparent;
+  border-radius: var(--sq-radius-control); background: transparent;
+  color: var(--sq-forest); font-size: .77rem; font-weight: 750;
+  line-height: 1.25; text-align: center;
+}
+.sisteminha-ds3 .sisteminha-nav-rolagem a .icone { width: 1.65rem; height: 1.65rem; color: var(--sq-primary); }
+.sisteminha-ds3 .sisteminha-nav-rolagem a[aria-current="page"] {
+  color: var(--sq-forest); background: var(--sq-brand-100);
+  border-color: var(--sq-border); box-shadow: inset 0 -3px 0 var(--sq-primary);
+}
+.sisteminha-ds3 .sisteminha-nav-rolagem a:hover { background: var(--sq-surface-soft); }
+.sisteminha-panorama-editorial {
+  display: grid;
+  grid-template-columns: minmax(0,.9fr) minmax(0,1.7fr) minmax(0,.9fr);
+  gap: clamp(.8rem,1.6vw,1.3rem); align-items: stretch;
+  margin-bottom: clamp(1.5rem,3vw,2.5rem);
+}
+.sisteminha-panorama-texto { display: grid; align-content: center; gap: .6rem; min-width: 0; }
+.sisteminha-panorama-texto h2 { font-size: clamp(1.6rem,2.45vw,2.2rem); line-height: 1.17; }
+.sisteminha-panorama-texto > p:not(.sisteminha-kicker) {
+  line-height: 1.65; font-size: .91rem; color: var(--sq-text-muted);
+}
+.sisteminha-panorama-texto .sisteminha-nota-editorial {
+  padding: .85rem; background: var(--sq-cream);
+  border-radius: var(--sq-radius-control); color: var(--sq-forest);
+}
+.sisteminha-panorama-imagem { overflow: hidden; margin: 0; min-width: 0; }
+.sisteminha-panorama-imagem img {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--sq-radius-card);
+}
+.sisteminha-panorama-imagem figcaption {
+  color: var(--sq-text-muted); font-size: .74rem; margin-top: .35rem; line-height: 1.4;
+}
+.sisteminha-panorama-beneficios {
+  background: var(--sq-surface-soft); border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card); padding: clamp(.8rem,1.6vw,1.3rem);
+}
+.sisteminha-panorama-beneficios h3 {
+  display: flex; align-items: center; gap: .45rem;
+  font: 400 clamp(1.15rem,1.65vw,1.4rem)/1.2 var(--sq-font-display);
+}
+.sisteminha-panorama-beneficios h3 .icone { color: var(--sq-primary); width: 1.5rem; height: 1.5rem; }
+.sisteminha-panorama-beneficios ul { list-style: none; padding: 0; margin: .75rem 0; }
+.sisteminha-panorama-beneficios li {
+  display: flex; gap: .5rem; align-items: start;
+  font-size: .83rem; line-height: 1.45; padding: .47rem 0;
+}
+.sisteminha-panorama-beneficios li::before {
+  content: "✓"; display: grid; place-items: center; flex: none;
+  background: var(--sq-primary); color: #fff; width: 1.15rem; height: 1.15rem;
+  font-size: .65rem; border-radius: 50%; font-weight: 800; margin-top: .12rem;
+}
+.sisteminha-panorama-beneficios > p { color: var(--sq-text-muted); font-size: .75rem; line-height: 1.5; }
+.sisteminha-ciclo-titulo {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: .35rem 1rem; margin-bottom: 1rem;
+}
+.sisteminha-ciclo-titulo h2 { font-size: clamp(1.5rem,2.6vw,2rem); }
+.sisteminha-ciclo-titulo p { max-width: 56ch; color: var(--sq-text-muted); font-size: .89rem; }
+@media (max-width: 1120px) {
+  .sisteminha-ds3 .sisteminha-nav-rolagem {
+    display: flex; gap: .2rem; overflow-x: auto; scroll-snap-type: x proximity;
+  }
+  .sisteminha-ds3 .sisteminha-nav-rolagem a { flex: 0 0 8.25rem; scroll-snap-align: start; }
+}
+@media (max-width: 900px) {
+  .sisteminha-panorama-editorial { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .sisteminha-panorama-texto { grid-column: 1 / -1; }
+}
+@media (max-width: 767px) {
+  .pagina-home .home-abertura-grade { min-height: 26rem; padding-block: 2.5rem; }
+  .pagina-home .home-abertura h1 { max-width: 19ch; font-size: clamp(2.15rem,8.2vw,3.3rem); }
+  .pagina-home .home-abertura-imagem img { object-position: 58% 48%; }
+  .pagina-home .home-abertura-imagem::after {
+    background: linear-gradient(90deg,rgb(8 31 17 / .94),rgb(8 31 17 / .63));
+  }
+  .sisteminha-ds3 .sisteminha-abertura { min-height: 24rem; }
+  .sisteminha-ds3 .sisteminha-nav-local { margin-inline: 0; }
+  .sisteminha-panorama-editorial { grid-template-columns: minmax(0,1fr); }
+  .sisteminha-panorama-texto { grid-column: auto; }
+  .sisteminha-panorama-imagem img { aspect-ratio: 16 / 10; }
+  .sisteminha-ds3 .sisteminha-intro { padding: 1.35rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pagina-home :is(.home-atalho,.guia-cartao,.home-artigo-cartao) { transition: none; transform: none !important; }
+}
