@@ -184,12 +184,19 @@ export default function PlanejadorVisualCanteiro() {
       return false;
     }
     try {
+      // Evita sobrescrever mudanças feitas em outra aba do navegador.
+      if (window.localStorage.getItem(chaveCanteiros) !== null) {
+        const armazenado = lerColecaoCanteiros();
+        if (JSON.stringify(armazenado.itens) !== JSON.stringify(colecao.itens)) {
+          throw new Error("Os canteiros mudaram em outra aba. Recarregue antes de salvar para evitar perda de dados.");
+        }
+      }
       const salvoAgora = gravarColecaoCanteiros(proximo);
       setColecao(salvoAgora);
       setSalvo(true);
       return salvoAgora;
-    } catch {
-      avisar("Não foi possível guardar os canteiros neste navegador.", true);
+    } catch (falha) {
+      avisar(falha.message || "Não foi possível guardar os canteiros neste navegador.", true);
       return false;
     }
   }
