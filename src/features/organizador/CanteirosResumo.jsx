@@ -19,7 +19,7 @@ export default function CanteirosResumo({ colecao, planos, aviso }) {
         <a className="botao botao-contorno" href={linkEditor}>Editar desenhos</a>
       </div>
       {aviso && <p className="aviso" role="alert">{aviso}</p>}
-      <ul className="canteiros-resumo-grade">
+      {!aviso && <ul className="canteiros-resumo-grade">
         {situacoes.map(item => (
           <li key={item.id} className="canteiros-resumo-item">
             <div className="canteiros-resumo-cabecalho">
@@ -42,7 +42,7 @@ export default function CanteirosResumo({ colecao, planos, aviso }) {
             </p>}
           </li>
         ))}
-      </ul>
+      </ul>}
       <p className="nota">Para vincular um cultivo, escolha o canteiro salvo em “Planejar um cultivo”. A agenda usa IDs estáveis, mas ainda não move as plantas automaticamente no desenho.</p>
     </section>
   );
