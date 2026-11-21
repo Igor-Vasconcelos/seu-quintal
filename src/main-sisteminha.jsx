@@ -53,6 +53,23 @@ const modulos = {
   },
 };
 
+// Navegação local em URLs com hash; rotas HTML por módulo serão a próxima evolução de SEO.
+const nomesDasAbas = [
+  ["ciclo", "Visão geral"],
+  ["tanque", "Tanque de peixes"],
+  ["galinheiro", "Galinheiro"],
+  ["horta", "Horta"],
+  ["compostagem", "Compostagem"],
+  ["minhocario", "Minhocário"],
+];
+
+function abaPelaHash() {
+  const hash = window.location.hash.slice(1);
+  if (Object.hasOwn(modulos, hash)) return hash;
+  if (["calculadora-galinheiro", "consumo-galinheiro", "cuidados-galinheiro"].includes(hash)) return "galinheiro";
+  return "ciclo";
+}
+
 const caminhos = [
   {
     id: "agua",
@@ -125,19 +142,56 @@ function DetalheModulo({ id, modulo }) {
 
 function Sisteminha() {
   const [botaoCreditos, definirBotaoCreditos] = useState(null);
+  const [abaAtiva, definirAbaAtiva] = useState(abaPelaHash);
 
   useEffect(() => {
-    const destino = document.getElementById(window.location.hash.slice(1));
-    destino?.focus({ preventScroll: true });
-    destino?.scrollIntoView();
+    const atualizarPeloHistorico = () => {
+      const hash = window.location.hash.slice(1);
+      // Âncoras de fontes, topo e controles internos não alteram o módulo ativo.
+      if (hash === "ciclo" || Object.hasOwn(modulos, hash) ||
+        ["calculadora-galinheiro", "consumo-galinheiro", "cuidados-galinheiro"].includes(hash)) {
+        definirAbaAtiva(abaPelaHash());
+      }
+    };
+    window.addEventListener("popstate", atualizarPeloHistorico);
+    window.addEventListener("hashchange", atualizarPeloHistorico);
+    return () => {
+      window.removeEventListener("popstate", atualizarPeloHistorico);
+      window.removeEventListener("hashchange", atualizarPeloHistorico);
+    };
   }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash !== "ciclo" && !Object.hasOwn(modulos, hash)) return;
+    const destino = document.getElementById(abaAtiva === "ciclo" ? "ciclo" : "modulos");
+    destino?.focus({ preventScroll: true });
+    destino?.scrollIntoView({ block: "start", behavior: "instant" });
+  }, [abaAtiva]);
+
+  function navegarPeloConteudo(evento) {
+    if (evento.defaultPrevented || evento.button !== 0 ||
+      evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey) return;
+    const link = evento.target.closest('a[href^="#"]');
+    const hash = link?.getAttribute("href")?.slice(1);
+    const aba = hash === "modulos" ? "tanque" : hash;
+    if (aba !== "ciclo" && !Object.hasOwn(modulos, aba)) return;
+    evento.preventDefault();
+    definirAbaAtiva(aba);
+    if (window.location.hash !== "#" + aba) {
+      window.history.pushState(null, "", "#" + aba);
+    }
+    // Para um clique repetido na aba ativa, a rolagem continua funcionando.
+    const destino = document.getElementById(aba === "ciclo" ? "ciclo" : "modulos");
+    if (destino && aba === abaAtiva) destino.scrollIntoView({ block: "start" });
+  }
 
   return (
     <div className="pagina pagina-sisteminha" id="inicio">
       <a className="pular" href="#conteudo">Pular para o conteúdo</a>
       <Cabecalho sisteminha />
 
-      <main id="conteudo" tabIndex={-1}>
+      <main id="conteudo" tabIndex={-1} onClick={navegarPeloConteudo}>
         <section className="sisteminha-abertura" aria-labelledby="titulo-sisteminha">
           <div className="sisteminha-intro">
             <h1 id="titulo-sisteminha">Sisteminha Embrapa</h1>
@@ -156,7 +210,18 @@ function Sisteminha() {
           </div>
         </section>
 
-        <section className="sisteminha-secao" id="ciclo" aria-labelledby="titulo-ciclo" tabIndex={-1}>
+        <nav className="sisteminha-nav-local" aria-label="Tópicos do Sisteminha">
+          <div className="sisteminha-nav-rolagem">
+            {nomesDasAbas.map(([id, titulo]) => (
+              <a key={id} href={`#${id}`} aria-current={abaAtiva === id ? "page" : undefined}>
+                {titulo}
+              </a>
+            ))}
+            <a href="#fontes">Fontes oficiais</a>
+          </div>
+        </nav>
+
+        <section className="sisteminha-secao" id="ciclo" hidden={abaAtiva !== "ciclo"} aria-labelledby="titulo-ciclo" tabIndex={-1}>
           <h2 id="titulo-ciclo">Como funciona o ciclo</h2>
           <p className="sisteminha-orientacao">Siga a água do tanque até a horta ou veja como resíduos de diferentes módulos podem voltar aos canteiros na forma de adubo.</p>
           <div className="caminhos">
@@ -174,11 +239,11 @@ function Sisteminha() {
           </ul>
         </section>
 
-        <section className="sisteminha-secao" id="modulos" aria-labelledby="titulo-modulos" tabIndex={-1}>
-          <h2 id="titulo-modulos">Conheça os módulos</h2>
+        <section className="sisteminha-secao" id="modulos" aria-labelledby="titulo-modulos" tabIndex={-1} hidden={abaAtiva === "ciclo"}>
+          <h2 id="titulo-modulos">{modulos[abaAtiva]?.titulo ?? "Conheça os módulos"}</h2>
           <p className="sisteminha-orientacao">Estes cinco componentes mostram uma das formas de integrar o Sisteminha. A escolha dos módulos pode variar conforme o espaço, os recursos e a rotina de quem vai cuidar.</p>
           <div className="sisteminha-detalhes">
-            {Object.entries(modulos).map(([id, modulo]) => id === "galinheiro" ? (
+            {Object.entries(modulos).filter(([id]) => id === abaAtiva).map(([id, modulo]) => id === "galinheiro" ? (
               <Galinheiro key={id} modulo={modulo} />
             ) : (
               <DetalheModulo key={id} id={id} modulo={modulo} />
@@ -186,7 +251,7 @@ function Sisteminha() {
           </div>
         </section>
 
-        <aside className="sisteminha-fontes" aria-labelledby="titulo-fontes">
+        <aside className="sisteminha-fontes" id="fontes" aria-labelledby="titulo-fontes">
           <div>
             <h2 id="titulo-fontes">Materiais da Embrapa</h2>
             <p>Consulte os materiais oficiais para conhecer os demais módulos e ver orientações de montagem e manejo.</p>
