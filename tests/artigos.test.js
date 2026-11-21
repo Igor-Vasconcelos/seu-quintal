@@ -16,7 +16,7 @@ test("o Markdown gera HTML estático acessível e evita scripts injetados", () =
   const { html, headings } = renderMarkdown("## Primeira etapa\n\nTexto **forte**.\n\n- Item\n\n## Segunda etapa\n\n<script>alert(1)</script>", "../../");
   assert.match(html, /<h2 id="primeira-etapa">/);
   assert.match(html, /<strong>forte<\/strong>/);
-  assert.match(html, /<ul><li>Item<\/li>/s);
+  assert.match(html, /<ul>\s*<li>Item<\/li>/s);
   assert.match(html, /&lt;script&gt;/);
   assert.doesNotMatch(html, /<script>alert/);
   assert.equal(headings.length, 2);
