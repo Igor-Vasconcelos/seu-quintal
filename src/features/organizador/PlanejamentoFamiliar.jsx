@@ -7,7 +7,7 @@ import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import "../../styles/plano-familiar.css";
 
 const grupos = [
-  { titulo: "Mais procuradas para a mesa", culturas: ["Alface de verão", "Cenoura de verão", "Tomate de mesa"] },
+  { titulo: "Sugestões para o dia a dia", culturas: ["Alface de verão", "Cenoura de verão", "Tomate de mesa"] },
   { titulo: "Outras culturas disponíveis", culturas: ["Rúcula", "Rabanete", "Beterraba", "Couve", "Abobrinha", "Alface de inverno", "Cenoura de inverno"] },
 ];
 
@@ -53,7 +53,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
     definirSalvando(true);
     definirRetorno("");
     try {
-      const resultado = await aoAplicar(sugestao.sugestoes.map(({ plano }) => plano));
+      const resultado = await aoAplicar(sugestao.sugestoes.map(({ plano }) => plano), sugestao.areaTotal);
       if (resultado) {
         definirRetorno("Cultivos adicionados ao plano! Veja as tarefas e primeiras colheitas na agenda abaixo.");
         definirFalha(false);
@@ -188,7 +188,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
                 onClick={salvarPlano}>{salvando ? "Adicionando…" : "Adicionar sugestões à minha agenda"}</button>
               <a className="botao botao-contorno" href="../canteiros/">Desenhar um canteiro</a>
             </div>
-            <p className="nota">Os novos cultivos serão salvos na agenda deste navegador, sem apagar os existentes. Os canteiros recebem nomes e reservas estimadas; a integração automática com o desenho será uma próxima etapa.</p>
+            <p className="nota">Os novos cultivos serão salvos na agenda deste navegador, sem apagar os existentes. Se a área total da horta ainda não tiver sido definida, ela será preenchida com a soma dos canteiros. Os canteiros recebem nomes e reservas estimadas; a integração automática com o desenho será uma próxima etapa.</p>
           </>}
           {retorno && <p className={falha ? "erro" : "organizador-status"} role={falha ? "alert" : "status"}>{retorno}</p>}
         </div>
