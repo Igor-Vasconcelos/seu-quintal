@@ -7,6 +7,8 @@ import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Icone from "./components/Icone.jsx";
 import Rodape from "./components/Rodape.jsx";
 import Galinheiro from "./features/galinheiro/Galinheiro.jsx";
+import FluxoSisteminha from "./features/sisteminha/FluxoSisteminha.jsx";
+import { fichasSisteminha, etapasImplantacao, materiaisOficiais } from "./features/sisteminha/dadosSisteminha.js";
 import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/editorial.css";
@@ -42,7 +44,7 @@ const modulos = {
     imagem: "horta.webp",
     descricaoImagem: "Canteiros com hortaliças cultivadas no quintal.",
     conexao: ["compostagem", "Ver compostagem"],
-    resumo: "Aproveita água e adubo para produzir alimentos.",
+    resumo: "Integra hortaliças e, quando há espaço, frutíferas ao aproveitamento de água e composto.",
     explicacao: "Os canteiros podem receber água do tanque para irrigação e usar composto ou húmus no solo. Depois da colheita, restos vegetais adequados podem voltar à composteira, dando continuidade ao aproveitamento dos resíduos.",
   },
   galinheiro: {
@@ -53,90 +55,137 @@ const modulos = {
   },
 };
 
-// Navegação local em URLs com hash; rotas HTML por módulo serão a próxima evolução de SEO.
+// Navegação por hash: preserva links existentes. URLs próprias para cada módulo
+// serão uma evolução de SEO, com páginas HTML indexáveis.
 const nomesDasAbas = [
   ["ciclo", "Visão geral"],
   ["tanque", "Tanque de peixes"],
   ["galinheiro", "Galinheiro"],
-  ["horta", "Horta"],
+  ["horta", "Horta e pomar"],
   ["compostagem", "Compostagem"],
   ["minhocario", "Minhocário"],
+  ["integracao", "Como integrar"],
+  ["materiais", "Materiais e fontes"],
 ];
+const idsDasAbas = new Set(nomesDasAbas.map(([id]) => id));
 
 function abaPelaHash() {
   const hash = window.location.hash.slice(1);
-  if (Object.hasOwn(modulos, hash)) return hash;
+  if (hash === "fontes") return "materiais";
+  if (idsDasAbas.has(hash)) return hash;
   if (["calculadora-galinheiro", "consumo-galinheiro", "cuidados-galinheiro"].includes(hash)) return "galinheiro";
   return "ciclo";
 }
 
-const caminhos = [
-  {
-    id: "agua",
-    titulo: "Caminho da água",
-    etapas: [["tanque", "Tanque de peixes"], ["horta", "Irrigação da horta"]],
-  },
-  {
-    id: "residuos",
-    titulo: "Caminho dos resíduos",
-    etapas: [
-      ["tanque", "Tanque de peixes"],
-      ["galinheiro", "Galinheiro"],
-      ["compostagem", "Compostagem"],
-      ["minhocario", "Minhocário"],
-      ["horta", "Adubo para a horta"],
-    ],
-  },
-];
-
-function Caminho({ id, titulo, etapas }) {
-  return (
-    <div className={`caminho caminho-${id}`}>
-      <h3>{titulo}</h3>
-      <ol className="caminho-etapas">
-        {etapas.map(([destino, rotulo], indice) => (
-          <li key={destino}>
-            {indice > 0 && (
-              <span className="caminho-conector" aria-hidden="true">
-                {id === "residuos" && indice === 1 ? "+" : <Icone nome="seta" />}
-              </span>
-            )}
-            <a href={`#${destino}`}>{rotulo}</a>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
 function DetalheModulo({ id, modulo }) {
+  const ficha = fichasSisteminha[id];
   const [destino, rotulo] = modulo.conexao;
 
   return (
     <article className="sisteminha-detalhe sisteminha-modulo" id={id}
-      tabIndex={-1} aria-labelledby={`titulo-${id}`}>
-      <img className="sisteminha-modulo-imagem" src={`./imagens/${modulo.imagem}`}
+      tabIndex={-1} aria-labelledby={"titulo-" + id}>
+      <img className="sisteminha-modulo-imagem" src={"./imagens/" + modulo.imagem}
         alt={modulo.descricaoImagem} loading="lazy" />
 
       <div className="sisteminha-modulo-conteudo">
         <header>
-          <h3 id={`titulo-${id}`}>{modulo.titulo}</h3>
+          <h3 id={"titulo-" + id}>{modulo.titulo}</h3>
           <p className="sisteminha-modulo-resumo">{modulo.resumo}</p>
         </header>
         <p className="sisteminha-modulo-explicacao">{modulo.explicacao}</p>
 
+        <div className="sisteminha-ficha">
+          <section>
+            <h4>Para que serve?</h4>
+            <p>{ficha.objetivo}</p>
+          </section>
+          <section>
+            <h4>O que é necessário?</h4>
+            <ul>{ficha.materiais.map(texto => <li key={texto}>{texto}</li>)}</ul>
+          </section>
+          <section>
+            <h4>Manejo e cuidados</h4>
+            <p>{ficha.manejo}</p>
+            <p>{ficha.cuidados}</p>
+          </section>
+          <section>
+            <h4>Como se conecta?</h4>
+            <p>{ficha.ligacoes}</p>
+          </section>
+        </div>
+
         <div className="sisteminha-modulo-acoes">
-          <a className="botao botao-contorno" href={`#${destino}`}>
-            {rotulo} <Icone nome="seta" />
-          </a>
-          {id === "horta" && <a className="sisteminha-voltar" href="./horta/">Abrir guia de horta</a>}
-          {id === "compostagem" && <a className="sisteminha-voltar" href="./guias/compostagem/">Ver o que pode ser compostado</a>}
+          {ficha.links.map(link => (
+            <a key={link.href} className="botao botao-contorno" href={link.href}
+              {...(link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+              {link.titulo} <Icone nome="seta"/>
+            </a>
+          ))}
+          <a className="sisteminha-voltar" href={"#" + destino}>{rotulo} <Icone nome="seta"/></a>
           <a className="sisteminha-voltar sisteminha-link-ciclo" href="#ciclo">
-            <Icone nome="seta" /> Voltar ao ciclo
+            <Icone nome="seta"/> Voltar ao ciclo
           </a>
         </div>
       </div>
     </article>
+  );
+}
+
+function IntegracaoSisteminha() {
+  return (
+    <section className="sisteminha-secao" id="integracao" aria-labelledby="titulo-integracao" tabIndex={-1}>
+      <div className="sisteminha-secao-intro">
+        <p className="sisteminha-kicker">DA IDEIA AO QUINTAL</p>
+        <h2 id="titulo-integracao">Como integrar os módulos</h2>
+        <p>Não é necessário instalar tudo ao mesmo tempo. O objetivo é aproveitar recursos e produzir alimentos,
+          respeitando o tamanho do espaço, a rotina e os cuidados com os animais.</p>
+      </div>
+      <ol className="sisteminha-etapas-integracao">
+        {etapasImplantacao.map((etapa, indice) => (
+          <li key={etapa.titulo}>
+            <span className="sisteminha-numero">{String(indice + 1).padStart(2, "0")}</span>
+            <div><h3>{etapa.titulo}</h3><p>{etapa.explicacao}</p></div>
+          </li>
+        ))}
+      </ol>
+      <div className="sisteminha-integracao-recado">
+        <h3>O que não fazer</h3>
+        <p>Não trate a água do tanque como água potável, não aplique dejetos animais frescos na horta e
+          não dimensione tanques ou instalações somente por fotografias. Procure a orientação técnica da Embrapa
+          e das instituições locais antes de construir.</p>
+      </div>
+      <div className="sisteminha-acoes-externas">
+        <a className="botao" href="./meu-quintal/">Planejar o espaço no Meu Quintal</a>
+        <a className="botao botao-contorno" href="#materiais">Consultar materiais oficiais</a>
+      </div>
+    </section>
+  );
+}
+
+function MateriaisSisteminha() {
+  return (
+    <section className="sisteminha-secao" id="materiais" aria-labelledby="titulo-materiais" tabIndex={-1}>
+      <div className="sisteminha-secao-intro">
+        <p className="sisteminha-kicker">BIBLIOTECA TÉCNICA</p>
+        <h2 id="titulo-materiais">Materiais e fontes</h2>
+        <p>Use a página como introdução. A implantação e o manejo exigem consultar as publicações técnicas,
+          especialmente sobre qualidade da água, tratamento de resíduos e bem-estar animal.</p>
+      </div>
+      <ul className="sisteminha-materiais-grade">
+        {materiaisOficiais.map(item => <li key={item.url}>
+          <h3>{item.titulo}</h3>
+          <p>{item.detalhe}</p>
+          <a href={item.url} target="_blank" rel="noopener noreferrer">
+            Acessar na Embrapa <Icone nome="seta" />
+          </a>
+        </li>)}
+      </ul>
+      <div className="sisteminha-integracao-recado">
+        <h3>Sobre o conteúdo do Seu Quintal</h3>
+        <p>Esta é uma explicação independente, inspirada em publicações da Embrapa; não é um portal oficial.
+          As imagens educativas ilustrativas foram geradas por IA e não representam uma instalação real validada.</p>
+      </div>
+    </section>
   );
 }
 
@@ -148,7 +197,7 @@ function Sisteminha() {
     const atualizarPeloHistorico = () => {
       const hash = window.location.hash.slice(1);
       // Âncoras de fontes, topo e controles internos não alteram o módulo ativo.
-      if (hash === "ciclo" || Object.hasOwn(modulos, hash) ||
+      if (idsDasAbas.has(hash) || hash === "fontes" ||
         ["calculadora-galinheiro", "consumo-galinheiro", "cuidados-galinheiro"].includes(hash)) {
         definirAbaAtiva(abaPelaHash());
       }
@@ -163,8 +212,9 @@ function Sisteminha() {
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
-    if (hash !== "ciclo" && !Object.hasOwn(modulos, hash)) return;
-    const destino = document.getElementById(abaAtiva === "ciclo" ? "ciclo" : "modulos");
+    if (!idsDasAbas.has(hash) && hash !== "fontes") return;
+    const alvo = Object.hasOwn(modulos, abaAtiva) ? "modulos" : abaAtiva;
+    const destino = document.getElementById(alvo);
     destino?.focus({ preventScroll: true });
     destino?.scrollIntoView({ block: "start", behavior: "instant" });
   }, [abaAtiva]);
@@ -174,15 +224,15 @@ function Sisteminha() {
       evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey) return;
     const link = evento.target.closest('a[href^="#"]');
     const hash = link?.getAttribute("href")?.slice(1);
-    const aba = hash === "modulos" ? "tanque" : hash;
-    if (aba !== "ciclo" && !Object.hasOwn(modulos, aba)) return;
+    const aba = hash === "modulos" ? "tanque" : hash === "fontes" ? "materiais" : hash;
+    if (!idsDasAbas.has(aba)) return;
     evento.preventDefault();
     definirAbaAtiva(aba);
     if (window.location.hash !== "#" + aba) {
       window.history.pushState(null, "", "#" + aba);
     }
     // Para um clique repetido na aba ativa, a rolagem continua funcionando.
-    const destino = document.getElementById(aba === "ciclo" ? "ciclo" : "modulos");
+    const destino = document.getElementById(Object.hasOwn(modulos, aba) ? "modulos" : aba);
     if (destino && aba === abaAtiva) destino.scrollIntoView({ block: "start" });
   }
 
@@ -223,10 +273,9 @@ function Sisteminha() {
 
         <section className="sisteminha-secao" id="ciclo" hidden={abaAtiva !== "ciclo"} aria-labelledby="titulo-ciclo" tabIndex={-1}>
           <h2 id="titulo-ciclo">Como funciona o ciclo</h2>
-          <p className="sisteminha-orientacao">Siga a água do tanque até a horta ou veja como resíduos de diferentes módulos podem voltar aos canteiros na forma de adubo.</p>
-          <div className="caminhos">
-            {caminhos.map((caminho) => <Caminho key={caminho.id} {...caminho} />)}
-          </div>
+          <p className="sisteminha-orientacao">Explore os caminhos da água, da matéria orgânica e dos alimentos.
+            Toque em um componente para conhecer seus cuidados e conexões.</p>
+          <FluxoSisteminha/>
           <ul className="sisteminha-cartoes">
             {Object.entries(modulos).map(([id, modulo]) => (
               <li key={id}>
@@ -239,9 +288,11 @@ function Sisteminha() {
           </ul>
         </section>
 
-        <section className="sisteminha-secao" id="modulos" aria-labelledby="titulo-modulos" tabIndex={-1} hidden={abaAtiva === "ciclo"}>
+        <section className="sisteminha-secao" id="modulos" aria-labelledby="titulo-modulos" tabIndex={-1}
+          hidden={!Object.hasOwn(modulos, abaAtiva)}>
           <h2 id="titulo-modulos">{modulos[abaAtiva]?.titulo ?? "Conheça os módulos"}</h2>
-          <p className="sisteminha-orientacao">Estes cinco componentes mostram uma das formas de integrar o Sisteminha. A escolha dos módulos pode variar conforme o espaço, os recursos e a rotina de quem vai cuidar.</p>
+          <p className="sisteminha-orientacao">Estes cinco componentes ilustram uma configuração integrada;
+            o Sisteminha inclui outros módulos que podem ser combinados de acordo com recursos e manejo.</p>
           <div className="sisteminha-detalhes">
             {Object.entries(modulos).filter(([id]) => id === abaAtiva).map(([id, modulo]) => id === "galinheiro" ? (
               <Galinheiro key={id} modulo={modulo} />
@@ -251,16 +302,12 @@ function Sisteminha() {
           </div>
         </section>
 
-        <aside className="sisteminha-fontes" id="fontes" aria-labelledby="titulo-fontes">
-          <div>
-            <h2 id="titulo-fontes">Materiais da Embrapa</h2>
-            <p>Consulte os materiais oficiais para conhecer os demais módulos e ver orientações de montagem e manejo.</p>
-          </div>
-          <div className="sisteminha-fontes-links">
-            <a className="botao" href="https://www.embrapa.br/web/meio-norte/sisteminha">Portal do Sisteminha</a>
-            <a className="sisteminha-voltar" href="https://www.infoteca.cnptia.embrapa.br/handle/doc/1111791">Manual do tanque de peixes</a>
-          </div>
-        </aside>
+        {abaAtiva === "integracao" && <IntegracaoSisteminha/>}
+        {abaAtiva === "materiais" && <MateriaisSisteminha/>}
+        <p className="sisteminha-rodape-tecnico">
+          Conteúdo educativo independente. Os módulos e materiais apresentados devem ser adaptados
+          às condições locais com orientação técnica.
+        </p>
       </main>
 
       <Rodape sisteminha aoVerCreditos={(evento) => definirBotaoCreditos(evento.currentTarget)} />
