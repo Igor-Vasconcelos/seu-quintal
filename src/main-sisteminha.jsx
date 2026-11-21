@@ -145,7 +145,14 @@ function Sisteminha() {
   const [abaAtiva, definirAbaAtiva] = useState(abaPelaHash);
 
   useEffect(() => {
-    const atualizarPeloHistorico = () => definirAbaAtiva(abaPelaHash());
+    const atualizarPeloHistorico = () => {
+      const hash = window.location.hash.slice(1);
+      // Âncoras de fontes, topo e controles internos não alteram o módulo ativo.
+      if (hash === "ciclo" || Object.hasOwn(modulos, hash) ||
+        ["calculadora-galinheiro", "consumo-galinheiro", "cuidados-galinheiro"].includes(hash)) {
+        definirAbaAtiva(abaPelaHash());
+      }
+    };
     window.addEventListener("popstate", atualizarPeloHistorico);
     window.addEventListener("hashchange", atualizarPeloHistorico);
     return () => {
@@ -155,7 +162,8 @@ function Sisteminha() {
   }, []);
 
   useEffect(() => {
-    if (!window.location.hash) return;
+    const hash = window.location.hash.slice(1);
+    if (hash !== "ciclo" && !Object.hasOwn(modulos, hash)) return;
     const destino = document.getElementById(abaAtiva === "ciclo" ? "ciclo" : "modulos");
     destino?.focus({ preventScroll: true });
     destino?.scrollIntoView({ block: "start", behavior: "instant" });
