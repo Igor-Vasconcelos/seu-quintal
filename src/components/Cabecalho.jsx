@@ -37,6 +37,7 @@ export default function Cabecalho({ sisteminha = false, raiz = "./", pagina }) {
             <a href={inicio} aria-current={naHome ? "page" : undefined}>Início</a>
             <a href={`${raiz}horta/calendario-de-plantio/`}
               aria-current={pagina === "calendario" ? "page" : undefined}>Calendário</a>
+            <a href={`${raiz}artigos/`} aria-current={pagina === "artigos" ? "page" : undefined}>Artigos</a>
             <a href={`${raiz}guias/`} aria-current={pagina === "guias" ? "page" : undefined}
               data-secao-atual={nosGuias || undefined}>Guias</a>
             <a href={sisteminha ? "#inicio" : `${raiz}sisteminha.html`}

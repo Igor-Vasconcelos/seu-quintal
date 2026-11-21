@@ -96,6 +96,7 @@ export default function App() {
             <a className="home-link" href="./guias/">Ver todos os guias <Icone nome="seta" /></a>
           </div>
           <CartoesGuias itens={guias.slice(0, 3)} />
+          <p className="nota">Quer aprender mais? <a href="./artigos/">Leia nossos artigos sobre horta, animais e planejamento.</a></p>
           <div className="home-temas" id="categorias" tabIndex={-1}>
             <h3>Explore por assunto</h3>
             <ul className="home-categorias">
