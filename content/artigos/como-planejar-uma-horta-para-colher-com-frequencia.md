@@ -17,6 +17,8 @@ Anote a largura e o comprimento de cada canteiro, considerando caminhos de acess
 
 Se você ainda não tem canteiros, consulte nosso [guia de horta em pequenos espaços](/horta/).
 
+Com as medidas em mãos, experimente o [planejador visual de canteiros](/horta/canteiros/) para testar a posição das culturas conforme os espaçamentos de referência, sem precisar criar uma conta.
+
 ## 2. Escolha o que sua família costuma consumir
 
 Anote quais verduras e temperos entram nas refeições da casa e com que frequência são usados. Não é preciso começar com muitas espécies: escolher poucas culturas facilita acompanhar as primeiras safras.
