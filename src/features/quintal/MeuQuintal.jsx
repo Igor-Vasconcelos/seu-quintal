@@ -41,23 +41,36 @@ export default function MeuQuintal() {
       <Cabecalho raiz={raiz} pagina="meu-quintal" />
       <main className="quintal-pagina" id="conteudo" tabIndex={-1}>
         <header className="quintal-titulo">
-          <div>
+          <div className="quintal-titulo-texto">
+            <span className="quintal-etiqueta"><Icone nome="muda"/> MEU ESPAÇO DE PLANEJAMENTO</span>
             <h1>Meu Quintal</h1>
-            <p>Planeje seu espaço, organize o plantio e registre as colheitas.</p>
-            <p className="quintal-salvamento">Seus dados ficam salvos neste navegador.</p>
+            <p>Planeje seu espaço, organize o plantio e registre suas colheitas.</p>
+            <p className="quintal-salvamento"><Icone nome="historico"/>
+              Dados guardados neste navegador. Faça backup para proteger seus projetos.</p>
           </div>
-          <a className="home-link" href={raiz}><Icone nome="seta" /> Voltar ao início</a>
+          <div className="quintal-titulo-acoes">
+            <a className="botao botao-contorno" href="#quintal-backup">
+              <Icone nome="historico"/> Backup e recuperação
+            </a>
+            <a className="home-link" href={raiz}><Icone nome="seta"/> Voltar ao início</a>
+          </div>
         </header>
         <nav className="quintal-secoes" aria-label="Ferramentas do Meu Quintal">
           {Object.entries(secoes).map(([id, { nome, icone }]) => (
             <a key={id} href={`#${id}`} aria-controls="quintal-ferramenta"
               aria-current={secao === id ? "location" : undefined}>
-              <Icone nome={icone} />{nome}
+              <span className="quintal-navegacao-icone"><Icone nome={icone}/></span>
+              <span>{nome}</span>
             </a>
           ))}
         </nav>
-        <BackupDados />
+        <p className="visualmente-oculto" role="status" aria-live="polite">
+          Seção selecionada: {secoes[secao].nome}
+        </p>
         <div className="quintal-ferramenta" id="quintal-ferramenta">
+          <div className="quintal-ferramenta-topo" aria-hidden="true">
+            <span>ÁREA DE TRABALHO</span><strong>{secoes[secao].nome}</strong>
+          </div>
           <LimiteDaFerramenta key={secao}>
             <Suspense fallback={<p role="status">Carregando ferramenta…</p>}>
               {secao === "terreno" && <PlanejadorQuintal />}
@@ -72,6 +85,7 @@ export default function MeuQuintal() {
             </Suspense>
           </LimiteDaFerramenta>
         </div>
+        <BackupDados />
       </main>
       <Rodape raiz={raiz} pagina="meu-quintal" />
     </div>
