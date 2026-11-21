@@ -69,7 +69,7 @@ export default function BackupDados() {
   }
 
   return (
-    <details className="quintal-backup">
+    <details className="quintal-backup" id="quintal-backup">
       <summary>Backup e recuperação dos meus dados</summary>
       <div className="quintal-backup-conteudo">
         <p>Salve uma cópia dos terrenos, canteiros, desenhos, histórico e planos da horta em um arquivo JSON.

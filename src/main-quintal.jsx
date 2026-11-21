@@ -9,6 +9,7 @@ import "./styles/editorial.css";
 import "./styles/guias-cultivo.css";
 import "./styles/planejador.css";
 import "./styles/meu-quintal.css";
+import "./styles/workspace-v3.css";
 
 createRoot(document.getElementById("quintal-raiz")).render(
   <MeuQuintal />,
