@@ -53,11 +53,44 @@ test("fichas de cada módulo possuem informações e ligações verificáveis", 
 });
 
 test("mantém calculadora de galinhas e imagens já presentes", () => {
-  assert.match(main, /<Galinheiro key=\{id\} modulo=\{modulo\}/);
+  assert.match(main, /<Galinheiro modulo=\{modulo\}/);
   assert.match(main, /src=\{"\.\/imagens\/" \+ modulo\.imagem\}/);
   assert.match(main, /imagens\/sisteminha\/panorama.webp/);
   assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/tanque.webp")));
   assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/minhocario.webp")));
   assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/panorama.webp")));
   assert.match(main, /imagens dos módulos do Sisteminha são ilustrações geradas por IA/);
+});
+
+
+test("troca de tópicos usa transição suave, respeitando preferência de movimento reduzido", () => {
+  assert.doesNotMatch(main, /behavior: "instant"/);
+  assert.match(main, /behavior: movimento/);
+  assert.match(main, /window\.matchMedia\("\(prefers-reduced-motion: reduce\)"\)/);
+  assert.match(main, /window\.requestAnimationFrame/);
+  assert.match(main, /aria-live="polite"/);
+  assert.match(css, /@keyframes sq-sisteminha-entrada/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+  assert.match(css, /animation: none/);
+  assert.match(main, /history\.pushState/);
+});
+
+test("cinco módulos possuem imagens e esquemas educativos escaláveis", () => {
+  const svg = arquivo("src/features/sisteminha/EsquemaModulo.jsx");
+  const extra = arquivo("src/features/sisteminha/SaibaMaisModulo.jsx");
+  for (const id of ["tanque", "horta", "galinheiro", "compostagem", "minhocario"]) {
+    assert.ok(svg.includes('modulo === "' + id + '"'));
+    const dados = fichasSisteminha[id];
+    assert.equal(dados.etapas.length, 3);
+    assert.equal(dados.sinais.length, 3);
+    assert.equal(dados.perguntas.length, 2);
+    assert.ok(dados.perguntas.every(p => p.pergunta && p.resposta));
+  }
+  assert.match(svg, /<svg viewBox="0 0 760 285"/);
+  assert.match(svg, /aria-labelledby/);
+  assert.match(extra, /<details key=\{item\.pergunta\}>/);
+  assert.match(main, /<EsquemaModulo modulo=\{id\}/);
+  assert.match(main, /<SaibaMaisModulo modulo=\{id\}/);
+  assert.match(css, /sisteminha-modulo-midia/);
+  assert.match(css, /sisteminha-foto figcaption/);
 });
