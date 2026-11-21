@@ -1,43 +1,60 @@
 import { useId, useMemo, useRef, useState } from "react";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
+import IconeCultura from "./IconeCultura.jsx";
+import { nomeCurtoDaCultura } from "./culturasVisuais.js";
+import { MEDIDAS_INICIAIS, gravarRascunho, lerRascunho } from "./rascunhoCanteiro.js";
 import {
   LIMITE_PLANTAS, PASSO_MOVIMENTO_CM, adicionarAutomaticamente, areaOcupadaCm2,
-  capacidadeHomogenea, cm, dimensoesDaCultura, posicaoValida,
-  proximaPosicaoLivre, resumirCulturas,
+  capacidadeHomogenea, cm, dimensoesDaCultura, posicaoValida, proximaPosicaoLivre, resumirCulturas,
 } from "./canteiroGeometria.js";
 import "../../styles/visual-canteiro.css";
 
 const nomes = Object.keys(culturasOrganizador);
-const paleta = ["var(--sq-leaf)", "var(--sq-brand-700)", "var(--sq-accent)",
-  "var(--sq-info-text)", "var(--sq-warning-text)"];
-const metros = n => formatarMedida(n / 100);
+const metros = valorCm => formatarMedida(valorCm / 100);
+const numero = valor => formatarMedida(valor);
+const defaultTexto = valor => String(valor / 100).replace(".", ",");
 
 export default function PlanejadorVisualCanteiro() {
-  const [textoLargura, setTextoLargura] = useState("1");
-  const [textoComprimento, setTextoComprimento] = useState("2");
-  const [medidas, setMedidas] = useState({ largura: 100, comprimento: 200 });
+  const [restaurado] = useState(() => lerRascunho());
+  const [medidas, setMedidas] = useState(restaurado?.medidas ?? MEDIDAS_INICIAIS);
+  const [textoLargura, setTextoLargura] = useState(() =>
+    defaultTexto((restaurado?.medidas ?? MEDIDAS_INICIAIS).largura));
+  const [textoComprimento, setTextoComprimento] = useState(() =>
+    defaultTexto((restaurado?.medidas ?? MEDIDAS_INICIAIS).comprimento));
+  const [plantas, setPlantas] = useState(restaurado?.plantas ?? []);
+  const plantasRef = useRef(restaurado?.plantas ?? []);
   const [cultura, setCultura] = useState("Alface de verão");
   const [girarNovas, setGirarNovas] = useState(false);
-  const [plantas, setPlantas] = useState([]);
+  const [mostrarTodas, setMostrarTodas] = useState(false);
   const [selecionado, setSelecionado] = useState(null);
-  const [mensagem, setMensagem] = useState("");
+  const [salvo, setSalvo] = useState(Boolean(restaurado));
+  const [mensagem, setMensagem] = useState(restaurado ? "Seu último desenho salvo foi recuperado." : "");
   const [erro, setErro] = useState(false);
-  const sequencia = useRef(0);
-  const desenhando = useRef(null);
-  const svg = useRef(null);
-  const idMalha = useId().replaceAll(":", "");
+  const [baixando, setBaixando] = useState(false);
+  const sequencia = useRef(Date.now());
+  const arrastoId = useRef(null);
+  const svgRef = useRef(null);
+  const malhaId = useId().replaceAll(":", "");
   const ficha = culturasOrganizador[cultura];
-  const espacamento = dimensoesDaCultura(ficha, girarNovas);
+  const dimensoes = dimensoesDaCultura(ficha, girarNovas);
   const selecionada = plantas.find(item => item.id === selecionado);
   const resumo = useMemo(() => resumirCulturas(plantas), [plantas]);
-  const area = medidas.largura * medidas.comprimento;
-  const ocupacao = Math.min(100, areaOcupadaCm2(plantas) / area * 100);
-  const idNovo = () => "muda-" + (++sequencia.current);
+  const areaCm2 = medidas.largura * medidas.comprimento;
+  const ocupacao = Math.min(100, (areaOcupadaCm2(plantas) / areaCm2) * 100);
+  const capacidade = capacidadeHomogenea(medidas.largura, medidas.comprimento, dimensoes);
+  const idNovo = () => "planta-" + (++sequencia.current);
+  const visiveis = mostrarTodas ? nomes : nomes.slice(0, 6);
 
   function avisar(texto, invalido = false) {
     setErro(invalido);
     setMensagem(texto);
+  }
+
+  function atualizarPlantas(novas) {
+    plantasRef.current = novas;
+    setPlantas(novas);
+    setSalvo(false);
   }
 
   function aplicarMedidas(evento) {
@@ -45,99 +62,143 @@ export default function PlanejadorVisualCanteiro() {
     const largura = lerMedida(textoLargura);
     const comprimento = lerMedida(textoComprimento);
     if (largura === null || comprimento === null ||
-      largura < 0.3 || largura > 10 || comprimento < 0.3 || comprimento > 20) {
+      largura < 0.30 || largura > 10 || comprimento < 0.30 || comprimento > 20) {
       avisar("Informe largura de 0,30 a 10 m e comprimento de 0,30 a 20 m.", true);
       return;
     }
     const nova = { largura: cm(largura), comprimento: cm(comprimento) };
-    if (plantas.some(item => !posicaoValida(item, plantas, nova.largura, nova.comprimento, item.id))) {
-      avisar("Algumas plantas ficariam fora do canteiro. Remova ou mova essas posições antes de reduzir as medidas.", true);
+    if (plantasRef.current.some(item =>
+      !posicaoValida(item, plantasRef.current, nova.largura, nova.comprimento, item.id))) {
+      avisar("Algumas plantas ficariam fora do canteiro. Mova ou remova essas posições primeiro.", true);
       return;
     }
     setMedidas(nova);
-    avisar("Medidas atualizadas sem apagar as plantas.");
+    setSalvo(false);
+    avisar("Medidas atualizadas. As plantas foram preservadas.");
   }
 
-  function incluirUma() {
-    if (plantas.length >= LIMITE_PLANTAS) {
-      avisar("Limite de " + LIMITE_PLANTAS + " posições no desenho. Divida o cultivo em mais canteiros.", true);
+  function escolherCultura(nome) {
+    setCultura(nome);
+    setGirarNovas(false);
+    avisar(nomeCurtoDaCultura(nome) + " selecionada. Adicione uma planta ao canteiro.");
+  }
+
+  function adicionarUma() {
+    if (plantasRef.current.length >= LIMITE_PLANTAS) {
+      avisar("O desenho atingiu o limite de " + LIMITE_PLANTAS + " posições.", true);
       return;
     }
-    const livre = proximaPosicaoLivre(plantas, cultura, espacamento, medidas.largura, medidas.comprimento);
-    if (!livre) { avisar("Não há posição livre para essa cultura com o espaçamento escolhido.", true); return; }
-    const nova = { ...livre, id: idNovo() };
-    setPlantas([...plantas, nova]);
+    const vaga = proximaPosicaoLivre(plantasRef.current, cultura, dimensoes,
+      medidas.largura, medidas.comprimento);
+    if (!vaga) {
+      avisar("Não há espaço livre para esta cultura com o espaçamento selecionado.", true);
+      return;
+    }
+    const nova = { ...vaga, id: idNovo() };
+    atualizarPlantas([...plantasRef.current, nova]);
     setSelecionado(nova.id);
-    avisar(cultura + " adicionada ao desenho.");
+    avisar(nomeCurtoDaCultura(cultura) + " adicionada.");
   }
 
   function preencher() {
-    const novas = adicionarAutomaticamente(plantas, cultura, espacamento, medidas.largura,
-      medidas.comprimento, LIMITE_PLANTAS, idNovo);
-    if (!novas.length) { avisar("Não há posições adicionais disponíveis para essa cultura.", true); return; }
-    setPlantas([...plantas, ...novas]);
+    const novas = adicionarAutomaticamente(plantasRef.current, cultura, dimensoes,
+      medidas.largura, medidas.comprimento, LIMITE_PLANTAS, idNovo);
+    if (!novas.length) {
+      avisar("Nenhuma posição livre encontrada para esta cultura.", true);
+      return;
+    }
+    atualizarPlantas([...plantasRef.current, ...novas]);
     setSelecionado(novas[novas.length - 1].id);
-    avisar(novas.length + " posições adicionadas. Confira as condições reais de cultivo.");
+    avisar(novas.length + " posições adicionadas. Confira as recomendações locais de cultivo.");
   }
 
   function mover(id, x, y, silencioso = false) {
-    const planta = plantas.find(item => item.id === id);
+    const atuais = plantasRef.current;
+    const planta = atuais.find(item => item.id === id);
     if (!planta) return;
-    const nova = { ...planta, x: Math.round(x * 2) / 2, y: Math.round(y * 2) / 2 };
-    if (!posicaoValida(nova, plantas, medidas.largura, medidas.comprimento, id)) {
-      if (!silencioso) avisar("Não é possível mover: limite do canteiro ou sobreposição de espaçamentos.", true);
+    const candidata = { ...planta, x: Math.round(x * 2) / 2, y: Math.round(y * 2) / 2 };
+    if (!posicaoValida(candidata, atuais, medidas.largura, medidas.comprimento, id)) {
+      if (!silencioso) avisar("Movimento impedido: limite do canteiro ou espaçamento ocupado.", true);
       return;
     }
-    setPlantas(atuais => atuais.map(item => item.id === id ? nova : item));
-    if (!silencioso) avisar("Posição de " + planta.cultura + " atualizada.");
+    atualizarPlantas(atuais.map(item => item.id === id ? candidata : item));
+    if (!silencioso) avisar("Posição atualizada.");
   }
 
   function girarSelecionada() {
     if (!selecionada) return;
     const nova = { ...selecionada, largura: selecionada.comprimento,
       comprimento: selecionada.largura };
-    if (!posicaoValida(nova, plantas, medidas.largura, medidas.comprimento, nova.id)) {
-      avisar("Não é possível girar: falta espaço ou há outra planta muito próxima.", true);
+    if (!posicaoValida(nova, plantasRef.current, medidas.largura, medidas.comprimento, nova.id)) {
+      avisar("Não é possível girar aqui: o espaçamento encontraria uma borda ou outra planta.", true);
       return;
     }
-    setPlantas(atuais => atuais.map(item => item.id === nova.id ? nova : item));
-    avisar("Orientação alterada.");
+    atualizarPlantas(plantasRef.current.map(item => item.id === nova.id ? nova : item));
+    avisar("Orientação do espaçamento alterada.");
   }
 
-  function pontoSvg(evento) {
-    const matriz = svg.current?.getScreenCTM();
+  function removerSelecionada() {
+    if (!selecionada) return;
+    atualizarPlantas(plantasRef.current.filter(item => item.id !== selecionada.id));
+    setSelecionado(null);
+    avisar("Planta removida.");
+  }
+
+  function limpar() {
+    if (!plantas.length) return;
+    if (!window.confirm("Remover todas as plantas deste desenho?")) return;
+    atualizarPlantas([]);
+    setSelecionado(null);
+    avisar("Desenho limpo. O rascunho salvo anteriormente não foi alterado.");
+  }
+
+  function salvar() {
+    try {
+      gravarRascunho({ medidas, plantas: plantasRef.current });
+      setSalvo(true);
+      avisar("Desenho salvo neste navegador. Para acessar em outro dispositivo, será necessária a futura sincronização.");
+    } catch {
+      avisar("Não foi possível salvar neste navegador. Verifique o armazenamento disponível.", true);
+    }
+  }
+
+  function pontoDoPonteiro(evento) {
+    const matriz = svgRef.current?.getScreenCTM();
     if (!matriz) return null;
-    const ponto = svg.current.createSVGPoint();
+    const ponto = svgRef.current.createSVGPoint();
     ponto.x = evento.clientX;
     ponto.y = evento.clientY;
     return ponto.matrixTransform(matriz.inverse());
   }
 
-  function iniciar(evento, id) {
+  function iniciarArrasto(evento, id) {
     if (evento.button !== 0) return;
     setSelecionado(id);
-    desenhando.current = id;
+    arrastoId.current = id;
     evento.currentTarget.setPointerCapture(evento.pointerId);
   }
 
-  function deslocar(evento, id) {
-    if (desenhando.current !== id) return;
-    const ponto = pontoSvg(evento);
-    if (ponto) mover(id, ponto.x, ponto.y, true);
+  function moverArrasto(evento, id) {
+    if (arrastoId.current !== id) return;
+    const ponto = pontoDoPonteiro(evento);
+    if (ponto) mover(id, ponto.y, ponto.x, true);
   }
 
-  function encerrar(evento) {
-    desenhando.current = null;
+  function terminarArrasto(evento) {
+    arrastoId.current = null;
     if (evento.currentTarget.hasPointerCapture(evento.pointerId)) {
       evento.currentTarget.releasePointerCapture(evento.pointerId);
     }
   }
 
-  function teclado(evento, planta) {
-    const deslocamento = {
-      ArrowLeft: [-PASSO_MOVIMENTO_CM, 0], ArrowRight: [PASSO_MOVIMENTO_CM, 0],
-      ArrowUp: [0, -PASSO_MOVIMENTO_CM], ArrowDown: [0, PASSO_MOVIMENTO_CM],
-    }[evento.key];
+  function moverPorTeclado(evento, planta) {
+    const passos = {
+      ArrowLeft: [0, -PASSO_MOVIMENTO_CM],
+      ArrowRight: [0, PASSO_MOVIMENTO_CM],
+      ArrowUp: [-PASSO_MOVIMENTO_CM, 0],
+      ArrowDown: [PASSO_MOVIMENTO_CM, 0],
+    };
+    const deslocamento = passos[evento.key];
     if (deslocamento) {
       evento.preventDefault();
       setSelecionado(planta.id);
@@ -148,155 +209,236 @@ export default function PlanejadorVisualCanteiro() {
     }
   }
 
-  function limpar() {
-    if (!window.confirm("Remover todas as plantas desta prévia?")) return;
-    setPlantas([]);
-    setSelecionado(null);
-    avisar("Canteiro limpo.");
+  async function baixarPNG() {
+    const original = svgRef.current;
+    if (!original || baixando) return;
+    setBaixando(true);
+    try {
+      const copia = original.cloneNode(true);
+      copia.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      const ladoMaior = Math.max(medidas.largura, medidas.comprimento);
+      const largura = Math.max(1, Math.round(1600 * medidas.comprimento / ladoMaior));
+      const altura = Math.max(1, Math.round(1600 * medidas.largura / ladoMaior));
+      copia.setAttribute("width", String(largura));
+      copia.setAttribute("height", String(altura));
+      const texto = new XMLSerializer().serializeToString(copia);
+      const urlSVG = URL.createObjectURL(new Blob([texto], { type: "image/svg+xml;charset=utf-8" }));
+      try {
+        const imagem = new Image();
+        imagem.src = urlSVG;
+        await imagem.decode();
+        const canvas = document.createElement("canvas");
+        canvas.width = largura;
+        canvas.height = altura;
+        const contexto = canvas.getContext("2d");
+        if (!contexto) throw new Error("Canvas indisponível.");
+        contexto.drawImage(imagem, 0, 0, largura, altura);
+        const arquivo = await new Promise((resolve, reject) => canvas.toBlob(
+          blob => blob ? resolve(blob) : reject(new Error("Não foi possível gerar o PNG.")), "image/png"));
+        const urlPNG = URL.createObjectURL(arquivo);
+        const link = document.createElement("a");
+        link.href = urlPNG;
+        link.download = "seu-quintal-canteiro.png";
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(urlPNG), 1000);
+        avisar("Imagem PNG gerada com o desenho atual do canteiro.");
+      } finally {
+        URL.revokeObjectURL(urlSVG);
+      }
+    } catch {
+      avisar("Não foi possível gerar a imagem neste navegador.", true);
+    } finally {
+      setBaixando(false);
+    }
   }
 
   return (
-    <section className="canteiro-visual" aria-labelledby="titulo-canteiro-visual">
-      <header className="canteiro-visual-abertura">
+    <section className="canteiro-visual" aria-labelledby="titulo-visual-canteiro">
+      <div className="canteiro-visual-acima">
         <div>
           <p className="canteiro-etiqueta">FERRAMENTA GRATUITA · SEM CADASTRO</p>
-          <h2 id="titulo-canteiro-visual">Desenhe seu canteiro</h2>
-          <p>Visualize as posições das plantas com os mesmos espaçamentos do nosso Organizador de Horta.</p>
+          <h2 id="titulo-visual-canteiro">Monte seu canteiro</h2>
         </div>
-        <p className="canteiro-aviso-salvamento">Prévia experimental: as posições ainda não são salvas quando você fecha esta página.</p>
-      </header>
+        <p className="canteiro-visual-dica-curta">Escolha uma cultura, distribua as plantas e ajuste como preferir.</p>
+      </div>
+
       <div className="canteiro-visual-grade">
-        <section className="canteiro-visual-controles" aria-label="Medidas e culturas">
-          <h3>1. Medidas do canteiro</h3>
-          <form className="canteiro-visual-form" onSubmit={aplicarMedidas}>
-            <label>Largura (m)
-              <input value={textoLargura} inputMode="decimal" required
-                onChange={e => setTextoLargura(e.target.value)} />
-            </label>
-            <label>Comprimento (m)
-              <input value={textoComprimento} inputMode="decimal" required
-                onChange={e => setTextoComprimento(e.target.value)} />
-            </label>
-            <button type="submit" className="botao botao-contorno">Aplicar medidas</button>
-          </form>
-          <h3>2. Escolha a cultura</h3>
-          <label className="canteiro-visual-form">Cultura
-            <select value={cultura} onChange={e => { setCultura(e.target.value); setGirarNovas(false); }}>
-              {nomes.map(nome => <option key={nome} value={nome}>{nome}</option>)}
-            </select>
-          </label>
-          <div className="canteiro-visual-dados">
-            <p><strong>Entre fileiras:</strong> {metros(espacamento.largura)} m</p>
-            <p><strong>Entre plantas:</strong> {metros(espacamento.comprimento)} m</p>
-            <p><strong>Canteiro vazio:</strong> cerca de {capacidadeHomogenea(medidas.largura, medidas.comprimento, espacamento)} posições da cultura selecionada.</p>
-          </div>
-          <label className="canteiro-visual-checkbox">
-            <input type="checkbox" checked={girarNovas} onChange={e => setGirarNovas(e.target.checked)}/>
-            Inverter fileiras para as novas plantas
-          </label>
-          <div className="canteiro-visual-botoes">
-            <button type="button" className="botao" onClick={incluirUma}>Adicionar uma planta</button>
-            <button type="button" className="botao botao-contorno" onClick={preencher}>Preencher área livre</button>
-          </div>
-          <p className="canteiro-ajuda">Escolha a cultura e adicione. Depois, selecione a planta no desenho para arrastar, mover por botões ou remover.</p>
-          <details className="canteiro-visual-fontes">
-            <summary>Fontes e limitações</summary>
-            <p>Espaçamentos de referência do Organizador de Horta, sem reserva adicional para corredores e manejo. A capacidade é geométrica, não uma previsão de colheita.</p>
-            <ul>
-              <li><a href={fonteEscalonamento} target="_blank" rel="noopener noreferrer">Embrapa · Escalonamento do cultivo</a></li>
-              {ficha.fontes?.map(fonte => <li key={fonte.url}><a href={fonte.url} target="_blank" rel="noopener noreferrer">{fonte.nome}</a></li>)}
-            </ul>
+        <div className="canteiro-visual-esquerda">
+          <details className="canteiro-visual-cartao" open>
+            <summary><span aria-hidden="true">▱</span> Medidas do canteiro</summary>
+            <form className="canteiro-medidas" onSubmit={aplicarMedidas}>
+              <label>Largura <span className="canteiro-input"><input aria-label="Largura do canteiro em metros"
+                inputMode="decimal" value={textoLargura} onChange={e => setTextoLargura(e.target.value)}
+                required/><span>m</span></span></label>
+              <label>Comprimento <span className="canteiro-input"><input aria-label="Comprimento do canteiro em metros"
+                inputMode="decimal" value={textoComprimento} onChange={e => setTextoComprimento(e.target.value)}
+                required/><span>m</span></span></label>
+              <button className="botao botao-contorno" type="submit">Aplicar medidas</button>
+            </form>
           </details>
-        </section>
-        <section className="canteiro-visual-area" aria-label="Planta superior do canteiro">
-          <div className="canteiro-visual-area-topo">
-            <h3>3. Distribuição</h3>
-            <span>{metros(medidas.largura)} × {metros(medidas.comprimento)} m</span>
-          </div>
-          <p className="canteiro-ajuda">Vista superior em proporção. A malha representa quadrados de 25 × 25 cm.</p>
-          <div className="canteiro-visual-viewport">
-            <svg ref={svg} viewBox={"0 0 " + medidas.largura + " " + medidas.comprimento}
-              preserveAspectRatio="xMidYMid meet" role="group"
-              aria-label={"Canteiro com " + plantas.length + " plantas. Selecione uma pelo teclado ou toque."}>
-              <defs>
-                <pattern id={idMalha} width="25" height="25" patternUnits="userSpaceOnUse">
-                  <path d="M25 0 L0 0 0 25" fill="none" stroke="var(--sq-plan-guide)" strokeWidth=".4"/>
-                </pattern>
-              </defs>
-              <rect width={medidas.largura} height={medidas.comprimento} fill="var(--sq-plan-soil)"/>
-              <rect width={medidas.largura} height={medidas.comprimento} fill={"url(#" + idMalha + ")"}/>
-              {plantas.map(planta => {
-                const ativa = planta.id === selecionado;
-                const cor = paleta[nomes.indexOf(planta.cultura) % paleta.length];
-                return (
-                  <g key={planta.id} role="button" tabIndex={0} aria-pressed={ativa}
-                    aria-label={planta.cultura + " em " + metros(planta.x) + " m por " + metros(planta.y) + " m. Setas do teclado movem 5 cm."}
-                    className="canteiro-visual-planta"
-                    onPointerDown={e => iniciar(e, planta.id)}
-                    onPointerMove={e => deslocar(e, planta.id)}
-                    onPointerUp={encerrar} onPointerCancel={encerrar}
-                    onClick={() => setSelecionado(planta.id)}
-                    onKeyDown={e => teclado(e, planta)}>
-                    <title>{planta.cultura + ": " + metros(planta.largura) + " × " + metros(planta.comprimento) + " m"}</title>
-                    <rect x={planta.x - planta.largura / 2} y={planta.y - planta.comprimento / 2}
-                      width={planta.largura} height={planta.comprimento}
-                      fill="var(--sq-brand-100)" fillOpacity=".55"
-                      stroke={ativa ? "var(--sq-plan-selection)" : "var(--sq-plan-existing-stroke)"}
-                      strokeWidth={ativa ? 2 : 1} vectorEffect="non-scaling-stroke"/>
-                    <circle cx={planta.x} cy={planta.y} r={Math.min(planta.largura, planta.comprimento) * .3}
-                      fill={cor} stroke="white" strokeWidth=".6" vectorEffect="non-scaling-stroke"/>
-                  </g>
-                );
-              })}
-              <rect width={medidas.largura} height={medidas.comprimento}
-                fill="none" stroke="var(--sq-plan-planned-stroke)" strokeWidth="2"
-                vectorEffect="non-scaling-stroke" pointerEvents="none"/>
-            </svg>
-          </div>
-          <p className="canteiro-ajuda">Os retângulos mostram o espaço reservado por planta, não o tamanho de sua copa adulta.</p>
-          {selecionada ? <div className="canteiro-visual-selecao">
-            <h4>{selecionada.cultura} selecionada</h4>
-            <p>Posição: {metros(selecionada.x)} m × {metros(selecionada.y)} m</p>
-            <div className="canteiro-visual-direcoes" aria-label="Mover planta">
-              <button type="button" onClick={() => mover(selecionada.id, selecionada.x, selecionada.y - 5)} aria-label="Mover 5 centímetros para cima">↑</button>
-              <div>
-                <button type="button" onClick={() => mover(selecionada.id, selecionada.x - 5, selecionada.y)} aria-label="Mover 5 centímetros para esquerda">←</button>
-                <button type="button" onClick={() => mover(selecionada.id, selecionada.x, selecionada.y + 5)} aria-label="Mover 5 centímetros para baixo">↓</button>
-                <button type="button" onClick={() => mover(selecionada.id, selecionada.x + 5, selecionada.y)} aria-label="Mover 5 centímetros para direita">→</button>
-              </div>
+
+          <div className="canteiro-visual-cartao canteiro-catalogo">
+            <div className="canteiro-cartao-cabecalho">
+              <h3><span aria-hidden="true">❧</span> Escolha a cultura</h3>
+              <span className="canteiro-cat-contador">{nomes.length} opções</span>
             </div>
-            <div className="canteiro-visual-botoes">
-              <button type="button" className="botao botao-contorno" onClick={girarSelecionada}>Girar espaçamento</button>
-              <button type="button" className="botao botao-contorno" onClick={() => {
-                setPlantas(atuais => atuais.filter(item => item.id !== selecionada.id));
-                setSelecionado(null); avisar("Planta removida.");
-              }}>Remover planta</button>
+            <p className="canteiro-texto-secundario">Toque em uma cultura para adicioná-la ao desenho.</p>
+            <div className="canteiro-culturas-grade" role="group" aria-label="Culturas disponíveis">
+              {visiveis.map(nome => (
+                <button type="button" key={nome} aria-pressed={cultura === nome}
+                  className={"canteiro-cultura-item" + (cultura === nome ? " selecionado" : "")}
+                  onClick={() => escolherCultura(nome)}>
+                  <IconeCultura nome={nome} className="canteiro-cultura-icone"/>
+                  <span>{nomeCurtoDaCultura(nome)}</span>
+                  {cultura === nome && <b className="canteiro-cultura-check" aria-hidden="true">✓</b>}
+                </button>
+              ))}
             </div>
-          </div> : <p className="canteiro-ajuda">Selecione uma planta para ver os controles de movimento.</p>}
-        </section>
-        <aside className="canteiro-visual-resumo" aria-label="Resumo da distribuição">
-          <h3>4. Resultado</h3>
-          <dl>
-            <div><dt>Posições desenhadas</dt><dd>{plantas.length}</dd></div>
-            <div><dt>Área do canteiro</dt><dd>{formatarMedida(area / 10000)} m²</dd></div>
-            <div><dt>Espaço reservado</dt><dd>{formatarMedida(ocupacao)}%</dd></div>
-          </dl>
-          {resumo.length ? <ul className="canteiro-visual-lista">
-            {resumo.map(item => <li key={item.cultura}><span>{item.cultura}</span><strong>{item.quantidade}</strong></li>)}
-          </ul> : <p>Adicione a primeira cultura para visualizar o resultado.</p>}
-          <p className="canteiro-ajuda">A ocupação representa somente os espaçamentos reservados, sem prever produtividade.</p>
-          <div className="canteiro-visual-proximo">
-            <h4>Quer colher com frequência?</h4>
-            <p>Use o Organizador da Horta para planejar consumo, venda e datas de novos lotes.</p>
-            <a className="botao" href={"../organizador/?cultura=" + encodeURIComponent(selecionada?.cultura || cultura)}>
-              Planejar datas de plantio
-            </a>
-            <p className="canteiro-ajuda">As posições não são transferidas para a agenda nesta primeira versão.</p>
+            <button type="button" className="canteiro-ver-mais"
+              onClick={() => setMostrarTodas(!mostrarTodas)} aria-expanded={mostrarTodas}>
+              {mostrarTodas ? "Ver menos culturas" : "Ver todas as culturas"}
+            </button>
+            <div className="canteiro-espacamento">
+              <strong>Espaçamento de referência</strong>
+              <p>{metros(dimensoes.largura)} m entre fileiras · {metros(dimensoes.comprimento)} m entre plantas</p>
+              <small>Capacidade teórica no canteiro vazio: {capacidade} posições</small>
+            </div>
+            <details className="canteiro-mais-opcoes">
+              <summary>Orientação e fontes técnicas</summary>
+              <label><input type="checkbox" checked={girarNovas}
+                onChange={e => setGirarNovas(e.target.checked)}/> Inverter a orientação das novas plantas</label>
+              <p>Os retângulos indicam o espaço de referência de cada planta. Não incluem corredores, margens extras ou garantia de produção.</p>
+              <ul>
+                <li><a href={fonteEscalonamento} target="_blank" rel="noopener noreferrer">Embrapa · Plantio escalonado</a></li>
+                {ficha.fontes?.map(fonte => <li key={fonte.url}><a href={fonte.url} target="_blank" rel="noopener noreferrer">{fonte.nome}</a></li>)}
+              </ul>
+            </details>
           </div>
-          <button type="button" className="botao botao-contorno" onClick={limpar} disabled={!plantas.length}>Limpar desenho</button>
+        </div>
+
+        <section className="canteiro-visual-cartao canteiro-area" aria-label="Desenho interativo do canteiro">
+          <div className="canteiro-area-cabecalho">
+            <div>
+              <h3><span aria-hidden="true">✳</span> Seu canteiro</h3>
+              <span className="canteiro-texto-secundario">{metros(medidas.largura)} × {metros(medidas.comprimento)} m</span>
+            </div>
+            <span className="canteiro-vista" aria-label="Vista superior do canteiro">▦ Vista superior</span>
+          </div>
+
+          <div className="canteiro-area-desenho">
+            <div className="canteiro-medida-horizontal">{metros(medidas.comprimento)} m</div>
+            <div className="canteiro-area-svg">
+              <svg xmlns="http://www.w3.org/2000/svg" ref={svgRef}
+                viewBox={"0 0 " + medidas.comprimento + " " + medidas.largura}
+                preserveAspectRatio="xMidYMid meet" role="group"
+                aria-label={"Canteiro com " + plantas.length + " plantas. Use os botões abaixo para editar e as setas do teclado para mover uma planta."}>
+                <defs>
+                  <pattern id={malhaId} patternUnits="userSpaceOnUse" width="25" height="25">
+                    <path d="M25 0 L0 0 0 25" fill="none" stroke="#B48B62" strokeWidth=".5" opacity=".5"/>
+                  </pattern>
+                </defs>
+                <rect x="0" y="0" width={medidas.comprimento} height={medidas.largura}
+                  fill="#69472E"/>
+                <rect x="2" y="2" width={medidas.comprimento - 4} height={medidas.largura - 4}
+                  fill="#765139" stroke="#B27B4B" strokeWidth="2"/>
+                <rect x="3" y="3" width={medidas.comprimento - 6} height={medidas.largura - 6}
+                  fill={"url(#" + malhaId + ")"}/>
+                {plantas.map(planta => {
+                  const ativa = planta.id === selecionado;
+                  const tam = Math.min(planta.largura, planta.comprimento) * .92;
+                  return (
+                    <g key={planta.id} role="button" tabIndex={0} aria-pressed={ativa}
+                      aria-label={planta.cultura + ", posição " + metros(planta.x) + " m por " + metros(planta.y) + " m. Use Enter para selecionar ou setas para mover."}
+                      className="canteiro-planta" onClick={() => setSelecionado(planta.id)}
+                      onPointerDown={e => iniciarArrasto(e, planta.id)}
+                      onPointerMove={e => moverArrasto(e, planta.id)}
+                      onPointerUp={terminarArrasto} onPointerCancel={terminarArrasto}
+                      onKeyDown={e => moverPorTeclado(e, planta)}>
+                      <title>{nomeCurtoDaCultura(planta.cultura) + " — " + metros(planta.largura) + " × " + metros(planta.comprimento) + " m"}</title>
+                      <rect x={planta.y - planta.comprimento / 2} y={planta.x - planta.largura / 2}
+                        width={planta.comprimento} height={planta.largura}
+                        rx={Math.min(2, tam / 5)} fill={ativa ? "#DAE7C0" : "#8AB870"} fillOpacity={ativa ? .24 : .1}
+                        stroke={ativa ? "#E9F7A9" : "#D4BE90"} strokeWidth={ativa ? 2 : .8}
+                        strokeDasharray={ativa ? "3 2" : "2 2"} vectorEffect="non-scaling-stroke"/>
+                      <IconeCultura nome={planta.cultura}
+                        x={planta.y - tam / 2} y={planta.x - tam / 2} width={tam} height={tam}/>
+                    </g>
+                  );
+                })}
+                <rect x="1" y="1" width={medidas.comprimento - 2} height={medidas.largura - 2}
+                  fill="none" stroke="#C79760" strokeWidth="3" vectorEffect="non-scaling-stroke"
+                  pointerEvents="none"/>
+              </svg>
+              {!plantas.length && <div className="canteiro-area-vazio" aria-hidden="true">
+                <span>🌱</span><strong>Seu canteiro está pronto</strong>
+                <small>Escolha uma cultura e toque em “Adicionar planta”.</small>
+              </div>}
+            </div>
+          </div>
+          <div className="canteiro-area-acoes">
+            <button className="botao" type="button" onClick={adicionarUma}>＋ Adicionar planta</button>
+            <button className="botao botao-contorno" type="button" onClick={preencher}>▦ Preencher área</button>
+            <button className="botao botao-contorno" type="button" onClick={girarSelecionada} disabled={!selecionada}>↻ Girar</button>
+            <button className="botao botao-contorno" type="button" onClick={removerSelecionada} disabled={!selecionada}>✕ Remover</button>
+          </div>
+          {plantas.length > 0 && <div className="canteiro-selecao">
+            <label>Planta selecionada
+              <select value={selecionado ?? ""} onChange={e => setSelecionado(e.target.value || null)}>
+                <option value="">Selecione para mover</option>
+                {plantas.map((planta, indice) => <option key={planta.id} value={planta.id}>
+                  {indice + 1}. {nomeCurtoDaCultura(planta.cultura)} ({metros(planta.x)} × {metros(planta.y)} m)
+                </option>)}
+              </select>
+            </label>
+            {selecionada && <div className="canteiro-direcoes" aria-label="Movimentar planta em passos de 5 centímetros">
+              <button type="button" onClick={() => mover(selecionada.id, selecionada.x - PASSO_MOVIMENTO_CM, selecionada.y)} aria-label="Mover 5 cm para cima">↑</button>
+              <button type="button" onClick={() => mover(selecionada.id, selecionada.x, selecionada.y - PASSO_MOVIMENTO_CM)} aria-label="Mover 5 cm para a esquerda">←</button>
+              <button type="button" onClick={() => mover(selecionada.id, selecionada.x + PASSO_MOVIMENTO_CM, selecionada.y)} aria-label="Mover 5 cm para baixo">↓</button>
+              <button type="button" onClick={() => mover(selecionada.id, selecionada.x, selecionada.y + PASSO_MOVIMENTO_CM)} aria-label="Mover 5 cm para a direita">→</button>
+            </div>}
+          </div>}
+          <p className="canteiro-ajuda">Arraste no desenho ou selecione uma posição e use as setas. Cada retângulo indica o espaçamento reservado.</p>
+        </section>
+
+        <aside className="canteiro-visual-cartao canteiro-resumo" aria-label="Resumo do planejamento">
+          <div className="canteiro-resumo-painel">
+            <h3><span aria-hidden="true">▥</span> Resumo</h3>
+            <dl>
+              <div><dt>Área do canteiro</dt><dd>{numero(areaCm2 / 10000)} m²</dd></div>
+              <div><dt>Plantas posicionadas</dt><dd>{plantas.length}</dd></div>
+              <div><dt>Ocupação teórica</dt><dd><span className="canteiro-anel" style={{ "--sq-progresso": ocupacao + "%" }} aria-hidden="true"/> {numero(ocupacao)}%</dd></div>
+            </dl>
+          </div>
+          {resumo.length > 0 && <details className="canteiro-resumo-culturas">
+            <summary>Ver quantidade por cultura</summary>
+            <ul>
+              {resumo.map(item => <li key={item.cultura}>
+                <IconeCultura nome={item.cultura}/><span>{nomeCurtoDaCultura(item.cultura)}</span>
+                <strong>{item.quantidade}</strong>
+              </li>)}
+            </ul>
+          </details>}
+          <div className="canteiro-resumo-botoes">
+            <button className="botao" type="button" onClick={salvar}>
+              {salvo ? "✓ Salvo neste navegador" : "✓ Salvar neste navegador"}
+            </button>
+            <button className="botao botao-contorno" type="button" onClick={baixarPNG} disabled={baixando}>
+              {baixando ? "Gerando imagem…" : "↓ Baixar imagem PNG"}
+            </button>
+            <button className="canteiro-limpar" type="button" onClick={limpar} disabled={!plantas.length}>Limpar desenho</button>
+          </div>
+          <p className="canteiro-texto-secundario">Salva um rascunho neste dispositivo. Não sincroniza com o Meu Quintal e ainda não entra no backup geral.</p>
         </aside>
       </div>
-      <p className={erro ? "erro" : "canteiro-visual-status"} role={erro ? "alert" : "status"} aria-live="polite">{mensagem}</p>
+
+      <div className="canteiro-dica">
+        <strong><span aria-hidden="true">✦</span> Dica do Seu Quintal</strong>
+        <p>Quer colher em épocas diferentes? Use o <a href={"../organizador/?cultura=" + encodeURIComponent(selecionada?.cultura || cultura)}>Organizador de Horta</a> para planejar lotes de plantio.</p>
+      </div>
+      <p className={erro ? "canteiro-erro" : "canteiro-mensagem"} role={erro ? "alert" : "status"} aria-live="polite">{mensagem}</p>
+      <p className="canteiro-sobre">Os espaçamentos são referências por cultura; variedade, solo, irrigação, clima e manejo podem exigir ajustes. O resultado não prevê produtividade.</p>
     </section>
   );
 }
