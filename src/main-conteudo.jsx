@@ -9,6 +9,7 @@ import "./styles/home.css";
 import "./styles/editorial.css";
 import "./styles/guias-cultivo.css";
 import "./styles/conteudo.css";
+import "./styles/editorial-pages-v3.css";
 
 const { raiz, pagina } = document.body.dataset;
 

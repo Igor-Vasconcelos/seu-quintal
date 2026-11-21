@@ -125,7 +125,9 @@ function layout({ title, description, path, prefix, body, image, kind = "website
     '<script type="module" src="' + prefix + 'src/main-artigos.js"></script>', extraHead,
     '</head><body class="sq-artigos"><a class="sq-skip" href="#conteudo">Pular para o conteúdo</a>',
     '<header class="sq-header"><div class="sq-container sq-header-inner">',
-    '<a class="sq-brand" href="' + prefix + '"><span aria-hidden="true">🌱</span> Seu Quintal</a>',
+    '<a class="sq-brand" href="' + prefix + '" aria-label="Seu Quintal, página inicial">' +
+      '<img src="' + prefix + 'favicon.svg" width="42" height="42" alt="" aria-hidden="true">' +
+      '<span class="sq-brand-text"><strong>Seu Quintal</strong><small>Da primeira muda ao seu sítio.</small></span></a>',
     '<nav class="sq-desktop-nav" aria-label="Menu principal">' + nav + "</nav>",
     '<a class="sq-account" href="' + prefix + 'meu-quintal/">Meu Quintal</a>',
     '<details class="sq-mobile-menu"><summary>Menu</summary><nav aria-label="Menu para celular">' + nav + '</nav></details>',
@@ -156,7 +158,7 @@ function renderArticle(article) {
     '<p class="sq-lede">' + escapeHtml(article.descricao) + "</p>" +
     '<p class="sq-byline">Por ' + escapeHtml(article.autor) + (date ? " · " + date : "") + "</p></header>" +
     '<figure class="sq-hero-image"><img src="../../' + article.imagem.slice(1) +
-    '" alt="' + escapeHtml(article.imagemAlt) + '" width="1200" height="675"></figure>' +
+    '" alt="' + escapeHtml(article.imagemAlt) + '" width="1200" height="675" decoding="async"></figure>' +
     '<div class="sq-article-layout">' + toc + '<div class="sq-prose">' + content.html + tool + "</div></div></article>" +
     '<p class="sq-back"><a href="../">Ver todos os artigos</a></p>';
   const structured = {
