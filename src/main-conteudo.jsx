@@ -80,3 +80,5 @@ if (guia) {
     return <Guia raiz={raiz} />;
   });
 }
+
+import "./styles/tool-ui-v3.css";
