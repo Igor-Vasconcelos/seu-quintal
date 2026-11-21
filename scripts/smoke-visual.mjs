@@ -1,0 +1,82 @@
+import { chromium } from "playwright";
+import { mkdirSync } from "node:fs";
+import assert from "node:assert/strict";
+
+const URL_BASE = "http://127.0.0.1:4173";
+const PASTA = "artifacts/visual";
+mkdirSync(PASTA, { recursive: true });
+const rotas = [
+  ["home", "/"],
+  ["sisteminha", "/sisteminha.html"],
+  ["guias", "/guias/"],
+  ["horta", "/horta/"],
+  ["canteiros", "/horta/canteiros/"],
+  ["organizador", "/horta/organizador/"],
+  ["meu-quintal", "/meu-quintal/"],
+  ["artigos", "/artigos/"],
+];
+
+const navegador = await chromium.launch({ headless: true });
+let casos = 0;
+try {
+  for (const { nome, largura, altura } of [
+    { nome: "celular", largura: 390, altura: 844 },
+    { nome: "desktop", largura: 1440, altura: 900 },
+  ]) {
+    const contexto = await navegador.newContext({
+      viewport: { width: largura, height: altura },
+      reducedMotion: "reduce",
+      deviceScaleFactor: 1,
+    });
+    for (const [slug, rota] of rotas) {
+      const pagina = await contexto.newPage();
+      const erros = [];
+      pagina.on("pageerror", erro => erros.push(erro.message));
+      const resposta = await pagina.goto(URL_BASE + rota, { waitUntil: "networkidle", timeout: 40000 });
+      assert.ok(resposta?.ok(), rota + ": resposta HTTP inválida");
+      await pagina.locator("h1").first().waitFor({ timeout: 25000 });
+      const larguraExcedente = await pagina.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      assert.ok(larguraExcedente <= 2,
+        slug + "/" + nome + ": conteúdo excede largura por " + larguraExcedente + " px");
+      assert.deepEqual(erros, [], slug + "/" + nome + ": erro JavaScript");
+      if (slug === "home" || slug === "sisteminha" || slug === "meu-quintal") {
+        await pagina.screenshot({
+          path: PASTA + "/" + slug + "-" + nome + ".png",
+          animations: "disabled",
+        });
+      }
+      if (slug === "home" && nome === "celular") {
+        const menu = pagina.locator(".menu-alternar");
+        await menu.click();
+        assert.equal(await menu.getAttribute("aria-expanded"), "true");
+        const grupo = pagina.locator(".site-menu-grupo").first();
+        await grupo.locator("summary").click();
+        assert.ok(await grupo.locator('a[href*="horta/"]').first().isVisible(),
+          "Menu de guias precisa abrir em telas móveis");
+        await grupo.locator("summary").press("Escape");
+        assert.equal(await grupo.getAttribute("open"), null,
+          "Escape deve fechar o submenu");
+      }
+      if (slug === "sisteminha") {
+        await pagina.locator('.sisteminha-nav-rolagem a[href="#tanque"]').click();
+        await pagina.locator("#modulos h2").first().waitFor({ state: "visible", timeout: 12000 });
+        assert.match(await pagina.locator("#modulos h2").first().innerText(), /Tanque/i);
+        await pagina.locator('.sisteminha-nav-rolagem a[href="#ciclo"]').click();
+        await pagina.locator("#ciclo").waitFor({ state: "visible", timeout: 12000 });
+      }
+      if (slug === "meu-quintal") {
+        await pagina.locator('.quintal-secoes a[href="#canteiros"]').click();
+        await pagina.locator(".canteiro-visual").waitFor({ state: "visible", timeout: 20000 });
+        assert.ok(await pagina.locator("#quintal-backup").count());
+      }
+      console.log("PASSOU", nome, rota);
+      await pagina.close();
+      casos++;
+    }
+    await contexto.close();
+  }
+} finally {
+  await navegador.close();
+}
+console.log("Navegador: " + casos + " páginas verificadas; capturas em " + PASTA + ".");
