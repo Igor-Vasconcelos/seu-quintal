@@ -37,6 +37,10 @@ export function situacaoDosCanteiros(colecao, planos, hoje = hojeCivil()) {
       sugestao = liberacao
         ? "Replantio: conferir liberação após " + liberacao + ", se não houver outros lotes previstos."
         : "Liberação sem data confiável: informe a duração real da colheita antes de replantar.";
+    } else if (vinculados.some(plano =>
+      culturasOrganizador[plano.cultura]?.colheitasSucessivas && !plano.duracao)) {
+      estado = "Liberação não verificada";
+      sugestao = "A duração da colheita não foi informada. Confirme no canteiro antes de replantar.";
     } else if (proximas.length) {
       estado = "Próximo plantio previsto";
       sugestao = "Entrada estimada em " + proximas[0].entrada + "; confirme o espaço antes de plantar.";
