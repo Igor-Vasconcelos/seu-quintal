@@ -1,38 +1,58 @@
 import Icone from "./Icone.jsx";
 import "../styles/rodape.css";
+import "../styles/site-shell.css";
 
 export default function Rodape({ inicio = false, sisteminha = false, raiz = "./", pagina, aoVerCreditos }) {
-  const home = inicio ? "" : raiz;
-
+  const home = inicio ? "#inicio" : raiz;
+  const grupos = [
+    { titulo: "Aprenda", links: [
+      ["Horta e jardim", "horta/"],
+      ["Guias práticos", "guias/"],
+      ["Artigos", "artigos/"],
+      ["Sisteminha Embrapa", "sisteminha.html"],
+    ] },
+    { titulo: "Planeje", links: [
+      ["Calendário de plantio", "horta/calendario-de-plantio/"],
+      ["Planejador de canteiros", "horta/canteiros/"],
+      ["Organizador de horta", "horta/organizador/"],
+      ["Meu Quintal", "meu-quintal/"],
+    ] },
+  ];
   return (
-    <footer className="rodape">
+    <footer className="rodape rodape-v3">
       <div className="rodape-conteudo">
         <div className="rodape-identidade">
-          <a href={home || "#inicio"} className="marca">
-            <Icone nome="muda" />Seu Quintal
+          <a href={home} className="marca site-marca">
+            <span className="marca-simbolo"><Icone nome="muda"/></span>
+            <span className="site-marca-texto"><strong>Seu Quintal</strong><small>Da primeira muda ao seu sítio.</small></span>
           </a>
-          <p>Ferramentas e guias para cultivar e planejar seu espaço.</p>
+          <p>Conhecimento e ferramentas gratuitas para cultivar, cuidar dos animais e organizar seu espaço produtivo.</p>
+          <span className="rodape-apoio">Aprenda no seu ritmo. Planeje com confiança.</span>
         </div>
-        <nav className="rodape-navegacao" aria-labelledby="titulo-rodape">
-          <h2 id="titulo-rodape">Explore o site</h2>
-          <ul>
-            <li><a href={`${raiz}horta/`} aria-current={pagina === "horta" ? "page" : undefined}>Horta em pequenos espaços</a></li>
-            <li><a href={`${raiz}horta/organizador/`} aria-current={pagina === "organizador" ? "page" : undefined}>Organizador de horta</a></li>
-            <li><a href={`${raiz}horta/canteiros/`}>Planejador de canteiros</a></li>
-            <li><a href={`${raiz}horta/calendario-de-plantio/`} aria-current={pagina === "calendario" ? "page" : undefined}>Calendário de plantio</a></li>
-            <li><a href={`${raiz}meu-quintal/`} target="_blank" rel="noopener"
-              aria-label="Meu Quintal (abre em nova aba)">Meu Quintal <Icone nome="novaAba" /></a></li>
-            <li><a href={`${raiz}artigos/`} aria-current={pagina === "artigos" ? "page" : undefined}>Artigos e dicas</a></li>
-            <li><a href={`${raiz}guias/`} aria-current={pagina === "guias" ? "page" : undefined}>Todos os guias</a></li>
-            <li><a href={sisteminha ? "#inicio" : `${raiz}sisteminha.html`} aria-current={sisteminha ? "page" : undefined}>Sisteminha Embrapa</a></li>
-            <li><a href={`${raiz}mapa-do-site/`} aria-current={pagina === "mapa" ? "page" : undefined}>Mapa do site</a></li>
-          </ul>
-        </nav>
+        {grupos.map(grupo => (
+          <nav className="rodape-navegacao" key={grupo.titulo} aria-label={grupo.titulo}>
+            <h2>{grupo.titulo}</h2>
+            <ul>
+              {grupo.links.map(([titulo, rota]) => {
+                const atual = rota === "sisteminha.html" ? sisteminha
+                  : rota === "horta/" ? pagina === "horta"
+                  : rota === "artigos/" ? pagina === "artigos"
+                  : rota === "guias/" ? pagina === "guias" : false;
+                return <li key={rota}><a href={raiz + rota} aria-current={atual ? "page" : undefined}>
+                  {titulo}
+                </a></li>;
+              })}
+            </ul>
+          </nav>
+        ))}
       </div>
-
       <div className="rodape-base">
-        {aoVerCreditos && <button type="button" onClick={aoVerCreditos}>Sobre as imagens</button>}
-        <a href="#inicio" className="rodape-topo">Voltar ao topo <Icone nome="seta" /></a>
+        <span>© Seu Quintal · Conteúdo educativo independente.</span>
+        <div className="rodape-utilidades">
+          {aoVerCreditos && <button type="button" onClick={aoVerCreditos}>Sobre as imagens</button>}
+          <a href={raiz + "mapa-do-site/"}>Mapa do site</a>
+          <a href="#inicio" className="rodape-topo">Voltar ao topo <Icone nome="seta"/></a>
+        </div>
       </div>
     </footer>
   );
