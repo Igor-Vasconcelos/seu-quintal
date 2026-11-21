@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useState } from "react";
+import { StrictMode, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "@fontsource-variable/dm-sans";
 import "@fontsource/dm-serif-text/latin-400.css";
@@ -8,6 +8,8 @@ import Icone from "./components/Icone.jsx";
 import Rodape from "./components/Rodape.jsx";
 import Galinheiro from "./features/galinheiro/Galinheiro.jsx";
 import FluxoSisteminha from "./features/sisteminha/FluxoSisteminha.jsx";
+import EsquemaModulo from "./features/sisteminha/EsquemaModulo.jsx";
+import SaibaMaisModulo from "./features/sisteminha/SaibaMaisModulo.jsx";
 import { fichasSisteminha, etapasImplantacao, materiaisOficiais } from "./features/sisteminha/dadosSisteminha.js";
 import "./styles/tokens.css";
 import "./styles/home.css";
@@ -84,8 +86,17 @@ function DetalheModulo({ id, modulo }) {
   return (
     <article className="sisteminha-detalhe sisteminha-modulo" id={id}
       tabIndex={-1} aria-labelledby={"titulo-" + id}>
-      <img className="sisteminha-modulo-imagem" src={"./imagens/" + modulo.imagem}
-        alt={modulo.descricaoImagem} loading="lazy" />
+      <div className="sisteminha-modulo-midia">
+        <figure className="sisteminha-foto">
+          <a href={"./imagens/" + modulo.imagem} target="_blank" rel="noopener noreferrer"
+            aria-label={"Abrir ilustração de " + modulo.titulo + " em tamanho original"}>
+            <img className="sisteminha-modulo-imagem" src={"./imagens/" + modulo.imagem}
+              alt={modulo.descricaoImagem} loading="lazy" decoding="async" />
+          </a>
+          <figcaption>Ilustração gerada por IA. <span>Toque para ver no tamanho original.</span></figcaption>
+        </figure>
+        <EsquemaModulo modulo={id}/>
+      </div>
 
       <div className="sisteminha-modulo-conteudo">
         <header>
@@ -114,6 +125,7 @@ function DetalheModulo({ id, modulo }) {
           </section>
         </div>
 
+        <SaibaMaisModulo modulo={id}/>
         <div className="sisteminha-modulo-acoes">
           {ficha.links.map(link => (
             <a key={link.href} className="botao botao-contorno" href={link.href}
@@ -192,6 +204,8 @@ function MateriaisSisteminha() {
 function Sisteminha() {
   const [botaoCreditos, definirBotaoCreditos] = useState(null);
   const [abaAtiva, definirAbaAtiva] = useState(abaPelaHash);
+  const veioDeClique = useRef(false);
+  const foiMontado = useRef(false);
 
   useEffect(() => {
     const atualizarPeloHistorico = () => {
@@ -212,11 +226,25 @@ function Sisteminha() {
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
-    if (!idsDasAbas.has(hash) && hash !== "fontes") return;
-    const alvo = Object.hasOwn(modulos, abaAtiva) ? "modulos" : abaAtiva;
-    const destino = document.getElementById(alvo);
-    destino?.focus({ preventScroll: true });
-    destino?.scrollIntoView({ block: "start", behavior: "instant" });
+    const ancorasGalinheiro = ["calculadora-galinheiro", "consumo-galinheiro", "cuidados-galinheiro"];
+    if (!idsDasAbas.has(hash) && hash !== "fontes" && !ancorasGalinheiro.includes(hash)) return;
+    const primeiroAcesso = !foiMontado.current;
+    foiMontado.current = true;
+    const alvo = ancorasGalinheiro.includes(hash) ? hash :
+      Object.hasOwn(modulos, abaAtiva) ? "modulos" : abaAtiva;
+    const clique = veioDeClique.current;
+    veioDeClique.current = false;
+    // Um quadro de renderização garante que o tópico novo já esteja disponível.
+    const quadro = window.requestAnimationFrame(() => {
+      const destino = document.getElementById(alvo);
+      if (!destino) return;
+      const reducao = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const movimento = reducao || (primeiroAcesso && !clique) ? "auto" : "smooth";
+      // O alvo recebe o foco após a troca: leitores de tela encontram o novo título.
+      destino.focus({ preventScroll: true });
+      destino.scrollIntoView({ block: "start", behavior: movimento });
+    });
+    return () => window.cancelAnimationFrame(quadro);
   }, [abaAtiva]);
 
   function navegarPeloConteudo(evento) {
@@ -227,13 +255,17 @@ function Sisteminha() {
     const aba = hash === "modulos" ? "tanque" : hash === "fontes" ? "materiais" : hash;
     if (!idsDasAbas.has(aba)) return;
     evento.preventDefault();
+    veioDeClique.current = true;
     definirAbaAtiva(aba);
     if (window.location.hash !== "#" + aba) {
       window.history.pushState(null, "", "#" + aba);
     }
     // Para um clique repetido na aba ativa, a rolagem continua funcionando.
     const destino = document.getElementById(Object.hasOwn(modulos, aba) ? "modulos" : aba);
-    if (destino && aba === abaAtiva) destino.scrollIntoView({ block: "start" });
+    if (destino && aba === abaAtiva) {
+      const reducao = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      destino.scrollIntoView({ block: "start", behavior: reducao ? "auto" : "smooth" });
+    }
   }
 
   return (
@@ -267,11 +299,14 @@ function Sisteminha() {
                 {titulo}
               </a>
             ))}
-            <a href="#fontes">Fontes oficiais</a>
           </div>
         </nav>
 
-        <section className="sisteminha-secao" id="ciclo" hidden={abaAtiva !== "ciclo"} aria-labelledby="titulo-ciclo" tabIndex={-1}>
+        <p className="sisteminha-visualmente-oculto" role="status" aria-live="polite" aria-atomic="true">
+          Tópico selecionado: {nomesDasAbas.find(([id]) => id === abaAtiva)?.[1]}
+        </p>
+
+        <section className="sisteminha-secao sisteminha-transicao-conteudo" id="ciclo" hidden={abaAtiva !== "ciclo"} aria-labelledby="titulo-ciclo" tabIndex={-1}>
           <h2 id="titulo-ciclo">Como funciona o ciclo</h2>
           <p className="sisteminha-orientacao">Explore os caminhos da água, da matéria orgânica e dos alimentos.
             Toque em um componente para conhecer seus cuidados e conexões.</p>
@@ -280,12 +315,25 @@ function Sisteminha() {
             {Object.entries(modulos).map(([id, modulo]) => (
               <li key={id}>
                 <a className="sisteminha-cartao" href={`#${id}`}>
-                  <img src={`./imagens/${modulo.imagem}`} alt="" loading="lazy" />
+                  <img src={`./imagens/${modulo.imagem}`} alt="" loading="lazy" decoding="async" />
                   <span>{modulo.titulo} <Icone nome="seta" /></span>
                 </a>
               </li>
             ))}
           </ul>
+          <section className="sisteminha-visao-beneficios" aria-labelledby="beneficios-sisteminha">
+            <div>
+              <p className="sisteminha-kicker">CONHEÇA ANTES DE CONSTRUIR</p>
+              <h3 id="beneficios-sisteminha">O que torna o Sisteminha diferente?</h3>
+              <p>É uma tecnologia social de produção integrada: cada módulo tem uma função e as conexões
+                ajudam a aproveitar recursos, sempre com tratamento e manejo adequados.</p>
+            </div>
+            <ul>
+              <li><strong>Produção diversificada</strong><span>Peixes, aves e vegetais, conforme os módulos escolhidos.</span></li>
+              <li><strong>Reaproveitamento responsável</strong><span>Água e matéria orgânica podem voltar ao cultivo após o tratamento correto.</span></li>
+              <li><strong>Adaptação ao espaço</strong><span>O arranjo e a escala precisam caber na rotina, no orçamento e no terreno.</span></li>
+            </ul>
+          </section>
         </section>
 
         <section className="sisteminha-secao" id="modulos" aria-labelledby="titulo-modulos" tabIndex={-1}
@@ -293,17 +341,21 @@ function Sisteminha() {
           <h2 id="titulo-modulos">{modulos[abaAtiva]?.titulo ?? "Conheça os módulos"}</h2>
           <p className="sisteminha-orientacao">Estes cinco componentes ilustram uma configuração integrada;
             o Sisteminha inclui outros módulos que podem ser combinados de acordo com recursos e manejo.</p>
-          <div className="sisteminha-detalhes">
+          <div className="sisteminha-detalhes sisteminha-transicao-conteudo" key={abaAtiva}>
             {Object.entries(modulos).filter(([id]) => id === abaAtiva).map(([id, modulo]) => id === "galinheiro" ? (
-              <Galinheiro key={id} modulo={modulo} />
+              <div key={id} className="sisteminha-galinheiro-conjunto">
+                <Galinheiro modulo={modulo} />
+                <EsquemaModulo modulo="galinheiro" />
+                <SaibaMaisModulo modulo="galinheiro" />
+              </div>
             ) : (
               <DetalheModulo key={id} id={id} modulo={modulo} />
             ))}
           </div>
         </section>
 
-        {abaAtiva === "integracao" && <IntegracaoSisteminha/>}
-        {abaAtiva === "materiais" && <MateriaisSisteminha/>}
+        {abaAtiva === "integracao" && <div className="sisteminha-transicao-conteudo" key="integracao"><IntegracaoSisteminha/></div>}
+        {abaAtiva === "materiais" && <div className="sisteminha-transicao-conteudo" key="materiais"><MateriaisSisteminha/></div>}
         <p className="sisteminha-rodape-tecnico">
           Conteúdo educativo independente. Os módulos e materiais apresentados devem ser adaptados
           às condições locais com orientação técnica.

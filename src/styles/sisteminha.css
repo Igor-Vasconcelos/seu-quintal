@@ -700,3 +700,155 @@ a.sisteminha-passo:hover { border-color: var(--cor-rota); text-decoration: under
 @media (prefers-reduced-motion: reduce) {
   .sisteminha-fluxo * { scroll-behavior: auto; transition: none; }
 }
+
+
+/* Sisteminha 2.2 — transições acessíveis e imagens técnicas nítidas */
+@keyframes sq-sisteminha-entrada {
+  from { opacity: .25; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.sisteminha-transicao-conteudo:not([hidden]) {
+  animation: sq-sisteminha-entrada 260ms cubic-bezier(.2,.75,.25,1) both;
+}
+.sisteminha-nav-rolagem a {
+  transition: background-color 180ms ease, color 180ms ease,
+    border-color 180ms ease, box-shadow 180ms ease;
+}
+.sisteminha-nav-rolagem a[aria-current="page"] {
+  box-shadow: inset 0 -3px 0 var(--sq-cream);
+}
+.sisteminha-visualmente-oculto {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+.sisteminha-modulo-midia {
+  display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  align-items: start; gap: .8rem; padding: clamp(.65rem,1.4vw,1rem);
+  background: var(--sq-surface-warm); border-radius: var(--sq-radius-card) var(--sq-radius-card) 0 0;
+}
+.sisteminha-foto,.sisteminha-esquema { min-width: 0; margin: 0; }
+.sisteminha-foto a {
+  display: block; border-radius: var(--sq-radius-media); overflow: hidden;
+}
+.sisteminha-foto img.sisteminha-modulo-imagem {
+  display: block; width: 100%; height: auto;
+  max-height: 22rem; aspect-ratio: 3 / 2; object-fit: cover;
+  object-position: center;
+  border-radius: var(--sq-radius-media);
+  filter: saturate(1.06) contrast(1.025);
+  transition: filter 180ms ease;
+}
+.sisteminha-foto a:hover img { filter: saturate(1.1) contrast(1.045); }
+.sisteminha-foto figcaption,.sisteminha-esquema figcaption {
+  font-size: .75rem; color: var(--sq-text-muted); line-height: 1.45;
+  padding: .45rem .15rem 0;
+}
+.sisteminha-esquema svg {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface-soft);
+}
+.sisteminha-modulo-conteudo { gap: 1.15rem; }
+.sisteminha-aprofundamento {
+  display: grid; gap: 1rem; padding-block: 1rem;
+  border-top: 1px solid var(--sq-border);
+}
+.sisteminha-aprofundamento-titulo h4 {
+  font: 400 clamp(1.4rem,2.5vw,2rem)/1.2 var(--sq-font-display);
+  margin: .25rem 0 .35rem;
+}
+.sisteminha-aprofundamento-titulo > p:last-child {
+  max-width: 66ch; color: var(--sq-text-muted); font-size: .9rem; line-height: 1.6;
+}
+.sisteminha-passo-a-passo {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: .8rem; list-style: none; padding: 0; margin: 0;
+}
+.sisteminha-passo-a-passo li {
+  padding: 1rem; background: var(--sq-surface-soft);
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-media);
+}
+.sisteminha-etapa-numero {
+  display: inline-grid; place-items: center; width: 2.2rem; height: 2.2rem;
+  border-radius: .6rem; color: var(--sq-primary);
+  background: var(--sq-brand-100); font-weight: 800; font-size: .82rem;
+}
+.sisteminha-passo-a-passo h5,.sisteminha-mais-grupo h5 {
+  font: 400 1.17rem/1.3 var(--sq-font-display); margin: .7rem 0 .4rem;
+}
+.sisteminha-passo-a-passo p,.sisteminha-mais-grupo p,.sisteminha-mais-grupo li {
+  color: var(--sq-text-muted); font-size: .89rem; line-height: 1.6;
+}
+.sisteminha-mais-grupo {
+  display: grid; grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: .9rem;
+}
+.sisteminha-alertas,.sisteminha-perguntas {
+  min-width: 0; padding: 1rem;
+  border-radius: var(--sq-radius-media); border: 1px solid var(--sq-border);
+  background: var(--sq-surface);
+}
+.sisteminha-alertas { background: var(--sq-surface-warm); }
+.sisteminha-alertas ul { margin: .6rem 0; padding-left: 1.35rem; }
+.sisteminha-alertas li + li { margin-top: .35rem; }
+.sisteminha-mais-grupo h5 { margin-top: 0; }
+.sisteminha-perguntas details { border-top: 1px solid var(--sq-border); margin-top: .55rem; }
+.sisteminha-perguntas summary {
+  display: list-item; min-height: var(--sq-control-min);
+  padding: .65rem .2rem; cursor: pointer; color: var(--sq-primary);
+  font-size: .9rem; font-weight: 700; line-height: 1.45;
+}
+.sisteminha-perguntas details p { padding: 0 .3rem .8rem; }
+.sisteminha-galinheiro-conjunto {
+  display: grid; min-width: 0; gap: 1.15rem;
+}
+.sisteminha-galinheiro-conjunto > .sisteminha-esquema { max-width: 58rem; margin-inline: auto; }
+.sisteminha-galinheiro-conjunto > .sisteminha-aprofundamento {
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+  background: var(--sq-surface); padding: clamp(.9rem,2vw,1.5rem);
+}
+.sisteminha-cartao img {
+  display: block; height: auto; aspect-ratio: 3 / 2; object-fit: cover;
+  filter: saturate(1.05) contrast(1.02);
+}
+.sisteminha-panorama img { filter: saturate(1.04) contrast(1.02); }
+.galinheiro-imagem { filter: saturate(1.045) contrast(1.025); }
+
+@media (max-width: 1000px) {
+  .sisteminha-modulo-midia { grid-template-columns: minmax(0,1fr); }
+  .sisteminha-foto img.sisteminha-modulo-imagem { max-height: 27rem; }
+}
+@media (max-width: 767px) {
+  .sisteminha-passo-a-passo,.sisteminha-mais-grupo { grid-template-columns: minmax(0,1fr); }
+  .sisteminha-transicao-conteudo:not([hidden]) {
+    animation-duration: 180ms;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sisteminha-transicao-conteudo:not([hidden]) { animation: none; }
+  .sisteminha-nav-rolagem a,
+  .sisteminha-foto img.sisteminha-modulo-imagem { transition: none; }
+}
+
+
+/* Visão geral: benefícios essenciais, sem inventar métricas */
+.sisteminha-visao-beneficios {
+  display: grid; grid-template-columns: minmax(0,.72fr) minmax(0,1.28fr);
+  gap: clamp(1rem,3vw,2.5rem); margin-top: 1.4rem;
+  padding: clamp(1rem,2.2vw,1.5rem);
+  background: var(--sq-surface-warm); border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+}
+.sisteminha-visao-beneficios h3 { font: 400 clamp(1.3rem,2.3vw,1.8rem)/1.2 var(--sq-font-display); margin-bottom: .5rem; }
+.sisteminha-visao-beneficios p { color: var(--sq-text-muted); font-size: .9rem; line-height: 1.6; }
+.sisteminha-visao-beneficios ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.sisteminha-visao-beneficios li { display: grid; gap: .2rem; padding: .7rem .9rem; border: 1px solid var(--sq-border); border-radius: var(--sq-radius-control); background: var(--sq-surface); }
+.sisteminha-visao-beneficios li strong { color: var(--sq-primary); font-size: .92rem; }
+.sisteminha-visao-beneficios li span { color: var(--sq-text-muted); font-size: .85rem; line-height: 1.5; }
+@media (max-width: 720px) {
+  .sisteminha-visao-beneficios { grid-template-columns: minmax(0,1fr); }
+}
