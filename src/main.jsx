@@ -15,3 +15,5 @@ createRoot(document.getElementById("root")).render(
     <App />
   </StrictMode>,
 );
+
+import "./styles/tool-ui-v3.css";

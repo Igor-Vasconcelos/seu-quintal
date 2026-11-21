@@ -413,3 +413,5 @@ createRoot(document.getElementById("root")).render(
     <Sisteminha />
   </StrictMode>,
 );
+
+import "./styles/tool-ui-v3.css";

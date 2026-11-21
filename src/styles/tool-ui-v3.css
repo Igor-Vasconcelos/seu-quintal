@@ -1,0 +1,128 @@
+/* DS3 — Etapa 4: componentes visuais de ferramentas; cálculos e dados inalterados.
+ * Seletores de escopo para preservar interações do SVG e componentes próprios.
+ */
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.ferramenta,.painel-guia,.organizador-cartao,.canteiro-visual-cartao,.galinheiro-cartao) {
+  border-color: var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+  box-shadow: var(--sq-shadow-card);
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.ferramenta-titulo,.organizador-secao-cabecalho h2,.canteiro-visual-acima h2) {
+  color: var(--sq-forest);
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.campo,.canteiro-medidas label,.familia-campos .campo) {
+  color: var(--sq-forest); font-weight: 700;
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.campo input,.campo select,.campo textarea,.canteiro-input,.familia-campos input,.familia-meta input) {
+  border-color: var(--sq-control-border);
+  border-radius: var(--sq-radius-control);
+  background: var(--sq-surface);
+  transition: border-color .17s ease, box-shadow .17s ease;
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.campo input,.campo select,.campo textarea,.canteiro-input,.familia-campos input,.familia-meta input):focus-within {
+  border-color: var(--sq-focus);
+  box-shadow: 0 0 0 3px rgb(35 107 76 / .13);
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.campo input,.campo select,.campo textarea)[aria-invalid="true"] {
+  border-color: var(--sq-error-text);
+  box-shadow: 0 0 0 1px var(--sq-error-text);
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.resultado,.organizador-previsao,.ficha-cultura,.galinheiro-resultado) {
+  min-width: 0; font-variant-numeric: tabular-nums;
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.resultado,.organizador-previsao) :is(strong,dd) { font-variant-numeric: tabular-nums; }
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.resultado,.organizador-previsao,.canteiro-espacamento) {
+  border-radius: var(--sq-radius-control);
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.botao,.canteiro-direcoes button,.organizador-seletor-canteiro select) {
+  min-height: var(--sq-control-min);
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.botao,.canteiro-cultura-item,.familia-cultura):focus-visible {
+  outline: 3px solid var(--sq-focus);
+  outline-offset: 3px;
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.botao,.canteiro-cultura-item) {
+  transition: background-color .17s ease, border-color .17s ease, box-shadow .17s ease;
+}
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  :is(.aviso,.erro) { line-height: 1.5; border-radius: var(--sq-radius-control); }
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  .aviso { border: 1px solid #E8C87E; }
+:where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+  .erro { border: 1px solid #E7B6AE; }
+.conteudo-tematico .area-tematica > h2,
+.conteudo-tematico .orientacao-tematica > h2 { margin-bottom: .75rem; }
+.conteudo-tematico .area-tematica > h2 {
+  font: 400 clamp(1.45rem,2.4vw,2rem)/1.2 var(--sq-font-display);
+  color: var(--sq-forest);
+}
+.conteudo-tematico .area-tematica:has(.organizador) {
+  padding: clamp(.7rem,2vw,1.15rem);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card); background: var(--sq-surface-warm);
+}
+.conteudo-tematico .canteiro-visual-acima {
+  border-bottom: 1px solid var(--sq-border);
+  padding-bottom: .85rem;
+}
+.conteudo-tematico .canteiro-visual-cartao { border: 1px solid var(--sq-border); }
+.conteudo-tematico .canteiro-area {
+  background: var(--sq-surface);
+  box-shadow: 0 9px 26px rgb(24 60 43 / .08);
+}
+.conteudo-tematico .canteiro-cultura-item.selecionado {
+  box-shadow: inset 0 0 0 1px var(--sq-primary);
+}
+.conteudo-tematico .meus-canteiros-editor {
+  background: var(--sq-surface-warm);
+}
+.conteudo-tematico .organizador-abertura,
+.conteudo-tematico .galinheiro-abertura {
+  border-radius: var(--sq-radius-card);
+}
+.conteudo-tematico .familia-indicadores > div {
+  background: var(--sq-brand-100); border: 1px solid var(--sq-border);
+}
+.pagina-sisteminha .galinheiro-cartao {
+  border: 1px solid var(--sq-border);
+  background: var(--sq-surface); box-shadow: var(--sq-shadow-card);
+}
+.pagina-sisteminha .galinheiro-cartao :is(dt,dd) { font-variant-numeric: tabular-nums; }
+.pagina-sisteminha .galinheiro-calculadora {
+  background: var(--sq-surface-warm); border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+}
+.editor-terreno .cartao-planta {
+  border-color: var(--sq-border); border-radius: var(--sq-radius-card);
+}
+.editor-terreno .config-terreno {
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-control);
+}
+.editor-terreno .config-terreno summary {
+  display: list-item; min-height: var(--sq-control-min);
+  align-content: center; color: var(--sq-primary);
+}
+.editor-terreno .regua-terreno { border-radius: var(--sq-radius-control); }
+@media (max-width: 767px) {
+  .conteudo-tematico .area-tematica:has(.organizador) { padding: .55rem; }
+  .conteudo-tematico .canteiro-area { box-shadow: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(.pagina-home,.conteudo-tematico,.pagina-sisteminha,.pagina-meu-quintal)
+    :is(.botao,.canteiro-cultura-item,.campo input,.campo select,.campo textarea,.canteiro-input,.familia-campos input,.familia-meta input) {
+    transition: none;
+  }
+}

@@ -13,3 +13,5 @@ import "./styles/meu-quintal.css";
 createRoot(document.getElementById("quintal-raiz")).render(
   <MeuQuintal />,
 );
+
+import "./styles/tool-ui-v3.css";
