@@ -214,14 +214,14 @@ export default function OrganizadorHorta({ culturaSugerida }) {
     }
   }
 
-  async function adicionarSugestoes(sugestoes) {
+  async function adicionarSugestoes(sugestoes, areaTotal) {
     if (!sugestoes.length || bloqueado) return false;
     return atualizar((atuais) => {
       const existentes = new Set(atuais.planos.map(p => p.cultura));
       const novos = sugestoes.filter(p => !existentes.has(p.cultura))
         .map(plano => ({ ...plano, id: novoId(), concluidas: [] }));
       if (novos.length !== sugestoes.length) throw new Error("Um cultivo já foi cadastrado.");
-      return { ...atuais, planos: [...atuais.planos, ...novos] };
+      return { ...atuais, area: atuais.area ?? areaTotal, planos: [...atuais.planos, ...novos] };
     }, "Sugestões de plantio incluídas na agenda.");
   }
 
