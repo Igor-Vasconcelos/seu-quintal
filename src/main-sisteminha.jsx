@@ -71,6 +71,11 @@ const nomesDasAbas = [
   ["materiais", "Materiais e fontes"],
 ];
 const idsDasAbas = new Set(nomesDasAbas.map(([id]) => id));
+const iconesAbas = {
+  ciclo: "ciclo", tanque: "peixe", galinheiro: "galinha",
+  horta: "muda", compostagem: "recycle", minhocario: "minhoca",
+  integracao: "rede", materiais: "livro",
+};
 
 function abaPelaHash() {
   const hash = window.location.hash.slice(1);
@@ -270,13 +275,14 @@ function Sisteminha() {
   }
 
   return (
-    <div className="pagina pagina-sisteminha" id="inicio">
+    <div className="pagina pagina-sisteminha sisteminha-ds3" id="inicio">
       <a className="pular" href="#conteudo">Pular para o conteúdo</a>
       <Cabecalho sisteminha />
 
       <main id="conteudo" tabIndex={-1} onClick={navegarPeloConteudo}>
         <section className="sisteminha-abertura" aria-labelledby="titulo-sisteminha">
           <div className="sisteminha-intro">
+            <span className="sisteminha-hero-selo"><Icone nome="muda"/> TECNOLOGIA SOCIAL</span>
             <h1 id="titulo-sisteminha">Sisteminha Embrapa</h1>
             <p>O Sisteminha Embrapa, UFU e Fapemig combina diferentes formas de produzir alimentos no quintal. Entenda como a água do tanque pode ajudar na irrigação e como resíduos podem virar composto para a horta.</p>
             <div className="sisteminha-intro-acoes">
@@ -297,7 +303,7 @@ function Sisteminha() {
           <div className="sisteminha-nav-rolagem">
             {nomesDasAbas.map(([id, titulo]) => (
               <a key={id} href={`#${id}`} aria-current={abaAtiva === id ? "page" : undefined}>
-                {titulo}
+                <Icone nome={iconesAbas[id]}/><span>{titulo}</span>
               </a>
             ))}
           </div>
@@ -308,9 +314,39 @@ function Sisteminha() {
         </p>
 
         <section className="sisteminha-secao sisteminha-transicao-conteudo" id="ciclo" hidden={abaAtiva !== "ciclo"} aria-labelledby="titulo-ciclo" tabIndex={-1}>
-          <h2 id="titulo-ciclo">Como funciona o ciclo</h2>
-          <p className="sisteminha-orientacao">Explore os caminhos da água, da matéria orgânica e dos alimentos.
-            Toque em um componente para conhecer seus cuidados e conexões.</p>
+          <div className="sisteminha-panorama-editorial">
+            <div className="sisteminha-panorama-texto">
+              <p className="sisteminha-kicker">VISÃO GERAL</p>
+              <h2 id="titulo-ciclo">O que é o Sisteminha Embrapa?</h2>
+              <p>É uma tecnologia social de produção integrada que combina módulos para
+                produzir alimentos e aproveitar recursos de forma responsável.
+                Cada família pode planejar o que cabe no seu espaço.</p>
+              <p className="sisteminha-nota-editorial">A integração depende de manejo, tratamento adequado,
+                espaço disponível e orientação técnica. Não é um circuito único nem uma garantia de produção.</p>
+            </div>
+            <figure className="sisteminha-panorama-imagem">
+              <img src="./imagens/sisteminha/panorama.webp"
+                srcSet="./imagens/sisteminha/panorama-720.webp 720w, ./imagens/sisteminha/panorama-960.webp 960w, ./imagens/sisteminha/panorama.webp 1248w"
+                sizes="(max-width: 767px) 94vw, 42vw" width="1248" height="832"
+                loading="lazy" decoding="async"
+                alt="Ilustração educativa com tanque de peixes, galinheiro, horta e composteira organizados em um quintal."/>
+              <figcaption>Representação ilustrativa gerada por IA, não fotografia de instalação oficial.</figcaption>
+            </figure>
+            <aside className="sisteminha-panorama-beneficios">
+              <h3><Icone nome="muda"/> Principais benefícios</h3>
+              <ul>
+                <li>Produção diversificada conforme os módulos escolhidos</li>
+                <li>Maior aproveitamento responsável dos recursos</li>
+                <li>Organização de pequenas áreas produtivas</li>
+                <li>Oportunidade de planejar a alimentação familiar</li>
+              </ul>
+              <p>Investimento e resultados variam conforme a escala e o manejo.</p>
+            </aside>
+          </div>
+          <div className="sisteminha-ciclo-titulo">
+            <h2>Entenda os caminhos do ciclo</h2>
+            <p>Água, matéria orgânica e alimentos possuem processos próprios. Explore cada rota.</p>
+          </div>
           <FluxoSisteminha/>
           <ul className="sisteminha-cartoes">
             {Object.entries(modulos).map(([id, modulo]) => (
