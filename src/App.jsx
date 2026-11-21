@@ -16,13 +16,6 @@ const atalhos = [
   { destino: "./horta/organizador/", icone: "calendario", titulo: "Montar uma agenda", resumo: "Planeje os lotes e acompanhe as datas da horta." },
 ];
 
-const jornadas = [
-  { etapa: "01", titulo: "Sonhando", descricao: "Descubra como usar cada metro do terreno.", destino: "#planejador", acao: "Planejar meu espaço" },
-  { etapa: "02", titulo: "Começando", descricao: "Aprenda a plantar em vasos ou canteiros.", destino: "./horta/", acao: "Começar minha horta" },
-  { etapa: "03", titulo: "Crescendo", descricao: "Organize os plantios e as próximas colheitas.", destino: "./horta/organizador/", acao: "Montar minha agenda" },
-  { etapa: "04", titulo: "Expandindo", descricao: "Conheça formas de integrar a produção.", destino: "./sisteminha.html", acao: "Explorar o Sisteminha" },
-];
-
 export default function App() {
   const [botaoCreditos, definirBotaoCreditos] = useState(null);
 
@@ -81,27 +74,6 @@ export default function App() {
                     {novaAba && <span className="visualmente-oculto"> (abre em nova aba)</span>}
                   </span>
                   <Icone nome={novaAba ? "novaAba" : "seta"} />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="home-miolo home-secao home-jornada" aria-labelledby="titulo-jornada">
-          <div className="home-secao-topo">
-            <div>
-              <p className="home-sobretitulo">SEU MOMENTO</p>
-              <h2 id="titulo-jornada">Um caminho para cada fase</h2>
-            </div>
-          </div>
-          <ul className="home-jornada-grade">
-            {jornadas.map(({ etapa, titulo, descricao, destino, acao }) => (
-              <li key={etapa}>
-                <a className="home-jornada-card" href={destino}>
-                  <span className="home-jornada-numero" aria-hidden="true">{etapa}</span>
-                  <strong>{titulo}</strong>
-                  <span>{descricao}</span>
-                  <span className="home-jornada-acao">{acao} <Icone nome="seta" /></span>
                 </a>
               </li>
             ))}
