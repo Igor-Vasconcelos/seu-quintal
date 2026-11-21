@@ -269,7 +269,7 @@ export default function OrganizadorHorta({ culturaSugerida }) {
       <PlanejamentoFamiliar regiao={dados.regiao} planosExistentes={dados.planos}
         bloqueado={bloqueado} aoAplicar={adicionarSugestoes} />
       <FormularioCultivo key={planoEmEdicao?.id ?? "novo"} edicao={planoEmEdicao} regiao={dados.regiao}
-        canteiros={estadoCanteiros.dados.itens}
+        canteiros={estadoCanteiros.erro ? [] : estadoCanteiros.dados.itens}
         culturaSugerida={culturaSugerida} aoSalvar={salvarPlano} aoCancelar={() => definirEdicao(null)} bloqueado={bloqueado} />
       <PlanoHorta dados={dados} aoEditar={editar} aoRemover={remover} bloqueado={bloqueado} />
       {dados.planos.length > 0 && <AgendaHorta planos={dados.planos} regiao={dados.regiao} aoConcluir={concluir} bloqueado={bloqueado} />}
