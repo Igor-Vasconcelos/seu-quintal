@@ -90,7 +90,7 @@ function ResumoCultivo({ plano, regiao }) {
   );
 }
 
-export default function FormularioCultivo({ edicao, culturaSugerida, regiao, aoSalvar, aoCancelar, bloqueado }) {
+export default function FormularioCultivo({ edicao, culturaSugerida, regiao, canteiros = [], aoSalvar, aoCancelar, bloqueado }) {
   const [campos, definirCampos] = useState(() => formularioInicial(edicao, culturaSugerida));
   const [tentouSalvar, definirTentouSalvar] = useState(false);
   const ficha = culturasOrganizador[campos.cultura];
@@ -110,6 +110,15 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, aoS
       venda: proxima.unidade === ficha.unidade ? atuais.venda : "0",
       intervalo: proxima.colheitasSucessivas === ficha.colheitasSucessivas ? atuais.intervalo : proxima.colheitasSucessivas ? "4" : "1",
       rendimento: "", duracao: "",
+    }));
+  }
+
+  function vincularCanteiro(evento) {
+    const id = evento.target.value;
+    const salvo = canteiros.find(item => item.id === id);
+    definirCampos(atuais => ({
+      ...atuais, canteiroId: id,
+      canteiro: salvo ? salvo.nome : atuais.canteiro,
     }));
   }
 
@@ -172,8 +181,17 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, aoS
               </p>}
             </fieldset>
           )}
-          <label className="campo">Canteiro ou área (opcional)
-            <input name="canteiro" value={campos.canteiro} onChange={mudar} maxLength={60} placeholder="Ex. Canteiro 1" />
+          <label className="campo organizador-seletor-canteiro">Vincular a um canteiro salvo (opcional)
+            <select name="canteiroId" value={campos.canteiroId || ""} onChange={vincularCanteiro}>
+              <option value="">Sem vínculo com o desenho</option>
+              {canteiros.map(item => <option key={item.id} value={item.id}>
+                {item.nome} — {(item.medidas.largura * item.medidas.comprimento / 10000).toLocaleString("pt-BR")} m²
+              </option>)}
+            </select>
+          </label>
+          <label className="campo">Canteiro ou área (descrição)
+            <input name="canteiro" value={campos.canteiro} onChange={mudar} maxLength={60}
+              placeholder="Ex.: canteiro perto da varanda" />
           </label>
           {tentouSalvar && erro && <p className="erro" role="alert">{erro}</p>}
           <div className="organizador-acoes">

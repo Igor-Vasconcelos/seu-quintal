@@ -6,6 +6,8 @@ import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import { novoId } from "../planejador/projetos.js";
 import AgendaHorta from "./AgendaHorta.jsx";
 import PlanejamentoFamiliar from "./PlanejamentoFamiliar.jsx";
+import CanteirosResumo from "./CanteirosResumo.jsx";
+import { chaveCanteiros, colecaoInicial, lerColecaoCanteiros } from "./canteiros.js";
 import { chaveOrganizador, gravarOrganizador, hortaInicial, lerOrganizador, recuperarOrganizador } from "./armazenamento.js";
 import { culturasOrganizador } from "./culturas.js";
 import { avancarDias, dimensionarLote, janelaDeDatas, projetarLote, rotuloData } from "./escala.js";
@@ -140,6 +142,10 @@ function PlanoHorta({ dados, aoEditar, aoRemover, bloqueado }) {
 
 export default function OrganizadorHorta({ culturaSugerida }) {
   const [estado, definirEstado] = useState(abrirOrganizador);
+  const [estadoCanteiros, definirEstadoCanteiros] = useState(() => {
+    try { return { dados: lerColecaoCanteiros(), erro: "" }; }
+    catch (falha) { return { dados: colecaoInicial(), erro: falha.message }; }
+  });
   const [edicao, definirEdicao] = useState(null);
   const [mensagem, definirMensagem] = useState("");
   const [salvando, definirSalvando] = useState(false);
@@ -150,6 +156,10 @@ export default function OrganizadorHorta({ culturaSugerida }) {
   useEffect(() => {
     function sincronizar(evento) {
       if (evento.key === chaveOrganizador || evento.key === null) definirEstado(abrirOrganizador());
+      if (evento.key === chaveCanteiros || evento.key === null) {
+        try { definirEstadoCanteiros({ dados: lerColecaoCanteiros(), erro: "" }); }
+        catch (falha) { definirEstadoCanteiros(atual => ({ ...atual, erro: falha.message })); }
+      }
     }
     window.addEventListener("storage", sincronizar);
     return () => window.removeEventListener("storage", sincronizar);
@@ -255,9 +265,11 @@ export default function OrganizadorHorta({ culturaSugerida }) {
       {erro && <p className="erro" role="alert">{erro}</p>}
       {corrompido !== null && <RecuperarDados recuperar={recuperar} salvando={salvando} />}
       <p className="organizador-status" role="status">{mensagem}</p>
+      <CanteirosResumo colecao={estadoCanteiros.dados} planos={dados.planos} aviso={estadoCanteiros.erro} />
       <PlanejamentoFamiliar regiao={dados.regiao} planosExistentes={dados.planos}
         bloqueado={bloqueado} aoAplicar={adicionarSugestoes} />
       <FormularioCultivo key={planoEmEdicao?.id ?? "novo"} edicao={planoEmEdicao} regiao={dados.regiao}
+        canteiros={estadoCanteiros.dados.itens}
         culturaSugerida={culturaSugerida} aoSalvar={salvarPlano} aoCancelar={() => definirEdicao(null)} bloqueado={bloqueado} />
       <PlanoHorta dados={dados} aoEditar={editar} aoRemover={remover} bloqueado={bloqueado} />
       {dados.planos.length > 0 && <AgendaHorta planos={dados.planos} regiao={dados.regiao} aoConcluir={concluir} bloqueado={bloqueado} />}

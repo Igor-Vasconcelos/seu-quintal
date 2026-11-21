@@ -3,12 +3,16 @@ import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
 import IconeCultura from "./IconeCultura.jsx";
 import { nomeCurtoDaCultura } from "./culturasVisuais.js";
-import { MEDIDAS_INICIAIS, gravarRascunho, lerRascunho } from "./rascunhoCanteiro.js";
+import { adicionarCanteiro, colecaoInicial, gravarColecaoCanteiros, lerColecaoCanteiros,
+  limiteCanteiros, removerCanteiro, substituirCanteiro } from "./canteiros.js";
+import { lerOrganizador } from "./armazenamento.js";
+import { chaveCanteiros } from "./canteiros.js";
 import {
   LIMITE_PLANTAS, PASSO_MOVIMENTO_CM, adicionarAutomaticamente, areaOcupadaCm2,
   capacidadeHomogenea, cm, dimensoesDaCultura, posicaoValida, proximaPosicaoLivre, resumirCulturas,
 } from "./canteiroGeometria.js";
 import "../../styles/visual-canteiro.css";
+import "../../styles/canteiros-inteligentes.css";
 
 const nomes = Object.keys(culturasOrganizador);
 const metros = valorCm => formatarMedida(valorCm / 100);
@@ -16,20 +20,30 @@ const numero = valor => formatarMedida(valor);
 const defaultTexto = valor => String(valor / 100).replace(".", ",");
 
 export default function PlanejadorVisualCanteiro() {
-  const [restaurado] = useState(() => lerRascunho());
-  const [medidas, setMedidas] = useState(restaurado?.medidas ?? MEDIDAS_INICIAIS);
-  const [textoLargura, setTextoLargura] = useState(() =>
-    defaultTexto((restaurado?.medidas ?? MEDIDAS_INICIAIS).largura));
-  const [textoComprimento, setTextoComprimento] = useState(() =>
-    defaultTexto((restaurado?.medidas ?? MEDIDAS_INICIAIS).comprimento));
-  const [plantas, setPlantas] = useState(restaurado?.plantas ?? []);
-  const plantasRef = useRef(restaurado?.plantas ?? []);
+  const [inicio] = useState(() => {
+    try { return { dados: lerColecaoCanteiros(), erro: "" }; }
+    catch (erro) { return { dados: colecaoInicial(), erro: erro.message }; }
+  });
+  const [colecao, setColecao] = useState(inicio.dados);
+  const [ativoId, setAtivoId] = useState(inicio.dados.ativoId);
+  const ativo = colecao.itens.find(item => item.id === ativoId) || colecao.itens[0];
+  const [nome, setNome] = useState(ativo.nome);
+  const [novoNome, setNovoNome] = useState("");
+  const [medidas, setMedidas] = useState(ativo.medidas);
+  const [textoLargura, setTextoLargura] = useState(() => defaultTexto(ativo.medidas.largura));
+  const [textoComprimento, setTextoComprimento] = useState(() => defaultTexto(ativo.medidas.comprimento));
+  const [plantas, setPlantas] = useState(ativo.plantas);
+  const plantasRef = useRef(ativo.plantas);
   const [cultura, setCultura] = useState("Alface de verão");
   const [girarNovas, setGirarNovas] = useState(false);
   const [mostrarTodas, setMostrarTodas] = useState(false);
   const [selecionado, setSelecionado] = useState(null);
-  const [salvo, setSalvo] = useState(Boolean(restaurado));
-  const [mensagem, setMensagem] = useState(restaurado ? "Seu último desenho salvo foi recuperado." : "");
+  const [salvo, setSalvo] = useState(() => {
+    try { return !inicio.erro && window.localStorage.getItem(chaveCanteiros) !== null; }
+    catch { return false; }
+  });
+  const [mensagem, setMensagem] = useState(inicio.erro ||
+    "Se havia um rascunho antigo, ele foi carregado sem apagar o original. Salve para incluí-lo nos Meus Canteiros.");
   const [erro, setErro] = useState(false);
   const [baixando, setBaixando] = useState(false);
   const sequencia = useRef(Date.now());
@@ -152,14 +166,93 @@ export default function PlanejadorVisualCanteiro() {
     avisar("Desenho limpo. O rascunho salvo anteriormente não foi alterado.");
   }
 
-  function salvar() {
-    try {
-      gravarRascunho({ medidas, plantas: plantasRef.current });
-      setSalvo(true);
-      avisar("Desenho salvo neste navegador. Para acessar em outro dispositivo, será necessária a futura sincronização.");
-    } catch {
-      avisar("Não foi possível salvar neste navegador. Verifique o armazenamento disponível.", true);
+  function carregarCanteiro(item) {
+    setAtivoId(item.id);
+    setNome(item.nome);
+    setMedidas(item.medidas);
+    setTextoLargura(defaultTexto(item.medidas.largura));
+    setTextoComprimento(defaultTexto(item.medidas.comprimento));
+    setPlantas(item.plantas);
+    plantasRef.current = item.plantas;
+    setSelecionado(null);
+    setSalvo(true);
+  }
+
+  function persistir(proximo) {
+    if (inicio.erro) {
+      avisar("Existe um problema com o armazenamento anterior. Nenhum dado será sobrescrito.", true);
+      return false;
     }
+    try {
+      const salvoAgora = gravarColecaoCanteiros(proximo);
+      setColecao(salvoAgora);
+      setSalvo(true);
+      return salvoAgora;
+    } catch {
+      avisar("Não foi possível guardar os canteiros neste navegador.", true);
+      return false;
+    }
+  }
+
+  function salvar() {
+    if (inicio.erro) return;
+    try {
+      const proximo = substituirCanteiro(colecao, ativoId,
+        { nome: nome.trim(), medidas, plantas: plantasRef.current });
+      if (persistir(proximo)) avisar("Canteiro salvo. Ele estará no backup do Meu Quintal.");
+    } catch (falha) {
+      avisar(falha.message || "Confira o nome e as medidas do canteiro.", true);
+    }
+  }
+
+  function trocarCanteiro(id) {
+    if (id === ativoId) return;
+    if (!salvo && !window.confirm("Existem mudanças não salvas. Trocar de canteiro sem salvá-las?")) return;
+    const proximo = { ...colecao, ativoId: id };
+    if (persistir(proximo)) {
+      carregarCanteiro(proximo.itens.find(item => item.id === id));
+      avisar("Canteiro aberto.");
+    }
+  }
+
+  function criarCanteiro() {
+    if (!salvo && !window.confirm("Criar outro canteiro sem salvar as mudanças do atual?")) return;
+    const nomeNovo = novoNome.trim() || "Canteiro " + (colecao.itens.length + 1);
+    if (nomeNovo.length > 60) return avisar("Use um nome com até 60 caracteres.", true);
+    try {
+      const id = "canteiro-" + (globalThis.crypto?.randomUUID?.() ?? Date.now().toString(36));
+      const proximo = adicionarCanteiro(colecao, id, nomeNovo);
+      if (persistir(proximo)) {
+        carregarCanteiro(proximo.itens.at(-1));
+        setNovoNome("");
+        avisar("Novo canteiro criado e salvo neste navegador.");
+      }
+    } catch (falha) {
+      avisar(falha.message, true);
+    }
+  }
+
+  function excluirCanteiro() {
+    if (colecao.itens.length < 2) return;
+    try {
+      const planos = lerOrganizador().dados.planos;
+      if (planos.some(plano => plano.canteiroId === ativoId ||
+        (!plano.canteiroId && plano.canteiro === ativo.nome))) {
+        avisar("Este canteiro está vinculado à agenda. Edite os cultivos antes de excluí-lo.", true);
+        return;
+      }
+    } catch {
+      avisar("Não foi possível verificar os vínculos da agenda. Exclusão cancelada.", true);
+      return;
+    }
+    if (!window.confirm("Excluir " + ativo.nome + " e seu desenho salvo? Esta ação não pode ser desfeita.")) return;
+    try {
+      const proximo = removerCanteiro(colecao, ativoId);
+      if (persistir(proximo)) {
+        carregarCanteiro(proximo.itens[0]);
+        avisar("Canteiro excluído. Os demais foram preservados.");
+      }
+    } catch (falha) { avisar(falha.message, true); }
   }
 
   function pontoDoPonteiro(evento) {
@@ -262,6 +355,31 @@ export default function PlanejadorVisualCanteiro() {
           <h2 id="titulo-visual-canteiro">Monte seu canteiro</h2>
         </div>
         <p className="canteiro-visual-dica-curta">Escolha uma cultura, distribua as plantas e ajuste como preferir.</p>
+      </div>
+
+      <div className="meus-canteiros-editor" aria-label="Meus canteiros salvos">
+        <label>Abrir canteiro
+          <select value={ativoId} onChange={e => trocarCanteiro(e.target.value)}>
+            {colecao.itens.map(item => <option key={item.id} value={item.id}>{item.nome}</option>)}
+          </select>
+        </label>
+        <label>Nome do canteiro
+          <input value={nome} maxLength={60} onChange={e => { setNome(e.target.value); setSalvo(false); }}/>
+        </label>
+        <label>Novo canteiro
+          <input value={novoNome} maxLength={60} placeholder="Ex.: Canteiro das folhas"
+            onChange={e => setNovoNome(e.target.value)}/>
+        </label>
+        <button type="button" className="botao botao-contorno" onClick={criarCanteiro}
+          disabled={Boolean(inicio.erro) || colecao.itens.length >= limiteCanteiros}>＋ Criar</button>
+        <button type="button" className="botao botao-contorno" onClick={excluirCanteiro}
+          disabled={Boolean(inicio.erro) || colecao.itens.length < 2}>Excluir canteiro</button>
+        <div className="meus-canteiros-editor-dados">
+          <p>{colecao.itens.length} de {limiteCanteiros} canteiros · Salve as alterações antes de trocar de canteiro.</p>
+          <a href={window.location.pathname.includes("/meu-quintal/") ? "#horta" : "../organizador/#meus-canteiros"}>
+            Ver previsão de plantio e replantio
+          </a>
+        </div>
       </div>
 
       <div className="canteiro-visual-grade">
@@ -422,14 +540,14 @@ export default function PlanejadorVisualCanteiro() {
           </details>}
           <div className="canteiro-resumo-botoes">
             <button className="botao" type="button" onClick={salvar}>
-              {salvo ? "✓ Salvo neste navegador" : "✓ Salvar neste navegador"}
+              {salvo ? "✓ Canteiro salvo" : "✓ Salvar canteiro"}
             </button>
             <button className="botao botao-contorno" type="button" onClick={baixarPNG} disabled={baixando}>
               {baixando ? "Gerando imagem…" : "↓ Baixar imagem PNG"}
             </button>
             <button className="canteiro-limpar" type="button" onClick={limpar} disabled={!plantas.length}>Limpar desenho</button>
           </div>
-          <p className="canteiro-texto-secundario">Salva um rascunho neste dispositivo. Não sincroniza com o Meu Quintal e ainda não entra no backup geral.</p>
+          <p className="canteiro-texto-secundario">Salva vários canteiros neste dispositivo e inclui-os no backup do Meu Quintal. Não sincroniza entre dispositivos.</p>
         </aside>
       </div>
 

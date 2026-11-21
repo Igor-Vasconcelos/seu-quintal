@@ -5,6 +5,8 @@ import { chaveOrganizador, hortaInicial } from "../organizador/armazenamento.js"
 import { formularioInicial, lerPlano } from "../organizador/escala.js";
 import { culturasOrganizador } from "../organizador/culturas.js";
 import { regioes } from "../../data/plantio.js";
+import { chaveCanteiros, lerColecaoCanteiros, normalizarColecao } from "../organizador/canteiros.js";
+import { CHAVE_CANTEIRO } from "../organizador/rascunhoCanteiro.js";
 
 export const chaveHistorico = "seu-quintal:historico-cultivo:v1";
 export const limiteArquivoBackup = 2 * 1024 * 1024;
@@ -90,6 +92,10 @@ export function validarBackup(pacote) {
   validarProjetos(pacote.dados.projetos);
   validarHistorico(pacote.dados.historico);
   validarOrganizador(pacote.dados.organizador);
+  if (Object.hasOwn(pacote.dados, "canteiros")) {
+    exigir(normalizarColecao(pacote.dados.canteiros) !== null,
+      "Os canteiros do backup estão inválidos.");
+  }
   return pacote;
 }
 
@@ -107,6 +113,9 @@ export async function criarBackup() {
       projetos: await lerProjetosSalvos(),
       historico: lerLocal(chaveHistorico, []),
       organizador: lerLocal(chaveOrganizador, hortaInicial),
+      ...((window.localStorage.getItem(chaveCanteiros) !== null ||
+        window.localStorage.getItem(CHAVE_CANTEIRO) !== null)
+        ? { canteiros: lerColecaoCanteiros() } : {}),
     },
   };
   validarBackup(pacote);
@@ -122,16 +131,20 @@ export function resumoBackup(pacote) {
     cenarios: Object.values(projetos.terrenos).reduce((total, terreno) => total + terreno.cenarios.length, 0),
     registros: historico.length,
     planos: organizador.planos.length,
+    ...(Object.hasOwn(pacote.dados, "canteiros") ? { canteiros: pacote.dados.canteiros.itens.length } : {}),
   };
 }
 
 export async function restaurarBackup(pacote) {
-  const { projetos, historico, organizador } = validarBackup(pacote).dados;
-  const chaves = [chaveHistorico, chaveOrganizador, chaveProjetos];
+  const { projetos, historico, organizador, canteiros } = validarBackup(pacote).dados;
+  // Um backup antigo não contém canteiros: preserve os atuais em vez de apagá-los.
+  const chaves = [chaveHistorico, chaveOrganizador, chaveProjetos,
+    ...(canteiros ? [chaveCanteiros] : [])];
   const anteriores = chaves.map((chave) => window.localStorage.getItem(chave));
   try {
     window.localStorage.setItem(chaveHistorico, JSON.stringify(historico));
     window.localStorage.setItem(chaveOrganizador, JSON.stringify(organizador));
+    if (canteiros) window.localStorage.setItem(chaveCanteiros, JSON.stringify(canteiros));
     // A gravação do terreno usa IndexedDB, com fallback no armazenamento local.
     const resultado = await gravarProjetosSalvos(() => ({ dados: projetos }));
     if (!resultado.salvo) throw new Error("Não foi possível salvar todos os terrenos.");

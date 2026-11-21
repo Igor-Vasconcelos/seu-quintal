@@ -12,7 +12,7 @@ function normalizarPlanoSalvo(item) {
     const { plano } = lerPlano(formularioInicial(item));
     if (!plano) return null;
     const concluidas = Array.isArray(item.concluidas) ? item.concluidas.filter((chave) => typeof chave === "string") : [];
-    return { ...plano, id: item.id, concluidas };
+    return { ...plano, id: item.id, canteiroId: typeof item.canteiroId === "string" ? item.canteiroId : "", concluidas };
   } catch {
     return null;
   }

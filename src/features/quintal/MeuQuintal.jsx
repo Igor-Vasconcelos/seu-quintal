@@ -8,10 +8,12 @@ import BackupDados from "./BackupDados.jsx";
 
 const HistoricoCultivo = lazy(() => import("../cultivo/HistoricoCultivo.jsx"));
 const OrganizadorHorta = lazy(() => import("../organizador/OrganizadorHorta.jsx"));
+const PlanejadorVisualCanteiro = lazy(() => import("../organizador/PlanejadorVisualCanteiro.jsx"));
 const secoes = {
   terreno: { nome: "Terreno", icone: "planta" },
   historico: { nome: "Histórico", icone: "historico" },
   horta: { nome: "Agenda da horta", icone: "calendario" },
+  canteiros: { nome: "Meus canteiros", icone: "planta" },
 };
 const raiz = "../";
 
@@ -60,6 +62,9 @@ export default function MeuQuintal() {
             <Suspense fallback={<p role="status">Carregando ferramenta…</p>}>
               {secao === "terreno" && <PlanejadorQuintal />}
               {secao === "historico" && <HistoricoCultivo nivelTitulo={2} />}
+              {secao === "canteiros" && <section aria-label="Meus canteiros">
+                <PlanejadorVisualCanteiro />
+              </section>}
               {secao === "horta" && <section aria-label="Organizador de horta">
                 <h2>Agenda da horta</h2>
                 <OrganizadorHorta culturaSugerida={cultura} />
