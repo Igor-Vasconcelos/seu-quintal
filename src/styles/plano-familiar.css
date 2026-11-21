@@ -1,0 +1,95 @@
+/* Seu Quintal — assistente de escalonamento; Design System 2.0 */
+.organizador .familia { padding: 0; overflow: visible; scroll-margin-top: 1.5rem; }
+.familia-abrir {
+  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; cursor: pointer; padding: clamp(.9rem, 2vw, 1.3rem);
+  background: var(--sq-surface-warm); border-radius: var(--sq-radius-card);
+}
+.familia-abrir::-webkit-details-marker { display: none; }
+.familia-abrir::before {
+  content: "🌱"; flex: 0 0 2.5rem; display: grid; place-items: center; align-self: center;
+  width: 2.5rem; height: 2.5rem; border-radius: .8rem; background: var(--sq-brand-100);
+}
+.familia-chamada { flex: 1; min-width: 0; display: grid; gap: .2rem; }
+.familia-chamada strong { font: 400 clamp(1.2rem, 2.3vw, 1.6rem)/1.2 var(--sq-font-display); }
+.familia-chamada small { font-size: .85rem; color: var(--sq-text-muted); font-weight: 500; line-height: 1.45; }
+.familia-chamada-acao {
+  flex: none; padding: .6rem .75rem; border-radius: var(--sq-radius-control);
+  background: var(--sq-primary); color: var(--sq-on-primary); font-size: .82rem; font-weight: 700;
+}
+.familia[open] > .familia-abrir { border-radius: var(--sq-radius-card) var(--sq-radius-card) 0 0; }
+.familia-conteudo { display: grid; gap: 1rem; padding: clamp(1rem,2vw,1.4rem); }
+.familia-etapa {
+  min-width: 0; padding: clamp(.7rem,1.5vw,1rem); border: 1px solid var(--sq-border);
+  background: var(--sq-surface); border-radius: var(--sq-radius-media);
+}
+.familia-etapa h3 { display: flex; gap: .55rem; align-items: center; font: 400 clamp(1.25rem,2vw,1.55rem)/1.2 var(--sq-font-display); margin: 0 0 .8rem; }
+.familia-passo {
+  display: inline-grid; place-items: center; width: 2rem; height: 2rem; flex: none;
+  background: var(--sq-brand-100); color: var(--sq-primary); border-radius: .55rem;
+  font: 750 .9rem var(--sq-font-ui);
+}
+.familia-campos { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,10rem),1fr)); gap: .7rem; align-items: end; }
+.familia-campos .campo, .familia-meta label { display: grid; gap: .3rem; font-size: .875rem; font-weight: 700; }
+.familia-campos input, .familia-meta input {
+  width: 100%; min-height: var(--sq-control-min); padding: .55rem .65rem;
+  border: 1px solid var(--sq-control-border); border-radius: var(--sq-radius-control);
+  background: var(--sq-surface); color: var(--sq-text); font: 500 1rem var(--sq-font-ui);
+}
+.familia .nota { font-size: .83rem; color: var(--sq-text-muted); line-height: 1.5; }
+.familia-grupo h4, .familia-metas h4 { font-size: 1rem; margin: .9rem 0 .6rem; }
+.familia-grupo summary { color: var(--sq-primary); font-size: .875rem; font-weight: 700; }
+.familia-seletor { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,10rem),1fr)); gap: .55rem; }
+.familia-cultura {
+  display: flex; gap: .4rem; align-items: center; cursor: pointer;
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-control);
+  min-height: 3.8rem; padding: .4rem .55rem; background: var(--sq-surface-soft);
+  font-size: .8rem; font-weight: 700;
+}
+.familia-cultura:has(input:checked) { background: var(--sq-brand-100); border-color: var(--sq-primary); }
+.familia-cultura svg { width: 2.7rem; height: 2.7rem; flex: none; }
+.familia-cultura input, .familia-venda input { width: 1.05rem; height: 1.05rem; flex: none; accent-color: var(--sq-primary); }
+.familia-metas { margin-top: 1.25rem; }
+.familia-venda { display: flex; align-items: center; gap: .5rem; min-height: var(--sq-control-min); font-size: .9rem; }
+.familia-meta {
+  display: grid; grid-template-columns: minmax(8rem, 1.4fr) minmax(7rem, .7fr) minmax(7rem, .7fr);
+  gap: .6rem; padding: .7rem 0; align-items: center; border-bottom: 1px solid var(--sq-subtle-line);
+}
+.familia-meta-cultura { display: flex; align-items: center; min-width: 0; gap: .45rem; }
+.familia-meta-cultura svg { width: 2.5rem; height: 2.5rem; flex: none; }
+.familia-meta-cultura > span { display: grid; gap: .15rem; min-width: 0; }
+.familia-meta-cultura strong { font-size: .86rem; }
+.familia-meta-cultura small { color: var(--sq-text-muted); font-size: .75rem; }
+.familia-indicadores {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .6rem; margin-block: .8rem;
+}
+.familia-indicadores > div { border-radius: var(--sq-radius-control); background: var(--sq-brand-100); padding: .7rem; }
+.familia-indicadores span { display: block; font-size: .8rem; color: var(--sq-text-muted); line-height: 1.4; }
+.familia-indicadores strong { display: block; margin-top: .3rem; font-size: clamp(1.05rem,2.1vw,1.4rem); font-variant-numeric: tabular-nums; }
+.familia-previsoes { list-style: none; margin: 0; padding: 0; display: grid; gap: .65rem; }
+.familia-previsoes > li { border: 1px solid var(--sq-border); border-radius: var(--sq-radius-control); padding: .85rem; }
+.familia-previsoes > li p { margin: .35rem 0 0; font-size: .84rem; line-height: 1.5; color: var(--sq-text-muted); }
+.familia-previsao-titulo { display: flex; gap: .65rem; align-items: center; }
+.familia-previsao-titulo svg { flex: none; width: 2.8rem; height: 2.8rem; }
+.familia-previsao-titulo div { display: grid; gap: .15rem; }
+.familia-previsao-titulo span { font-size: .83rem; color: var(--sq-text-muted); }
+.familia-previsoes .familia-alerta { color: var(--sq-warning-text); font-weight: 700; }
+.familia-limites { margin: .65rem 0; font-size: .84rem; line-height: 1.55; }
+.familia-limites summary { color: var(--sq-primary); font-weight: 750; }
+.familia-limites ul { padding-left: 1.5rem; }
+.familia-limites li { margin: .45rem 0; }
+.familia-limites a { color: var(--sq-link); }
+.familia-acoes { display: flex; flex-wrap: wrap; gap: .65rem; margin: 1rem 0 .6rem; }
+.familia-acoes .botao { min-height: var(--sq-control-min); text-decoration: none; text-align: center; }
+.familia-acoes .botao:disabled { opacity: .5; cursor: not-allowed; }
+.familia .erro { padding: .8rem; }
+.familia :is(a,button,input,summary):focus-visible { outline: 3px solid var(--sq-focus); outline-offset: 2px; }
+@media (max-width: 660px) {
+  .familia-abrir { flex-wrap: wrap; }
+  .familia-abrir::before { display: none; }
+  .familia-chamada-acao { width: 100%; text-align: center; }
+  .familia-meta { grid-template-columns: minmax(0,1fr) minmax(6.5rem,.65fr); }
+  .familia-meta label:nth-child(3) { grid-column: 2; }
+  .familia-indicadores { grid-template-columns: minmax(0,1fr); }
+  .familia-acoes .botao { flex: 1 1 100%; }
+}

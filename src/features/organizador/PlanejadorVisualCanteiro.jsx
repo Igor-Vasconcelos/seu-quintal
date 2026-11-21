@@ -435,7 +435,7 @@ export default function PlanejadorVisualCanteiro() {
 
       <div className="canteiro-dica">
         <strong><span aria-hidden="true">✦</span> Dica do Seu Quintal</strong>
-        <p>Quer colher em épocas diferentes? Use o <a href={"../organizador/?cultura=" + encodeURIComponent(selecionada?.cultura || cultura)}>Organizador de Horta</a> para planejar lotes de plantio.</p>
+        <p>Quer colher em épocas diferentes? Use o <a href="../organizador/#planejamento-familiar">Organizador de Horta</a> para planejar lotes de plantio.</p>
       </div>
       <p className={erro ? "canteiro-erro" : "canteiro-mensagem"} role={erro ? "alert" : "status"} aria-live="polite">{mensagem}</p>
       <p className="canteiro-sobre">Os espaçamentos são referências por cultura; variedade, solo, irrigação, clima e manejo podem exigir ajustes. O resultado não prevê produtividade.</p>
