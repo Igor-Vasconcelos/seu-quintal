@@ -1,0 +1,125 @@
+import { culturasOrganizador } from "./culturas.js";
+import { dataValida, dimensionarLote, projetarLote, situacaoDoPlantio } from "./escala.js";
+
+// Exemplos ajustáveis para iniciar uma conversa sobre a demanda da família.
+// NÃO representam consumo médio do IBGE nem uma recomendação nutricional.
+export const sugestoesDeConsumo = Object.freeze([
+  { cultura: "Alface de verão", grupo: "Folhosas", porPessoa: 0.5, dica: "Colheita concentrada" },
+  { cultura: "Alface de inverno", grupo: "Folhosas", porPessoa: 0.5, dica: "Variedade para outra época" },
+  { cultura: "Cenoura de verão", grupo: "Raízes", porPessoa: 2, dica: "Muito presente na alimentação" },
+  { cultura: "Cenoura de inverno", grupo: "Raízes", porPessoa: 2, dica: "Variedade para outra época" },
+  { cultura: "Tomate de mesa", grupo: "Frutos", porPessoa: 0.25, dica: "Comum na mesa brasileira; lote teste" },
+  { cultura: "Rúcula", grupo: "Folhosas", porPessoa: 0.5, dica: "Colheita concentrada" },
+  { cultura: "Rabanete", grupo: "Raízes", porPessoa: 2, dica: "Ciclo curto" },
+  { cultura: "Beterraba", grupo: "Raízes", porPessoa: 1, dica: "Colheita por lote" },
+  { cultura: "Couve", grupo: "Folhosas", porPessoa: 0.1, dica: "Colheita de folhas; lote teste" },
+  { cultura: "Abobrinha", grupo: "Frutos", porPessoa: 0.25, dica: "Colheitas repetidas; lote teste" },
+]);
+
+export function metaExemplo(cultura, pessoas) {
+  const item = sugestoesDeConsumo.find(s => s.cultura === cultura);
+  return item && Number.isInteger(pessoas) && pessoas >= 1 && pessoas <= 20
+    ? Math.round(item.porPessoa * pessoas * 100) / 100 : null;
+}
+
+// Faz reserva CONSERVADORA de área simultânea nos canteiros, sem desenhar a posição física.
+// Canteiros com mais de uma cultura exigem posterior conferência geométrica no editor.
+function distribuirReservas(canteiros, reservadoExistente, novos) {
+  const espacos = canteiros.map((canteiro, i) => ({
+    nome: "Canteiro " + (i + 1), area: canteiro.area, usada: 0,
+  }));
+  function alocar(area) {
+    let restante = area;
+    const destinos = [];
+    for (const espaco of espacos) {
+      if (restante <= 1e-8) break;
+      const livre = Math.max(0, espaco.area - espaco.usada);
+      const usar = Math.min(livre, restante);
+      if (usar > 1e-8) {
+        espaco.usada += usar;
+        restante -= usar;
+        destinos.push({ nome: espaco.nome, area: Math.round(usar * 100) / 100 });
+      }
+    }
+    return { destinos, restante: Math.max(0, restante) };
+  }
+  alocar(reservadoExistente);
+  return novos.map(({ plano, area, ...resto }) => {
+    const { destinos, restante } = alocar(area);
+    const nomes = destinos.map(d => d.nome);
+    return {
+      ...resto, area, reservas: destinos,
+      semEspaco: restante > 1e-6,
+      plano: { ...plano, canteiro: nomes.join(", ").slice(0, 60) },
+    };
+  });
+}
+
+export function calcularPlanoFamiliar({
+  pessoas, quantidadeCanteiros, largura, comprimento, inicio, regiao,
+  preferencias, planosExistentes = [],
+}) {
+  if (!Number.isInteger(pessoas) || pessoas < 1 || pessoas > 20)
+    return { erro: "Informe de 1 a 20 pessoas na família." };
+  if (!Number.isInteger(quantidadeCanteiros) || quantidadeCanteiros < 1 || quantidadeCanteiros > 24 ||
+    !Number.isFinite(largura) || !Number.isFinite(comprimento) ||
+    largura < 0.3 || largura > 3 || comprimento < 0.3 || comprimento > 20)
+    return { erro: "Informe de 1 a 24 canteiros, largura de 0,30 a 3 m e comprimento de 0,30 a 20 m." };
+  if (!dataValida(inicio)) return { erro: "Informe uma data válida para começar o planejamento." };
+  if (!Array.isArray(preferencias) || preferencias.length === 0)
+    return { erro: "Selecione pelo menos uma cultura." };
+  const culturas = new Set();
+  const existentes = new Set(planosExistentes.map(plano => plano.cultura));
+  const novos = [];
+  for (const item of preferencias) {
+    const ficha = culturasOrganizador[item.cultura];
+    if (!ficha || culturas.has(item.cultura)) return { erro: "Culturas repetidas ou não cadastradas." };
+    if (existentes.has(item.cultura)) return { erro: item.cultura + " já possui um cultivo na agenda. Edite o plano existente para evitar duplicar lotes." };
+    culturas.add(item.cultura);
+    if (typeof item.casa !== "number" || typeof (item.venda ?? 0) !== "number")
+      return { erro: "Informe metas numéricas válidas para " + item.cultura + "." };
+    const casa = item.casa, venda = item.venda ?? 0;
+    if (!Number.isFinite(casa) || casa < 0 || casa > 10000 ||
+      !Number.isFinite(venda) || venda < 0 || venda > 10000 ||
+      casa + venda <= 0)
+      return { erro: "Informe metas semanais positivas, em " + ficha.unidade + ", para " + item.cultura + "." };
+    const continuo = Boolean(ficha.colheitasSucessivas);
+    const plano = {
+      cultura: item.cultura, origem: "semente", inicio,
+      canteiro: "", casa, venda, intervalo: continuo ? 4 : 1,
+      rendimento: null, duracao: null, teste: 2,
+    };
+    const dimensionamento = dimensionarLote(plano);
+    const primeiro = projetarLote(plano, 0);
+    const alertaEpoca = situacaoDoPlantio(plano, regiao, primeiro.canteiro.de, primeiro.canteiro.ate);
+    novos.push({
+      plano, area: dimensionamento.areaSimultanea,
+      plantas: dimensionamento.plantas,
+      experimental: dimensionamento.experimental,
+      alertaEpoca, primeiraColheita: primeiro.colheita,
+      seguintes: [0, 1, 2].map(i => projetarLote(plano, i)),
+    });
+  }
+  const areaCanteiro = largura * comprimento;
+  const areaTotal = areaCanteiro * quantidadeCanteiros;
+  const reservada = planosExistentes.reduce((soma, plano) => soma + dimensionarLote(plano).areaSimultanea, 0);
+  const estimativaNova = novos.reduce((soma, item) => soma + item.area, 0);
+  const canteiros = Array.from({ length: quantidadeCanteiros }, () => ({ area: areaCanteiro }));
+  const sugestoes = distribuirReservas(canteiros, reservada, novos);
+  const falta = Math.max(0, reservada + estimativaNova - areaTotal);
+  return {
+    erro: null, sugestoes, areaCanteiro, areaTotal, areaReservada: reservada,
+    areaNova: estimativaNova, faltaArea: falta,
+    cabe: falta <= 1e-6 && sugestoes.every(item => !item.semEspaco),
+    canteirosNecessarios: Math.ceil((reservada + estimativaNova) / areaCanteiro),
+    avisos: [
+      ...(sugestoes.some(item => item.experimental)
+        ? ["Culturas de colheitas sucessivas começam com 2 plantas de teste. Sem rendimento medido, não é possível prometer a meta em kg."] : []),
+      ...(sugestoes.some(item => item.alertaEpoca)
+        ? ["Há cultivos com plantio fora ou parcialmente fora da janela regional de referência."] : []),
+      ...(planosExistentes.length
+        ? ["A área dos cultivos já cadastrados foi reservada no cálculo, mas sua localização física não foi verificada."] : []),
+      "As reservas são estimativas simultâneas, não a planta geométrica final. Confira o posicionamento no Planejador de Canteiros.",
+    ],
+  };
+}

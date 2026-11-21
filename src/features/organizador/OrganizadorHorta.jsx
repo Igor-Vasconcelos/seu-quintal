@@ -5,6 +5,7 @@ import HistoricoCultivo from "../cultivo/HistoricoCultivo.jsx";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import { novoId } from "../planejador/projetos.js";
 import AgendaHorta from "./AgendaHorta.jsx";
+import PlanejamentoFamiliar from "./PlanejamentoFamiliar.jsx";
 import { chaveOrganizador, gravarOrganizador, hortaInicial, lerOrganizador, recuperarOrganizador } from "./armazenamento.js";
 import { culturasOrganizador } from "./culturas.js";
 import { avancarDias, dimensionarLote, janelaDeDatas, projetarLote, rotuloData } from "./escala.js";
@@ -213,6 +214,17 @@ export default function OrganizadorHorta({ culturaSugerida }) {
     }
   }
 
+  async function adicionarSugestoes(sugestoes) {
+    if (!sugestoes.length || bloqueado) return false;
+    return atualizar((atuais) => {
+      const existentes = new Set(atuais.planos.map(p => p.cultura));
+      const novos = sugestoes.filter(p => !existentes.has(p.cultura))
+        .map(plano => ({ ...plano, id: novoId(), concluidas: [] }));
+      if (novos.length !== sugestoes.length) throw new Error("Um cultivo já foi cadastrado.");
+      return { ...atuais, planos: [...atuais.planos, ...novos] };
+    }, "Sugestões de plantio incluídas na agenda.");
+  }
+
   async function remover(id) {
     if (await atualizar((atuais) => ({ ...atuais, planos: atuais.planos.filter((plano) => plano.id !== id) }), "Cultivo removido.")) {
       if (id === edicao) definirEdicao(null);
@@ -243,6 +255,8 @@ export default function OrganizadorHorta({ culturaSugerida }) {
       {erro && <p className="erro" role="alert">{erro}</p>}
       {corrompido !== null && <RecuperarDados recuperar={recuperar} salvando={salvando} />}
       <p className="organizador-status" role="status">{mensagem}</p>
+      <PlanejamentoFamiliar regiao={dados.regiao} planosExistentes={dados.planos}
+        bloqueado={bloqueado} aoAplicar={adicionarSugestoes} />
       <FormularioCultivo key={planoEmEdicao?.id ?? "novo"} edicao={planoEmEdicao} regiao={dados.regiao}
         culturaSugerida={culturaSugerida} aoSalvar={salvarPlano} aoCancelar={() => definirEdicao(null)} bloqueado={bloqueado} />
       <PlanoHorta dados={dados} aoEditar={editar} aoRemover={remover} bloqueado={bloqueado} />
