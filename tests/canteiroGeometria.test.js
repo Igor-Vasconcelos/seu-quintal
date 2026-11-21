@@ -72,7 +72,7 @@ test("canteiro e ferramenta estão integrados ao build e às rotas públicas", (
   const main = readFileSync(resolve(raiz, "src/main-conteudo.jsx"), "utf8");
   const generator = readFileSync(resolve(raiz, "scripts/gerar-artigos.mjs"), "utf8");
   assert.match(vite, /horta\/canteiros\/index\.html/);
-  assert.match(site, /<h1>Planeje seu canteiro/);
+  assert.match(site, /<h1>Planejador Visual de Canteiros<\/h1>/);
   assert.match(site, /<div id="canteiro-visual-raiz"/);
   assert.match(main, /<OrganizadorHorta culturaSugerida=\{cultura\}/);
   assert.match(generator, /"\/horta\/canteiros\/"/);
