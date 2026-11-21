@@ -17,6 +17,7 @@ const desenhos = {
   historico: <>
     <path d="M8 4H5v17h14V4h-3M8 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2H8V4Zm0 7h8m-8 5h8" />
   </>,
+  "chevron-baixo": <path d="m6 9 6 6 6-6" />,
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   fechar: <path d="m6 6 12 12M18 6 6 18" />,
   novaAba: <path d="M13 5h6v6m0-6-8 8m6 0v6H5V7h6" />,
