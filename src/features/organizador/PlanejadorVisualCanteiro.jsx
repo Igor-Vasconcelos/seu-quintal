@@ -381,6 +381,8 @@ export default function PlanejadorVisualCanteiro() {
           disabled={Boolean(inicio.erro) || colecao.itens.length >= limiteCanteiros}>＋ Criar</button>
         <button type="button" className="botao botao-contorno" onClick={excluirCanteiro}
           disabled={Boolean(inicio.erro) || colecao.itens.length < 2}>Excluir canteiro</button>
+        <button type="button" className="botao" onClick={salvar}
+          disabled={Boolean(inicio.erro) || salvo}>{salvo ? "✓ Salvo" : "Salvar alterações"}</button>
         <div className="meus-canteiros-editor-dados">
           <p>{colecao.itens.length} de {limiteCanteiros} canteiros · Salve as alterações antes de trocar de canteiro.</p>
           <a href={window.location.pathname.includes("/meu-quintal/") ? "#horta" : "../organizador/#meus-canteiros"}>
