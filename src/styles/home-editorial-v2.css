@@ -1,0 +1,77 @@
+/* Home editorial — referência visual 21/11/2026. Apenas .pagina-home. */
+.pagina-home { background: var(--sq-canvas); }
+.pagina-home .home-abertura-grade { min-height: clamp(21rem, 31vw, 27rem); padding-block: clamp(2rem, 4vw, 3.5rem); }
+.pagina-home .home-abertura h1 { max-width: 19ch; font-size: clamp(2.4rem,4.8vw,4.15rem); }
+.pagina-home .home-abertura-texto > p { max-width: 50ch; }
+.pagina-home .home-trilhas {
+  display: flex; gap: .2rem; position: relative; z-index: 3;
+  margin-top: -1.5rem; margin-bottom: clamp(1.5rem,3vw,2.25rem);
+  padding: .5rem; overflow-x: auto; scrollbar-width: thin;
+  background: var(--sq-surface); border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card); box-shadow: var(--sq-shadow-card);
+}
+.pagina-home .home-trilhas a {
+  display: flex; flex: 1 0 auto; flex-direction: column; align-items: center;
+  justify-content: center; gap: .4rem; min-width: 6.5rem; min-height: 4.3rem;
+  padding: .55rem .65rem; border-radius: .85rem;
+  color: var(--sq-forest); font-size: .83rem; font-weight: 700;
+  text-decoration: none; text-align: center; white-space: nowrap;
+}
+.pagina-home .home-trilhas a:hover,
+.pagina-home .home-trilhas .home-trilha-atual { background: var(--sq-brand-100); }
+.pagina-home .home-trilhas .icone { width: 1.65rem; height: 1.65rem; color: var(--sq-primary); }
+.pagina-home .home-editorial { display: grid; grid-template-columns: minmax(0, 1fr) minmax(17rem, .34fr); gap: clamp(1rem,2vw,1.6rem); align-items: start; }
+.pagina-home .home-editorial-coluna { min-width: 0; }
+.pagina-home .home-editorial .home-secao-topo { display: flex; gap: 1rem; align-items: end; justify-content: space-between; margin-bottom: 1rem; }
+.pagina-home .home-editorial .home-secao-topo h2,
+.pagina-home .home-editorial-ferramentas h2 { display: flex; align-items: center; gap: .55rem; font-size: clamp(1.65rem,2.2vw,2.1rem); }
+.pagina-home .home-editorial .home-secao-topo h2 .icone,
+.pagina-home .home-editorial-ferramentas h2 .icone { width: 1.2em; height: 1.2em; color: var(--sq-primary); }
+.pagina-home .home-editorial .home-secao-descricao { margin-top: .3rem; max-width: 55ch; }
+.pagina-home .home-editorial .guias-grade { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .9rem; list-style: none; padding: 0; }
+.pagina-home .home-editorial .guias-grade > li { min-width: 0; }
+.pagina-home .home-editorial .guia-cartao { display: block; height: 100%; overflow: hidden; border-radius: var(--sq-radius-card); border: 1px solid var(--sq-border); background: var(--sq-surface); text-decoration: none; }
+.pagina-home .home-editorial .guia-cartao img { width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover; }
+.pagina-home .home-editorial .guia-cartao > div { padding: .8rem .9rem; }
+.pagina-home .home-editorial .guia-cartao h3 { margin: .3rem 0; font: 700 clamp(1rem,1.5vw,1.15rem)/1.3 var(--sq-font-ui); }
+.pagina-home .home-editorial .guia-cartao p { color: var(--sq-muted); font-size: .89rem; line-height: 1.5; }
+.pagina-home .home-editorial .guia-cartao-formato { color: var(--sq-brand-700); font-size: .75rem; font-weight: 750; }
+.pagina-home .home-editorial .guia-cartao-detalhes { display: none; }
+.pagina-home .home-editorial .guia-acao { display: inline-flex; align-items: center; gap: .3rem; margin-top: .7rem; color: var(--sq-primary); font-weight: 700; font-size: .85rem; }
+.pagina-home .home-editorial-ferramentas { min-width: 0; padding: clamp(1rem,2vw,1.35rem); background: var(--sq-surface-soft); border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card); }
+.pagina-home .home-editorial-ferramentas h2 { font-size: clamp(1.3rem,2vw,1.65rem); }
+.pagina-home .home-editorial-ferramentas > p { margin: .5rem 0 .85rem; color: var(--sq-muted); font-size: .9rem; }
+.pagina-home .home-editorial-ferramentas ul { padding: 0; margin: 0 0 .85rem; list-style: none; display: grid; gap: .35rem; }
+.pagina-home .home-editorial-ferramentas li a { display: flex; align-items: center; justify-content: space-between; gap: .65rem; min-height: 3.7rem; padding: .65rem .75rem; border-radius: .8rem; background: var(--sq-surface); text-decoration: none; }
+.pagina-home .home-editorial-ferramentas li a:hover { background: var(--sq-cream); }
+.pagina-home .home-editorial-ferramentas li span { display: grid; gap: .15rem; }
+.pagina-home .home-editorial-ferramentas li strong { font-size: .88rem; }
+.pagina-home .home-editorial-ferramentas li small { color: var(--sq-muted); font-size: .78rem; }
+.pagina-home .home-editorial-ferramentas li .icone { width: 1.15rem; color: var(--sq-primary); }
+.pagina-home .home-editorial-ferramentas > .botao { width: 100%; text-decoration: none; }
+.pagina-home .home-editorial-artigos { margin-top: clamp(2rem,4vw,3.5rem); }
+.pagina-home .home-editorial-artigos .home-artigos-grade { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .85rem; padding: 0; list-style: none; }
+.pagina-home .home-editorial-artigos .home-artigo-cartao { height: 100%; display: grid; grid-template-columns: 38% 1fr; overflow: hidden; border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card); background: #fff; text-decoration: none; }
+.pagina-home .home-editorial-artigos .home-artigo-cartao img { width: 100%; height: 100%; min-height: 7rem; object-fit: cover; }
+.pagina-home .home-editorial-artigos .home-artigo-cartao > div { padding: .7rem; }
+.pagina-home .home-editorial-artigos .home-artigo-cartao h3 { font: 700 .92rem/1.35 var(--sq-font-ui); }
+.pagina-home .home-editorial-artigos .home-artigo-cartao p { display: none; }
+.pagina-home .home-editorial-artigos .home-artigo-categoria { color: var(--sq-muted); font-size: .75rem; }
+.pagina-home .home-editorial-artigos .home-artigo-acao { font-size: .77rem; }
+.pagina-home .home-editorial + .home-secao { padding-top: clamp(2rem,4vw,3.5rem); }
+@media(min-width: 1280px) {
+  .pagina-home .home-editorial .guias-grade { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .pagina-home .home-editorial { grid-template-columns: minmax(0,1fr) 19rem; }
+}
+@media(max-width: 900px) {
+  .pagina-home .home-editorial { grid-template-columns: minmax(0,1fr); }
+  .pagina-home .home-editorial-ferramentas ul { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media(max-width: 599px) {
+  .pagina-home .home-trilhas { margin-inline: var(--sq-gutter); }
+  .pagina-home .home-trilhas a { min-width: 6rem; }
+  .pagina-home .home-editorial .guias-grade,
+  .pagina-home .home-editorial-artigos .home-artigos-grade,
+  .pagina-home .home-editorial-ferramentas ul { grid-template-columns: minmax(0,1fr); }
+  .pagina-home .home-editorial .home-secao-topo { align-items: start; flex-wrap: wrap; }
+}
