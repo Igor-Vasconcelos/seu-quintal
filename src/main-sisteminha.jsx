@@ -423,3 +423,5 @@ createRoot(document.getElementById("root")).render(
 import "./styles/tool-ui-v3.css";
 
 import "./styles/site-raiz-caminho.css";
+
+import "./styles/layout-shell-v5.css";
