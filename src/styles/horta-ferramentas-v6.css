@@ -1,0 +1,156 @@
+/* Horta guiada 2.0 — escopo restrito à página /horta/.
+ * Reutiliza tokens Raiz & Caminho e mantém as fórmulas separadas dos visuais.
+ */
+.horta-ferramentas-v2, .horta-proximas-etapas { min-width: 0; }
+.horta-ferramentas-v2 .horta-sobretitulo,
+.horta-proximas-etapas .horta-sobretitulo {
+  display: block; font: 750 .72rem/1.3 var(--sq-font-ui);
+  letter-spacing: .08em; color: var(--sq-primary);
+}
+.horta-ferramentas-intro {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  gap: .85rem 1.25rem; margin-bottom: 1.1rem; padding: clamp(.9rem,2vw,1.25rem);
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+  background: linear-gradient(110deg,var(--sq-cream),var(--sq-surface-warm));
+}
+.horta-ferramentas-intro > div:first-child { flex: 1 1 18rem; min-width: 0; }
+.horta-ferramentas-intro p { margin: .3rem 0 0; max-width: 61ch; line-height: 1.5; font-size: .92rem; color: var(--sq-text-muted); }
+.horta-secoes {
+  display: grid; grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: .45rem; flex: 0 1 23rem; min-width: min(100%,19rem);
+}
+.horta-secao-botao {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  min-height: var(--sq-control-min); padding: .5rem .75rem;
+  border: 1px solid var(--sq-primary); border-radius: var(--sq-radius-control);
+  background: var(--sq-surface); color: var(--sq-primary);
+  cursor: pointer; font: 750 .88rem var(--sq-font-ui);
+  transition: background .15s, border-color .15s;
+}
+.horta-secao-botao[aria-pressed="true"] { background: var(--sq-primary); color: var(--sq-on-primary); }
+.horta-secao-numero {
+  display: grid; place-items: center; flex: 0 0 1.5rem; width: 1.5rem; height: 1.5rem;
+  border-radius: .5rem; background: var(--sq-brand-100); color: var(--sq-forest); font-size: .76rem;
+}
+.horta-painel { min-width: 0; padding: clamp(1rem,2.5vw,1.55rem); border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card); background: var(--sq-surface); box-shadow: var(--sq-shadow-card); }
+.horta-painel[hidden] { display: none !important; }
+.horta-painel-cabecalho { display: grid; gap: .3rem; margin-bottom: 1rem; }
+.horta-painel-cabecalho h3 { margin: 0; font: 400 clamp(1.4rem,2.5vw,1.85rem)/1.2 var(--sq-font-display); color: var(--sq-forest); }
+.horta-painel-cabecalho p { margin: 0; color: var(--sq-text-muted); font-size: .94rem; line-height: 1.55; }
+.horta-escolhas { display: grid; gap: 1.2rem; }
+.horta-campo-escolha, .horta-modelos { border: none; padding: 0; margin: 0; min-width: 0; }
+.horta-campo-escolha legend, .horta-modelos legend, .horta-medidas-cabecalho h4 {
+  font: 750 1rem/1.5 var(--sq-font-ui); margin-bottom: .6rem; color: var(--sq-forest);
+}
+.horta-numero { display: inline-grid; place-items: center; margin-right: .35rem; width: 1.6rem; height: 1.6rem; background: var(--sq-brand-100); border-radius: .45rem; font-size: .8rem; font-weight: 800; color: var(--sq-primary); }
+.horta-ajuda { color: var(--sq-text-muted); font-size: .82rem; line-height: 1.5; margin: .1rem 0 .65rem; }
+.horta-opcoes { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .55rem; }
+.horta-opcao {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  gap: .27rem; text-align: left; min-width: 0; min-height: 5.1rem;
+  padding: .75rem .85rem; border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-control); background: var(--sq-surface);
+  color: var(--sq-text); cursor: pointer; font-family: var(--sq-font-ui);
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+.horta-opcao strong { font-size: .91rem; line-height: 1.35; }
+.horta-opcao span { font-size: .78rem; line-height: 1.45; color: var(--sq-text-muted); }
+.horta-opcao[aria-pressed="true"] { border-color: var(--sq-primary); outline: 1px solid var(--sq-primary); background: var(--sq-brand-100); box-shadow: inset 3px 0 var(--sq-primary); }
+.horta-opcao:hover { border-color: var(--sq-primary); }
+.horta-opcao[aria-pressed="true"] strong::before { content: "✓"; display: inline-block; margin-right: .35rem; color: var(--sq-primary); }
+.horta-ferramentas-v2 :is(.horta-secao-botao,.horta-opcao,.horta-limpar,button,input,select,a):focus-visible,
+.horta-proximas-etapas a:focus-visible { outline: 3px solid var(--sq-focus); outline-offset: 3px; }
+.horta-recomendacoes { margin-top: 1.25rem; }
+.horta-estado-inicial { display: flex; gap: .8rem; align-items: center; padding: 1rem; border: 1px dashed var(--sq-control-border); border-radius: var(--sq-radius-media); background: var(--sq-surface-soft); }
+.horta-estado-inicial strong { display: block; font-size: 1rem; }
+.horta-estado-inicial p { margin: .2rem 0 0; color: var(--sq-text-muted); font-size: .84rem; }
+.horta-estado-icone { display: grid; flex: 0 0 2.7rem; place-items: center; width: 2.7rem; height: 2.7rem; border-radius: .75rem; background: var(--sq-brand-100); font-size: 1.5rem; color: var(--sq-primary); }
+.horta-recomendacoes-titulo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: .5rem; margin-bottom: .65rem; }
+.horta-recomendacoes-titulo h4 { margin: .15rem 0 0; font: 400 clamp(1.35rem,2vw,1.6rem)/1.2 var(--sq-font-display); }
+.horta-recomendacoes-titulo p { margin: .3rem 0 0; font-size: .82rem; color: var(--sq-text-muted); line-height: 1.45; }
+.horta-limpar { min-height: var(--sq-control-min); background: transparent; border: none; color: var(--sq-primary); text-decoration: underline; text-underline-offset: .2em; cursor: pointer; font: 750 .83rem var(--sq-font-ui); }
+.horta-ferramentas-v2 .horta-culturas { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-auto-flow: unset; grid-auto-columns: unset; gap: .7rem; margin: .45rem 0 .8rem; }
+.horta-ferramentas-v2 .horta-culturas li { display: flex; flex-direction: column; min-width: 0; }
+.horta-ferramentas-v2 .horta-culturas img { display: block; width: 100%; height: auto; max-height: none; aspect-ratio: 3 / 2; object-fit: cover; }
+.horta-ferramentas-v2 .horta-cultura-texto { padding: .65rem .75rem .8rem; flex: 1; }
+.horta-ferramentas-v2 .horta-cultura-texto strong { display: block; text-align: left; padding: 0; font-size: .96rem; color: var(--sq-forest); }
+.horta-ferramentas-v2 .horta-cultura-texto p { margin: .25rem 0 0; font-size: .82rem; line-height: 1.55; color: var(--sq-text-muted); }
+.horta-orientacoes { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .7rem; margin: 1rem 0; }
+.horta-orientacoes > div { min-width: 0; padding: .85rem 1rem; background: var(--sq-surface-soft); border-radius: var(--sq-radius-media); }
+.horta-orientacoes dt { font-size: .9rem; font-weight: 750; color: var(--sq-forest); }
+.horta-orientacoes dd { margin: .25rem 0 0; font-size: .85rem; line-height: 1.55; }
+.horta-proximos-passos { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .9rem; }
+.horta-proximos-passos .botao { min-height: var(--sq-control-min); text-decoration: none; text-align: center; }
+.horta-ressalva { color: var(--sq-text-muted); font-size: .78rem; line-height: 1.5; margin: .9rem 0 .5rem; }
+.horta-ferramentas-v2 .creditos-culturas { margin-top: .75rem; }
+.horta-ferramentas-v2 .creditos-culturas a { color: var(--sq-link); }
+/* Calculadora */
+.horta-calculadora-layout { display: grid; grid-template-columns: minmax(0,1.28fr) minmax(16rem,.78fr); gap: 1rem; align-items: start; }
+.horta-ferramentas-v2 .form-terra { margin: 0; min-width: 0; gap: .7rem; }
+.horta-ferramentas-v2 .form-terra .nota { margin: 0; }
+.horta-modelos { margin-bottom: .45rem; }
+.horta-modelos .horta-opcao { min-height: 4.6rem; }
+.horta-modelos .horta-ajuda { margin: .45rem 0 0; }
+.horta-medidas-cabecalho { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .6rem; }
+.horta-medidas-cabecalho h4 { margin: 0; }
+.horta-medidas-cabecalho > .campo { width: min(100%,13rem); }
+.horta-medidas-cabecalho select { min-height: var(--sq-control-min); }
+.horta-ferramentas-v2 .campos-terra { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .6rem; }
+.horta-ferramentas-v2 .campos-terra .campo { min-width: 0; }
+.horta-ferramentas-v2 .form-terra .campo input { width: 100%; min-width: 0; min-height: var(--sq-control-min); }
+.horta-saco-terra { max-width: 18rem; }
+.horta-opcional { font-size: .75rem; font-weight: 500; color: var(--sq-text-muted); }
+.horta-erro { font-size: .84rem; padding: .6rem .75rem; margin: 0; }
+.horta-calculadora-acoes { display: flex; gap: .55rem; flex-wrap: wrap; margin-top: .3rem; }
+.horta-calculadora-acoes button { min-height: var(--sq-control-min); }
+.horta-resultado-card { display: grid; gap: 1rem; min-width: 0; padding: 1rem; border-radius: var(--sq-radius-media); background: var(--sq-surface-soft); border: 1px solid var(--sq-border); }
+.horta-resultado-dados { display: grid; gap: .3rem; padding: 1rem; background: var(--sq-forest); border-radius: var(--sq-radius-media); color: var(--sq-on-primary); }
+.horta-resultado-volume { font: 400 clamp(2.2rem,3.5vw,3.4rem)/1 var(--sq-font-display); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.horta-resultado-volume small { font: 600 .9rem var(--sq-font-ui); }
+.horta-resultado-label { font-size: .88rem; }
+.horta-resultado-sacos { display: grid; gap: .2rem; border-top: 1px solid rgb(255 255 255 / .35); padding-top: .75rem; margin: .6rem 0 0; }
+.horta-resultado-sacos strong { font-size: 1.25rem; }
+.horta-resultado-sacos span, .horta-resultado-dica { font-size: .83rem; line-height: 1.5; }
+.horta-resultado-dica { margin: .6rem 0 0; }
+.horta-resultado-vazio { display: grid; gap: .45rem; padding: .55rem 0 .9rem; color: var(--sq-forest); }
+.horta-resultado-ilustracao { font-size: 2.5rem; line-height: 1.1; }
+.horta-resultado-vazio strong { font: 400 1.25rem/1.25 var(--sq-font-display); }
+.horta-resultado-vazio p { color: var(--sq-text-muted); font-size: .86rem; line-height: 1.55; }
+.horta-resultado-premissas { border-top: 1px solid var(--sq-border); padding-top: .75rem; }
+.horta-resultado-premissas strong { font-size: .85rem; }
+.horta-resultado-premissas p { margin: .3rem 0 0; font-size: .79rem; line-height: 1.55; color: var(--sq-text-muted); }
+/* Próximos passos úteis em vez de uma lista de links extensa. */
+.conteudo-tematico .horta-proximas-etapas { background: var(--sq-surface-warm); }
+.horta-relacionados-cabecalho h2 { margin: .2rem 0 .25rem; }
+.horta-relacionados-cabecalho p { margin: 0 0 .85rem; font-size: .9rem; }
+.horta-relacionados-grade { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .65rem; }
+.conteudo-tematico .horta-relacionado { display: flex; align-items: start; gap: .8rem; min-width: 0; padding: .85rem; border: 1px solid var(--sq-border); border-radius: var(--sq-radius-control); background: var(--sq-surface); text-decoration: none; min-height: 5rem; }
+.horta-relacionado-passo { display: grid; flex: 0 0 2.2rem; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: .5rem; background: var(--sq-brand-100); color: var(--sq-primary); font-weight: 800; font-size: .8rem; }
+.horta-relacionado span:last-child { display: grid; gap: .3rem; }
+.horta-relacionado strong { font-size: .93rem; color: var(--sq-forest); }
+.horta-relacionado small { font-weight: 500; font-size: .81rem; line-height: 1.5; color: var(--sq-text-muted); }
+.conteudo-tematico .horta-relacionado:hover { border-color: var(--sq-primary); }
+@media (max-width: 860px) {
+  .horta-calculadora-layout { grid-template-columns: minmax(0,1fr); }
+  .horta-resultado-card { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 650px) {
+  .horta-ferramentas-intro { display: grid; }
+  .horta-secoes { flex: auto; min-width: 0; width: 100%; }
+  .horta-opcoes { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .horta-ferramentas-v2 .horta-culturas { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .horta-orientacoes, .horta-relacionados-grade { grid-template-columns: minmax(0,1fr); }
+  .horta-ferramentas-v2 .campos-terra { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 430px) {
+  .horta-ferramentas-v2 .horta-culturas { grid-template-columns: minmax(0,1fr); }
+  .horta-ferramentas-v2 .horta-culturas li { display: grid; grid-template-columns: minmax(6rem,.8fr) minmax(0,1.2fr); }
+  .horta-ferramentas-v2 .horta-culturas img { height: 100%; min-height: 7.2rem; }
+  .horta-secao-botao { font-size: .8rem; padding-inline: .3rem; gap: .3rem; }
+  .horta-opcoes, .horta-ferramentas-v2 .campos-terra { grid-template-columns: minmax(0,1fr); }
+  .horta-opcao { min-height: 3.8rem; }
+  .horta-calculadora-acoes button { flex: 1 1 8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .horta-ferramentas-v2 :is(button,a) { transition: none; }
+}
