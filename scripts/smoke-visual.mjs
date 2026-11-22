@@ -15,6 +15,8 @@ const rotas = [
   ["organizador", "/horta/organizador/"],
   ["meu-quintal", "/meu-quintal/"],
   ["artigos", "/artigos/"],
+  ["artigo-horta", "/artigos/como-planejar-uma-horta-para-colher-com-frequencia/"],
+  ["artigo-galinhas", "/artigos/quantas-galinhas-para-ter-ovos-em-casa/"],
   ["ferramentas", "/ferramentas/"],
   ["peixes", "/ferramentas/calculadora-peixes/"],
   ["pomar", "/ferramentas/planejador-de-pomar/"],
@@ -57,6 +59,31 @@ try {
       assert.ok(await logo.evaluate(img => img.complete && img.naturalWidth > 0),
         slug + "/" + nome + ": logomarca não carregou");
 
+      if (slug.startsWith("artigo-")) {
+        const indice = pagina.locator(".sq-toc");
+        const painel = indice.locator("details.sq-toc-details");
+        await painel.waitFor({ state: "attached", timeout: 12000 });
+        assert.equal(await painel.evaluate(el => el.open), largura > 1080,
+          "Índice aberto no desktop e recolhido no celular");
+        const campos = pagina.locator(".sq-article-layout");
+        const colunas = await campos.evaluate(el => getComputedStyle(el).gridTemplateColumns.split(" ").length);
+        assert.equal(colunas, largura > 1080 ? 2 : 1,
+          "Layout editorial deve ter duas colunas apenas quando houver espaço");
+        if (largura <= 1080) await painel.locator("summary").click();
+        const linksIndice = indice.locator('a[href^="#"]');
+        assert.ok(await linksIndice.count() >= 2, "Índice vazio");
+        const primeiro = linksIndice.first();
+        await primeiro.click();
+        await pagina.waitForFunction(() => location.hash.length > 1);
+        await pagina.waitForFunction(() =>
+          document.querySelector('.sq-toc a[aria-current="location"]') !== null);
+        assert.ok(await pagina.locator(".sq-article-info").innerText(),
+          "Metadados da leitura ausentes");
+        await pagina.screenshot({
+          path: PASTA + "/" + slug + "-" + nome + ".png",
+          animations: "disabled",
+        });
+      }
       if (["home", "horta", "meu-quintal"].includes(slug)) {
         const botaoQuintal = pagina.locator(".menu-quintal");
         assert.equal(await botaoQuintal.locator("svg").count(), 1,
@@ -393,6 +420,7 @@ try {
     });
     for (const [slug, rota] of [
       ["home", "/"], ["guias", "/guias/"], ["artigos", "/artigos/"],
+      ["artigo-horta", "/artigos/como-planejar-uma-horta-para-colher-com-frequencia/"],
       ["ferramentas", "/ferramentas/"], ["sisteminha", "/sisteminha.html"],
       ["meu-quintal", "/meu-quintal/"], ["horta", "/horta/"],
     ]) {

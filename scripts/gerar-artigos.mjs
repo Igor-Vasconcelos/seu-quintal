@@ -206,26 +206,42 @@ function layout({ title, description, path, prefix, body, image, kind = "website
   ].filter(Boolean).join("\n");
 }
 
-function renderArticle(article) {
+// Mantém o slug e os IDs das seções do Markdown para preservar links e SEO.
+export function renderArticle(article) {
   const prefix = "../../", path = "/artigos/" + article.slug + "/";
   const content = renderMarkdown(article.markdown, prefix);
   const summary = content.headings.filter(x => x.level === 2);
-  const toc = summary.length > 1 ? '<nav class="sq-toc" aria-label="Neste artigo"><strong>Neste artigo</strong><ol>' +
-    summary.map(x => '<li><a href="#' + x.id + '">' + escapeHtml(x.name) + "</a></li>").join("") + "</ol></nav>" : "";
+  // Só a apresentação remove a numeração digitada no Markdown.
+  // O <ol> já apresenta o número; evita "1. 1. Comece...".
+  const tituloCurto = name => name.replace(/^\d+\.\s*/, "");
+  const palavras = article.markdown.trim().split(/\s+/u).filter(Boolean).length;
+  const minutos = Math.max(1, Math.ceil(palavras / 220));
+  const leitura = "Leitura estimada de " + minutos + " min";
+  const toc = summary.length > 1
+    ? '<nav class="sq-toc" aria-label="Índice do artigo"><details class="sq-toc-details">' +
+      '<summary><span class="sq-toc-rotulo">Neste artigo</span><span class="sq-toc-chevron" aria-hidden="true">⌄</span></summary>' +
+      '<p class="sq-toc-meta">' + summary.length + ' tópicos · ' + leitura + '</p><ol>' +
+      summary.map(x => '<li><a href="#' + x.id + '">' + escapeHtml(tituloCurto(x.name)) + '</a></li>').join("") +
+      '</ol></details></nav>'
+    : "";
   const date = article.dataPublicacao
     ? '<time datetime="' + article.dataPublicacao + '">' + escapeHtml(article.dataPublicacao.split("-").reverse().join("/")) + "</time>"
     : "";
+  const toolUrl = linkTarget(article.ferramentaUrl, prefix);
   const tool = '<aside class="sq-tool"><p class="sq-eyebrow">COLOQUE EM PRÁTICA</p>' +
     '<h2>Experimente uma ferramenta gratuita</h2><p>Transforme o aprendizado em um plano para seu espaço.</p>' +
-    '<a class="sq-button" href="' + linkTarget(article.ferramentaUrl, prefix) + '">' + escapeHtml(article.ferramentaTexto) + "</a></aside>";
+    '<a class="sq-button" href="' + toolUrl + '">' + escapeHtml(article.ferramentaTexto) + "</a></aside>";
   const body = '<nav class="sq-breadcrumb" aria-label="Você está aqui"><a href="../../">Início</a> / <a href="../">Artigos</a> / ' +
     escapeHtml(article.categoria) + '</nav><article class="sq-article"><header class="sq-article-header">' +
     '<p class="sq-eyebrow">' + escapeHtml(article.categoria) + "</p><h1>" + escapeHtml(article.titulo) + "</h1>" +
     '<p class="sq-lede">' + escapeHtml(article.descricao) + "</p>" +
-    '<p class="sq-byline">Por ' + escapeHtml(article.autor) + (date ? " · " + date : "") + "</p></header>" +
+    '<div class="sq-article-info"><p class="sq-byline">Por ' + escapeHtml(article.autor) +
+    (date ? " · " + date : "") + '</p><p class="sq-read-meta">' + leitura + '</p>' +
+    '<a class="sq-meta-tool" href="' + toolUrl + '">Ferramenta relacionada</a></div></header>' +
     '<figure class="sq-hero-image"><img src="../../' + article.imagem.slice(1) +
-    '" alt="' + escapeHtml(article.imagemAlt) + '" width="1200" height="675" decoding="async"></figure>' +
-    '<div class="sq-article-layout">' + toc + '<div class="sq-prose">' + content.html + tool + "</div></div></article>" +
+    '" alt="' + escapeHtml(article.imagemAlt) + '" width="1200" height="675" decoding="async" fetchpriority="high"></figure>' +
+    '<div class="sq-article-layout">' + toc + '<div class="sq-prose" id="inicio-leitura">' +
+    content.html + tool + "</div></div></article>" +
     '<p class="sq-back"><a href="../">Ver todos os artigos</a></p>';
   const structured = {
     "@context": "https://schema.org", "@type": "BlogPosting", headline: article.titulo,

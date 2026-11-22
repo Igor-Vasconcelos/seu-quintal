@@ -36,7 +36,13 @@ const destaques = [
   {
     titulo: "Como planejar um pomar produtivo",
     descricao: "Compare o espaçamento e a área necessária para o crescimento das frutíferas.",
-    imagem: "./imagens/colheita.webp",
+    // Fotografia real de árvores frutíferas distribuídas em fileiras (CC BY 2.0).
+    imagem: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/Orchard_Agriculture_%28A4%29_%284999168100%29.jpg/960px-Orchard_Agriculture_%28A4%29_%284999168100%29.jpg",
+    imagemAlt: "Pomar real com árvores frutíferas organizadas em fileiras e espaço de circulação.",
+    creditoFoto: "Hazel Gordon / USDA Forest Service",
+    creditoUrl: "https://commons.wikimedia.org/wiki/File:Orchard_Agriculture_(A4)_(4999168100).jpg",
+    licenca: "CC BY 2.0",
+    licencaUrl: "https://creativecommons.org/licenses/by/2.0/",
     destino: "./ferramentas/planejador-de-pomar/",
     tema: "Pomar",
     nivel: "Iniciante",
@@ -49,10 +55,11 @@ export default function DestaquesEditorial() {
   return (
     <ul className="home-destaques-grade">
       {destaques.map((destaque) => (
-        <li key={destaque.destino}>
+        <li key={destaque.destino} className={destaque.creditoFoto ? "home-destaque-com-credito" : undefined}>
           <a className="home-destaque-card" href={destaque.destino}>
             <div className="home-destaque-imagem">
-              <img src={destaque.imagem} width="792" height="528" loading="lazy" decoding="async" alt="" />
+              <img src={destaque.imagem} width="792" height="528" loading="lazy" decoding="async"
+                alt={destaque.imagemAlt || ""} referrerPolicy={destaque.creditoFoto ? "no-referrer" : undefined} />
               <span className="home-destaque-selo"><Icone nome="livro" /> {destaque.etiqueta}</span>
             </div>
             <div className="home-destaque-conteudo">
@@ -64,6 +71,11 @@ export default function DestaquesEditorial() {
               </div>
             </div>
           </a>
+          {destaque.creditoFoto && <p className="home-destaque-credito">
+            Foto: <a href={destaque.creditoUrl} target="_blank" rel="noopener noreferrer">
+              {destaque.creditoFoto}</a> · <a href={destaque.licencaUrl} target="_blank"
+              rel="noopener noreferrer">{destaque.licenca}</a>. Imagem recortada para o card.
+          </p>}
         </li>
       ))}
     </ul>
