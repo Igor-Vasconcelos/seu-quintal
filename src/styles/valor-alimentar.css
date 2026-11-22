@@ -1,0 +1,21 @@
+/* Educação alimentar — tokens oficiais, sem criar paleta independente. */
+.sq-valor-alimentar {
+  background: var(--sq-surface-soft); color: var(--sq-text);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media); padding: var(--sq-space-4);
+  margin-block: var(--sq-space-3); font-family: var(--sq-font-ui);
+}
+.sq-valor-alimentar strong { display:block; font-weight:700; font-size:.93rem; }
+.sq-valor-alimentar p { margin:.35rem 0 0; line-height:1.55; font-size:.875rem; }
+.sq-valor-alimentar .sq-valor-fontes { color:var(--sq-text-muted); font-size:.78rem; }
+.sq-valor-alimentar a { color:var(--sq-link); text-underline-offset:3px; }
+.sq-valor-alimentar--compacto { padding:.7rem .8rem; margin-block:.6rem; }
+.sq-valor-alimentar--compacto strong { font-size:.82rem; }
+.sq-valor-alimentar--compacto p { font-size:.8rem; }
+.sq-rotacao-instrucao { background:var(--sq-surface-warm); border:1px solid var(--sq-border);
+ border-radius:var(--sq-radius-media); padding:var(--sq-space-4); margin-top:var(--sq-space-3); }
+.sq-rotacao-instrucao h4 { margin:0 0 .5rem; color:var(--sq-text); }
+.sq-rotacao-instrucao p { margin:.5rem 0; }
+.sq-rotacao-instrucao ul { margin:.6rem 0; padding-left:1.3rem; }
+.sq-rotacao-instrucao li { margin-bottom:.4rem; }
+.sq-rotacao-instrucao a { color:var(--sq-link); }

@@ -3,6 +3,7 @@ import { buscaFichaCultura, fonteFichaCultura } from "../data/fichas-culturas.js
 import { consultarPlantio, descreverEpocaPlantio, fontePlantio, meses, regioes, totalCulturas } from "../data/plantio.js";
 import { culturasOrganizador } from "../features/organizador/culturas.js";
 import CaixaDialogo from "./CaixaDialogo.jsx";
+import ValorAlimentar from "./ValorAlimentar.jsx";
 import Icone from "./Icone.jsx";
 
 const inicial = { regiao: "Sudeste", mes: new Date().getMonth() + 1 };
@@ -43,6 +44,7 @@ function FichaCultura({ nome, regiao, raiz, acionador, fechar }) {
           <div><dt>Quando colher</dt><dd>{ficha.colheita}</dd></div>
         </dl>
       )}
+      <ValorAlimentar nome={nome}/>
       {Object.hasOwn(culturasOrganizador, nome) && (
         <div className="ficha-cultura-acoes">
           <a className="botao" href={`${raiz}meu-quintal/?${parametros}#horta`} target="_blank" rel="noopener"

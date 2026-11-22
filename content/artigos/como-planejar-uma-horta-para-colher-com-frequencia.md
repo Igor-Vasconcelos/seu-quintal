@@ -8,11 +8,16 @@ imagemAlt: "Ilustração realista de uma horta doméstica com canteiros de folha
 resposta: "Para colher mais vezes, divida as culturas em pequenos lotes, semeie ou transplante em datas diferentes e registre o desenvolvimento real de cada canteiro."
 ferramentaUrl: "/horta/organizador/"
 ferramentaTexto: "Abrir Organizador de Horta"
+aprendizados: "Medir o espaço útil e observar a incidência de sol|Distribuir cultivos em lotes sem superlotar canteiros|Registrar o crescimento e ajustar as datas de plantio"
+relacionadoUrl: "/horta/"
+relacionadoTitulo: "Horta em pequenos espaços"
+relacionadoDescricao: "Veja o que plantar conforme a luz e o espaço de vasos, varandas e canteiros."
+relacionadoImagem: "/imagens/artigos/horta-colheita-escalonada.webp"
 status: "publicado"
 ---
 **Uma horta para consumo da família não precisa produzir tudo de uma vez.** O segredo é combinar espaço, espécies que a casa realmente consome e plantios escalonados: enquanto um lote cresce, outro está sendo colhido e um terceiro pode ser iniciado. Isso distribui o trabalho e reduz a concentração de colheitas, sem eliminar imprevistos.
 
-Este guia funciona tanto para um quintal com canteiros quanto para jardineiras em varanda. Você vai aprender a medir a área, fazer um primeiro plano de quatro semanas, reconhecer os cuidados mais importantes e continuar o planejamento nas ferramentas gratuitas do Seu Quintal.
+Este guia funciona tanto para um quintal com canteiros quanto para jardineiras em varanda. Você pode começar pelo que a família deseja comer e estimar a área necessária, mesmo antes de medir ou construir os canteiros. Depois, compare a estimativa com o espaço real, o sol e as condições de cultivo. A seguir, você vai testar um plano e continuar nas ferramentas gratuitas do Seu Quintal.
 
 ## 1. Comece medindo o espaço
 
@@ -69,6 +74,10 @@ O quadro abaixo mostra um **roteiro administrativo ilustrativo**, não um calend
 ![Pessoa colhendo alface em um canteiro bem cuidado, com cesto de hortaliças ao lado, ilustrando a colheita em momentos diferentes.](/imagens/artigos/horta-colheita-escalonada.webp)
 
 **Atenção:** se o lote A ainda ocupa o canteiro, não coloque o lote D sobre o mesmo espaço. Considere áreas de produção e semeadura separadas, ou espere a liberação do canteiro.
+
+A simulação abaixo usa o mesmo cálculo do Organizador de Horta. Escolha um alimento, a meta semanal e o intervalo entre novos lotes: você verá uma estimativa de área e os estágios representados com os mesmos desenhos de culturas usados no site.
+
+:::horta-familiar-interativa
 
 ## 4. Reserve espaço para erros e imprevistos
 

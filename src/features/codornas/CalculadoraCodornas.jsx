@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import Icone from "../../components/Icone.jsx";
 import { configuracaoCodornas, fontesCodornas, numeroCodornas, simularCodornas } from "./calculos.js";
 import "../../styles/calculadora-codornas.css";
@@ -228,6 +229,8 @@ export default function CalculadoraCodornas() {
     </form>
     <div ref={resultadoRef}>{resultado && <Resultado resultado={resultado}/>}</div>
     <section className="codornas-educacao" aria-labelledby="titulo-cuidados-codornas">
+      <ValorAlimentar nome="Ovos de codorna"/>
+      <ValorAlimentar nome="Carne de codorna"/>
       <h3 id="titulo-cuidados-codornas">Como cuidar das codornas: preparação, rotina, higiene e saúde</h3>
       <div className="codornas-informacoes">
         {explicacoes.map(bloco => <article key={bloco.titulo}>

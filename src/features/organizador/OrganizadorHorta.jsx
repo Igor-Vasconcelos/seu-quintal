@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import RecuperarDados from "../../components/RecuperarDados.jsx";
 import { regioes } from "../../data/plantio.js";
 import HistoricoCultivo from "../cultivo/HistoricoCultivo.jsx";
@@ -85,6 +86,7 @@ function CultivoSalvo({ plano, aoEditar, aoRemover, bloqueado }) {
       <p className="nota">Meta por semana · Casa {formatarMedida(plano.casa)} {ficha.unidade}
         {plano.venda > 0 && ` · Venda ${formatarMedida(plano.venda)} ${ficha.unidade}`}</p>
       <p className="nota">Primeira colheita prevista de {janelaDeDatas(primeiro.colheita.de, primeiro.colheita.ate)}</p>
+      <ValorAlimentar nome={plano.cultura} compacto/>
       <details className="organizador-detalhes organizador-lotes">
         <summary>Ver os 6 primeiros lotes</summary>
         <ol>
@@ -268,7 +270,7 @@ export default function OrganizadorHorta({ culturaSugerida }) {
       <div className="organizador-inicio">
         <div>
           <span className="organizador-etiqueta">DA PRIMEIRA MUDA À COLHEITA</span>
-          <h2>Organize sua horta no seu ritmo</h2>
+          <h2>Horta contínua: do consumo da família à colheita</h2>
           <p>Escolha as culturas, planeje lotes com datas estimadas e acompanhe o que precisa fazer.</p>
           <p className="organizador-inicio-contador" role="status">
             {dados.planos.length ? `${dados.planos.length} cultivo(s) no seu plano` : "Você ainda não cadastrou cultivos."}

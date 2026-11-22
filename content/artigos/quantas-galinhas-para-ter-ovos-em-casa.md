@@ -8,6 +8,11 @@ imagemAlt: "Ilustração realista de galinhas poedeiras em galinheiro doméstico
 resposta: "Divida sua meta semanal de ovos pela postura média semanal prevista por ave e arredonde para cima; depois confira espaço, alimentação, água e condições de manejo."
 ferramentaUrl: "/sisteminha.html#calculadora-galinheiro"
 ferramentaTexto: "Calcular galinhas, água e ração"
+aprendizados: "Estimar poedeiras a partir do consumo real de ovos|Avaliar espaço, ração e água com premissas explícitas|Acompanhar postura, limpeza, sanidade e bem-estar"
+relacionadoUrl: "/sisteminha.html#galinheiro"
+relacionadoTitulo: "Entenda o galinheiro no Sisteminha"
+relacionadoDescricao: "Conheça o módulo de aves e os cuidados para planejar sua criação."
+relacionadoImagem: "/imagens/artigos/galinhas-agua-racao.webp"
 status: "publicado"
 ---
 **A quantidade de galinhas não deve ser escolhida apenas pelo tamanho do quintal.** Primeiro estime quantos ovos a família consome. Depois, avalie a produção esperada por ave, a área disponível, as instalações e os cuidados que você consegue oferecer todos os dias.

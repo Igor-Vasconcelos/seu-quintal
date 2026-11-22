@@ -60,6 +60,23 @@ export function readArticle(source, file) {
   if (meta.dataAtualizacao && meta.dataAtualizacao < meta.dataPublicacao) {
     throw new Error("dataAtualizacao anterior à publicação em " + file);
   }
+  if (meta.aprendizados) {
+    const itens = meta.aprendizados.split("|").map(item => item.trim());
+    if (itens.length < 2 || itens.length > 4 || itens.some(item => item.length < 12 || item.length > 140)) {
+      throw new Error("Aprendizados devem conter de 2 a 4 frases, separadas por |: " + file);
+    }
+  }
+  if (meta.relacionadoUrl) {
+    const [rota, ancora, excesso] = meta.relacionadoUrl.split("#");
+    pathOnly(rota);
+    if (excesso !== undefined || (ancora && !/^[a-z0-9_-]+$/.test(ancora))) {
+      throw new Error("Link relacionado inválido: " + file);
+    }
+    if (!meta.relacionadoTitulo || !meta.relacionadoDescricao) {
+      throw new Error("Conteúdo relacionado sem título ou descrição: " + file);
+    }
+    if (meta.relacionadoImagem) pathOnly(meta.relacionadoImagem);
+  }
   return { ...meta, markdown: match[2] };
 }
 
@@ -104,6 +121,15 @@ export function renderMarkdown(markdown, prefix) {
   for (let i = 0; i < linhas.length; i++) {
     const line = linhas[i];
     if (!line.trim()) { closeParagraph(); closeList(); continue; }
+    if (line.trim() === ":::horta-familiar-interativa") {
+      closeParagraph(); closeList();
+      output.push('<section class="sq-horta-widget" id="experimente-a-horta" aria-labelledby="titulo-horta-interativa">' +
+        '<h3 id="titulo-horta-interativa">Experimente: quanto plantar para sua família?</h3>' +
+        '<div id="simulador-horta-artigo"><p>Ative o JavaScript para usar a simulação interativa. ' +
+        '<a href="' + prefix + 'horta/organizador/#planejamento-familiar">Abrir ferramenta completa de horta contínua</a>.</p></div>' +
+        '</section>');
+      continue;
+    }
     const imagem = line.match(/^!\[([^\]]{8,200})\]\((\/imagens\/artigos\/[a-z0-9-]+\.webp)\)$/);
     if (imagem) {
       closeParagraph(); closeList();
@@ -246,6 +272,32 @@ function layout({ title, description, path, prefix, body, image, kind = "website
   ].filter(Boolean).join("\n");
 }
 
+/**
+ * Grupos semânticos sem remover ou duplicar o texto original.
+ * Apenas seções com imagem e sem tabela viram passo ilustrado em duas colunas.
+ * Os IDs, links, listas e legendas continuam idênticos.
+ */
+export function comporSecoesEditorais(html) {
+  const blocos = html.split(/(?=<h2 id=")/);
+  return blocos.map(bloco => {
+    const cabecalho = bloco.match(/^<h2 id="([a-z0-9-]+)">[\s\S]*?<\/h2>/);
+    if (!cabecalho) return bloco;
+    const id = cabecalho[1];
+    const inicio = cabecalho[0];
+    const restante = bloco.slice(inicio.length);
+    const figura = restante.match(/<figure class="sq-step-figure">[\s\S]*?<\/figure>/);
+    if (figura && !restante.includes('class="sq-table-wrap"') &&
+        (restante.match(/class="sq-step-figure"/g) || []).length === 1) {
+      // Mantém o conteúdo e a legenda no mesmo bloco visual, preservando HTML indexável.
+      const texto = restante.replace(figura[0], "");
+      return '<section class="sq-guide-section sq-guide-section--illustrated" aria-labelledby="' + id +
+        '">' + inicio + '<div class="sq-guide-step"><div class="sq-guide-step-copy">' +
+        texto + '</div>' + figura[0] + '</div></section>';
+    }
+    return '<section class="sq-guide-section" aria-labelledby="' + id + '">' + bloco + '</section>';
+  }).join("");
+}
+
 // Mantém o slug e os IDs das seções do Markdown para preservar links e SEO.
 export function renderArticle(article) {
   const prefix = "../../", path = "/artigos/" + article.slug + "/";
@@ -273,18 +325,50 @@ export function renderArticle(article) {
     '<a class="sq-button" href="' + toolUrl + '">' + escapeHtml(article.ferramentaTexto) + "</a></aside>";
   const resposta = article.resposta
     ? '<p class="sq-answer"><strong>Resposta direta:</strong> ' + escapeHtml(article.resposta) + "</p>" : "";
-  const body = '<nav class="sq-breadcrumb" aria-label="Você está aqui"><a href="../../">Início</a> / <a href="../">Artigos</a> / ' +
-    escapeHtml(article.categoria) + '</nav><article class="sq-article"><div class="sq-article-opening">' +
-    '<header class="sq-article-header"><p class="sq-eyebrow">' + escapeHtml(article.categoria) +
-    '</p><h1>' + escapeHtml(article.titulo) + '</h1>' +
-    '<p class="sq-lede">' + escapeHtml(article.descricao) + '</p>' + resposta +
-    '<div class="sq-article-info"><p class="sq-byline">Por ' + escapeHtml(article.autor) +
-    (date ? " · " + date : "") + '</p><p class="sq-read-meta">' + leitura + '</p>' +
-    '<a class="sq-meta-tool" href="' + toolUrl + '">' + escapeHtml(article.ferramentaTexto) + '</a></div></header>' +
+  const aprendizados = (article.aprendizados || "").split("|").map(item => item.trim()).filter(Boolean);
+  const painelAprendizados = aprendizados.length
+    ? '<section class="sq-learning-panel" aria-label="Resumo do que você vai aprender">' +
+      '<h2>O que você vai aprender</h2><ul>' +
+      aprendizados.map(x => '<li>' + escapeHtml(x) + '</li>').join("") + '</ul></section>'
+    : "";
+  const relacionadoLink = article.relacionadoUrl
+    ? linkTarget(article.relacionadoUrl, prefix) : toolUrl;
+  const relacionadoTitulo = article.relacionadoTitulo || article.ferramentaTexto;
+  const relacionadoDescricao = article.relacionadoDescricao || "Explore o recurso relacionado a este assunto.";
+  const relacionadoImagem = article.relacionadoImagem
+    ? '<img src="' + linkTarget(article.relacionadoImagem, prefix) +
+      '" alt="" width="480" height="320" loading="lazy" decoding="async">' : "";
+  const painelRelacionado = '<section class="sq-side-related" aria-label="Próximo conteúdo útil">' +
+    '<h2>Continue aprendendo</h2><a class="sq-side-related-card" href="' + relacionadoLink +
+    '">' + relacionadoImagem + '<span class="sq-side-related-text"><strong>' +
+    escapeHtml(relacionadoTitulo) + '</strong><span>' + escapeHtml(relacionadoDescricao) +
+    '</span><span class="sq-side-related-action">Explorar conteúdo →</span></span></a></section>';
+  const corpoOrganizado = comporSecoesEditorais(content.html);
+  const body = '<nav class="sq-breadcrumb" aria-label="Você está aqui"><a href="../../">Início</a>' +
+    ' <span aria-hidden="true">/</span> <a href="../">Artigos</a> <span aria-hidden="true">/</span> ' +
+    '<span aria-current="page">' + escapeHtml(article.categoria) + '</span></nav>' +
+    '<article class="sq-article"><div class="sq-article-opening">' +
     '<figure class="sq-hero-image"><img src="../../' + article.imagem.slice(1) +
-    '" alt="' + escapeHtml(article.imagemAlt) + '" width="960" height="640" decoding="async" fetchpriority="high"></figure>' +
-    '</div><div class="sq-article-layout">' + toc + '<div class="sq-prose" id="inicio-leitura">' +
-    content.html + tool + "</div></div></article>" +
+    '" alt="' + escapeHtml(article.imagemAlt) +
+    '" width="960" height="640" decoding="async" fetchpriority="high"></figure>' +
+    '<header class="sq-article-header"><p class="sq-eyebrow">ARTIGO · ' +
+    escapeHtml(article.categoria) + '</p><h1>' + escapeHtml(article.titulo) +
+    '</h1><p class="sq-lede">' + escapeHtml(article.descricao) + '</p></header></div>' +
+    '<div class="sq-article-meta-bar"><div class="sq-article-info">' +
+    '<p class="sq-byline">Por ' + escapeHtml(article.autor) + '</p>' +
+    (date ? '<span class="sq-date">' + date + '</span>' : "") +
+    '<p class="sq-read-meta">' + leitura + '</p>' +
+    '<a class="sq-meta-tool" href="' + toolUrl + '">' +
+    escapeHtml(article.ferramentaTexto) + '</a>' +
+    '<span class="sq-meta-spacer" aria-hidden="true"></span>' +
+    '<button class="sq-share-button" type="button" data-sq-share>Compartilhar</button>' +
+    '<span class="sq-share-feedback" role="status" aria-live="polite"></span>' +
+    '</div></div>' +
+    '<div class="sq-article-layout">' +
+    '<aside class="sq-article-aside" aria-label="Navegação e sugestões">' +
+    toc + painelRelacionado + '</aside>' +
+    '<div class="sq-prose" id="inicio-leitura">' +
+    resposta + painelAprendizados + corpoOrganizado + tool + '</div></div></article>' +
     '<p class="sq-back"><a href="../">Ver todos os artigos</a></p>';
   const structured = {
     "@context": "https://schema.org", "@type": "BlogPosting", headline: article.titulo,
@@ -297,7 +381,15 @@ export function renderArticle(article) {
   if (article.dataAtualizacao) structured.dateModified = article.dataAtualizacao;
   // FAQ publicada apenas quando as perguntas e respostas constarem no HTML.
   const faq = extractFaqs(article.markdown);
-  const schemas = [structured];
+  const breadcrumbs = {
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: ORIGIN + "/" },
+      { "@type": "ListItem", position: 2, name: "Artigos", item: ORIGIN + "/artigos/" },
+      { "@type": "ListItem", position: 3, name: article.titulo, item: ORIGIN + path },
+    ],
+  };
+  const schemas = [structured, breadcrumbs];
   if (faq.length) schemas.push({
     "@context": "https://schema.org", "@type": "FAQPage",
     mainEntity: faq.map(item => ({

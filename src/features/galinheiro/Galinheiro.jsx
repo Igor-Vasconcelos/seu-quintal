@@ -1,3 +1,4 @@
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import Icone from "../../components/Icone.jsx";
 import { guiaAnimais } from "../../data/guias.js";
 import CalculadoraGalinheiro from "./CalculadoraGalinheiro.jsx";
@@ -105,6 +106,11 @@ export default function Galinheiro({ modulo }) {
       </div>
 
       <CalculadoraGalinheiro />
+      <section className="galinheiro-secao" aria-labelledby="galinheiro-alimentacao-titulo">
+        <h4 id="galinheiro-alimentacao-titulo">Ovos e carne na alimentação</h4>
+        <ValorAlimentar nome="Ovos de galinha"/>
+        <ValorAlimentar nome="Carne de frango"/>
+      </section>
       <ConsumoGalinheiro />
       <CuidadosGalinheiro />
 
