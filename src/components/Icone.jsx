@@ -7,6 +7,19 @@ const desenhos = {
     <path d="M6 4h15l-4 16H2L6 4Z" />
     <path d="m11 4-4 16m9-16-4 16M4 12h15" />
   </>,
+  // Meu Quintal: casinha, muda, caminho e dois canteiros dentro do terreno.
+  // Ícone vetorial simplificado para funcionar no cabeçalho e no emblema grande.
+  // "planta" continua reservado à grade técnica do planejador de terreno.
+  "meu-quintal": <>
+    <path d="m8.4 9.4 3.7-3 3.7 3" />
+    <path d="M9.25 9.5v5.2h5.7V9.5M11.4 14.7v-3.2h1.7v3.2" />
+    <path d="M4.8 15.25H19.2L21.4 20.6H2.6Z" />
+    <path d="M11.35 20.6c-.3-1.6.4-3.6 1.75-5.9" />
+    <path d="M7 19v-4" />
+    <path d="M7 16.7c-1.9-.1-2.7-1.5-2.7-2.7 1.6 0 2.6.9 2.7 2.7Zm0-.1c.2-1.9 1.3-2.8 2.7-2.9 0 1.7-1.1 2.8-2.7 2.9Z" />
+    <path d="M15 18h4m-3.1-1.5v1.5m1.7-1.5V18" />
+    <path d="M15.4 19.7h4" />
+  </>,
   livro: <>
     <path d="M12 6v14m0-14C9 4 6 4 2 5v14c4-1 7-1 10 1 3-2 6-2 10-1V5c-4-1-7-1-10 1Z" />
   </>,

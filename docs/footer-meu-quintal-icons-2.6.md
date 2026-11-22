@@ -28,3 +28,12 @@ A versão anterior do rodapé exibia duas colunas de navegação desiguais: **Ap
 
 ## Limites
 Ainda não foram implementadas páginas de política de privacidade, contato ou publicidade; só devem ser incluídas no rodapé depois de criadas e verificadas. Nenhum dado do usuário foi alterado.
+
+
+## Evolução 2.7 — Emblema de acesso ao Meu Quintal
+
+O botão global **Meu Quintal** e a ilustração de destaque do projeto recente ainda mostravam `planta` (grade técnica de terreno). Substituímos esse símbolo por `meu-quintal`: uma casinha com muda, fileiras de canteiros e um caminho, simplificada em um único SVG local de 24 × 24, compatível com tamanhos pequenos.
+
+**Onde aparece:** botão do cabeçalho, destaque do Meu Quintal na Home, ilustração do projeto recente na Visão geral e link do rodapé. A Home apresenta o mesmo SVG num círculo verde-claro; no cabeçalho o traço é ligeiramente maior para legibilidade. O rótulo textual continua presente, e o emblema é decorativo para leitores de tela. O símbolo `planta` foi mantido nos pontos que representam a grade técnica ou o desenho de terrenos; os cinco ícones próprios da sidebar também foram preservados.
+
+**Validação:** `tests/iconeMeuQuintal.test.js` verifica o desenho SVG, os quatro lugares de uso e a preservação dos ícones do planejador; `scripts/smoke-visual.mjs` verifica dimensões e captura o emblema em celular e desktop. Não há alteração de rotas, dados, API ou fórmulas.

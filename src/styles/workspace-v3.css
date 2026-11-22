@@ -251,3 +251,9 @@
     width: 1.4rem; height: 1.4rem;
   }
 }
+
+
+/* Emblema da propriedade recente: traço ligeiramente mais forte em tamanho grande. */
+.pagina-meu-quintal .quintal-ultimo-icone .icone {
+  stroke-width: 1.75;
+}

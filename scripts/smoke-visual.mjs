@@ -58,6 +58,13 @@ try {
         slug + "/" + nome + ": logomarca não carregou");
 
       if (["home", "horta", "meu-quintal"].includes(slug)) {
+        const botaoQuintal = pagina.locator(".menu-quintal");
+        assert.equal(await botaoQuintal.locator("svg").count(), 1,
+          "Meu Quintal deve apresentar o novo ícone SVG no cabeçalho");
+        assert.ok(await botaoQuintal.locator("svg path").count() >= 7,
+          "Ícone do Meu Quintal deve mostrar casa, horta e caminho");
+      }
+      if (["home", "horta", "meu-quintal"].includes(slug)) {
         const footer = pagina.locator(".rodape.rodape-v3");
         await footer.waitFor({ state: "visible", timeout: 16000 });
         const grupos = footer.locator(".rodape-navegacao");
@@ -99,6 +106,13 @@ try {
           "Ferramenta deve apresentar 3 características claras");
       }
       if (slug === "home") {
+        const emblema = pagina.locator(".home-meu-quintal-emblema");
+        assert.equal(await emblema.locator("svg").count(), 1);
+        assert.equal(await emblema.evaluate(el => getComputedStyle(el).borderRadius), "50%",
+          "O emblema do Meu Quintal deve ter fundo circular acolhedor");
+        await emblema.screenshot({
+          path: PASTA + "/icone-meu-quintal-home-" + nome + ".png", animations: "disabled",
+        });
         assert.equal(await pagina.locator(".home-destaque-card").count(), 4,
           "Home precisa mostrar quatro cartões editoriais");
         const imagens = pagina.locator(".home-destaque-imagem img");
@@ -350,6 +364,14 @@ try {
           "O projeto criado deve aparecer na visão geral");
         assert.equal(await pagina.locator(".quintal-indicadores strong").nth(2).innerText(), "3",
           "A visão geral precisa contar os três elementos adicionados ao cenário");
+        const iconeProjeto = pagina.locator(".quintal-ultimo-icone");
+        assert.ok(await iconeProjeto.locator("svg path").count() >= 7,
+          "O destaque de projeto deve usar o mesmo símbolo do Meu Quintal");
+        if (await iconeProjeto.isVisible()) {
+          await iconeProjeto.screenshot({
+            path: PASTA + "/icone-meu-quintal-projeto-" + nome + ".png", animations: "disabled",
+          });
+        }
         // Este mesmo componente também é montado em Meu Quintal; a rota é diferente.
         await pagina.locator('.quintal-secoes a[href="#canteiros"]').click();
         const dicaDoQuintal = pagina.locator(".canteiro-dica a");

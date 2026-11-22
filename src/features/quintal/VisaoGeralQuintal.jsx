@@ -72,7 +72,7 @@ export default function VisaoGeralQuintal() {
             Continuar neste terreno <Icone nome="seta"/>
           </a>
         </div>
-        <div className="quintal-ultimo-icone" aria-hidden="true"><Icone nome="planta"/></div>
+        <div className="quintal-ultimo-icone" aria-hidden="true"><Icone nome="meu-quintal"/></div>
       </section>
 
       <div className="quintal-projetos-cabecalho">

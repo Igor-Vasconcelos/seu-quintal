@@ -54,7 +54,7 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
                 return <li key={rota}><a href={raiz + rota}
                   className={rota === "meu-quintal/" ? "rodape-link-quintal" : undefined}
                   aria-current={atual ? "page" : undefined}>
-                  {rota === "meu-quintal/" && <Icone nome="visao-quintal"/>}
+                  {rota === "meu-quintal/" && <Icone nome="meu-quintal"/>}
                   <span>{titulo}</span>
                 </a></li>;
               })}
