@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Icone from "../../components/Icone.jsx";
 import { lerProjetosSalvos } from "../planejador/bancoProjetos.js";
-import { chaveDoTerreno, lerProjetos } from "../planejador/projetos.js";
-import { criarTerreno, formatarMedida } from "../planejador/geometria.js";
+import { lerProjetos } from "../planejador/projetos.js";
+import { resumirProjetosQuintal } from "./resumoQuintal.js";
+import { formatarMedida } from "../planejador/geometria.js";
 
 function tituloDoTerreno(terreno) {
   return `${formatarMedida(terreno.largura)} × ${formatarMedida(terreno.comprimento)} m`;
@@ -42,15 +43,7 @@ export default function VisaoGeralQuintal() {
     <p role="status">Carregando seus projetos deste navegador…</p>
   </section>;
 
-  const terrenos = Object.entries(dados.terrenos ?? {}).map(([id, projeto]) => ({
-    id, projeto, medidas: criarTerreno(...id.split("x")),
-  })).filter(({ medidas }) => medidas);
-
-  const totalCenarios = terrenos.reduce((total, { projeto }) => total + projeto.cenarios.length, 0);
-  const ultimaChave = dados.ultimoTerreno ? chaveDoTerreno(dados.ultimoTerreno) : null;
-  const atual = terrenos.find(({ id }) => id === ultimaChave) ?? terrenos[0];
-  const cenarioAtivo = atual?.projeto.cenarios.find(({ id }) => id === atual.projeto.ativo)
-    ?? atual?.projeto.cenarios[0];
+  const { terrenos, totalCenarios, atual, itensNoCenarioAtivo } = resumirProjetosQuintal(dados);
 
   return <section className="quintal-visao-geral" aria-labelledby="quintal-visao-titulo">
     <div className="quintal-visao-cabecalho">
@@ -66,7 +59,7 @@ export default function VisaoGeralQuintal() {
       <div className="quintal-indicadores" aria-label="Resumo dos projetos salvos">
         <div><small>Terrenos salvos</small><strong>{terrenos.length}</strong></div>
         <div><small>Cenários registrados</small><strong>{totalCenarios}</strong></div>
-        <div><small>Itens no cenário atual</small><strong>{cenarioAtivo?.itens.length ?? 0}</strong></div>
+        <div><small>Itens no cenário atual</small><strong>{itensNoCenarioAtivo}</strong></div>
       </div>
 
       <section className="quintal-ultimo-projeto" aria-labelledby="quintal-projeto-atual">
