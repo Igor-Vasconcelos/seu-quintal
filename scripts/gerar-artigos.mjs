@@ -128,7 +128,7 @@ function layout({ title, description, path, prefix, body, image, kind = "website
     '</head><body class="sq-artigos"><a class="sq-skip" href="#conteudo">Pular para o conteúdo</a>',
     '<header class="sq-header"><div class="sq-container sq-header-inner">',
     '<a class="sq-brand" href="' + prefix + '" aria-label="Seu Quintal, página inicial">' +
-      '<img src="' + prefix + 'favicon.svg" width="42" height="42" alt="" aria-hidden="true">' +
+      '<img src="' + prefix + 'imagens/marca-seu-quintal.svg" width="58" height="58" alt="" aria-hidden="true">' +
       '<span class="sq-brand-text"><strong>Seu Quintal</strong><small>Da primeira muda ao seu sítio.</small></span></a>',
     '<nav class="sq-desktop-nav" aria-label="Menu principal">' + nav + "</nav>",
     '<a class="sq-account" href="' + prefix + 'meu-quintal/">Meu Quintal</a>',

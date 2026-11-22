@@ -75,7 +75,10 @@ export default function Cabecalho({ sisteminha = false, raiz = "./", pagina }) {
     <header className="topo site-shell" onKeyDown={tratarTecla}>
       <div className="topo-miolo">
         <a href={inicio} className="marca site-marca" aria-label="Seu Quintal, voltar ao início">
-          <span className="marca-simbolo"><Icone nome="casa"/></span>
+          <span className="marca-simbolo site-marca-emblema">
+            <img src={raiz + "imagens/marca-seu-quintal.svg"} width="58" height="58"
+              alt="" aria-hidden="true" />
+          </span>
           <span className="site-marca-texto">
             <strong>Seu Quintal</strong>
             <small>Da primeira muda ao seu sítio.</small>

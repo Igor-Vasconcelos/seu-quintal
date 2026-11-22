@@ -117,3 +117,5 @@ import "./styles/calculadoras-peixes-pomar.css";
 import "./styles/tool-layout-v4.css";
 
 import "./styles/site-raiz-caminho.css";
+
+import "./styles/layout-shell-v5.css";

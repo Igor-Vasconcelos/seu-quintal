@@ -27,7 +27,10 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
       <div className="rodape-conteudo">
         <div className="rodape-identidade">
           <a href={home} className="marca site-marca">
-            <span className="marca-simbolo"><Icone nome="muda"/></span>
+            <span className="marca-simbolo site-marca-emblema">
+              <img src={raiz + "imagens/marca-seu-quintal.svg"} width="58" height="58"
+                alt="" aria-hidden="true" loading="lazy" />
+            </span>
             <span className="site-marca-texto"><strong>Seu Quintal</strong><small>Da primeira muda ao seu sítio.</small></span>
           </a>
           <p>Conhecimento e ferramentas gratuitas para cultivar, cuidar dos animais e organizar seu espaço produtivo.</p>
