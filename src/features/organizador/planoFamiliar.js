@@ -33,6 +33,11 @@ export const sugestoesDeConsumo = Object.freeze([
   { cultura: "Morango", grupo: "Frutos", porPessoa: 0.1, dica: "Risco de doenças com excesso de umidade" },
 ]);
 
+export function intervaloPadrao(cultura) {
+  const ficha = culturasOrganizador[cultura];
+  return ficha?.colheitasSucessivas ? 4 : 1;
+}
+
 export function metaExemplo(cultura, pessoas) {
   const item = sugestoesDeConsumo.find(s => s.cultura === cultura);
   return item && Number.isInteger(pessoas) && pessoas >= 1 && pessoas <= 20
@@ -100,21 +105,25 @@ export function calcularPlanoFamiliar({
       !Number.isFinite(venda) || venda < 0 || venda > 10000 ||
       casa + venda <= 0)
       return { erro: "Informe metas semanais positivas, em " + ficha.unidade + ", para " + item.cultura + "." };
-    const continuo = Boolean(ficha.colheitasSucessivas);
+    const intervalo = item.intervalo === undefined ? intervaloPadrao(item.cultura) : item.intervalo;
+    if (!Number.isInteger(intervalo) || intervalo < 1 || intervalo > 52)
+      return { erro: "Informe um intervalo de 1 a 52 semanas para " + item.cultura + "." };
     const plano = {
       cultura: item.cultura, origem: ficha.somenteMuda ? "muda" : "semente", inicio,
-      canteiro: "", casa, venda, intervalo: continuo ? 4 : 1,
+      canteiro: "", casa, venda, intervalo,
       rendimento: null, duracao: null, teste: 2,
     };
     const dimensionamento = dimensionarLote(plano);
-    const primeiro = projetarLote(plano, 0);
-    const alertaEpoca = situacaoDoPlantio(plano, regiao, primeiro.canteiro.de, primeiro.canteiro.ate);
+    const seguintes = [0, 1, 2].map(i => projetarLote(plano, i));
+    const primeiro = seguintes[0];
+    const alertaEpoca = seguintes.map(lote =>
+      situacaoDoPlantio(plano, regiao, lote.canteiro.de, lote.canteiro.ate)
+    ).find(Boolean) ?? "";
     novos.push({
       plano, area: dimensionamento.areaSimultanea,
       plantas: dimensionamento.plantas,
       experimental: dimensionamento.experimental,
-      alertaEpoca, primeiraColheita: primeiro.colheita,
-      seguintes: [0, 1, 2].map(i => projetarLote(plano, i)),
+      alertaEpoca, primeiraColheita: primeiro.colheita, seguintes,
     });
   }
   const areaCanteiro = largura * comprimento;
@@ -133,7 +142,7 @@ export function calcularPlanoFamiliar({
       ...(sugestoes.some(item => item.experimental)
         ? ["Culturas de colheitas sucessivas começam com 2 plantas de teste. Sem rendimento medido, não é possível prometer a meta em kg."] : []),
       ...(sugestoes.some(item => item.alertaEpoca)
-        ? ["Há cultivos com plantio fora ou parcialmente fora da janela regional de referência."] : []),
+        ? ["Um ou mais dos três primeiros lotes têm entrada no canteiro fora ou parcialmente fora da época regional de referência."] : []),
       ...(planosExistentes.length
         ? ["A área dos cultivos já cadastrados foi reservada no cálculo, mas sua localização física não foi verificada."] : []),
       "As reservas são estimativas simultâneas, não a planta geométrica final. Confira o posicionamento no Planejador de Canteiros.",
