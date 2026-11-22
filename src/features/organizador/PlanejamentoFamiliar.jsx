@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
+import { fonteRotacao, sugestoesRotacao } from "./rotacaoCulturas.js";
 import IconeCultura from "./IconeCultura.jsx";
 import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas.js";
 import { descreverEpocaPlantio } from "../../data/plantio.js";
@@ -83,6 +85,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
     casa: metasCasa[cultura] === undefined ? metaExemplo(cultura, pessoas) : lerMedida(metasCasa[cultura], 0),
     venda: incluirVenda ? (metasVenda[cultura] === undefined ? 0 : lerMedida(metasVenda[cultura], 0)) : 0,
   }));
+  const alternativasRotacao = sugestoesRotacao(selecionadas);
   const sugestao = calcularPlanoFamiliar({
     pessoas, quantidadeCanteiros: quantidade, largura: lerMedida(largura),
     comprimento: lerMedida(comprimento), inicio, regiao, preferencias, planosExistentes,
@@ -111,13 +114,13 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
     <details className="organizador-cartao familia" id="planejamento-familiar" ref={detalheRef}>
       <summary className="familia-abrir">
         <span className="familia-chamada">
-          <strong>Planejamento para colher com frequência</strong>
-          <small>Escolha o que a família consome e veja uma sugestão de lotes por canteiro.</small>
+          <strong>Horta contínua: consumo, plantios escalonados e rotação</strong>
+          <small>Informe o consumo semanal, planeje lotes e aprenda a alternar cultivos nos canteiros.</small>
         </span>
         <span className="familia-chamada-acao">Montar minha horta</span>
       </summary>
       <div className="familia-conteudo">
-        <p className="nota">Este assistente reaproveita os ciclos de cultivo e a agenda do Seu Quintal. As quantidades sugeridas são apenas exemplos iniciais editáveis, não médias oficiais de consumo.</p>
+        <p className="nota">Escolha os alimentos, ajuste as metas semanais e confira as primeiras datas de colheita. As sugestões de consumo são exemplos editáveis, não médias oficiais. Rotação é a troca de famílias botânicas em ciclos posteriores; o sistema ainda não a executa automaticamente.</p>
         <div className="familia-etapa">
           <h3><span className="familia-passo">1</span> Pessoas e espaço disponível</h3>
           <div className="familia-campos">
@@ -188,7 +191,9 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
               <div><dt>Como começar</dt><dd>{orientacao?.plantio}</dd></div>
               <div><dt>Cuidados</dt><dd>{orientacao?.cuidados}</dd></div>
               <div><dt>Quando colher</dt><dd>{orientacao?.colheita}</dd></div>
+              <div><dt>Como manter a colheita</dt><dd>{culturasOrganizador[culturaDetalhe]?.colheitasSucessivas ? "Essa planta pode oferecer mais de uma coleta. Registre o rendimento real para ajustar as metas." : "Divida os plantios em lotes com datas diferentes para distribuir a colheita."}</dd></div>
             </dl>
+            <ValorAlimentar nome={culturaDetalhe} compacto/>
             {orientacao && <a href={fonteFichaCultura(orientacao.pagina)} target="_blank" rel="noopener noreferrer">
               Consultar ficha Embrapa/Sebrae
             </a>}
@@ -245,6 +250,18 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
                 </li>
               ))}
             </ol>
+            <section className="sq-rotacao-instrucao" aria-labelledby="sq-rotacao-titulo">
+              <h4 id="sq-rotacao-titulo">Depois da colheita: como fazer rotação de culturas?</h4>
+              <p>Escalonar é semear em datas diferentes. Rotacionar é alternar famílias botânicas no <strong>mesmo canteiro, em ciclos posteriores</strong>; pode ajudar a organizar o manejo de solo e pragas, mas não garante ausência de doenças.</p>
+              {alternativasRotacao.length ? <>
+                <p>Exemplos com suas culturas, somente depois de liberar o canteiro:</p>
+                <ul>{alternativasRotacao.map(item => <li key={item.origem}>
+                  <strong>{item.origem}</strong> ({item.familiaOrigem}) → <strong>{item.destino}</strong> ({item.familiaDestino}).
+                </li>)}</ul>
+              </> : <p>Selecione duas ou mais culturas de famílias botânicas diferentes para ver exemplos. Consulte o histórico antes de repetir plantios.</p>}
+              <p className="nota">Orientação didática: não reserva canteiros automaticamente, nem avalia doenças anteriores, adubação ou épocas compatíveis. Confirme a sequência com orientação local.</p>
+              <a href={fonteRotacao} target="_blank" rel="noopener noreferrer">MAPA — ficha de rotação de hortaliças</a>
+            </section>
             <details className="familia-limites">
               <summary>Premissas, limites e fontes</summary>
               <ul>{sugestao.avisos.map(item => <li key={item}>{item}</li>)}</ul>

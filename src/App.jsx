@@ -13,7 +13,7 @@ import { criarTerreno } from "./features/planejador/geometria.js";
 const atalhos = [
   { destino: "./horta/", icone: "muda", titulo: "Começar uma horta", resumo: "Escolha plantas para o seu espaço e as horas de sol." },
   { destino: "#planejador", icone: "planta", titulo: "Planejar meu terreno", resumo: "Informe as medidas e desenhe onde vai cada área." },
-  { destino: "./horta/organizador/", icone: "calendario", titulo: "Montar uma agenda", resumo: "Planeje os lotes e acompanhe as datas da horta." },
+  { destino: "./horta/organizador/#planejamento-familiar", icone: "calendario", titulo: "Horta para consumo da família", resumo: "Defina quanto quer colher, programe lotes e acompanhe a agenda." },
 ];
 
 export default function App() {
@@ -94,6 +94,7 @@ export default function App() {
               {[
                 { titulo: "Planejador de canteiros", descricao: "Organize suas culturas.", href: "./horta/canteiros/" },
                 { titulo: "Calendário de plantio", descricao: "Saiba o que plantar.", href: "./horta/calendario-de-plantio/" },
+                { titulo: "Horta contínua", descricao: "Consumo, lotes e rotação de culturas.", href: "./horta/organizador/#planejamento-familiar" },
                 { titulo: "Calculadora de peixes", descricao: "Volume e planejamento.", href: "./ferramentas/calculadora-peixes/" },
                 { titulo: "Calculadora de codornas", descricao: "Ovos, corte e consumo.", href: "./ferramentas/calculadora-codornas/" },
                 { titulo: "Planejador de pomar", descricao: "Espaçamento e frutíferas.", href: "./ferramentas/planejador-de-pomar/" },

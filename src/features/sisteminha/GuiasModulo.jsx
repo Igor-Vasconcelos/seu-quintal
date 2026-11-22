@@ -12,6 +12,7 @@ const sugestoes = {
   ],
   horta: [
     {titulo:"Planeje uma horta com colheita frequente",descricao:"Organize plantios em lotes.",href:"./artigos/como-planejar-uma-horta-para-colher-com-frequencia/"},
+    {titulo:"Montar horta para consumo familiar",descricao:"Escolha alimentos, metas semanais e aprenda a alternar as culturas.",href:"./horta/organizador/#planejamento-familiar"},
     {titulo:"Calendário de plantio",descricao:"Consulte períodos por região.",href:"./horta/calendario-de-plantio/"},
     {titulo:"Planejador de pomar",descricao:"Respeite o crescimento futuro das árvores.",href:"./ferramentas/planejador-de-pomar/"},
   ],

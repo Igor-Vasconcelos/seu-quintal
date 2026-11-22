@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { plantasHorta } from "../../data/plantas-horta.js";
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
+import { buscaFichaCultura } from "../../data/fichas-culturas.js";
 import IconeCultura from "../organizador/IconeCultura.jsx";
 import { exemploParaCultivo, recomendarCultivos } from "./recomendacoesHorta.js";
 import CalculadoraTerra from "./CalculadoraTerra.jsx";
@@ -28,6 +30,7 @@ const secoes = [
 ];
 
 function CartaoCultivo({ item, raiz, aoCalcular, cuidadoExtra = false }) {
+  const orientacao = buscaFichaCultura(item.culturaAgenda ?? item.nome);
   return <li className="horta-cultura-card">
     {item.foto ? (
       <img src={`${raiz}imagens/horta/${item.id}.webp`} width="360" height="240"
@@ -40,6 +43,8 @@ function CartaoCultivo({ item, raiz, aoCalcular, cuidadoExtra = false }) {
     <div className="horta-cultura-texto">
       <strong>{item.nome}</strong>
       <p>{item.dica}</p>
+      {orientacao && <p><strong>Quando colher:</strong> {orientacao.colheita}</p>}
+      <ValorAlimentar nome={item.culturaAgenda ?? item.nome} compacto/>
       {cuidadoExtra && <p className="horta-cuidado-sol"><b>Atenção ao sol:</b> {item.cuidadoSol}</p>}
       <button className="horta-calcular-da-planta" type="button" onClick={() => aoCalcular(item.id)}>
         Calcular terra para {item.nome} <span aria-hidden="true">→</span>

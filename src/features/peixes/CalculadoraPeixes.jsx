@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import Icone from "../../components/Icone.jsx";
 import { especiesPeixes, estimarPeixes, fontesPeixes } from "./estimativa.js";
 
@@ -172,6 +173,7 @@ export default function CalculadoraPeixes() {
       <p><strong>Densidade técnica:</strong> quando o usuário declara um índice validado e as condições críticas,
         a conta divide a biomassa total prevista pelo peso final. Não é uma recomendação de povoamento.</p>
     </details>
+    <ValorAlimentar nome="Peixes"/>
     <aside className="simulador-fontes" aria-label="Fontes técnicas da calculadora de peixes">
       <h3>Fontes e cuidados</h3>
       <ul>{fontesPeixes.map(f => <li key={f.url}><a href={f.url} target="_blank" rel="noopener noreferrer">{f.nome}</a></li>)}</ul>
