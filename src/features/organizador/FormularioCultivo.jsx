@@ -174,15 +174,15 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
               <Quantidade nome="venda" rotulo="Para venda (opcional)" valor={campos.venda} mudar={mudar} />
             </div>
           </fieldset>
-          {ficha.colheitasSucessivas && (
+          {(ficha.colheitasSucessivas || ficha.planejamentoPorPeso) && (
             <fieldset className="organizador-meta">
-              <legend>Colheitas da mesma planta</legend>
-              <p className="nota">Use o rendimento observado de um ciclo inteiro ou comece com um lote de teste.</p>
+              <legend>{ficha.colheitasSucessivas ? "Colheitas da mesma planta" : "Produção por peso no lote"}</legend>
+              <p className="nota">Use o rendimento real observado por planta no ciclo ou comece com um lote de teste. Sem essa medição, a meta em kg não pode ser garantida.</p>
               <div className="organizador-campos">
                 <Quantidade nome="rendimento" rotulo="Kg por planta no ciclo (opcional)" valor={campos.rendimento} mudar={mudar} />
-                <label className="campo">Semanas de colheita (opcional)
+                {ficha.colheitasSucessivas && <label className="campo">Semanas de colheita (opcional)
                   <input type="number" name="duracao" min="1" max="104" step="1" value={campos.duracao} onChange={mudar} />
-                </label>
+                </label>}
                 {!campos.rendimento && <label className="campo">Plantas no lote de teste
                   <input type="number" name="teste" min="1" step="1" value={campos.teste} onChange={mudar} required />
                 </label>}
