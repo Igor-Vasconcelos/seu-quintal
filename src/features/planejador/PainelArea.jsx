@@ -26,6 +26,9 @@ export default function PainelArea({ item, terreno, aoSalvar, aoRemover }) {
     pomar: { href: "../ferramentas/planejador-de-pomar/", nome: "Calcular posições das árvores" },
     galinheiro: { href: "../sisteminha.html#galinheiro", nome: "Consultar calculadora do galinheiro" },
     canteiro: { href: "../horta/canteiros/", nome: "Planejar plantas do canteiro" },
+    horta: { href: "../sisteminha.html#horta", nome: "Entender o módulo de horta e pomar" },
+    compostagem: { href: "../sisteminha.html#compostagem", nome: "Conhecer a compostagem no Sisteminha" },
+    minhocario: { href: "../sisteminha.html#minhocario", nome: "Conhecer o minhocário no Sisteminha" },
   };
   const ferramenta = linksFerramenta[item.tipo];
   const medidas = [
