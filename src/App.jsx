@@ -41,15 +41,12 @@ export default function App() {
               <span className="home-hero-selo"><Icone nome="muda"/> ARTIGOS E GUIAS</span>
               <h1 id="titulo-home">Artigos e guias para seu quintal</h1>
               <p>Aprenda, planeje e produza com conteúdos práticos, explicados de forma simples, e use ferramentas gratuitas para colocar em prática.</p>
-              <div className="home-acoes home-acoes-editoriais">
-                <a className="botao" href="#ferramentas">
-                  Conteúdo confiável <Icone nome="livro" />
-                </a>
-                <a className="botao botao-contorno" href="./artigos/">
-                  Linguagem simples
-                </a>
+              <div className="home-beneficios" aria-label="Benefícios dos conteúdos">
+                <span><Icone nome="livro"/> Conteúdo confiável</span>
+                <span><Icone nome="muda"/> Linguagem simples</span>
+                <span><Icone nome="ciclo"/> Aplicação prática</span>
+                <span><Icone nome="galinha"/> Para toda a família</span>
               </div>
-              <span className="home-hero-garantia"><Icone nome="muda"/> Aplicação prática · Para toda a família</span>
             </div>
             <figure className="home-abertura-imagem">
               <img src="./imagens/abertura-horta-1200.webp"
@@ -91,7 +88,7 @@ export default function App() {
             <section className="home-editorial-artigos" id="artigos" aria-labelledby="titulo-artigos">
               <div className="home-secao-topo">
                 <div>
-                  <h2 id="titulo-artigos"><Icone nome="muda" /> Artigos mais recentes</h2>
+                  <h2 id="titulo-artigos"><Icone nome="livro" /> Artigos mais recentes</h2>
                   <p className="home-secao-descricao">Dúvidas do dia a dia e soluções para seu quintal.</p>
                 </div>
                 <a className="home-link" href="./artigos/">Ver todos os artigos <Icone nome="seta" /></a>
@@ -114,7 +111,7 @@ export default function App() {
             </section>
           </div>
           <aside className="home-editorial-ferramentas" aria-labelledby="titulo-ferramentas-rapidas">
-            <h2 id="titulo-ferramentas-rapidas"><Icone nome="planta" /> Ferramentas para aplicar</h2>
+            <h2 id="titulo-ferramentas-rapidas"><Icone nome="outros" /> Ferramentas para aplicar</h2>
             <p>Planeje, calcule e organize sua produção com ferramentas gratuitas.</p>
             <ul>
               {[
