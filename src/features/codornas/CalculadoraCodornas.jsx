@@ -21,7 +21,8 @@ function Campo({ rotulo, nome, valor, aoMudar, minimo, maximo, unidade, ajuda })
   return <label className="campo codornas-campo">
     <span>{rotulo}{unidade ? " (" + unidade + ")" : ""}</span>
     <input name={nome} type="text" inputMode="decimal" value={valor} onChange={e => aoMudar(nome,e.target.value)}
-      required aria-describedby={ajuda ? "codornas-ajuda-" + nome : undefined}
+      required={!["precoRacaoKg","precoPoedeira","precoPintinho","custoEstrutura"].includes(nome)}
+      aria-describedby={ajuda ? "codornas-ajuda-" + nome : undefined}
       data-min={minimo} data-max={maximo}/>
     {ajuda && <small id={"codornas-ajuda-" + nome}>{ajuda}</small>}
   </label>;
@@ -50,9 +51,9 @@ function Resultado({ resultado }) {
       <h4>Custos que você poderá planejar</h4>
       <p><strong>Ração por 30 dias:</strong> {resultado.custoRacaoMes === null
         ? "preço não informado" : "R$ " + formatar(resultado.custoRacaoMes,2)}.</p>
-      <p><strong>Primeira compra das aves:</strong> {resultado.custoCompraAvesInicial === null
+      <p><strong>Compra de aves para a ocupação simulada:</strong> {resultado.custoCompraAvesInicial === null
         ? "preço das aves não informado" : "R$ " + formatar(resultado.custoCompraAvesInicial,2)}.</p>
-      <p><strong>Primeiro investimento (aves + instalação):</strong> {resultado.investimentoInicialEstimado === null
+      <p><strong>Investimento estimado (aves + instalação):</strong> {resultado.investimentoInicialEstimado === null
         ? "preencha os preços das aves e equipamentos" : "R$ " + formatar(resultado.investimentoInicialEstimado,2)}.</p>
       <p><strong>Custo mensal calculável (ração + novas aves de corte):</strong> {resultado.custoMensalConhecido === null
         ? "preços incompletos" : "R$ " + formatar(resultado.custoMensalConhecido,2)}.
