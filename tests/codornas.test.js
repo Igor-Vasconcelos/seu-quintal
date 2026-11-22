@@ -29,7 +29,7 @@ test("codornas: lote de corte considera entrada, sobrevivência e lotes sobrepos
   assert.equal(r.lotesSimultaneos, 2);
   assert.equal(r.avesCorteAlojadas, 64);
   assert.ok(Math.abs(r.carneMesKg - 30 * .26 * .7) < 1e-8);
-  assert.ok(Math.abs(r.racaoMesKg - 64 * 18 * 30 / 1000) < 1e-8);
+  assert.ok(Math.abs(r.racaoMesKg - 32 * 18 * 42 / 1000) < 1e-8);
   assert.equal(r.areaReferenciaM2, 6.4);
 });
 
@@ -115,4 +115,26 @@ test("calculadora pública possui HTML, SEO, menu, mapa e teste de navegador", (
     "mapa-do-site/index.html","vite.config.js","scripts/smoke-visual.mjs"])
     assert.match(ler(file),/calculadora-codornas/);
   assert.match(ler("src/main-quintal.jsx"),/planejador-areas-visuais.css/);
+});
+
+test("codornas: custos só são mostrados com preços e consumo de lote respeita o ciclo", () => {
+  const semPreco = simularCodornas({ ...base, modo: "misto" });
+  assert.equal(semPreco.custoRacaoMes, null);
+  assert.equal(semPreco.custoCompraAvesInicial, null);
+  const r = simularCodornas({ ...base, modo: "misto",
+    precoRacaoKg:"4,50", precoPoedeira:"12", precoPintinho:"3", custoEstrutura:"250" });
+  assert.ok(r);
+  assert.ok(Math.abs(r.racaoMesKg - (13*27*30 + 32*18*42)/1000) < 1e-8);
+  assert.ok(Math.abs(r.custoRacaoMes - r.racaoMesKg*4.5) < 1e-8);
+  assert.equal(r.custoCompraAvesInicial, 13*12 + 64*3);
+  assert.equal(r.investimentoInicialEstimado, 13*12 + 64*3 + 250);
+  assert.equal(r.custoMensalConhecido, r.custoRacaoMes + 32*3);
+  assert.equal(simularCodornas({...base,precoRacaoKg:"-2"}),null);
+  assert.equal(simularCodornas({...base,precoRacaoKg:"custo"}),null);
+});
+test("codornas: área geométrica é informativa e não presume capacidade no misto", () => {
+  const ovos = simularCodornas({ ...base, areaDisponivelM2: "2" });
+  assert.equal(ovos.capacidadeGeometrica,20);
+  assert.equal(ovos.ovosPotenciaisDiaNaArea,16);
+  assert.equal(simularCodornas({...base,modo:"misto",areaDisponivelM2:"2"}).capacidadeGeometrica,null);
 });
