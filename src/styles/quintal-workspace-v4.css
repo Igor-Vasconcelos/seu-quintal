@@ -66,7 +66,7 @@
   width: min(100%,23rem);
   gap: .65rem;
 }
-.pagina-meu-quintal .quintal-salvamento {
+.pagina-meu-quintal .quintal-titulo .quintal-salvamento {
   display: flex;
   align-items: flex-start;
   max-width: none;
