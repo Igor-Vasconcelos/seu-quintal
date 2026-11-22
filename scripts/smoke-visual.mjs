@@ -137,6 +137,44 @@ try {
         await pagina.locator('.sisteminha-nav-rolagem a[href="#ciclo"]').click();
         await pagina.locator("#ciclo").waitFor({ state: "visible", timeout: 12000 });
       }
+      if (slug === "horta") {
+        const escolha = pagina.locator("#guia-horta-plantas");
+        await escolha.locator(".horta-opcao").first().waitFor({state:"visible",timeout:15000});
+        assert.equal(await escolha.locator(".horta-estado-inicial").count(),1,
+          "Deve orientar o início sem resultados vazios");
+        await escolha.locator(".horta-campo-escolha").first().getByRole("button",{name:/Varanda/}).click();
+        assert.match(await escolha.locator(".horta-estado-inicial").innerText(), /horas de sol/);
+        await escolha.locator(".horta-campo-escolha").nth(1).getByRole("button",{name:/6 horas ou mais/}).click();
+        assert.equal(await escolha.locator(".horta-culturas li").count(),3);
+        for(const imagem of await escolha.locator(".horta-culturas img").all()) {
+          await imagem.scrollIntoViewIfNeeded();
+          assert.ok(await imagem.evaluate(img => img.decode().then(() => img.naturalWidth > 0).catch(() => false)),
+            "Foto recomendada não carregou");
+        }
+        await pagina.screenshot({path:PASTA + "/horta-recomendacoes-" + nome + ".png",animations:"disabled"});
+        await pagina.locator(".horta-secao-botao").nth(1).click();
+        const form = pagina.locator(".form-terra");
+        await form.getByRole("button",{name:/Jardineira/}).click();
+        assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"60");
+        await form.locator('select[name="unidade"]').selectOption("m");
+        assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"0,6");
+        await form.locator('input[name="saco"]').fill("20");
+        await form.getByRole("button",{name:"Calcular terra",exact:true}).click();
+        assert.match(await pagina.locator(".horta-resultado-volume").innerText(), /30/);
+        assert.match(await pagina.locator(".horta-resultado-sacos").innerText(), /2 sacos/);
+        await pagina.screenshot({path:PASTA + "/horta-terra-" + nome + ".png",animations:"disabled"});
+        await form.locator('input[name="largura"]').fill("0");
+        await form.getByRole("button",{name:"Calcular terra",exact:true}).click();
+        assert.equal(await form.locator('input[name="largura"]').getAttribute("aria-invalid"),"true");
+        await form.getByRole("button",{name:"Limpar",exact:true}).click();
+        assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"");
+        await pagina.locator(".horta-secao-botao").nth(0).click();
+        assert.equal(await escolha.locator(".horta-culturas li").count(),3,
+          "As escolhas não devem desaparecer ao alternar as ferramentas");
+        const excedente = await pagina.evaluate(() =>
+          document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        assert.ok(excedente <= 2, "Horta " + nome + ": resultado causa overflow de " + excedente);
+      }
       if (slug === "peixes") {
         const form = pagina.locator(".simulador-peixes form");
         await form.locator('button[type="submit"]').click();
@@ -289,7 +327,7 @@ try {
     for (const [slug, rota] of [
       ["home", "/"], ["guias", "/guias/"], ["artigos", "/artigos/"],
       ["ferramentas", "/ferramentas/"], ["sisteminha", "/sisteminha.html"],
-      ["meu-quintal", "/meu-quintal/"],
+      ["meu-quintal", "/meu-quintal/"], ["horta", "/horta/"],
     ]) {
       const pagina = await contexto.newPage();
       await pagina.goto(URL_BASE + rota, {waitUntil: "networkidle", timeout: 40000});
