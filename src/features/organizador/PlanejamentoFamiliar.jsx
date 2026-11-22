@@ -29,7 +29,17 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
   const [retorno, definirRetorno] = useState("");
   const detalheRef = useRef(null);
   useEffect(() => {
-    if (window.location.hash === "#planejamento-familiar" && detalheRef.current) detalheRef.current.open = true;
+    // O Organizador é carregado sob demanda: o alvo ainda não existe quando o
+    // navegador tenta rolar até a âncora. Abrir e posicionar após a montagem.
+    function abrirPeloLink() {
+      const detalhe = detalheRef.current;
+      if (window.location.hash !== "#planejamento-familiar" || !detalhe) return;
+      detalhe.open = true;
+      requestAnimationFrame(() => detalhe.scrollIntoView({ block: "start", behavior: "auto" }));
+    }
+    abrirPeloLink();
+    window.addEventListener("hashchange", abrirPeloLink);
+    return () => window.removeEventListener("hashchange", abrirPeloLink);
   }, []);
   const [falha, definirFalha] = useState(false);
 
