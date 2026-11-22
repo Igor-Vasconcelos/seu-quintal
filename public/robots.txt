@@ -1,0 +1,8 @@
+# Nota: GitHub Pages hospeda este projeto em /seu-quintal/.
+# Para os buscadores, o robots efetivo do host ficaria em
+# https://igor-vasconcelos.github.io/robots.txt, não neste subdiretório.
+# O sitemap também deve ser enviado diretamente no Google Search Console.
+User-agent: *
+Allow: /seu-quintal/
+
+Sitemap: https://igor-vasconcelos.github.io/seu-quintal/sitemap.xml

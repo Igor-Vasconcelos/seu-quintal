@@ -1,0 +1,101 @@
+/* Navegação horizontal do Sisteminha — affordance mobile.
+ * Preserva links/âncoras, toque nativo e navegação por teclado. */
+.sisteminha-ds3 .sisteminha-nav-ajuda { display: none; }
+.sisteminha-ds3 .sisteminha-nav-viewport { position: relative; min-width: 0; }
+@media (max-width: 767px) {
+  .sisteminha-ds3 .sisteminha-nav-local {
+    border-radius: var(--sq-radius-card);
+    margin: -.65rem 0 clamp(1.25rem,3vw,2rem);
+    padding: .45rem;
+    background: var(--sq-surface-warm);
+  }
+  .sisteminha-ds3 .sisteminha-nav-ajuda {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .1rem .65rem .35rem;
+    color: var(--sq-forest);
+    font-size: .8rem;
+    font-weight: 650;
+  }
+  .sisteminha-ds3 .sisteminha-nav-ajuda::before,
+  .sisteminha-ds3 .sisteminha-nav-ajuda::after {
+    content: "";
+    height: 1px;
+    flex: 1 1 1rem;
+    background: var(--sq-border);
+  }
+  .sisteminha-ds3 .sisteminha-nav-ajuda button {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: none;
+    color: var(--sq-forest);
+    border: 1px solid var(--sq-border);
+    border-radius: 50%;
+    background: var(--sq-brand-100);
+    cursor: pointer;
+  }
+  .sisteminha-ds3 .sisteminha-nav-ajuda button:disabled {
+    opacity: .3;
+    cursor: default;
+  }
+  .sisteminha-ds3 .sisteminha-nav-ajuda button .icone {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  .sisteminha-ds3 .sisteminha-nav-ajuda button:focus-visible {
+    outline: 3px solid var(--sq-focus);
+    outline-offset: 2px;
+  }
+  .sisteminha-ds3 .sisteminha-nav-viewport {
+    overflow: hidden;
+    border-radius: var(--sq-radius-media);
+  }
+  .sisteminha-ds3 .sisteminha-nav-viewport[data-tem-mais="sim"]::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 1.5rem;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--sq-surface-warm));
+  }
+  .sisteminha-ds3 .sisteminha-nav-rolagem {
+    display: flex;
+    gap: .3rem;
+    padding: .3rem .85rem .55rem .3rem;
+    scroll-padding-inline: .3rem;
+    scroll-snap-type: x proximity;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .sisteminha-ds3 .sisteminha-nav-viewport .sisteminha-nav-rolagem a {
+    flex: 0 0 clamp(6.2rem, 27%, 7.4rem);
+    min-height: 5rem;
+    scroll-snap-align: start;
+    white-space: normal;
+    border: 1px solid var(--sq-border);
+    background: #fff;
+  }
+  .sisteminha-ds3 .sisteminha-nav-rolagem a[aria-current="page"] {
+    background: var(--sq-brand-100);
+    box-shadow: inset 0 -4px 0 var(--sq-primary);
+    border-color: var(--sq-primary);
+  }
+}
+@media (max-width: 359px) {
+  .sisteminha-ds3 .sisteminha-nav-viewport .sisteminha-nav-rolagem a {
+    flex-basis: 6.5rem;
+    font-size: .75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sisteminha-ds3 .sisteminha-nav-rolagem { scroll-behavior: auto; }
+}
