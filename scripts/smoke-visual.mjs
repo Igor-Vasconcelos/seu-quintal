@@ -78,6 +78,16 @@ try {
         }
         assert.ok(await pagina.locator(".home-editorial-ferramentas a").count() >= 6);
       }
+      if (slug === "sisteminha" && nome === "celular") {
+        const lista = pagina.locator(".sisteminha-nav-rolagem");
+        assert.ok(await lista.evaluate(el => el.scrollWidth > el.clientWidth),
+          "Abas móveis devem permitir rolagem horizontal");
+        assert.ok(await pagina.getByText("Deslize para ver mais").isVisible(),
+          "Dica de deslizar deve estar visível no celular");
+        await pagina.getByRole("button", {name: "Mostrar próximos tópicos do Sisteminha"}).click();
+        assert.ok(await lista.evaluate(el => el.scrollLeft > 0),
+          "Botão de avançar precisa rolar as abas");
+      }
       if (slug === "home" && nome === "celular") {
         const menu = pagina.locator(".menu-alternar");
         await menu.click();
