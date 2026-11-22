@@ -136,7 +136,8 @@ export const culturasOrganizador = {
     ponto: "Colha os frutos ainda macios, com frequência, antes de ficarem fibrosos.",
   },
   Morango: {
-    mudas: [21, 28], canteiro: [70, 80], espaco: [0.30, 0.20], unidade: "kg",
+    // Plantio por muda pronta: não sugerir semeadura em bandeja ao usuário.
+    mudas: [0, 0], somenteMuda: true, canteiro: [70, 80], espaco: [0.30, 0.20], unidade: "kg",
     colheitasSucessivas: true,
     ponto: "Colha os frutos maduros e evite que fiquem em contato com solo encharcado.",
   },
