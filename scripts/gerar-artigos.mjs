@@ -213,8 +213,8 @@ export function renderArticle(article) {
   const summary = content.headings.filter(x => x.level === 2);
   // Só a apresentação remove a numeração digitada no Markdown.
   // O <ol> já apresenta o número; evita "1. 1. Comece...".
-  const tituloCurto = name => name.replace(/^\\d+\\.\\s*/, "");
-  const palavras = article.markdown.trim().split(/\\s+/u).filter(Boolean).length;
+  const tituloCurto = name => name.replace(/^\d+\.\s*/, "");
+  const palavras = article.markdown.trim().split(/\s+/u).filter(Boolean).length;
   const minutos = Math.max(1, Math.ceil(palavras / 220));
   const leitura = "Leitura estimada de " + minutos + " min";
   const toc = summary.length > 1
