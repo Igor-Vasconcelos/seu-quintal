@@ -179,6 +179,35 @@ try {
           animations: "disabled",
         });
       }
+      if (slug === "organizador") {
+        const assistente = pagina.locator("#planejamento-familiar");
+        await assistente.waitFor({ state: "attached", timeout: 15000 });
+        if (!(await assistente.evaluate(elemento => elemento.open))) {
+          await assistente.locator("summary").click();
+        }
+        const primeiroLote = assistente.locator(".sq-horta-lote-visual").first();
+        await primeiroLote.locator(".sq-horta-etapa-ilustracao").first().waitFor({ state: "visible" });
+        assert.equal(await primeiroLote.locator(".sq-horta-etapa-ilustracao").count(), 3,
+          "Cada lote deve ilustrar as três etapas");
+        assert.equal(await primeiroLote.locator(".sq-horta-etapa-cultura-selo svg").count(), 2,
+          "Semeadura e desenvolvimento identificam a cultura usando seu desenho");
+        assert.equal(await primeiroLote.locator(".sq-horta-etapa-colheita-cultura").count(), 1,
+          "A colheita usa o pictograma existente da cultura");
+        await primeiroLote.screenshot({
+          path: PASTA + "/horta-estagios-" + nome + ".png", animations: "disabled",
+        });
+      }
+      if (slug === "artigo-horta") {
+        const demoHorta = pagina.locator("#simulador-horta-artigo");
+        await demoHorta.locator(".sq-horta-etapa-ilustracao").first()
+          .waitFor({ state: "visible", timeout: 15000 });
+        assert.ok(await demoHorta.locator(".sq-horta-etapa-ilustracao").count() >= 9,
+          "Prévia dentro do artigo também precisa apresentar desenhos nos três lotes");
+        const cenas = demoHorta.locator(".sq-horta-lote-visual").first();
+        await cenas.screenshot({
+          path: PASTA + "/artigo-horta-estagios-" + nome + ".png", animations: "disabled",
+        });
+      }
       if (["canteiros","calendario","organizador","codornas","peixes","pomar"].includes(slug)) {
         assert.equal(await pagina.locator('.ferramenta-meta span').count(),3,
           "Ferramenta deve apresentar 3 características claras");

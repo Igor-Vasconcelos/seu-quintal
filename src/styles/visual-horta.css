@@ -31,16 +31,65 @@
 .sq-horta-lote-visual {min-width:0; display:grid;grid-template-columns:4rem minmax(0,1fr);align-items:center;gap:.6rem;}
 .sq-horta-lote-visual > strong {font-size:.78rem;}
 .sq-horta-estagios {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.3rem;}
-.sq-horta-estagios > div {display:grid; gap:.2rem; min-width:0; padding:.55rem .35rem; border-radius:var(--sq-radius-control); background:var(--sq-brand-100);text-align:center;font-size:.76rem;}
-.sq-horta-estagios > div:nth-child(2) {background:var(--sq-surface-soft);}
-.sq-horta-estagios > div:nth-child(3) {background:var(--sq-success-bg);}
-.sq-horta-estagios small {color:var(--sq-text-muted); font-size:.7rem; overflow-wrap:anywhere;}
-.sq-horta-estagio-sinal {width:1.3rem;height:1.3rem;border-radius:50%;display:grid;place-items:center;margin:0 auto;font-weight:800;background:var(--sq-primary); color:var(--sq-on-primary);}
+.sq-horta-estagios > .sq-horta-etapa {
+  min-width:0;display:grid;grid-template-rows:auto auto auto auto;
+  align-content:start;justify-items:center;gap:.35rem;
+  padding:.65rem .55rem;border-radius:var(--sq-radius-control);
+  background:var(--sq-brand-100);text-align:center;font-size:.8rem;
+}
+.sq-horta-estagios > .sq-horta-etapa:nth-child(2) {background:var(--sq-surface-soft);}
+.sq-horta-estagios > .sq-horta-etapa:nth-child(3) {background:var(--sq-success-bg);}
+.sq-horta-etapa-titulo {font-weight:700;line-height:1.3;}
+.sq-horta-etapa-data {color:var(--sq-text-muted);font-size:.76rem;line-height:1.45;overflow-wrap:anywhere;}
+.sq-horta-estagio-sinal {
+  width:1.5rem;height:1.5rem;border-radius:50%;display:grid;place-items:center;
+  font-weight:800;background:var(--sq-primary);color:var(--sq-on-primary);
+}
+/* Cenas SVG por fase: a identificação da cultura vem do IconeCultura existente. */
+.sq-horta-etapa-ilustracao {width:min(100%,11rem);min-width:0;}
+.sq-horta-etapa-cena {
+  position:relative;display:grid;place-items:center;height:6.4rem;
+  border:1px solid var(--sq-border);border-radius:var(--sq-radius-media);
+  background:var(--sq-surface);overflow:hidden;
+}
+.sq-horta-etapa-cena-svg {width:100%;height:100%;display:block;}
+.sq-horta-etapa-cultura-selo {
+  position:absolute;right:.15rem;top:.15rem;width:2.2rem;height:2.2rem;
+  background:var(--sq-surface-warm);border:1px solid var(--sq-border);
+  border-radius:var(--sq-radius-pill);display:grid;place-items:center;
+}
+.sq-horta-etapa-cultura-selo svg {width:1.9rem;height:1.9rem;}
+.sq-horta-etapa-colheita {
+  width:100%;height:100%;position:relative;display:flex;
+  align-items:flex-start;justify-content:center;
+}
+.sq-horta-etapa-colheita-cultura {
+  position:absolute;top:.1rem;width:4.2rem;height:4.2rem;z-index:1;
+}
+.sq-horta-etapa-colheita-cesta {
+  position:absolute;bottom:.15rem;width:5.6rem;height:2.5rem;z-index:2;
+}
 .sq-horta-visual .sq-horta-visual-limites {font-size:.8rem;color:var(--sq-text-muted);}
 .sq-horta-visual a {color:var(--sq-link);text-underline-offset:3px;}
 @media (max-width:700px){
- .sq-horta-lote-visual{grid-template-columns:minmax(0,1fr);gap:.25rem;}
- .sq-horta-estagios{grid-template-columns:minmax(0,1fr);gap:.35rem;}
- .sq-horta-estagios > div{grid-template-columns:1.4rem 1fr auto;align-items:center;text-align:left;gap:.5rem;}
- .sq-horta-estagios small{text-align:right;}
+ .sq-horta-lote-visual {grid-template-columns:minmax(0,1fr);gap:.35rem;}
+ .sq-horta-estagios {grid-template-columns:minmax(0,1fr);gap:.45rem;}
+ .sq-horta-estagios > .sq-horta-etapa {
+   grid-template-columns:1.5rem minmax(5rem,6rem) minmax(0,1fr);
+   grid-template-rows:auto auto;align-items:center;justify-items:stretch;
+   gap:.2rem .55rem;padding:.55rem;text-align:left;
+ }
+ .sq-horta-estagio-sinal {grid-column:1;grid-row:1 / span 2;align-self:center;}
+ .sq-horta-etapa-ilustracao {grid-column:2;grid-row:1 / span 2;width:100%;}
+ .sq-horta-etapa-cena {height:5rem;}
+ .sq-horta-etapa-titulo {grid-column:3;grid-row:1;align-self:end;}
+ .sq-horta-etapa-data {grid-column:3;grid-row:2;align-self:start;}
+ .sq-horta-etapa-cultura-selo {width:1.7rem;height:1.7rem;}
+ .sq-horta-etapa-cultura-selo svg {width:1.5rem;height:1.5rem;}
+ .sq-horta-etapa-colheita-cultura {width:3.4rem;height:3.4rem;}
+ .sq-horta-etapa-colheita-cesta {width:4.5rem;height:2rem;}
+}
+@media (max-width:350px){
+ .sq-horta-estagios > .sq-horta-etapa {grid-template-columns:1.5rem 4.4rem minmax(0,1fr);gap:.2rem .35rem;}
+ .sq-horta-etapa-cena {height:4.3rem;}
 }

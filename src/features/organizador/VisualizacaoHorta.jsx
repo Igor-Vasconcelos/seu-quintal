@@ -1,4 +1,5 @@
 import IconeCultura from "./IconeCultura.jsx";
+import EstagioCulturaVisual from "./EstagioCulturaVisual.jsx";
 import { culturasOrganizador } from "./culturas.js";
 import { janelaDeDatas, rotuloData } from "./escala.js";
 import { formatarMedida } from "../planejador/geometria.js";
@@ -25,7 +26,7 @@ export default function VisualizacaoHorta({ resultado, compacto = false }) {
   return <section className="sq-horta-visual" aria-labelledby="sq-horta-visual-titulo">
     <header>
       <h4 id="sq-horta-visual-titulo">Veja como distribuir os lotes</h4>
-      <p>As figuras usam as ilustrações das próprias culturas do Seu Quintal. Canteiros e estágios são uma <strong>representação didática</strong>, sem posições de plantas ou medidas em escala.</p>
+      <p>As figuras usam as ilustrações das próprias culturas do Seu Quintal. Canteiros e estágios são uma <strong>representação didática</strong>, sem posições de plantas ou medidas em escala. Sementes e mudas são esquemáticas; o pictograma da cultura representa o alimento, não a aparência botânica da muda.</p>
     </header>
     {total > 0 && <div className="sq-horta-visual-setores">
       <h5>Exemplo de reservas por canteiro</h5>
@@ -58,21 +59,33 @@ export default function VisualizacaoHorta({ resultado, compacto = false }) {
               {item.seguintes.map(lote => <li key={lote.inicio} className="sq-horta-lote-visual">
                 <strong>Lote {lote.numero}</strong>
                 <div className="sq-horta-estagios" aria-label={"Etapas do lote " + lote.numero}>
-                  <div>
+                  <div className="sq-horta-etapa">
                     <span className="sq-horta-estagio-sinal" aria-hidden="true">1</span>
-                    <span>{item.plano.origem === "muda" ? "Mudas prontas" : ficha.mudas ? "Semeadura em bandeja" : "Semeadura"}</span>
-                    <small>{rotuloData(lote.inicio)}</small>
+                    <EstagioCulturaVisual cultura={item.plano.cultura} etapa={1}
+                      origem={item.plano.origem} comMudas={Boolean(ficha.mudas)}/>
+                    <span className="sq-horta-etapa-titulo">
+                      {item.plano.origem === "muda" ? "Mudas prontas" : ficha.mudas ? "Semeadura em bandeja" : "Semeadura"}
+                    </span>
+                    <small className="sq-horta-etapa-data">{rotuloData(lote.inicio)}</small>
                   </div>
-                  <div>
+                  <div className="sq-horta-etapa">
                     <span className="sq-horta-estagio-sinal" aria-hidden="true">2</span>
-                    <span>{ficha.mudas ? "Transplante / desenvolvimento" : "Desenvolvimento"}</span>
-                    <small>{ficha.mudas ? "Transplantar: " + janelaDeDatas(lote.canteiro.de, lote.canteiro.ate)
-                      : "Até início estimado de colheita: " + rotuloData(lote.colheita.de)}</small>
+                    <EstagioCulturaVisual cultura={item.plano.cultura} etapa={2}/>
+                    <span className="sq-horta-etapa-titulo">
+                      {ficha.mudas ? "Transplante / desenvolvimento" : "Desenvolvimento"}
+                    </span>
+                    <small className="sq-horta-etapa-data">
+                      {ficha.mudas ? "Transplantar: " + janelaDeDatas(lote.canteiro.de, lote.canteiro.ate)
+                        : "Até início estimado de colheita: " + rotuloData(lote.colheita.de)}
+                    </small>
                   </div>
-                  <div>
+                  <div className="sq-horta-etapa">
                     <span className="sq-horta-estagio-sinal" aria-hidden="true">3</span>
-                    <span>{ficha.colheitasSucessivas ? "Começar a colher" : "Colheita estimada"}</span>
-                    <small>{janelaDeDatas(lote.colheita.de, lote.colheita.ate)}</small>
+                    <EstagioCulturaVisual cultura={item.plano.cultura} etapa={3}/>
+                    <span className="sq-horta-etapa-titulo">
+                      {ficha.colheitasSucessivas ? "Começar a colher" : "Colheita estimada"}
+                    </span>
+                    <small className="sq-horta-etapa-data">{janelaDeDatas(lote.colheita.de, lote.colheita.ate)}</small>
                   </div>
                 </div>
               </li>)}
