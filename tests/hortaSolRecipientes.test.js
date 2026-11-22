@@ -41,7 +41,9 @@ test("janela evita estruturas pesadas e oferece alternativas com manejo", () => 
 });
 
 test("clicar em uma cultura fornece exemplo calculável, sem alterar fórmula", () => {
-  const tomate = exemploParaCultivo("tomate-cereja");
+  const tomate = exemploParaCultivo("tomate-cereja", "varanda");
+  assert.match(tomate.aviso,/terra molhada/);
+  assert.match(exemploParaCultivo("manjericao", "janela").aviso,/lado interno/);
   assert.equal(tomate.nome,"Tomate-cereja");
   assert.deepEqual(tomate.medidas,{comprimento:"45",largura:"45",profundidade:"45"});
   const {resultado,invalidos}=calcularTerra({...tomate.medidas,saco:"20"},"cm");
