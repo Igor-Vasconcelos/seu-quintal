@@ -131,7 +131,7 @@
 .pagina-meu-quintal .quintal-secoes a:focus-visible {
   outline: 3px solid var(--sq-focus); outline-offset: 3px;
 }
-@media (max-width: 1240px) {
+@media (max-width: 1020px) {
   .pagina-meu-quintal .quintal-pagina {
     grid-template-columns: minmax(0,1fr);
     grid-template-areas: "cabecalho" "navegacao" "ferramenta" "backup";
