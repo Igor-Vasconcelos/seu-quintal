@@ -125,7 +125,7 @@ export function renderMarkdown(markdown, prefix) {
       closeParagraph(); closeList();
       output.push('<section class="sq-horta-widget" id="experimente-a-horta" aria-labelledby="titulo-horta-interativa">' +
         '<h3 id="titulo-horta-interativa">Experimente: quanto plantar para sua família?</h3>' +
-        '<div id="simulador-horta-artigo"><p>Para simular com cálculos interativos, ative o JavaScript. ' +
+        '<div id="simulador-horta-artigo"><p>Ative o JavaScript para usar a simulação interativa. ' +
         '<a href="' + prefix + 'horta/organizador/#planejamento-familiar">Abrir ferramenta completa de horta contínua</a>.</p></div>' +
         '</section>');
       continue;
