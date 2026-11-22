@@ -68,10 +68,11 @@ export function lerPlano(campos) {
   }
   if (!semanasValidas(intervalo, 52)) return { erro: "Informe um intervalo inteiro de 1 a 52 semanas." };
 
-  const rendimento = ficha.colheitasSucessivas && campos.rendimento !== "" ? lerMedida(campos.rendimento) : null;
+  const exigeRendimento = ficha.colheitasSucessivas || ficha.planejamentoPorPeso;
+  const rendimento = exigeRendimento && campos.rendimento !== "" ? lerMedida(campos.rendimento) : null;
   const duracao = ficha.colheitasSucessivas && campos.duracao !== "" ? Number(campos.duracao) : null;
-  const teste = ficha.colheitasSucessivas ? Number(campos.teste) : 2;
-  if (ficha.colheitasSucessivas) {
+  const teste = exigeRendimento ? Number(campos.teste) : 2;
+  if (exigeRendimento) {
     if (campos.rendimento !== "" && rendimento === null) return { erro: "Informe um rendimento maior que zero." };
     if (duracao !== null && !semanasValidas(duracao, 104)) {
       return { erro: "Informe de 1 a 104 semanas de colheita ou deixe a duração em branco." };
@@ -104,7 +105,7 @@ function fases(plano) {
 export function dimensionarLote(plano) {
   const { ficha, viveiro, intervaloDias } = fases(plano);
   const metaLote = (Math.round(plano.casa * 100) + Math.round(plano.venda * 100)) * plano.intervalo / 100;
-  const experimental = Boolean(ficha.colheitasSucessivas && !plano.rendimento);
+  const experimental = Boolean((ficha.colheitasSucessivas || ficha.planejamentoPorPeso) && !plano.rendimento);
   const plantas = experimental ? plano.teste : Math.ceil(metaLote / (plano.rendimento ?? 1) - 1e-9);
   const areaLote = plantas * ficha.espaco[0] * ficha.espaco[1];
   const diasCanteiro = ficha.canteiro[1] + (viveiro[1] - viveiro[0]) + (plano.duracao ?? 0) * 7;
