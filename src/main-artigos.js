@@ -11,6 +11,11 @@ import "./styles/layout-shell-v5.css";
 
 import "./styles/artigos-leitura-v5.css";
 import "./styles/artigos-guias-v6.css";
+import "./styles/artigos-template-v7.css";
+import { iniciarCompartilhamentoArtigo } from "./features/artigos/compartilharArtigo.js";
 import { iniciarIndiceAtivo } from "./features/artigos/indiceAtivo.js";
 
-if (document.querySelector(".sq-article")) iniciarIndiceAtivo();
+if (document.querySelector(".sq-article")) {
+  iniciarIndiceAtivo();
+  iniciarCompartilhamentoArtigo();
+}
