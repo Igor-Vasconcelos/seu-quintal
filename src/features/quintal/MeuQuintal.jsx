@@ -13,9 +13,9 @@ const PlanejadorVisualCanteiro = lazy(() => import("../organizador/PlanejadorVis
 const secoes = {
   geral: { nome: "Visão geral", icone: "outros" },
   terreno: { nome: "Terrenos", icone: "planta" },
-  historico: { nome: "Histórico", icone: "historico" },
+  canteiros: { nome: "Meus canteiros", icone: "canteiro" },
   horta: { nome: "Agenda da horta", icone: "calendario" },
-  canteiros: { nome: "Meus canteiros", icone: "planta" },
+  historico: { nome: "Histórico", icone: "historico" },
 };
 const raiz = "../";
 
