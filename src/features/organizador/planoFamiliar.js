@@ -14,6 +14,23 @@ export const sugestoesDeConsumo = Object.freeze([
   { cultura: "Beterraba", grupo: "Raízes", porPessoa: 1, dica: "Colheita por lote" },
   { cultura: "Couve", grupo: "Folhosas", porPessoa: 0.1, dica: "Colheita de folhas; lote teste" },
   { cultura: "Abobrinha", grupo: "Frutos", porPessoa: 0.25, dica: "Colheitas repetidas; lote teste" },
+  { cultura: "Acelga", grupo: "Folhosas", porPessoa: 0.5, dica: "Folhas para saladas e refogados" },
+  { cultura: "Almeirão", grupo: "Folhosas", porPessoa: 0.5, dica: "Folhas amargas e nutritivas" },
+  { cultura: "Chicória", grupo: "Folhosas", porPessoa: 0.5, dica: "Cultivo de clima ameno" },
+  { cultura: "Brócolis de verão", grupo: "Brássicas", porPessoa: 0.25, dica: "Escolha cultivar apropriada ao calor" },
+  { cultura: "Brócolis de inverno", grupo: "Brássicas", porPessoa: 0.25, dica: "Atenção aos botões florais" },
+  { cultura: "Repolho de verão", grupo: "Brássicas", porPessoa: 0.25, dica: "Cabeças firmes, com cultivar adaptada" },
+  { cultura: "Repolho de inverno", grupo: "Brássicas", porPessoa: 0.25, dica: "Atenção ao frio e à irrigação" },
+  { cultura: "Coentro", grupo: "Temperos", porPessoa: 0.1, dica: "Planejamento por peso ainda experimental" },
+  { cultura: "Cebolinha", grupo: "Temperos", porPessoa: 0.1, dica: "Folhas que podem rebrotar" },
+  { cultura: "Espinafre", grupo: "Folhosas", porPessoa: 0.1, dica: "Folhas e cortes sucessivos" },
+  { cultura: "Salsa", grupo: "Temperos", porPessoa: 0.1, dica: "Colheita das folhas externas" },
+  { cultura: "Feijão-vagem", grupo: "Frutos", porPessoa: 0.25, dica: "Vagens jovens e tenras" },
+  { cultura: "Pepino", grupo: "Frutos", porPessoa: 0.25, dica: "Condução em treliça é opcional" },
+  { cultura: "Pimentão", grupo: "Frutos", porPessoa: 0.25, dica: "Colhido verde ou maduro" },
+  { cultura: "Berinjela", grupo: "Frutos", porPessoa: 0.25, dica: "Frutos firmes" },
+  { cultura: "Quiabo", grupo: "Frutos", porPessoa: 0.25, dica: "Requer colheita frequente" },
+  { cultura: "Morango", grupo: "Frutos", porPessoa: 0.1, dica: "Risco de doenças com excesso de umidade" },
 ]);
 
 export function metaExemplo(cultura, pessoas) {
