@@ -56,7 +56,7 @@ export default function GuiaHorta({ guia, raiz = "./" }) {
   const sugestao = espaco && luz ? recomendarCultivos(espaco, luz) : null;
 
   function calcularParaCultura(id) {
-    definirCultivoParaTerra(exemploParaCultivo(id));
+    definirCultivoParaTerra(exemploParaCultivo(id, espaco));
     definirSecao("terra");
     requestAnimationFrame(() => document.getElementById("titulo-terra")?.focus({ preventScroll: false }));
   }
@@ -175,7 +175,7 @@ export default function GuiaHorta({ guia, raiz = "./" }) {
               </dl>
               <div className="horta-proximos-passos">
                 <a className="botao" href={`${raiz}horta/calendario-de-plantio/`}>Ver calendário da minha região</a>
-                <a className="botao botao-contorno" href={`${raiz}horta/organizador/`}>Explorar o catálogo completo</a>
+                <a className="botao botao-contorno" href={`${raiz}horta/organizador/#planejamento-familiar`}>Explorar o catálogo completo</a>
                 <a className="botao botao-contorno" href={`${raiz}horta/canteiros/`}>Desenhar meu canteiro</a>
               </div>
               <p className="horta-ressalva">
