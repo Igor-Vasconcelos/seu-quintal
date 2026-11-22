@@ -102,7 +102,7 @@
 .topo.site-shell .menu-quintal {
   font-size: .88rem; white-space: nowrap; border-radius: var(--sq-radius-pill);
 }
-.topo.site-shell .menu-quintal .icone { width: 1.1rem; height: 1.1rem; }
+.topo.site-shell .menu-quintal .icone { width: 1.32rem; height: 1.32rem; stroke-width: 1.75; }
 .topo.site-shell .menu-alternar {
   align-items: center; border-radius: var(--sq-radius-pill);
 }
