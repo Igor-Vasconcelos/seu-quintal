@@ -4,7 +4,7 @@
 O conteúdo existente tinha cerca de 2 minutos de leitura, uma imagem de abertura excessivamente grande no desktop e poucos exemplos práticos. O link do artigo das galinhas abria o Sisteminha sem ir à calculadora. Imagens didáticas e tabelas não eram suportadas pelo gerador estático.
 
 ## Mudanças no produto
-- **Hero compacto, semelhante à Home**: imagem contextual ao lado do título/resposta direta no desktop. No celular, a imagem ocupa apenas uma faixa de até 9,5 rem após o resumo para liberar o conteúdo mais cedo. Não altera header global, URL ou navegação.
+- **Hero compacto, semelhante à Home**: imagem contextual ao lado do título/resposta direta no desktop. No celular, a imagem ocupa uma faixa de 8 rem; a resposta direta permanece visível e o subtítulo redundante é ocultado apenas na apresentação móvel para liberar o conteúdo mais cedo. Não altera header global, URL ou navegação.
 - **Horta**: passos de medição, escolha de plantas, lotes de plantio, exemplo administrativo de quatro semanas, fatores de risco, checklist, caso de família, perguntas frequentes, fontes e links específicos para Horta, Calendário, Planejador Visual, Organizador e Meu Quintal.
 - **Galinhas**: cálculo de poedeiras com hipótese ajustável (5 ovos/ave/semana), exemplos para 10/20/30 ovos, água e ração da mesma função de referência existente, espaço, ninhos, rotina, biossegurança, caso completo, perguntas frequentes, fontes e atalho direto à calculadora no Sisteminha.
 - **Markdown indexável**: gerador agora aceita imagens WebP locais com texto alternativo e legenda de IA, além de tabelas simples com header e região rolável acessível. Renderização estática sem depender de JavaScript para o conteúdo.
