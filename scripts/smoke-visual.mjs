@@ -151,7 +151,7 @@ try {
             "Foto recomendada não carregou");
         }
         await pagina.screenshot({path:PASTA + "/horta-recomendacoes-" + nome + ".png",animations:"disabled"});
-        await pagina.getByRole("button",{name:/2 Calcular terra/}).click();
+        await pagina.locator(".horta-secao-botao").nth(1).click();
         const form = pagina.locator(".form-terra");
         await form.getByRole("button",{name:/Jardineira/}).click();
         assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"60");
@@ -167,7 +167,7 @@ try {
         assert.equal(await form.locator('input[name="largura"]').getAttribute("aria-invalid"),"true");
         await form.getByRole("button",{name:"Limpar",exact:true}).click();
         assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"");
-        await pagina.getByRole("button",{name:/1 Escolher plantas/}).click();
+        await pagina.locator(".horta-secao-botao").nth(0).click();
         assert.equal(await escolha.locator(".horta-culturas li").count(),3,
           "As escolhas não devem desaparecer ao alternar as ferramentas");
         const excedente = await pagina.evaluate(() =>
