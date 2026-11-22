@@ -191,7 +191,8 @@ export default function CalculadoraCodornas() {
         <legend>3. Quanto custa na sua região? (opcional)</legend>
         <p className="codornas-nota">Informe os preços que souber. Sem preço, exibiremos consumo sem inventar valores.</p>
         <div className="codornas-grade">
-          {campo("Preço de um quilo de ração", "precoRacaoKg", "R$/kg")}
+          {campo("Preço médio de 1 kg de ração", "precoRacaoKg", "R$/kg",
+            "No modo misto ou entre fases, as rações podem ter preços diferentes; esta versão usa um preço médio informado por você.")}
           {(modo === "ovos" || modo === "misto") && campo("Preço de cada fêmea pronta para postura", "precoPoedeira", "R$/ave")}
           {(modo === "corte" || modo === "misto") && campo("Preço de cada pintinho para corte", "precoPintinho", "R$/ave")}
           {campo("Preço total do abrigo e equipamentos", "custoEstrutura", "R$", "Estimativa informada por você.")}
