@@ -147,7 +147,8 @@ try {
         await escolha.locator(".horta-campo-escolha").nth(1).getByRole("button",{name:/6 horas ou mais/}).click();
         assert.equal(await escolha.locator(".horta-culturas li").count(),3);
         for(const imagem of await escolha.locator(".horta-culturas img").all()) {
-          assert.ok(await imagem.evaluate(img=>img.complete && img.naturalWidth>0),
+          await imagem.scrollIntoViewIfNeeded();
+          assert.ok(await imagem.evaluate(img => img.decode().then(() => img.naturalWidth > 0).catch(() => false)),
             "Foto recomendada não carregou");
         }
         await pagina.screenshot({path:PASTA + "/horta-recomendacoes-" + nome + ".png",animations:"disabled"});
