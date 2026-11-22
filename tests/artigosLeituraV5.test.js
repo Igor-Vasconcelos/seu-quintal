@@ -7,15 +7,13 @@ import { generateArticles, readArticle, renderArticle } from "../scripts/gerar-a
 const base = resolve(import.meta.dirname, "..");
 const ler = arquivo => readFileSync(resolve(base, arquivo), "utf8");
 
-test("card de pomar usa foto real, com descrição e licença creditada", () => {
+test("cards de codornas e pomar usam imagens locais com origem transparente", () => {
   const jsx = ler("src/components/DestaquesEditorial.jsx");
-  assert.match(jsx, /Orchard_Agriculture/);
-  assert.doesNotMatch(jsx, /imagem: "\.\/imagens\/colheita\.webp"/);
-  assert.match(jsx, /imagemAlt: "Pomar real/);
-  assert.match(jsx, /Hazel Gordon \/ USDA Forest Service/);
-  assert.match(jsx, /creativecommons\.org\/licenses\/by\/2\.0/);
+  assert.match(jsx, /imagens\/codornas-fotoreal-v5\.webp/);
+  assert.match(jsx, /imagens\/pomar-frutiferas-v1\.webp/);
+  assert.match(jsx, /creditoImagem: "Imagem ilustrativa gerada por IA/);
   assert.match(jsx, /home-destaque-credito/);
-  assert.match(jsx, /referrerPolicy/);
+  assert.doesNotMatch(jsx, /Orchard_Agriculture|Hazel Gordon|creativecommons\.org\/licenses\/by\/2\.0/);
 });
 
 test("template gera índice numerado uma única vez, com navegação e leitura estimada", () => {

@@ -22,7 +22,8 @@ test("Fotos de ferramentas são realistas e possuem descrição e crédito",()=>
  for(const [file,asset] of [
    ["horta/canteiros/index.html","abertura-horta-768.webp"],
    ["horta/calendario-de-plantio/index.html","horta.webp"],
-   ["ferramentas/calculadora-codornas/index.html","codornas-fotoreal-v4.webp"],
+   ["ferramentas/calculadora-codornas/index.html","codornas-fotoreal-v5.webp"],
+   ["ferramentas/planejador-de-pomar/index.html","pomar-frutiferas-v1.webp"],
  ]){
   const html=read(file);
   assert.match(html,/ferramenta-(?:topo-figura|foto-realista)/);
@@ -30,7 +31,8 @@ test("Fotos de ferramentas são realistas e possuem descrição e crédito",()=>
   assert.match(html,/Imagem (?:ilustrativa|sintética) gerada por IA/);
   assert.match(html,/alt="/);
  }
- assert.ok(statSync(resolve(root,"public/imagens/codornas-fotoreal-v4.webp")).size>10000);
+ assert.ok(statSync(resolve(root,"public/imagens/codornas-fotoreal-v5.webp")).size>10000);
+ assert.ok(statSync(resolve(root,"public/imagens/pomar-frutiferas-v1.webp")).size>10000);
 });
 test("Fotografias não alteram as regras de negócio ou layouts dos mapas",()=>{
  const css=read("src/styles/tool-layout-v4.css");
