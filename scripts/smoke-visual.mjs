@@ -55,6 +55,17 @@ try {
         assert.equal(await pagina.locator('.ferramenta-meta span').count(),3,
           "Ferramenta deve apresentar 3 características claras");
       }
+      if (slug === "home") {
+        assert.equal(await pagina.locator(".home-destaque-card").count(), 4,
+          "Home precisa mostrar quatro cartões editoriais");
+        const imagens = pagina.locator(".home-destaque-imagem img");
+        for (let i = 0; i < await imagens.count(); i++) {
+          await imagens.nth(i).scrollIntoViewIfNeeded();
+          assert.ok(await imagens.nth(i).evaluate(img => img.complete && img.naturalWidth > 0),
+            "Imagem editorial deve carregar: " + i);
+        }
+        assert.ok(await pagina.locator(".home-editorial-ferramentas a").count() >= 6);
+      }
       if (slug === "home" && nome === "celular") {
         const menu = pagina.locator(".menu-alternar");
         await menu.click();
@@ -81,6 +92,8 @@ try {
         const ferramentasPeixes = pagina.locator('.sisteminha-ferramentas-modulo a[href="./ferramentas/calculadora-peixes/"]');
         await ferramentasPeixes.waitFor({state:"visible",timeout:12000});
         assert.match(await ferramentasPeixes.innerText(),/Calculadora de peixes/);
+        assert.ok(await pagina.locator(".sisteminha-guias-modulo a").count() >= 1,
+          "Sisteminha deve conectar guias ao módulo");
         await pagina.locator('.sisteminha-nav-rolagem a[href="#ciclo"]').click();
         await pagina.locator("#ciclo").waitFor({ state: "visible", timeout: 12000 });
       }
