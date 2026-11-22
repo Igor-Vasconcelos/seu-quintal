@@ -57,6 +57,37 @@ try {
       assert.ok(await logo.evaluate(img => img.complete && img.naturalWidth > 0),
         slug + "/" + nome + ": logomarca não carregou");
 
+      if (["home", "horta", "meu-quintal"].includes(slug)) {
+        const footer = pagina.locator(".rodape.rodape-v3");
+        await footer.waitFor({ state: "visible", timeout: 16000 });
+        const grupos = footer.locator(".rodape-navegacao");
+        assert.equal(await grupos.count(), 3, "Rodapé deve ter três grupos de navegação");
+        const titulos = ["Aprenda", "Planeje", "Cuide e organize"];
+        for (let i = 0; i < 3; i++) {
+          assert.equal(await grupos.nth(i).locator("h2").innerText(), titulos[i]);
+          assert.equal(await grupos.nth(i).locator("a").count(), 4,
+            "Rodapé precisa oferecer quatro caminhos por grupo");
+        }
+        const quintalLink = grupos.getByRole("link", { name: "Meu Quintal" });
+        assert.match(await quintalLink.getAttribute("href"), /meu-quintal\/$/);
+        await footer.screenshot({ path: PASTA + "/rodape-" + slug + "-" + nome + ".png", animations: "disabled" });
+        await pagina.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+      }
+      if (slug === "meu-quintal") {
+        const lateral = pagina.locator(".quintal-secoes");
+        await lateral.waitFor({ state: "visible", timeout: 16000 });
+        const links = lateral.locator(".quintal-secoes-links > a");
+        assert.equal(await links.count(), 5, "Sidebar deve manter cinco seções");
+        for (const link of await links.all()) {
+          assert.equal(await link.locator(".quintal-navegacao-icone svg").count(), 1);
+          assert.ok(await link.locator(".quintal-navegacao-icone svg path, .quintal-navegacao-icone svg rect").count() > 0,
+            "Ícone do menu precisa ter desenho SVG");
+        }
+        assert.equal(await links.first().getAttribute("aria-current"), "location");
+        assert.match(await lateral.locator(".quintal-secoes-rodape").innerText(), /Dados neste navegador/);
+        await lateral.screenshot({ path: PASTA + "/menu-quintal-" + nome + ".png", animations: "disabled" });
+        await pagina.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+      }
       if (slug === "home" || slug === "sisteminha" || slug === "meu-quintal") {
         await pagina.screenshot({
           path: PASTA + "/" + slug + "-" + nome + ".png",
