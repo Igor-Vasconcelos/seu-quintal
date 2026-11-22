@@ -76,8 +76,8 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
   }
-  .sisteminha-ds3 .sisteminha-nav-rolagem a {
-    flex: 0 0 clamp(6.7rem, 29%, 8rem);
+  .sisteminha-ds3 .sisteminha-nav-viewport .sisteminha-nav-rolagem a {
+    flex: 0 0 clamp(6.2rem, 27%, 7.4rem);
     min-height: 5rem;
     scroll-snap-align: start;
     white-space: normal;
@@ -91,8 +91,8 @@
   }
 }
 @media (max-width: 359px) {
-  .sisteminha-ds3 .sisteminha-nav-rolagem a {
-    flex-basis: 7.1rem;
+  .sisteminha-ds3 .sisteminha-nav-viewport .sisteminha-nav-rolagem a {
+    flex-basis: 6.5rem;
     font-size: .75rem;
   }
 }
