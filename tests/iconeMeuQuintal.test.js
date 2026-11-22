@@ -12,9 +12,9 @@ test("ícone do Meu Quintal é SVG próprio com casa, horta, muda e caminho", ()
   assert.ok(inicio >= 0 && fim > inicio);
   const desenho = svg.slice(inicio, fim);
   assert.ok((desenho.match(/<path /g) ?? []).length >= 7);
-  assert.match(desenho, /<rect /); // janela da casa
-  assert.match(desenho, /11\.5 20\.5/); // início do caminho
-  assert.match(desenho, /6\.7 18\.8/); // muda
+  assert.match(desenho, /3\.7-3/); // telhado simplificado
+  assert.match(desenho, /11\.35 20\.6/); // caminho até a casinha
+  assert.match(desenho, /M7 19v-4/); // muda em área separada
   assert.match(svg, /viewBox="0 0 24 24"/);
   assert.match(svg, /aria-hidden="true"/);
   assert.match(svg, /  planta: <>/); // a planta técnica do terreno não foi removida
