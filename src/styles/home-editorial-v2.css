@@ -240,3 +240,15 @@
 @media(prefers-reduced-motion:reduce) {
   .pagina-home .home-destaque-card { transition: none; transform: none !important; }
 }
+
+/* Correção de transbordamento detectado no smoke test móvel. */
+@media (max-width: 599px) {
+  .pagina-home .home-trilhas {
+    width: calc(100% - 2 * var(--sq-gutter));
+    max-width: calc(100% - 2 * var(--sq-gutter));
+    margin-inline: auto;
+  }
+  .pagina-home .home-editorial, .pagina-home .home-editorial-coluna {
+    min-width: 0;
+  }
+}
