@@ -1,0 +1,133 @@
+/* Seu Quintal — identidade da marca e largura de página | v5
+   Corrige a moldura estreita aplicada ao CABEÇALHO e RODAPÉ
+   quando são renderizados dentro de .pagina (React e HTML estático).
+   Mantém largura de leitura para main e nunca mascara overflow com clip.
+*/
+
+/* A .pagina é um wrapper estrutural, não um container visual do cabeçalho. */
+.pagina:has(> :is(.topo.site-shell, #cabecalho)) {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+.pagina:has(> :is(.topo.site-shell, #cabecalho)) > :is(.topo.site-shell, #cabecalho, #rodape, .rodape.rodape-v3) {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+.pagina:has(> :is(.topo.site-shell, #cabecalho)) > main {
+  box-sizing: border-box;
+  width: min(100%, var(--sq-container));
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: var(--sq-gutter);
+  min-width: 0;
+}
+
+/* Cabeçalho: o fundo ocupa a viewport, o miolo obedece ao grid. */
+.topo.site-shell .topo-miolo {
+  width: min(100%, 92rem);
+  max-width: none;
+}
+.topo.site-shell .site-marca {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: .6rem;
+  text-decoration: none;
+}
+.topo.site-shell .site-marca .marca-simbolo.site-marca-emblema,
+.rodape.rodape-v3 .site-marca .marca-simbolo.site-marca-emblema {
+  width: 3.35rem;
+  height: 3.35rem;
+  flex: 0 0 3.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.topo.site-shell .site-marca-emblema img,
+.rodape.rodape-v3 .site-marca-emblema img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.topo.site-shell .site-marca-texto {
+  gap: .18rem;
+  min-width: 0;
+}
+.topo.site-shell .site-marca-texto strong {
+  font: 400 clamp(1.45rem,1.7vw,1.8rem)/1.05 var(--sq-font-display);
+  color: var(--sq-forest);
+  letter-spacing: -.025em;
+}
+.topo.site-shell .site-marca-texto small {
+  font: 500 .68rem/1.2 var(--sq-font-ui);
+  color: var(--sq-forest);
+  white-space: nowrap;
+}
+.rodape.rodape-v3 .site-marca-texto strong { color: #fff; }
+.rodape.rodape-v3 .site-marca-texto small { color: var(--sq-cream); }
+.rodape.rodape-v3 .site-marca .marca-simbolo.site-marca-emblema {
+  width: 3rem; height: 3rem; flex-basis: 3rem;
+}
+
+/* Artigos gerados em HTML têm cabeçalho próprio: mesma marca, sem fundo de ícone. */
+.sq-artigos .sq-brand img {
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  object-fit: contain;
+}
+.sq-artigos .sq-header-inner {
+  width: min(100% - 2rem, 92rem);
+}
+.sq-artigos .sq-brand-text strong { color: var(--sq-forest); }
+
+/* Containers das páginas internas: alargamento só quando há espaço. */
+.pagina > main,
+.conteudo-tematico,
+.quintal-pagina,
+.sisteminha-ds3 main {
+  min-width: 0;
+}
+:where(.conteudo-tematico,.quintal-pagina,.sisteminha-ds3 main) :where(img,video,canvas) {
+  max-width: 100%;
+}
+:where(.conteudo-tematico,.quintal-pagina,.sisteminha-ds3 main) :where(.ferramentas,.guias-grade,.sisteminha-detalhes) > * {
+  min-width: 0;
+}
+.pagina:has(> :is(.topo.site-shell, #cabecalho)) > .pular {
+  left: var(--sq-gutter);
+}
+
+@media (max-width: 1030px) {
+  .topo.site-shell .site-marca .marca-simbolo.site-marca-emblema {
+    width: 3rem; height: 3rem; flex-basis: 3rem;
+  }
+}
+@media (max-width: 767px) {
+  .topo.site-shell .topo-miolo { padding-inline: var(--sq-gutter); }
+  .topo.site-shell .site-marca .marca-simbolo.site-marca-emblema {
+    width: 2.65rem; height: 2.65rem; flex-basis: 2.65rem;
+  }
+  .topo.site-shell .site-marca-texto strong { font-size: 1.38rem; }
+  .topo.site-shell .site-marca-texto small { font-size: .64rem; }
+  .sq-artigos .sq-brand img { width: 2.7rem; height: 2.7rem; }
+}
+@media (max-width: 360px) {
+  .topo.site-shell .site-marca { gap: .4rem; }
+  .topo.site-shell .site-marca .marca-simbolo.site-marca-emblema {
+    width: 2.35rem; height: 2.35rem; flex-basis: 2.35rem;
+  }
+  .topo.site-shell .site-marca-texto strong { font-size: 1.18rem; }
+  .topo.site-shell .site-marca-texto small { font-size: .55rem; }
+  .sq-artigos .sq-brand-text { display: grid; }
+  .sq-artigos .sq-brand-text strong { font-size: 1.18rem; }
+}
