@@ -214,6 +214,28 @@ function Sisteminha() {
   const [abaAtiva, definirAbaAtiva] = useState(abaPelaHash);
   const veioDeClique = useRef(false);
   const foiMontado = useRef(false);
+  const listaAbasRef = useRef(null);
+  const [temMaisAbas, definirTemMaisAbas] = useState(true);
+
+  function atualizarIndicadorAbas() {
+    const lista = listaAbasRef.current;
+    if (!lista) return;
+    definirTemMaisAbas(lista.scrollLeft + lista.clientWidth < lista.scrollWidth - 3);
+  }
+
+  function avancarAbas() {
+    const lista = listaAbasRef.current;
+    if (!lista) return;
+    const reduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    lista.scrollBy({left: Math.max(160, lista.clientWidth * .7),
+      behavior: reduzido ? "auto" : "smooth"});
+  }
+
+  useEffect(() => {
+    atualizarIndicadorAbas();
+    window.addEventListener("resize", atualizarIndicadorAbas);
+    return () => window.removeEventListener("resize", atualizarIndicadorAbas);
+  }, []);
 
   useEffect(() => {
     const atualizarPeloHistorico = () => {
@@ -304,12 +326,22 @@ function Sisteminha() {
         </section>
 
         <nav className="sisteminha-nav-local" aria-label="Tópicos do Sisteminha">
-          <div className="sisteminha-nav-rolagem">
-            {nomesDasAbas.map(([id, titulo]) => (
-              <a key={id} href={`#${id}`} aria-current={abaAtiva === id ? "page" : undefined}>
-                <Icone nome={iconesAbas[id]}/><span>{titulo}</span>
-              </a>
-            ))}
+          <div className="sisteminha-nav-ajuda">
+            <span>Deslize para ver mais</span>
+            <button type="button" onClick={avancarAbas} disabled={!temMaisAbas}
+              aria-label="Mostrar próximos tópicos do Sisteminha">
+              <Icone nome="seta"/>
+            </button>
+          </div>
+          <div className="sisteminha-nav-viewport" data-tem-mais={temMaisAbas ? "sim" : "nao"}>
+            <div className="sisteminha-nav-rolagem" ref={listaAbasRef}
+              onScroll={atualizarIndicadorAbas}>
+              {nomesDasAbas.map(([id, titulo]) => (
+                <a key={id} href={`#${id}`} aria-current={abaAtiva === id ? "page" : undefined}>
+                  <Icone nome={iconesAbas[id]}/><span>{titulo}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </nav>
 
@@ -425,3 +457,5 @@ import "./styles/tool-ui-v3.css";
 import "./styles/site-raiz-caminho.css";
 
 import "./styles/layout-shell-v5.css";
+
+import "./styles/sisteminha-swipe.css";
