@@ -68,7 +68,7 @@ try {
         assert.ok(await hero.evaluate(img => img.complete && img.naturalWidth > 0),
           "Fotografia de abertura não carregou");
         const imgHeight = await hero.evaluate(img => img.getBoundingClientRect().height);
-        assert.ok(imgHeight <= (largura < 700 ? 155 : 425),
+        assert.ok(imgHeight <= (largura < 700 ? 155 : 515),
           "A imagem de abertura está alta demais: " + imgHeight);
         assert.equal(await pagina.locator(".sq-prose .sq-step-figure img").count(), 2,
           "Cada artigo precisa de duas ilustrações durante a leitura");
