@@ -175,6 +175,8 @@ try {
         await pagina.waitForURL("**/horta/organizador/#planejamento-familiar");
         const planejamento = pagina.locator("#planejamento-familiar[open]");
         await planejamento.waitFor({ state: "visible", timeout: 20000 });
+        await pagina.getByRole("button", {name:"1. Escolher culturas"}).click();
+        assert.ok(await planejamento.isVisible(), "Atalho deve abrir o planejamento familiar");
         await planejamento.locator("input[type=search]").fill("brocolis");
         assert.equal(await planejamento.locator(".familia-cultura-opcao").count(),2,
           "Busca sem acentos deve retornar os dois tipos de brócolis");
@@ -183,6 +185,10 @@ try {
         await planejamento.locator("input[type=search]").fill("");
         await planejamento.getByRole("button", {name:"Temperos",exact:true}).click();
         assert.equal(await planejamento.locator(".familia-cultura-opcao").count(),3);
+        await pagina.locator(".organizador-form select[name=cultura]").selectOption("Morango");
+        assert.equal(await pagina.locator(".organizador-form select[name=origem]").inputValue(), "muda",
+          "Morango precisa começar por muda pronta");
+        assert.equal(await pagina.locator(".organizador-form select[name=origem] option").count(), 1);
         await pagina.locator(".organizador-form select[name=cultura]").selectOption("Pimentão");
         await pagina.getByText("Cuidados com Pimentão").waitFor({state:"visible"});
         await pagina.locator(".organizador-previsao").getByText("Primeiro lote").waitFor({state:"visible"});
