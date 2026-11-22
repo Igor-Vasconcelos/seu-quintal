@@ -112,3 +112,37 @@
 @media (prefers-reduced-motion: reduce) {
   .pagina-ferramenta-v4 .ferramenta-comecar { scroll-behavior: auto; }
 }
+
+/* Fotos editoriais realistas nas ferramentas de plantio */
+.pagina-ferramenta-v4 .titulo-tematico.ferramenta-topo-com-foto {
+  display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,.78fr);
+  align-items: center; gap: clamp(.65rem,2vw,1.6rem);
+}
+.pagina-ferramenta-v4 .ferramenta-topo-texto { display: grid; gap: .5rem; min-width: 0; }
+.pagina-ferramenta-v4 .ferramenta-topo-texto h1 { font-size: clamp(2rem,3.2vw,2.85rem); }
+.pagina-ferramenta-v4 .ferramenta-topo-figura { width: 100%; min-width: 0; margin: 0; }
+.pagina-ferramenta-v4 .ferramenta-topo-foto, 
+.pagina-ferramenta-v4 .ferramenta-topo-figura img {
+  display: block; width: 100%; height: auto; aspect-ratio: 16/9;
+  max-height: 14rem; object-fit: cover; border-radius: var(--sq-radius-media);
+}
+.pagina-ferramenta-v4 .ferramenta-topo-figura figcaption {
+  margin-top: .35rem; font-size: .72rem; line-height: 1.4; color: var(--sq-text-muted);
+}
+@media (max-width: 740px) {
+  .pagina-ferramenta-v4 .titulo-tematico.ferramenta-topo-com-foto { grid-template-columns: minmax(0,1fr); }
+  .pagina-ferramenta-v4 .ferramenta-topo-figura img { max-height: 9rem; }
+}
+
+/* Fotografia sintética de codornas: crédito visível e proporção consistente. */
+.pagina-ferramenta-v4 .abertura-horta .ferramenta-foto-realista {
+  display: grid; gap: .35rem; width: 100%; min-width: 0; margin: 0;
+}
+.pagina-ferramenta-v4 .abertura-horta .ferramenta-foto-realista img {
+  display: block; width: 100%; height: auto; aspect-ratio: 16/9;
+  max-height: 13.5rem; object-fit: cover; object-position: center;
+  border-radius: var(--sq-radius-media);
+}
+.pagina-ferramenta-v4 .ferramenta-foto-realista figcaption {
+  color: var(--sq-text-muted); font-size: .72rem; line-height: 1.4;
+}

@@ -72,6 +72,9 @@ try {
         assert.ok(await pagina.locator('a[href="../ferramentas/calculadora-peixes/"]').count() >= 1);
       }
       if (slug === "sisteminha") {
+        const foto = pagina.locator('.sisteminha-panorama img');
+        assert.ok(await foto.evaluate(img => img.complete && img.naturalWidth > 0),
+          "Fotografia realista do Sisteminha deve carregar");
         await pagina.locator('.sisteminha-nav-rolagem a[href="#tanque"]').click();
         await pagina.locator("#modulos h2").first().waitFor({ state: "visible", timeout: 12000 });
         assert.match(await pagina.locator("#modulos h2").first().innerText(), /Tanque/i);
@@ -90,6 +93,11 @@ try {
         const form = pagina.locator(".simulador-pomar form");
         await form.locator('button[type="submit"]').click();
         await pagina.locator("#resultado-pomar-titulo").waitFor({state:"visible",timeout:12000});
+      }
+      if (["canteiros","calendario","codornas"].includes(slug)) {
+        const imagem = pagina.locator('.ferramenta-topo-figura img, .ferramenta-foto-realista img').first();
+        assert.ok(await imagem.evaluate(img => img.complete && img.naturalWidth > 0),
+          slug + ": fotografia editorial deve carregar");
       }
       if (slug === "codornas") {
         await pagina.locator(".codornas-formulario button[type=submit]").click();

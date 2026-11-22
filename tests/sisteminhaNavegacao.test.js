@@ -59,7 +59,9 @@ test("mantém calculadora de galinhas e imagens já presentes", () => {
   assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/tanque.webp")));
   assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/minhocario.webp")));
   assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/panorama.webp")));
-  assert.match(main, /imagens dos módulos do Sisteminha são ilustrações geradas por IA/);
+  assert.match(main, /cena fotográfica sintética gerada por IA/);
+  assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/hero-realista-v4.avif")));
+  assert.ok(existsSync(resolve(origem, "public/imagens/sisteminha/hero-realista-v4.webp")));
 });
 
 
