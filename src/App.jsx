@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Cabecalho from "./components/Cabecalho.jsx";
 import Calendario from "./components/Calendario.jsx";
-import CartoesGuias from "./components/CartoesGuias.jsx";
+import DestaquesEditorial from "./components/DestaquesEditorial.jsx";
 import Icone from "./components/Icone.jsx";
 import Planejador from "./components/Planejador.jsx";
 import Rodape from "./components/Rodape.jsx";
-import { guias } from "./data/guias.js";
 import artigosPublicados from "./data/artigos-publicados.json";
 import { criarTerreno } from "./features/planejador/geometria.js";
 
@@ -39,18 +38,18 @@ export default function App() {
         <section className="home-abertura" aria-labelledby="titulo-home">
           <div className="home-miolo home-abertura-grade">
             <div className="home-abertura-texto">
-              <span className="home-hero-selo"><Icone nome="muda"/> SEU QUINTAL, SUAS POSSIBILIDADES</span>
-              <h1 id="titulo-home">Cultive seu espaço, <em>do primeiro vaso ao sítio.</em></h1>
-              <p>Da primeira muda ao seu sítio: artigos confiáveis, ferramentas gratuitas e planejamento para aproveitar melhor o espaço que você tem.</p>
-              <div className="home-acoes">
+              <span className="home-hero-selo"><Icone nome="muda"/> ARTIGOS E GUIAS</span>
+              <h1 id="titulo-home">Artigos e guias para seu quintal</h1>
+              <p>Aprenda, planeje e produza com conteúdos práticos, explicados de forma simples, e use ferramentas gratuitas para colocar em prática.</p>
+              <div className="home-acoes home-acoes-editoriais">
                 <a className="botao" href="#ferramentas">
-                  Explorar ferramentas <Icone nome="seta" />
+                  Conteúdo confiável <Icone nome="livro" />
                 </a>
                 <a className="botao botao-contorno" href="./artigos/">
-                  Ler artigos
+                  Linguagem simples
                 </a>
               </div>
-              <span className="home-hero-garantia"><Icone nome="muda"/> Ferramentas gratuitas e sem cadastro</span>
+              <span className="home-hero-garantia"><Icone nome="muda"/> Aplicação prática · Para toda a família</span>
             </div>
             <figure className="home-abertura-imagem">
               <img src="./imagens/abertura-horta-1200.webp"
@@ -64,16 +63,17 @@ export default function App() {
 
 
         <nav className="home-trilhas home-miolo" aria-label="Explorar assuntos">
-          <a href="./artigos/" className="home-trilha-atual"><Icone nome="muda" /> Todos os conteúdos</a>
+          <a href="./artigos/" className="home-trilha-atual"><Icone nome="outros" /> Todos os conteúdos</a>
           <a href="./horta/"><Icone nome="muda" /> Horta</a>
           <a href="./ferramentas/calculadora-peixes/"><Icone nome="peixe" /> Peixes</a>
-          <a href="./sisteminha.html#galinheiro"><Icone nome="planta" /> Aves</a>
-          <a href="./ferramentas/calculadora-codornas/">Codornas</a>
+          <a href="./sisteminha.html#galinheiro"><Icone nome="galinha" /> Aves</a>
+          <a href="./ferramentas/calculadora-codornas/"><Icone nome="codorna" /> Codornas</a>
           <a href="./ferramentas/planejador-de-pomar/"><Icone nome="arvores" /> Pomar</a>
-          <a href="./guias/compostagem/">Compostagem</a>
-          <a href="./guias/irrigacao/">Irrigação</a>
-          <a href="./meu-quintal/">Planejamento</a>
-          <a href="./sisteminha.html">Sisteminha</a>
+          <a href="./guias/compostagem/"><Icone nome="recycle" /> Compostagem</a>
+          <a href="./guias/irrigacao/"><Icone nome="muda" /> Irrigação</a>
+          <a href="./meu-quintal/"><Icone nome="planta" /> Planejamento</a>
+          <a href="./sisteminha.html"><Icone nome="ciclo" /> Sisteminha</a>
+          <a href="./guias/"><Icone nome="canteiro" /> Pequenos espaços</a>
         </nav>
 
         <section className="home-editorial home-miolo" id="guias" aria-label="Guias, artigos e ferramentas">
@@ -86,7 +86,7 @@ export default function App() {
                 </div>
                 <a className="home-link" href="./guias/">Ver todos os guias <Icone nome="seta" /></a>
               </div>
-              <CartoesGuias itens={guias.slice(0, 4)} />
+              <DestaquesEditorial />
             </section>
             <section className="home-editorial-artigos" id="artigos" aria-labelledby="titulo-artigos">
               <div className="home-secao-topo">
@@ -132,7 +132,7 @@ export default function App() {
           </aside>
         </section>
 
-        <section className="home-miolo home-secao" aria-labelledby="titulo-atalhos">
+        <section className="home-miolo home-secao home-atalhos-secao" aria-labelledby="titulo-atalhos">
           <h2 id="titulo-atalhos">O que você quer fazer?</h2>
           <ul className="home-atalhos">
             {atalhos.map(({ destino, icone, titulo, resumo, novaAba }) => (
