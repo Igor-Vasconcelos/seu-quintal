@@ -19,3 +19,18 @@ if (document.querySelector(".sq-article")) {
   iniciarIndiceAtivo();
   iniciarCompartilhamentoArtigo();
 }
+
+
+// Um exemplo interativo no artigo de horta usa o mesmo motor do Organizador.
+// Importação sob demanda para não carregar React nos demais artigos.
+const montagemHorta = document.getElementById("simulador-horta-artigo");
+if (montagemHorta) {
+  Promise.all([
+    import("react"), import("react-dom/client"),
+    import("./features/artigos/SimuladorHortaArtigo.jsx"),
+  ]).then(([React, Dom, modulo]) => {
+    Dom.createRoot(montagemHorta).render(React.createElement(modulo.default));
+  }).catch(() => {
+    // O conteúdo HTML indexável com link para a ferramenta completa permanece visível.
+  });
+}

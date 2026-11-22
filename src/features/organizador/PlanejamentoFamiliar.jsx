@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import { fonteRotacao, sugestoesRotacao } from "./rotacaoCulturas.js";
 import IconeCultura from "./IconeCultura.jsx";
+import VisualizacaoHorta from "./VisualizacaoHorta.jsx";
 import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas.js";
 import { descreverEpocaPlantio } from "../../data/plantio.js";
 import { buscarCulturas, categoriasCulturas, destaquesCulturas, resumoCultura, todasCulturas } from "./catalogoCulturas.js";
@@ -30,6 +31,7 @@ function textoNumero(n) {
 
 export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloqueado, aoAplicar }) {
   const [pessoas, definirPessoas] = useState(4);
+  const [modoEspaco, definirModoEspaco] = useState("automatico");
   const [quantidade, definirQuantidade] = useState(4);
   const [largura, definirLargura] = useState("1");
   const [comprimento, definirComprimento] = useState("3");
@@ -91,6 +93,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
   const sugestao = calcularPlanoFamiliar({
     pessoas, quantidadeCanteiros: quantidade, largura: lerMedida(largura),
     comprimento: lerMedida(comprimento), inicio, regiao, preferencias, planosExistentes,
+    modoEspaco,
   });
 
   async function salvarPlano() {
@@ -116,33 +119,24 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
     <details className="organizador-cartao familia" id="planejamento-familiar" ref={detalheRef}>
       <summary className="familia-abrir">
         <span className="familia-chamada">
-          <strong>Horta contínua: consumo, plantios escalonados e rotação</strong>
-          <small>Informe o consumo semanal, planeje lotes e aprenda a alternar cultivos nos canteiros.</small>
+          <strong>Planeje o consumo e descubra o espaço da sua horta</strong>
+          <small>Escolha o que deseja colher. Veja quanto espaço precisa e como manter lotes em diferentes estágios.</small>
         </span>
         <span className="familia-chamada-acao">Montar minha horta</span>
       </summary>
       <div className="familia-conteudo">
-        <p className="nota">Escolha os alimentos, ajuste as metas semanais e confira as primeiras datas de colheita. As sugestões de consumo são exemplos editáveis, não médias oficiais. Rotação é a troca de famílias botânicas em ciclos posteriores; o sistema ainda não a executa automaticamente.</p>
+        <p className="nota">Comece pelo que sua família realmente consome. O Seu Quintal calcula uma estimativa de área e mostra os lotes em diferentes estágios. As quantidades iniciais são exemplos editáveis, não recomendações oficiais de consumo; a rotação de culturas permanece uma orientação didática.</p>
         <div className="familia-etapa">
-          <h3><span className="familia-passo">1</span> Pessoas e espaço disponível</h3>
+          <h3><span className="familia-passo">1</span> Para quem e quando plantar?</h3>
           <div className="familia-campos">
             <label className="campo">Pessoas na família
               <input type="number" min="1" max="20" value={pessoas} onChange={e => definirPessoas(Number(e.target.value))} />
             </label>
-            <label className="campo">Quantidade de canteiros
-              <input type="number" min="1" max="24" value={quantidade} onChange={e => definirQuantidade(Number(e.target.value))} />
-            </label>
-            <label className="campo">Largura de cada canteiro (m)
-              <input inputMode="decimal" value={largura} onChange={e => definirLargura(e.target.value)} />
-            </label>
-            <label className="campo">Comprimento de cada canteiro (m)
-              <input inputMode="decimal" value={comprimento} onChange={e => definirComprimento(e.target.value)} />
-            </label>
-            <label className="campo">Data de início
+            <label className="campo">Data do primeiro lote
               <input type="date" value={inicio} onChange={e => definirInicio(e.target.value)} />
             </label>
           </div>
-          <p className="nota">Região atual: <strong>{regiao}</strong>. Para mudar, use “Região e espaço da horta” acima.</p>
+          <p className="nota">Região atual: <strong>{regiao}</strong>. Para mudar, use “Região e espaço da horta” acima. As sugestões mudam com as metas e não substituem a confirmação da época de cultivo.</p>
         </div>
 
         <div className="familia-etapa">
@@ -235,16 +229,40 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
         </div>
 
         <div className="familia-etapa">
-          <h3><span className="familia-passo">3</span> Quanto plantar, quando repetir e quando colher</h3>
-          <p className="nota">As três respostas abaixo usam a sua meta semanal, a frequência escolhida e as referências de ciclo de cada cultura. São estimativas; confira a época regional e o desenvolvimento real das plantas.</p>
+          <h3><span className="familia-passo">3</span> Descubra o espaço e veja os lotes</h3>
+          <fieldset className="familia-modo-espaco">
+            <legend>Como deseja planejar o espaço?</legend>
+            <label><input type="radio" name="modoEspacoFamiliar" value="automatico"
+              checked={modoEspaco === "automatico"} onChange={() => definirModoEspaco("automatico")}/>
+              <span><strong>Quero descobrir o espaço necessário</strong><small>O site calcula a demanda e mostra canteiros equivalentes de 1 × 3 m.</small></span></label>
+            <label><input type="radio" name="modoEspacoFamiliar" value="existente"
+              checked={modoEspaco === "existente"} onChange={() => definirModoEspaco("existente")}/>
+              <span><strong>Já tenho canteiros</strong><small>Compare sua área disponível com as metas e veja o que precisa ajustar.</small></span></label>
+          </fieldset>
+          {modoEspaco === "existente" && <div className="familia-campos familia-campos-existentes">
+            <label className="campo">Quantidade de canteiros
+              <input type="number" min="1" max="24" value={quantidade} onChange={e => definirQuantidade(Number(e.target.value))}/>
+            </label>
+            <label className="campo">Largura útil de cada canteiro (m)
+              <input inputMode="decimal" value={largura} onChange={e => definirLargura(e.target.value)}/>
+            </label>
+            <label className="campo">Comprimento útil de cada canteiro (m)
+              <input inputMode="decimal" value={comprimento} onChange={e => definirComprimento(e.target.value)}/>
+            </label>
+          </div>}
+          <p className="nota">A área é uma estimativa de ocupação simultânea, sem caminhos, bordas ou circulação. Canteiros-modelo não são uma planta baixa e devem ser adaptados às condições locais.</p>
+          <h4 className="familia-subtitulo-resultado">Quanto plantar, quando repetir e quando colher</h4>
+          <p className="nota">Cada cultura usa sua meta semanal, o intervalo escolhido e as referências de ciclo. Confira a estação e o desenvolvimento real antes de repetir o plantio.</p>
           {sugestao.erro ? <p className="erro" role="alert">{sugestao.erro}</p> : <>
-            <div className="familia-indicadores">
-              <div><span>Área disponível</span><strong>{formatarMedida(sugestao.areaTotal)} m²</strong></div>
-              <div><span>Área simultânea estimada</span><strong>{formatarMedida(sugestao.areaReservada + sugestao.areaNova)} m²</strong></div>
-              <div><span>Canteiros equivalentes necessários</span><strong>{sugestao.canteirosNecessarios}</strong></div>
+            <div className="familia-indicadores" aria-label="Resumo do espaço necessário">
+              <div><span>Área útil estimada para o cultivo</span><strong>{formatarMedida(sugestao.areaNecessariaM2)} m²</strong></div>
+              <div><span>{modoEspaco === "automatico" ? "Canteiros-modelo de 1 × 3 m" : "Canteiros equivalentes necessários"}</span><strong>{sugestao.canteirosNecessarios}</strong></div>
+              <div><span>{modoEspaco === "automatico" ? "Área total dos modelos" : "Área útil disponível"}</span><strong>{formatarMedida(sugestao.areaTotal)} m²</strong></div>
             </div>
             {sugestao.faltaArea > 0 && <p className="aviso" role="status">
-              Faltam aproximadamente <strong>{formatarMedida(sugestao.faltaArea)} m²</strong> para reservar o conjunto de cultivos. Aumente os canteiros, reduza as metas ou retire uma cultura.
+              {modoEspaco === "automatico"
+                ? <>A demanda ultrapassa os 24 canteiros-modelo mostrados. Revise as metas antes de salvar ou planeje mais espaço; faltam <strong>{formatarMedida(sugestao.faltaArea)} m²</strong> na visualização limitada.</>
+                : <>Faltam aproximadamente <strong>{formatarMedida(sugestao.faltaArea)} m²</strong> nos canteiros informados. Ajuste o espaço, as metas ou o intervalo de plantio.</>}
             </p>}
             <ol className="familia-previsoes" aria-label="Planejamento por cultura">
               {sugestao.sugestoes.map(({ plano, area, plantas, experimental, alertaEpoca, reservas, seguintes }) => {
@@ -305,6 +323,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
                 </li>;
               })}
             </ol>
+            <VisualizacaoHorta resultado={sugestao}/>
             <section className="sq-rotacao-instrucao" aria-labelledby="sq-rotacao-titulo">
               <h4 id="sq-rotacao-titulo">Depois da colheita: como fazer rotação de culturas?</h4>
               <p>Escalonar é semear em datas diferentes. Rotacionar é alternar famílias botânicas no <strong>mesmo canteiro, em ciclos posteriores</strong>; pode ajudar a organizar o manejo de solo e pragas, mas não garante ausência de doenças.</p>
@@ -330,7 +349,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
               <a className="botao botao-contorno" href={window.location.pathname.includes("/meu-quintal/")
                 ? "../horta/canteiros/" : "../canteiros/"}>Desenhar um canteiro</a>
             </div>
-            <p className="nota">Os novos cultivos serão salvos na agenda deste navegador, sem apagar os existentes. Se a área total da horta ainda não tiver sido definida, ela será preenchida com a soma dos canteiros. Os canteiros recebem nomes e reservas estimadas; a integração automática com o desenho será uma próxima etapa.</p>
+            <p className="nota">Só ao selecionar “Adicionar sugestões” os novos cultivos serão salvos na agenda deste navegador, sem apagar os existentes. No modo automático, os canteiros de 1 × 3 m são equivalências de área, não estruturas construídas. O desenho geométrico continua no Planejador Visual de Canteiros.</p>
           </>}
           {retorno && <p className={falha ? "erro" : "organizador-status"} role={falha ? "alert" : "status"}>{retorno}</p>}
         </div>
