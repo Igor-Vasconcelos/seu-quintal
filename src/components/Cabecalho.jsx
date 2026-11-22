@@ -124,7 +124,7 @@ export default function Cabecalho({ sisteminha = false, raiz = "./", pagina }) {
               aria-current={sisteminha ? "page" : undefined}>Sisteminha Embrapa</a>
           </div>
           <a className="botao menu-quintal"
-            href={noPainel ? "#terreno" : raiz + "meu-quintal/"}
+            href={noPainel ? "#geral" : raiz + "meu-quintal/"}
             aria-current={noPainel ? "page" : undefined}>
             <Icone nome="planta"/> Meu Quintal
           </a>
