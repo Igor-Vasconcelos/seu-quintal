@@ -97,6 +97,7 @@ export default function App() {
             </div>
             <p className="nota">Também pode <a href="./horta/canteiros/">desenhar um canteiro</a>,
               <a href="./ferramentas/calculadora-peixes/"> calcular volume e biomassa dos peixes</a>
+              <a href="./ferramentas/calculadora-codornas/"> simular ovos, corte e ração das codornas</a>
               ou <a href="./ferramentas/planejador-de-pomar/">planejar o espaço das frutíferas</a> —
               gratuito e sem cadastro.</p>
           </div>

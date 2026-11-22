@@ -17,6 +17,7 @@ const grupos = [
       { titulo: "Organizador da horta", rota: "horta/organizador/", paginas: ["organizador"] },
       { titulo: "Calendário de plantio", rota: "horta/calendario-de-plantio/", paginas: ["calendario"] },
       { titulo: "Calculadora de peixes", rota: "ferramentas/calculadora-peixes/", paginas: ["peixes"] },
+      { titulo: "Calculadora de codornas", rota: "ferramentas/calculadora-codornas/", paginas: ["codornas"] },
       { titulo: "Planejador de pomar", rota: "ferramentas/planejador-de-pomar/", paginas: ["pomar"] },
     ],
   },

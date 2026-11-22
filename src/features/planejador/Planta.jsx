@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import Icone from "../../components/Icone.jsx";
 import { distancia, formatarMedida, limitarPosicao, passoDaMalha } from "./geometria.js";
 import { tiposDeArea } from "./projetos.js";
 
@@ -110,7 +111,10 @@ export default function Planta({
               }),
             },
           };
-          const rotulo = !ponto && <span className="planta-item-rotulo">{item.nome}</span>;
+          const rotulo = !ponto && <span className="planta-item-conteudo" aria-hidden="true">
+            <Icone nome={tiposDeArea[item.tipo].icone}/>
+            <span className="planta-item-rotulo">{item.nome}</span>
+          </span>;
           return aoSelecionar && !aoMarcarPonto
             ? <button key={item.id} {...propriedades} type="button"
                 aria-label={item.nome} aria-pressed={selecionado === item.id}

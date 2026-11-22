@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 650" role="img" aria-labelledby="t d">
+<title id="t">Quintal com tanque, horta, compostagem e galinheiro</title>
+<desc id="d">Ilustração vetorial de um espaço produtivo com tanque de peixes, canteiros e um galinheiro contendo duas galinhas com anatomia simplificada e correta.</desc>
+<defs>
+<linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">
+<stop stop-color="#9DBA7E"/><stop offset=".56" stop-color="#D6E6A9"/><stop offset="1" stop-color="#F8E8C1"/>
+</linearGradient>
+<linearGradient id="sombra" x1="0" y1="0" x2="1" y2="0">
+<stop stop-color="#092C1B" stop-opacity=".98"/><stop offset=".39" stop-color="#173F28" stop-opacity=".78"/><stop offset=".73" stop-color="#25533A" stop-opacity=".18"/><stop offset="1" stop-color="#20402F" stop-opacity=".08"/>
+</linearGradient>
+<linearGradient id="agua" x1="0" y1="0" x2="0" y2="1">
+<stop stop-color="#82CCD4"/><stop offset="1" stop-color="#397D91"/>
+</linearGradient>
+<pattern id="terra" width="34" height="29" patternUnits="userSpaceOnUse">
+<rect width="34" height="29" fill="#B48A61"/><path d="M3 17 26 7M10 27 34 18" stroke="#D7AA78" stroke-width="3" opacity=".45"/>
+</pattern>
+<g id="planta">
+<path d="M0 0V-54" fill="none" stroke="#347743" stroke-width="9" stroke-linecap="round"/>
+<path d="M0-21C-59-51-50-79-8-69 10-58 0-21 0-21" fill="#6DAD51"/>
+<path d="M0-33C36-91 63-72 42-42 29-24 0-33 0-33" fill="#9AC966"/>
+</g>
+<g id="galinha" stroke="#875338" stroke-width="5" stroke-linejoin="round">
+<ellipse cx="0" cy="20" rx="58" ry="43" fill="#BC794E"/>
+<path d="M-41 5-71-22-53 21" fill="#B66D41"/>
+<path d="M25-2Q42-58 69-41L69 21" fill="#C78A56"/>
+<circle cx="65" cy="-27" r="25" fill="#C88B58"/>
+<path d="m82-27 30 12-30 12" fill="#E8AF61" stroke="#AF7C38"/>
+<path d="M53-49Q51-67 62-64Q65-75 75-69Q83-60 72-47" fill="#CA5748" stroke="#AA403D"/>
+<circle cx="75" cy="-34" r="4" fill="#173C2B" stroke="none"/>
+<ellipse cx="-4" cy="16" rx="36" ry="25" fill="#E0B183" stroke="#A76E49"/>
+<path d="M-22 55V82M12 56v26" stroke="#986632" stroke-width="7" fill="none"/>
+</g>
+</defs>
+<rect width="1440" height="650" fill="url(#ceu)"/>
+<path d="M0 180Q260 30 510 143T970 109T1440 154V425H0Z" fill="#7EA16A"/>
+<path d="M0 237Q350 165 700 244T1440 197v270H0Z" fill="#497D54"/>
+<g fill="#326943" opacity=".85">
+<circle cx="45" cy="73" r="175"/><circle cx="230" cy="9" r="134"/>
+<circle cx="620" cy="7" r="105"/><circle cx="715" cy="33" r="91"/>
+<circle cx="1370" cy="26" r="163"/><circle cx="1230" cy="11" r="104"/>
+</g>
+<path d="M0 410Q410 300 820 403T1440 365V650H0Z" fill="#8F9F57"/>
+<path d="M0 498Q410 446 960 468T1440 433V650H0Z" fill="#B2A06F"/>
+<g transform="translate(1040 260)">
+<path d="m-165 69 160-112 175 107v266h-335Z" fill="#B98C63" stroke="#765338" stroke-width="13"/>
+<path d="m-202 78 198-142 197 142" stroke="#7D4E32" stroke-width="24" fill="none" stroke-linecap="round"/>
+<rect x="-126" y="104" width="252" height="171" fill="#A67A53" stroke="#714E35" stroke-width="10"/>
+<g stroke="#6D513D" stroke-width="7"><path d="M-90 104v171m55-171v171m55-171v171m55-171v171M-126 159h252m-252 57h252"/></g>
+<rect x="32" y="115" width="84" height="160" fill="#E5BE8F" stroke="#83583D" stroke-width="9"/>
+<g transform="translate(-67 237) scale(.8)"><use href="#galinha"/></g>
+<g transform="translate(43 239) scale(.72)"><use href="#galinha"/></g>
+<path d="M-160 330H180" stroke="#694E36" stroke-width="15"/>
+</g>
+<g transform="translate(445 460)">
+<ellipse cy="58" rx="250" ry="90" fill="#7E6850"/>
+<path d="M-249 54V127Q0 210 249 127V54" fill="#A58661" stroke="#6C5941" stroke-width="12"/>
+<ellipse cy="56" rx="235" ry="77" fill="url(#agua)" stroke="#B5C5B6" stroke-width="14"/>
+<path d="M-115-42v-85h82v59" fill="none" stroke="#9AC1B4" stroke-width="20"/>
+<path d="M-33-65q34 47 57 5" fill="none" stroke="#C4F1EE" stroke-width="9"/>
+<path d="M-34 76q36-32 75 0l34-23-8 29-22 16Q1 128-34 76Z" fill="#E9AE52" stroke="#A76B33" stroke-width="5"/>
+<circle cx="35" cy="77" r="4" fill="#183C2B"/>
+</g>
+<g transform="translate(920 540)">
+<path d="m-182-4 193-41 220 53-204 63Z" fill="url(#terra)" stroke="#775C3D" stroke-width="14"/>
+<path d="M-182-4v37l200 72 213-72V8" fill="#A57A51" stroke="#765537" stroke-width="13"/>
+<use href="#planta" transform="translate(-122 5) scale(.72)"/>
+<use href="#planta" transform="translate(-32 -3) scale(.9)"/>
+<use href="#planta" transform="translate(70 4) scale(.73)"/>
+<use href="#planta" transform="translate(156 17) scale(.62)"/>
+</g>
+<g transform="translate(1220 548)">
+<path d="M-88-95H101V29H-88Z" fill="#A47F5B" stroke="#6F5238" stroke-width="9"/>
+<path d="M-102-97 0-151l118 50" fill="none" stroke="#765638" stroke-width="18"/>
+<path d="M-78-42H89m-167 46H89" stroke="#785638" stroke-width="8"/>
+<path d="M-74 32h176" stroke="#5D4931" stroke-width="9"/>
+</g>
+<rect width="1440" height="650" fill="url(#sombra)"/>
+</svg>
