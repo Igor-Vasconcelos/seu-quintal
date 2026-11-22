@@ -8,6 +8,11 @@ imagemAlt: "Ilustração realista de uma horta doméstica com canteiros de folha
 resposta: "Para colher mais vezes, divida as culturas em pequenos lotes, semeie ou transplante em datas diferentes e registre o desenvolvimento real de cada canteiro."
 ferramentaUrl: "/horta/organizador/"
 ferramentaTexto: "Abrir Organizador de Horta"
+aprendizados: "Medir o espaço útil e observar a incidência de sol|Distribuir cultivos em lotes sem superlotar canteiros|Registrar o crescimento e ajustar as datas de plantio"
+relacionadoUrl: "/horta/"
+relacionadoTitulo: "Horta em pequenos espaços"
+relacionadoDescricao: "Veja o que plantar conforme a luz e o espaço de vasos, varandas e canteiros."
+relacionadoImagem: "/imagens/artigos/horta-colheita-escalonada.webp"
 status: "publicado"
 ---
 **Uma horta para consumo da família não precisa produzir tudo de uma vez.** O segredo é combinar espaço, espécies que a casa realmente consome e plantios escalonados: enquanto um lote cresce, outro está sendo colhido e um terceiro pode ser iniciado. Isso distribui o trabalho e reduz a concentração de colheitas, sem eliminar imprevistos.
