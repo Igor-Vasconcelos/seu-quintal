@@ -267,3 +267,47 @@
     grid-template-columns: repeat(2,minmax(0,1fr));
   }
 }
+
+/* Calibração da altura visual a partir de captura Playwright real (1440 px).
+   Seletores mais específicos impedem que estilos legados expandam o hero. */
+@media (min-width: 768px) {
+  .pagina-home main .home-abertura .home-miolo.home-abertura-grade {
+    min-height: 16.2rem;
+    height: 16.2rem;
+    padding-block: .8rem 1.9rem;
+  }
+  .pagina-home main .home-abertura .home-abertura-texto {
+    max-width: min(74rem, 100%);
+  }
+  .pagina-home main .home-abertura h1#titulo-home {
+    max-width: none;
+    font-size: clamp(2.2rem, 3.35vw, 3.25rem);
+    line-height: 1.05;
+    letter-spacing: -.022em;
+  }
+  .pagina-home main .home-abertura .home-abertura-texto > p {
+    max-width: 65ch; margin-top: .45rem;
+    font-size: 1.03rem; line-height: 1.35;
+  }
+  .pagina-home main .home-abertura .home-hero-selo {
+    margin-bottom: .32rem; min-height: 1.9rem;
+  }
+  .pagina-home main .home-abertura .home-beneficios {
+    margin-top: .65rem; gap: .5rem;
+  }
+  .pagina-home main .home-abertura .home-beneficios span {
+    min-height: 2.15rem; padding: .35rem .75rem;
+    font-size: .76rem;
+  }
+}
+@media (max-width: 767px) {
+  .pagina-home main .home-abertura .home-miolo.home-abertura-grade {
+    height: auto; min-height: 22.5rem;
+    padding-block: 1.5rem 2.3rem;
+  }
+  .pagina-home main .home-abertura h1#titulo-home {
+    font-size: clamp(2rem, 8.5vw, 2.65rem);
+    max-width: 24ch;
+    line-height: 1.08;
+  }
+}
