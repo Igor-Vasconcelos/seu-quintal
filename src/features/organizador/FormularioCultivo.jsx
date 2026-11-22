@@ -3,6 +3,7 @@ import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas
 import { descreverEpocaPlantio, fontePlantio } from "../../data/plantio.js";
 import { formatarMedida } from "../planejador/geometria.js";
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
+import { categoriasCulturas, gruposCulturas } from "./catalogoCulturas.js";
 import { dimensionarLote, formularioInicial, janelaDeDatas, lerPlano, projetarLote, situacaoDoPlantio } from "./escala.js";
 
 function Quantidade({ nome, rotulo, valor, mudar }) {
@@ -27,7 +28,8 @@ function GuiaDoCultivo({ plano }) {
     <details className="organizador-detalhes">
       <summary>Como plantar, cuidar e colher</summary>
       <dl className="organizador-guia">
-        <div><dt>Começo</dt><dd>{comoComecar}</dd></div>
+        <div><dt>Como começar</dt><dd>{comoComecar}</dd></div>
+        <div><dt>Orientação da cultura</dt><dd>{ficha.plantio}</dd></div>
         <div><dt>Espaçamento usado no plano</dt><dd>{fileiras} cm entre fileiras e {plantas} cm entre plantas.</dd></div>
         <div><dt>Cuidados</dt><dd>{ficha.cuidados}</dd></div>
         <div><dt>Ponto de colheita</dt><dd>{dados.ponto}</dd></div>
@@ -136,7 +138,11 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
           <div className="organizador-campos">
             <label className="campo">Cultura
               <select name="cultura" value={campos.cultura} onChange={mudarCultura}>
-                {Object.keys(culturasOrganizador).map((nome) => <option key={nome}>{nome}</option>)}
+                {categoriasCulturas.map(grupo => (
+                  <optgroup key={grupo} label={grupo}>
+                    {gruposCulturas[grupo].map(nome => <option key={nome} value={nome}>{nome}</option>)}
+                  </optgroup>
+                ))}
               </select>
             </label>
             <label className="campo">Como vai começar?
@@ -155,6 +161,11 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
               </span>
             </label>
           </div>
+          <p className="organizador-dica-rapida">
+            <strong>Cuidados com {campos.cultura}</strong>
+            <span>{buscaFichaCultura(campos.cultura)?.cuidados}</span>
+            <small>Confira as orientações e as fontes completas na previsão ao lado (ou abaixo, no celular).</small>
+          </p>
           <fieldset className="organizador-meta">
             <legend>Quanto quer colher por semana?</legend>
             <p className="nota">Informe a meta em {ficha.unidade}.</p>
