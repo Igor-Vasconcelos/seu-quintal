@@ -38,7 +38,12 @@ export function readArticle(source, file) {
   for (const key of REQUIRED) if (!meta[key]) throw new Error("Metadado ausente em " + file + ": " + key);
   if (!["publicado", "rascunho"].includes(meta.status)) throw new Error("Status inválido: " + meta.status);
   pathOnly(meta.imagem);
-  pathOnly(meta.ferramentaUrl);
+  // Permite âncoras públicas verificadas em ferramentas, sem permitir URLs externas arbitrárias.
+  const [rotaFerramenta, ancoraFerramenta, excesso] = meta.ferramentaUrl.split("#");
+  pathOnly(rotaFerramenta);
+  if (excesso !== undefined || (ancoraFerramenta && !/^[a-z0-9_-]+$/.test(ancoraFerramenta))) {
+    throw new Error("Âncora de ferramenta inválida: " + meta.ferramentaUrl);
+  }
   // Datas editoriais são fornecidas explicitamente pelo autor, nunca inferidas do build.
   for (const campo of ["dataPublicacao", "dataAtualizacao"]) {
     if (!meta[campo]) continue;
@@ -59,7 +64,13 @@ export function readArticle(source, file) {
 }
 
 function linkTarget(value, prefix) {
-  if (value.startsWith("/")) return prefix + pathOnly(value).slice(1);
+  if (value.startsWith("/")) {
+    const [rota, ancora, excesso] = value.split("#");
+    if (excesso !== undefined || (ancora && !/^[a-z0-9_-]+$/.test(ancora))) {
+      throw new Error("Âncora inválida: " + value);
+    }
+    return prefix + pathOnly(rota).slice(1) + (ancora ? "#" + ancora : "");
+  }
   if (/^https:\/\/[^\s"'<>]+$/.test(value)) return value;
   if (/^#[a-z0-9_-]+$/.test(value)) return value;
   throw new Error("Link não suportado: " + value);
