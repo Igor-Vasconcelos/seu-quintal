@@ -11,6 +11,7 @@ const rotas = [
   ["guias", "/guias/"],
   ["horta", "/horta/"],
   ["canteiros", "/horta/canteiros/"],
+  ["calendario", "/horta/calendario-de-plantio/"],
   ["organizador", "/horta/organizador/"],
   ["meu-quintal", "/meu-quintal/"],
   ["artigos", "/artigos/"],
@@ -49,6 +50,10 @@ try {
           path: PASTA + "/" + slug + "-" + nome + ".png",
           animations: "disabled",
         });
+      }
+      if (["canteiros","calendario","organizador","codornas","peixes","pomar"].includes(slug)) {
+        assert.equal(await pagina.locator('.ferramenta-meta span').count(),3,
+          "Ferramenta deve apresentar 3 características claras");
       }
       if (slug === "home" && nome === "celular") {
         const menu = pagina.locator(".menu-alternar");
