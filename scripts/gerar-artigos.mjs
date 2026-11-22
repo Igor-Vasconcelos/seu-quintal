@@ -39,8 +39,21 @@ export function readArticle(source, file) {
   if (!["publicado", "rascunho"].includes(meta.status)) throw new Error("Status inválido: " + meta.status);
   pathOnly(meta.imagem);
   pathOnly(meta.ferramentaUrl);
-  if (meta.dataPublicacao && !/^\d{4}-\d{2}-\d{2}$/.test(meta.dataPublicacao)) {
-    throw new Error("Data inválida em " + file);
+  // Datas editoriais são fornecidas explicitamente pelo autor, nunca inferidas do build.
+  for (const campo of ["dataPublicacao", "dataAtualizacao"]) {
+    if (!meta[campo]) continue;
+    const data = meta[campo];
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data) ||
+      !Number.isFinite(Date.parse(data + "T00:00:00Z")) ||
+      new Date(data + "T00:00:00Z").toISOString().slice(0, 10) !== data) {
+      throw new Error("Data editorial inválida em " + file + ": " + campo);
+    }
+  }
+  if (meta.dataAtualizacao && !meta.dataPublicacao) {
+    throw new Error("Informe dataPublicacao antes de dataAtualizacao em " + file);
+  }
+  if (meta.dataAtualizacao && meta.dataAtualizacao < meta.dataPublicacao) {
+    throw new Error("dataAtualizacao anterior à publicação em " + file);
   }
   return { ...meta, markdown: match[2] };
 }
@@ -106,6 +119,54 @@ export function renderMarkdown(markdown, prefix) {
   return { html: output.join("\n"), headings };
 }
 
+
+/**
+ * FAQPage é opcional: extraímos apenas perguntas e respostas visíveis no Markdown.
+ * Sintaxe: ## Perguntas frequentes; ### Pergunta?; parágrafo da resposta.
+ * Nunca inventa FAQ e não promete rich snippets (descontinuados pelo Google).
+ */
+export function extractFaqs(markdown) {
+  const linhas = markdown.replace(/\r\n/g, "\n").split("\n");
+  let naSecao = false;
+  let encontrouSecao = false;
+  let pergunta = null;
+  let resposta = [];
+  const faqs = [];
+  const limpar = texto => texto.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1").replace(/\*([^*]+)\*/g, "$1")
+    .replace(/\s+/g, " ").trim();
+  function concluir() {
+    if (!pergunta) return;
+    const texto = limpar(resposta.join(" "));
+    if (!texto) throw new Error("Pergunta frequente sem resposta: " + pergunta);
+    faqs.push({ pergunta: limpar(pergunta), resposta: texto });
+    pergunta = null;
+    resposta = [];
+  }
+  for (const linha of linhas) {
+    if (/^##\s/.test(linha)) {
+      if (naSecao) concluir();
+      naSecao = /^##\s+perguntas frequentes\s*$/i.test(linha.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+      encontrouSecao ||= naSecao;
+      continue;
+    }
+    if (!naSecao) continue;
+    const sub = linha.match(/^###\s+(.+)$/);
+    if (sub) {
+      concluir();
+      pergunta = sub[1].trim();
+      if (!pergunta.endsWith("?")) throw new Error("FAQ precisa conter pergunta visível: " + pergunta);
+      continue;
+    }
+    if (!linha.trim()) continue;
+    if (!pergunta) throw new Error("Texto solto antes da primeira pergunta da FAQ");
+    resposta.push(linha.trim());
+  }
+  if (naSecao) concluir();
+  if (encontrouSecao && !faqs.length) throw new Error("Seção Perguntas frequentes sem perguntas e respostas");
+  return faqs;
+}
+
 function layout({ title, description, path, prefix, body, image, kind = "website", extraHead = "" }) {
   const nav = '<a href="' + prefix + '">Início</a><a href="' + prefix + 'horta/">Horta</a>' +
     '<a href="' + prefix + '#ferramentas">Ferramentas</a>' +
@@ -122,7 +183,10 @@ function layout({ title, description, path, prefix, body, image, kind = "website
     '<meta property="og:title" content="' + escapeHtml(title) + '">',
     '<meta property="og:description" content="' + escapeHtml(description) + '">',
     '<meta property="og:url" content="' + ORIGIN + path + '">',
+    '<meta property="og:locale" content="pt_BR">',
     image ? '<meta property="og:image" content="' + ORIGIN + image + '">' : "",
+    image ? '<meta property="og:image:alt" content="' + escapeHtml(title) + '">' : "",
+    image ? '<meta name="twitter:card" content="summary_large_image">' : "",
     '<link rel="icon" href="' + prefix + 'favicon.svg" type="image/svg+xml">',
     '<script type="module" src="' + prefix + 'src/main-artigos.js"></script>', extraHead,
     '</head><body class="sq-artigos"><a class="sq-skip" href="#conteudo">Pular para o conteúdo</a>',
@@ -165,14 +229,27 @@ function renderArticle(article) {
     '<p class="sq-back"><a href="../">Ver todos os artigos</a></p>';
   const structured = {
     "@context": "https://schema.org", "@type": "BlogPosting", headline: article.titulo,
-    description: article.descricao, mainEntityOfPage: ORIGIN + path,
+    description: article.descricao, url: ORIGIN + path, mainEntityOfPage: ORIGIN + path,
+    image: ORIGIN + article.imagem, inLanguage: "pt-BR",
     author: { "@type": "Organization", name: article.autor },
+    publisher: { "@type": "Organization", name: "Seu Quintal", url: ORIGIN + "/" },
   };
   if (article.dataPublicacao) structured.datePublished = article.dataPublicacao;
-  const json = JSON.stringify(structured).replace(/</g, "\\u003c");
+  if (article.dataAtualizacao) structured.dateModified = article.dataAtualizacao;
+  // FAQ publicada apenas quando as perguntas e respostas constarem no HTML.
+  const faq = extractFaqs(article.markdown);
+  const schemas = [structured];
+  if (faq.length) schemas.push({
+    "@context": "https://schema.org", "@type": "FAQPage",
+    mainEntity: faq.map(item => ({
+      "@type": "Question", name: item.pergunta,
+      acceptedAnswer: { "@type": "Answer", text: item.resposta },
+    })),
+  });
+  const extraHead = schemas.map(schema => '<script type="application/ld+json">' +
+    JSON.stringify(schema).replace(/</g, "\\u003c") + "</script>").join("\n");
   return layout({ title: article.titulo, description: article.descricao, path, prefix, body,
-    image: article.imagem, kind: "article",
-    extraHead: '<script type="application/ld+json">' + json + "</script>" });
+    image: article.imagem, kind: "article", extraHead });
 }
 
 function categoryId(text) {
