@@ -39,8 +39,8 @@ export default function App() {
         <section className="home-abertura" aria-labelledby="titulo-home">
           <div className="home-miolo home-abertura-grade">
             <div className="home-abertura-texto">
-              <span className="home-hero-selo"><Icone nome="muda"/> SEU ESPAÇO, SUAS POSSIBILIDADES</span>
-              <h1 id="titulo-home">Aprenda, planeje e cultive <em>seu espaço.</em></h1>
+              <span className="home-hero-selo"><Icone nome="muda"/> SEU QUINTAL, SUAS POSSIBILIDADES</span>
+              <h1 id="titulo-home">Cultive seu espaço, <em>do primeiro vaso ao sítio.</em></h1>
               <p>Da primeira muda ao seu sítio: artigos confiáveis, ferramentas gratuitas e planejamento para aproveitar melhor o espaço que você tem.</p>
               <div className="home-acoes">
                 <a className="botao" href="#ferramentas">
@@ -60,6 +60,76 @@ export default function App() {
                 alt="Canteiro de madeira com alfaces verdes e roxas, cebolinha e um vaso de temperos." fetchPriority="high" />
             </figure>
           </div>
+        </section>
+
+
+        <nav className="home-trilhas home-miolo" aria-label="Explorar assuntos">
+          <a href="./artigos/" className="home-trilha-atual"><Icone nome="muda" /> Todos os conteúdos</a>
+          <a href="./horta/"><Icone nome="muda" /> Horta</a>
+          <a href="./ferramentas/calculadora-peixes/"><Icone nome="peixe" /> Peixes</a>
+          <a href="./sisteminha.html#galinheiro"><Icone nome="planta" /> Aves</a>
+          <a href="./ferramentas/calculadora-codornas/">Codornas</a>
+          <a href="./ferramentas/planejador-de-pomar/"><Icone nome="arvore" /> Pomar</a>
+          <a href="./guias/compostagem/">Compostagem</a>
+          <a href="./guias/irrigacao/">Irrigação</a>
+          <a href="./meu-quintal/">Planejamento</a>
+          <a href="./sisteminha.html">Sisteminha</a>
+        </nav>
+
+        <section className="home-editorial home-miolo" id="guias" aria-label="Guias, artigos e ferramentas">
+          <div className="home-editorial-coluna">
+            <section aria-labelledby="titulo-guias">
+              <div className="home-secao-topo">
+                <div>
+                  <h2 id="titulo-guias"><Icone nome="muda" /> Comece por aqui</h2>
+                  <p className="home-secao-descricao">Guias práticos para aprender, planejar e colocar a mão na terra.</p>
+                </div>
+                <a className="home-link" href="./guias/">Ver todos os guias <Icone nome="seta" /></a>
+              </div>
+              <CartoesGuias itens={guias.slice(0, 4)} />
+            </section>
+            <section className="home-editorial-artigos" id="artigos" aria-labelledby="titulo-artigos">
+              <div className="home-secao-topo">
+                <div>
+                  <h2 id="titulo-artigos"><Icone nome="muda" /> Artigos mais recentes</h2>
+                  <p className="home-secao-descricao">Dúvidas do dia a dia e soluções para seu quintal.</p>
+                </div>
+                <a className="home-link" href="./artigos/">Ver todos os artigos <Icone nome="seta" /></a>
+              </div>
+              <ul className="home-artigos-grade">
+                {artigosPublicados.slice(0, 4).map((artigo) => (
+                  <li key={artigo.slug}>
+                    <a className="home-artigo-cartao" href={`./artigos/${artigo.slug}/`}>
+                      <img src={`.${artigo.imagem}`} width="792" height="446" alt="" loading="lazy" />
+                      <div>
+                        <span className="home-artigo-categoria">{artigo.categoria}</span>
+                        <h3>{artigo.titulo}</h3>
+                        <p>{artigo.descricao}</p>
+                        <span className="home-artigo-acao">Ler artigo <Icone nome="seta" /></span>
+                      </div>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
+          <aside className="home-editorial-ferramentas" aria-labelledby="titulo-ferramentas-rapidas">
+            <h2 id="titulo-ferramentas-rapidas"><Icone nome="planta" /> Ferramentas para aplicar</h2>
+            <p>Planeje, calcule e organize sua produção com ferramentas gratuitas.</p>
+            <ul>
+              {[
+                { titulo: "Planejador de canteiros", descricao: "Organize suas culturas.", href: "./horta/canteiros/" },
+                { titulo: "Calendário de plantio", descricao: "Saiba o que plantar.", href: "./horta/calendario-de-plantio/" },
+                { titulo: "Calculadora de peixes", descricao: "Volume e planejamento.", href: "./ferramentas/calculadora-peixes/" },
+                { titulo: "Calculadora de codornas", descricao: "Ovos, corte e consumo.", href: "./ferramentas/calculadora-codornas/" },
+                { titulo: "Planejador de pomar", descricao: "Espaçamento e frutíferas.", href: "./ferramentas/planejador-de-pomar/" },
+                { titulo: "Meu Quintal", descricao: "Organize sua propriedade.", href: "./meu-quintal/" },
+              ].map(item => (
+                <li key={item.href}><a href={item.href}><span><strong>{item.titulo}</strong><small>{item.descricao}</small></span><Icone nome="seta" /></a></li>
+              ))}
+            </ul>
+            <a className="botao" href="./ferramentas/">Ver todas as ferramentas <Icone nome="seta" /></a>
+          </aside>
         </section>
 
         <section className="home-miolo home-secao" aria-labelledby="titulo-atalhos">
@@ -101,55 +171,6 @@ export default function App() {
               ou <a href="./ferramentas/planejador-de-pomar/">planejar o espaço das frutíferas</a> —
               gratuito e sem cadastro.</p>
           </div>
-        </section>
-
-        <section className="home-miolo home-secao" id="guias" aria-labelledby="titulo-guias" tabIndex={-1}>
-          <div className="home-secao-topo">
-            <h2 id="titulo-guias">Guias para cultivar</h2>
-            <a className="home-link" href="./guias/">Ver todos os guias <Icone nome="seta" /></a>
-          </div>
-          <CartoesGuias itens={guias.slice(0, 3)} />
-          <p className="nota">Quer aprender mais? <a href="./artigos/">Leia nossos artigos sobre horta, animais e planejamento.</a></p>
-          <div className="home-temas" id="categorias" tabIndex={-1}>
-            <h3>Explore por assunto</h3>
-            <ul className="home-categorias">
-              {guias.map((guia) => (
-                <li key={guia.id}>
-                  <a href={`./${guia.destino}`}>
-                    <span className="categoria-simbolo" aria-hidden="true">{guia.simbolo}</span>
-                    <span>{guia.assunto}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        <section className="home-miolo home-secao home-artigos" id="artigos" aria-labelledby="titulo-artigos" tabIndex={-1}>
-          <div className="home-secao-topo">
-            <div>
-              <p className="home-sobretitulo">CONHECIMENTO QUE VIRA AÇÃO</p>
-              <h2 id="titulo-artigos">Aprenda com nossos artigos</h2>
-              <p className="home-secao-descricao">Respostas práticas para começar e cuidar melhor da sua produção.</p>
-            </div>
-            <a className="home-link" href="./artigos/">Ver todos os artigos <Icone nome="seta" /></a>
-          </div>
-          <ul className="home-artigos-grade">
-            {artigosPublicados.slice(0, 3).map((artigo) => (
-              <li key={artigo.slug}>
-                <a className="home-artigo-cartao" href={`./artigos/${artigo.slug}/`}>
-                  <img src={`.${artigo.imagem}`} width="792" height="446"
-                    alt="" loading="lazy" />
-                  <div>
-                    <span className="home-artigo-categoria">{artigo.categoria}</span>
-                    <h3>{artigo.titulo}</h3>
-                    <p>{artigo.descricao}</p>
-                    <span className="home-artigo-acao">Ler artigo <Icone nome="seta" /></span>
-                  </div>
-                </a>
-              </li>
-            ))}
-          </ul>
         </section>
 
         <section className="home-miolo home-secao home-projetos" aria-label="Projetos para o quintal">
