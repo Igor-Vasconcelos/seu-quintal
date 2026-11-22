@@ -3,6 +3,7 @@ import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
 import { buscarCulturas, categoriasCulturas } from "./catalogoCulturas.js";
 import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas.js";
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import IconeCultura from "./IconeCultura.jsx";
 import { nomeCurtoDaCultura } from "./culturasVisuais.js";
 import { adicionarCanteiro, colecaoInicial, gravarColecaoCanteiros, lerColecaoCanteiros,
@@ -458,6 +459,7 @@ export default function PlanejadorVisualCanteiro() {
                 <p><b>Plantio:</b> {orientacaoCultura.plantio}</p>
                 <p><b>Cuidados:</b> {orientacaoCultura.cuidados}</p>
                 <p><b>Colheita:</b> {orientacaoCultura.colheita}</p>
+                <ValorAlimentar nome={cultura} compacto/>
                 <a href={fonteFichaCultura(orientacaoCultura.pagina)} target="_blank" rel="noopener noreferrer">
                   Ver ficha técnica da Embrapa/Sebrae
                 </a>

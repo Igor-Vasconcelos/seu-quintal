@@ -1,3 +1,4 @@
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import { useState } from "react";
 import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas.js";
 import { descreverEpocaPlantio, fontePlantio } from "../../data/plantio.js";
@@ -34,6 +35,7 @@ function GuiaDoCultivo({ plano }) {
         <div><dt>Cuidados</dt><dd>{ficha.cuidados}</dd></div>
         <div><dt>Ponto de colheita</dt><dd>{dados.ponto}</dd></div>
       </dl>
+      <ValorAlimentar nome={plano.cultura} compacto/>
       <ul className="organizador-fontes">
         <li><a href={fonteFichaCultura(ficha.pagina)} target="_blank" rel="noreferrer">Embrapa e Sebrae · Ficha da cultura</a></li>
         <li><a href={fonteEscalonamento} target="_blank" rel="noreferrer">Embrapa · Plantio em lotes e espaçamento</a></li>

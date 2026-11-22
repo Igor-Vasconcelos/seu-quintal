@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ValorAlimentar from "../../components/ValorAlimentar.jsx";
 import Icone from "../../components/Icone.jsx";
 import { especiesPomar, fontePomar, planejarPomar } from "./geometriaPomar.js";
 
@@ -161,6 +162,7 @@ export default function PlanejadorPomar() {
           ? "Espaçamento inicial meramente ilustrativo. Defina os valores com informação da espécie e cultivar."
           : "Espaçamento inicial extraído de um exemplo de pomar do Sistema Filho, Embrapa. Ajuste após verificar cultivar, condução, clima e solo."}</p>
       </fieldset>
+      <ValorAlimentar nome={padrao.nome}/>
       {erro && <p className="erro" role="alert">{erro}</p>}
       <button type="submit" className="botao simulador-calcular">Desenhar meu pomar <Icone nome="seta"/></button>
     </form>
