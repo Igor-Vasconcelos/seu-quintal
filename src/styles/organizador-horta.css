@@ -364,3 +364,8 @@
   .organizador-atividade-data { grid-column: 1 / -1; }
   .organizador-secao-cabecalho { align-items: start; }
 }
+
+/* Informação acionável durante o preenchimento, não escondida no resumo. */
+.organizador-dica-rapida { display: grid; gap: .3rem; padding: .7rem .8rem; background: var(--sq-surface-soft); color: var(--sq-forest); border-inline-start: 3px solid var(--sq-primary); border-radius: .35rem; line-height: 1.45; font-size: .85rem; }
+.organizador-dica-rapida strong { font-size: .9rem; }
+.organizador-dica-rapida small { color: var(--sq-text-muted); font-size: .77rem; }
