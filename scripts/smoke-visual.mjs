@@ -185,6 +185,7 @@ try {
         await planejamento.locator("input[type=search]").fill("");
         await planejamento.getByRole("button", {name:"Temperos",exact:true}).click();
         assert.equal(await planejamento.locator(".familia-cultura-opcao").count(),3);
+        await planejamento.getByText("Guia rápido: Cebolinha").waitFor({ state: "visible" });
         await pagina.locator(".organizador-form select[name=cultura]").selectOption("Morango");
         assert.equal(await pagina.locator(".organizador-form select[name=origem]").inputValue(), "muda",
           "Morango precisa começar por muda pronta");
