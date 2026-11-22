@@ -45,7 +45,7 @@ export function formularioInicial(plano, culturaSugerida) {
   const cultura = Object.hasOwn(culturasOrganizador, escolha) ? escolha : "Alface de verão";
   const ficha = culturasOrganizador[cultura];
   const iniciais = {
-    cultura, origem: "semente", inicio: hojeCivil(), canteiro: "", canteiroId: "",
+    cultura, origem: ficha.somenteMuda ? "muda" : "semente", inicio: hojeCivil(), canteiro: "", canteiroId: "",
     casa: ficha.unidade === "kg" ? .5 : 4, venda: 0, intervalo: ficha.colheitasSucessivas ? 4 : 1,
     rendimento: null, duracao: null, teste: 2,
   };
@@ -89,7 +89,7 @@ export function lerPlano(campos) {
 
   return {
     plano: {
-      cultura: campos.cultura, origem: ficha.mudas && campos.origem === "muda" ? "muda" : "semente",
+      cultura: campos.cultura, origem: ficha.somenteMuda || (ficha.mudas && campos.origem === "muda") ? "muda" : "semente",
       inicio: campos.inicio, canteiro: campos.canteiro.trim(), canteiroId: campos.canteiroId || "", casa, venda, intervalo,
       rendimento, duracao, teste: rendimento ? 2 : teste,
     },
