@@ -25,13 +25,20 @@ test("O backup mantém contrato e confirma substituição antes de restaurar",()
  assert.match(jsx,/window\.location\.reload/);
  assert.match(jsx,/dados não são enviados para um servidor/);
 });
-test("O painel v3 muda apenas disposição e possui alternativa mobile",()=>{
- const css=read("src/styles/workspace-v3.css");
- assert.match(css,/grid-template-areas/);
- assert.match(css,/max-width: 1020px/);
- assert.match(css,/max-width: 700px/);
- assert.match(css,/prefers-reduced-motion/);
- assert.match(css,/scroll-snap-type/);
- assert.doesNotMatch(css,/(?:^|\n)\s*(?:input|button|\.planta-item)\s*\{/);
- assert.match(read("src/main-quintal.jsx"),/workspace-v3.css/);
+test("O workspace preserva o layout base e a navegação mobile não depende de scroll horizontal",()=>{
+ const cssBase=read("src/styles/workspace-v3.css");
+ const cssNovo=read("src/styles/quintal-workspace-v4.css");
+ assert.match(cssBase,/grid-template-areas/);
+ assert.match(cssBase,/max-width: 1020px/);
+ assert.match(cssNovo,/max-width: 1023px/);
+ assert.match(cssNovo,/max-width: 700px/);
+ assert.match(cssNovo,/prefers-reduced-motion/);
+ assert.match(cssNovo,/quintal-secoes-links/);
+ assert.match(cssNovo,/data-menu-recolhido/);
+ assert.match(cssNovo,/grid-template-columns: repeat\(2,minmax\(0,1fr\)\)/);
+ assert.doesNotMatch(cssNovo,/scroll-snap-type/);
+ assert.doesNotMatch(cssNovo,/(?:^|\n)\s*(?:input|button|\.planta-item)\s*\{/);
+ const entrada=read("src/main-quintal.jsx");
+ assert.match(entrada,/workspace-v3.css/);
+ assert.match(entrada,/quintal-workspace-v4.css/);
 });
