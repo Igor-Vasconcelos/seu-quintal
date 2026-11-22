@@ -145,15 +145,29 @@ try {
         await escolha.locator(".horta-campo-escolha").first().getByRole("button",{name:/Varanda/}).click();
         assert.match(await escolha.locator(".horta-estado-inicial").innerText(), /horas de sol/);
         await escolha.locator(".horta-campo-escolha").nth(1).getByRole("button",{name:/6 horas ou mais/}).click();
-        assert.equal(await escolha.locator(".horta-culturas li").count(),3);
-        for(const imagem of await escolha.locator(".horta-culturas img").all()) {
+        const principais = escolha.locator(".horta-recomendacoes > ul.horta-culturas");
+        assert.equal(await principais.locator("li").count(),4,
+          "Varanda com sol pleno deve mostrar quatro boas opções iniciais");
+        assert.equal(await escolha.locator(".horta-outras-condicoes").count(),1,
+          "Mais horas de sol devem oferecer possibilidades de meia-sombra com ressalvas");
+        await escolha.locator(".horta-outras-condicoes summary").click();
+        await escolha.locator(".horta-outras-condicoes").getByText("Alface", {exact:true}).waitFor();
+        for(const imagem of await principais.locator("img").all()) {
           await imagem.scrollIntoViewIfNeeded();
           assert.ok(await imagem.evaluate(img => img.decode().then(() => img.naturalWidth > 0).catch(() => false)),
             "Foto recomendada não carregou");
         }
         await pagina.screenshot({path:PASTA + "/horta-recomendacoes-" + nome + ".png",animations:"disabled"});
-        await pagina.locator(".horta-secao-botao").nth(1).click();
+        await principais.getByRole("button",{name:/Calcular terra para Tomate-cereja/}).click();
+        await pagina.locator(".horta-cultivo-selecionado").getByText("Exemplo para Tomate-cereja").waitFor();
+        assert.match(await pagina.locator(".horta-cultivo-selecionado").innerText(),/terra molhada/);
+        await pagina.screenshot({path:PASTA + "/horta-exemplo-planta-" + nome + ".png",animations:"disabled"});
         const form = pagina.locator(".form-terra");
+        assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"45");
+        assert.match(await pagina.locator(".horta-resultado-volume").innerText(), /91,125/);
+        await pagina.locator(".horta-cultivo-selecionado").getByRole("button",{name:"Voltar às plantas"}).click();
+        assert.equal(await principais.locator("li").count(),4);
+        await pagina.locator(".horta-secao-botao").nth(1).click();
         await form.getByRole("button",{name:/Jardineira/}).click();
         assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"60");
         await form.locator('select[name="unidade"]').selectOption("m");
@@ -169,7 +183,7 @@ try {
         await form.getByRole("button",{name:"Limpar",exact:true}).click();
         assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"");
         await pagina.locator(".horta-secao-botao").nth(0).click();
-        assert.equal(await escolha.locator(".horta-culturas li").count(),3,
+        assert.equal(await principais.locator("li").count(),4,
           "As escolhas não devem desaparecer ao alternar as ferramentas");
         const excedente = await pagina.evaluate(() =>
           document.documentElement.scrollWidth - document.documentElement.clientWidth);

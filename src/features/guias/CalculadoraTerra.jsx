@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatarMedida } from "../planejador/geometria.js";
 import { calcularTerra, converterMedidaTerra } from "./calculoTerra.js";
 
@@ -16,13 +16,27 @@ const modelos = [
 
 const vazios = { comprimento: "", largura: "", profundidade: "", saco: "" };
 
-export default function CalculadoraTerra() {
+export default function CalculadoraTerra({ sugestaoCultivo = null, voltarParaSugestoes }) {
   const [unidade, definirUnidade] = useState("cm");
   const [valores, definirValores] = useState(vazios);
   const [modelo, definirModelo] = useState("");
   const [resultado, definirResultado] = useState(null);
   const [invalidos, definirInvalidos] = useState([]);
   const [enviou, definirEnviou] = useState(false);
+  const [referenciaAtual, definirReferenciaAtual] = useState(null);
+
+  useEffect(() => {
+    if (!sugestaoCultivo) return;
+    // Só uma ação explícita "Calcular terra para..." deve preencher o exemplo.
+    const valoresIniciais = { ...vazios, ...sugestaoCultivo.medidas };
+    definirUnidade("cm");
+    definirValores(valoresIniciais);
+    definirModelo("");
+    definirResultado(calcularTerra(valoresIniciais, "cm").resultado);
+    definirInvalidos([]);
+    definirEnviou(true);
+    definirReferenciaAtual(sugestaoCultivo);
+  }, [sugestaoCultivo]);
 
   function mudarCampo(nome, valor) {
     definirValores(atuais => ({ ...atuais, [nome]: valor }));
@@ -44,6 +58,7 @@ export default function CalculadoraTerra() {
   }
 
   function selecionarModelo(item) {
+    definirReferenciaAtual(null);
     definirModelo(item.id);
     definirValores(atuais => ({
       ...atuais,
@@ -68,6 +83,7 @@ export default function CalculadoraTerra() {
   }
 
   function limpar() {
+    definirReferenciaAtual(null);
     definirValores(vazios);
     definirModelo("");
     definirResultado(null);
@@ -78,9 +94,19 @@ export default function CalculadoraTerra() {
   return (
     <section id="calculadora-terra" className="horta-calculadora" aria-labelledby="titulo-terra">
       <div className="horta-painel-cabecalho">
-        <h3 id="titulo-terra">Calcule a terra para seu espaço</h3>
+        <h3 id="titulo-terra" tabIndex={-1}>Calcule a terra para seu espaço</h3>
         <p>Escolha um modelo para começar ou informe as medidas internas do recipiente retangular.</p>
       </div>
+      {referenciaAtual && <div className="horta-cultivo-selecionado">
+        <div>
+          <span className="horta-sobretitulo">DA PLANTA PARA O RECIPIENTE</span>
+          <strong>Exemplo para {referenciaAtual.nome}</strong>
+          <p>{referenciaAtual.recipiente}</p>
+          <p className="horta-ajuda">{referenciaAtual.aviso} As medidas foram preenchidas e o volume já foi calculado; você pode ajustá-las.</p>
+        </div>
+        {voltarParaSugestoes && <button type="button" className="horta-limpar"
+          onClick={voltarParaSugestoes}>Voltar às plantas</button>}
+      </div>}
       <div className="horta-calculadora-layout">
         <form noValidate className="form-guia form-terra" onSubmit={calcular}>
           <fieldset className="horta-modelos">

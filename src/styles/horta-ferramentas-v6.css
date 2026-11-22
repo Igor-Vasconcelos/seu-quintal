@@ -154,3 +154,40 @@
 @media (prefers-reduced-motion: reduce) {
   .horta-ferramentas-v2 :is(button,a) { transition: none; }
 }
+
+/* Horta 2.5 — possibilidades por faixa de luz e caminho direto ao volume. */
+.horta-recomendacoes-subtitulo { color: var(--sq-forest); font: 750 1rem/1.4 var(--sq-font-ui); margin: .8rem 0 .55rem; }
+.horta-recomendacoes-status { color: var(--sq-text-muted); font-size: .85rem; line-height: 1.5; margin: -.2rem 0 .85rem; }
+.horta-aviso-luz { padding: .8rem 1rem; border-inline-start: 4px solid var(--sq-primary); border-radius: var(--sq-radius-control); background: var(--sq-surface-warm); font-size: .88rem; line-height: 1.5; margin: .5rem 0 .9rem; }
+.horta-ferramentas-v2 .horta-culturas { grid-template-columns: repeat(auto-fit,minmax(min(100%,14rem),1fr)); }
+.horta-ferramentas-v2 .horta-cultura-card { min-width: 0; display: flex; flex-direction: column; }
+.horta-cultura-ilustracao { min-height: 9rem; display: grid; place-items: center; background: var(--sq-brand-100); }
+.horta-cultura-ilustracao svg { width: min(46%,6.25rem); height: auto; max-height: 6.25rem; }
+.horta-ferramentas-v2 .horta-cultura-texto { display: flex; flex-direction: column; flex: 1; gap: .25rem; }
+.horta-ferramentas-v2 .horta-cultura-texto p { margin: 0 0 .35rem; }
+.horta-calcular-da-planta {
+  margin-top: auto; align-self: stretch; padding: .6rem .3rem; min-height: var(--sq-control-min);
+  text-align: left; border: 0; border-top: 1px solid var(--sq-border);
+  background: transparent; color: var(--sq-primary);
+  cursor: pointer; font: 750 .83rem/1.35 var(--sq-font-ui);
+}
+.horta-calcular-da-planta:hover { text-decoration: underline; text-underline-offset: .2em; }
+.horta-calcular-da-planta span { margin-inline-start: .25rem; }
+.horta-ferramentas-v2 .horta-cultura-texto .horta-cuidado-sol { color: var(--sq-forest); padding: .5rem .6rem; background: var(--sq-surface-warm); border-radius: .45rem; }
+.horta-mais-culturas { margin-block: .6rem 1rem; border: 1px solid var(--sq-border); border-radius: var(--sq-radius-media); background: var(--sq-surface-soft); padding: .1rem .8rem .5rem; }
+.horta-mais-culturas summary { min-height: var(--sq-control-min); display: flex; align-items: center; cursor: pointer; color: var(--sq-primary); font: 750 .91rem/1.4 var(--sq-font-ui); padding: .55rem .2rem; }
+.horta-mais-culturas[open] summary { border-bottom: 1px solid var(--sq-border); margin-bottom: .7rem; }
+.horta-mais-culturas > p { font-size: .85rem; line-height: 1.55; color: var(--sq-text-muted); margin: 0 0 .75rem; }
+.horta-ferramentas-v2 .horta-mais-culturas .horta-culturas { margin-block: .4rem; }
+.horta-cultivo-selecionado { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: .6rem 1rem; background: var(--sq-brand-100); border: 1px solid var(--sq-primary); border-radius: var(--sq-radius-media); padding: .85rem 1rem; margin-bottom: 1rem; }
+.horta-cultivo-selecionado > div { min-width: 0; flex: 1 1 15rem; }
+.horta-cultivo-selecionado strong { display: block; color: var(--sq-forest); font-size: 1.05rem; margin-top: .15rem; }
+.horta-cultivo-selecionado p { margin: .3rem 0 0; font-size: .86rem; line-height: 1.5; }
+.horta-cultivo-selecionado .horta-ajuda { margin-top: .35rem; }
+.horta-ferramentas-v2 :is(.horta-calcular-da-planta,.horta-mais-culturas summary):focus-visible { outline: 3px solid var(--sq-focus); outline-offset: 2px; }
+@media (max-width: 430px) {
+  .horta-ferramentas-v2 .horta-cultura-card { display: flex; }
+  .horta-ferramentas-v2 .horta-culturas { grid-template-columns: minmax(0,1fr); }
+  .horta-ferramentas-v2 .horta-culturas img { height: auto; min-height: 0; }
+  .horta-cultura-ilustracao { min-height: 6.5rem; }
+}
