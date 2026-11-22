@@ -311,3 +311,23 @@
     line-height: 1.08;
   }
 }
+
+
+/* Meu Quintal: o mesmo símbolo amigável da navbar, em emblema de destaque.
+   Não interfere nos ícones de planta em ferramentas ou terreno. */
+.pagina-home .home-meu-quintal-emblema {
+  display: grid;
+  place-items: center;
+  width: clamp(4.75rem, 7vw, 6rem);
+  height: clamp(4.75rem, 7vw, 6rem);
+  margin-bottom: .8rem;
+  border-radius: 50%;
+  color: var(--sq-forest);
+  background: var(--sq-brand-100);
+}
+.pagina-home .home-meu-quintal-emblema .icone {
+  display: block;
+  width: 66%;
+  height: 66%;
+  stroke-width: 1.65;
+}
