@@ -91,7 +91,8 @@ export const culturasOrganizador = {
   },
   Coentro: {
     canteiro: [50, 60], espaco: [0.25, 0.10], unidade: "kg",
-    colheitasSucessivas: true,
+    // Colheita em lote, porém por peso: exige aferição em teste.
+    planejamentoPorPeso: true,
     ponto: "Use folhas tenras antes do florescimento; registre a massa real colhida para planejar novos lotes.",
   },
   Cebolinha: {
