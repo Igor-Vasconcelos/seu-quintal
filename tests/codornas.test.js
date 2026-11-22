@@ -29,7 +29,7 @@ test("codornas: lote de corte considera entrada, sobrevivência e lotes sobrepos
   assert.equal(r.lotesSimultaneos, 2);
   assert.equal(r.avesCorteAlojadas, 64);
   assert.ok(Math.abs(r.carneMesKg - 30 * .26 * .7) < 1e-8);
-  assert.equal(r.racaoMesKg, 64 * 18 * 30 / 1000);
+  assert.ok(Math.abs(r.racaoMesKg - 64 * 18 * 30 / 1000) < 1e-8);
   assert.equal(r.areaReferenciaM2, 6.4);
 });
 
