@@ -10,7 +10,7 @@ const HistoricoCultivo = lazy(() => import("../cultivo/HistoricoCultivo.jsx"));
 const OrganizadorHorta = lazy(() => import("../organizador/OrganizadorHorta.jsx"));
 const PlanejadorVisualCanteiro = lazy(() => import("../organizador/PlanejadorVisualCanteiro.jsx"));
 const secoes = {
-  terreno: { nome: "Terreno", icone: "planta" },
+  terreno: { nome: "Terrenos", icone: "planta" },
   historico: { nome: "Histórico", icone: "historico" },
   horta: { nome: "Agenda da horta", icone: "calendario" },
   canteiros: { nome: "Meus canteiros", icone: "planta" },
@@ -44,15 +44,24 @@ export default function MeuQuintal() {
           <div className="quintal-titulo-texto">
             <span className="quintal-etiqueta"><Icone nome="muda"/> MEU ESPAÇO DE PLANEJAMENTO</span>
             <h1>Meu Quintal</h1>
-            <p>Planeje seu espaço, organize o plantio e registre suas colheitas.</p>
-            <p className="quintal-salvamento"><Icone nome="historico"/>
-              Dados guardados neste navegador. Faça backup para proteger seus projetos.</p>
+            <p>Organize seus terrenos, plantios, canteiros e registros em um só lugar.</p>
           </div>
           <div className="quintal-titulo-acoes">
-            <a className="botao botao-contorno" href="#quintal-backup">
-              <Icone nome="historico"/> Backup e recuperação
-            </a>
-            <a className="home-link" href={raiz}><Icone nome="seta"/> Voltar ao início</a>
+            <p className="quintal-salvamento"><Icone nome="historico"/>
+              Armazenamento neste navegador, sem sincronização automática. Faça backups regularmente.
+            </p>
+            <div className="quintal-acoes-links">
+              <button className="botao botao-contorno" type="button" onClick={() => {
+                const painel = document.getElementById("quintal-backup");
+                if (!painel) return;
+                painel.open = true;
+                painel.scrollIntoView({ block: "start" });
+                painel.querySelector("summary")?.focus();
+              }}>
+                <Icone nome="historico"/> Fazer backup
+              </button>
+              <a className="home-link" href={raiz}><Icone nome="seta"/> Voltar ao início</a>
+            </div>
           </div>
         </header>
         <nav className="quintal-secoes" aria-label="Ferramentas do Meu Quintal">
@@ -68,9 +77,6 @@ export default function MeuQuintal() {
           Seção selecionada: {secoes[secao].nome}
         </p>
         <div className="quintal-ferramenta" id="quintal-ferramenta">
-          <div className="quintal-ferramenta-topo" aria-hidden="true">
-            <span>ÁREA DE TRABALHO</span><strong>{secoes[secao].nome}</strong>
-          </div>
           <LimiteDaFerramenta key={secao}>
             <Suspense fallback={<p role="status">Carregando ferramenta…</p>}>
               {secao === "terreno" && <PlanejadorQuintal />}
