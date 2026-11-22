@@ -69,7 +69,7 @@ export default function App() {
           <a href="./ferramentas/calculadora-peixes/"><Icone nome="peixe" /> Peixes</a>
           <a href="./sisteminha.html#galinheiro"><Icone nome="planta" /> Aves</a>
           <a href="./ferramentas/calculadora-codornas/">Codornas</a>
-          <a href="./ferramentas/planejador-de-pomar/"><Icone nome="arvore" /> Pomar</a>
+          <a href="./ferramentas/planejador-de-pomar/"><Icone nome="arvores" /> Pomar</a>
           <a href="./guias/compostagem/">Compostagem</a>
           <a href="./guias/irrigacao/">Irrigação</a>
           <a href="./meu-quintal/">Planejamento</a>
