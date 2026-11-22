@@ -60,6 +60,16 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
   const mostrarDestaques = !busca.trim() && categoria === "Todas";
   const outrasCulturas = resultadosBusca.filter(nome => !mostrarDestaques || !destaquesCulturas.includes(nome));
   const orientacao = buscaFichaCultura(culturaDetalhe);
+  function pesquisar(texto) {
+    definirBusca(texto);
+    const primeira = buscarCulturas(texto, categoria)[0];
+    if (primeira) definirCulturaDetalhe(primeira);
+  }
+  function filtrar(grupo) {
+    definirCategoria(grupo);
+    const primeira = buscarCulturas(busca, grupo)[0];
+    if (primeira) definirCulturaDetalhe(primeira);
+  }
 
 
   function selecionar(nome, marcado) {
@@ -135,7 +145,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
           <p className="nota">Escolha as hortaliças e temperos que sua família realmente utiliza. Use a busca para encontrar novas opções e consulte as dicas antes de planejar o plantio.</p>
           <div className="familia-busca-cabecalho">
             <label className="campo">Buscar cultura
-              <input type="search" value={busca} onChange={e => definirBusca(e.target.value)}
+              <input type="search" value={busca} onChange={e => pesquisar(e.target.value)}
                 placeholder="Ex.: brócolis, pepino, salsa…" />
             </label>
             <p role="status" className="nota">{todasCulturas.length} culturas disponíveis · {selecionadas.length} selecionadas</p>
@@ -143,7 +153,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
           <div className="familia-filtros" role="group" aria-label="Filtrar por tipo de hortaliça">
             {["Todas", ...categoriasCulturas].map(nome => (
               <button type="button" key={nome} className="familia-filtro" aria-pressed={categoria === nome}
-                onClick={() => definirCategoria(nome)}>{nome}</button>
+                onClick={() => filtrar(nome)}>{nome}</button>
             ))}
           </div>
           {mostrarDestaques && <div className="familia-grupo">
