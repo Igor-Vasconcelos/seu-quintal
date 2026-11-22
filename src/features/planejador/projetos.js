@@ -5,28 +5,66 @@ export const chaveProjetos = "seu-quintal:projetos-terreno:v1";
 // Catálogo único do terreno. Apenas a chave de tipo é persistida;
  // ícones, categorias e dimensões iniciais podem evoluir sem migrar dados.
 export const tiposDeArea = {
+  // Cultivos
   canteiro: { nome: "Canteiro", largura: 1.2, comprimento: 3, cor: "horta", icone: "canteiro", grupo: "cultivo" },
-  casa: { nome: "Casa", largura: 8, comprimento: 10, cor: "construcao", icone: "casa", grupo: "construcao" },
-  acesso: { nome: "Acesso para caminhão", largura: 4, comprimento: 12, cor: "caminho", icone: "caminho", grupo: "construcao" },
-  manobra: { nome: "Área de manobra", largura: 8, comprimento: 8, cor: "caminho", icone: "manobra", grupo: "construcao" },
-  pomar: { nome: "Pomar", largura: 8, comprimento: 8, cor: "pomar", icone: "arvores", grupo: "cultivo" },
   horta: { nome: "Horta", largura: 4, comprimento: 6, cor: "horta", icone: "horta", grupo: "cultivo" },
-  tanque: { nome: "Tanque de peixes", largura: 5, comprimento: 5, cor: "agua", icone: "tanque", grupo: "animais" },
+  pomar: { nome: "Pomar", largura: 8, comprimento: 8, cor: "pomar", icone: "arvores", grupo: "cultivo" },
+  plantio: { nome: "Faixa de plantio", largura: 2, comprimento: 6, cor: "cultivo", icone: "fileiras", grupo: "cultivo", existente: true },
+  muda: { nome: "Muda ou árvore", largura: 0, comprimento: 0, cor: "pomar", icone: "muda", grupo: "cultivo", existente: true },
+  viveiro: { nome: "Viveiro de mudas", largura: 3, comprimento: 4, cor: "horta", icone: "viveiro", grupo: "cultivo" },
+
+  // Produção animal: os ícones representam áreas, não dimensionamento técnico.
   galinheiro: { nome: "Galinheiro", largura: 3, comprimento: 4, cor: "animais", icone: "galinha", grupo: "animais" },
   codornario: { nome: "Codornário", largura: 2, comprimento: 3, cor: "codornas", icone: "codorna", grupo: "animais" },
   chiqueiro: { nome: "Chiqueiro", largura: 3, comprimento: 4, cor: "animais", icone: "porco", grupo: "animais" },
-  compostagem: { nome: "Compostagem", largura: 2, comprimento: 2, cor: "pomar", icone: "composteira", grupo: "apoio" },
-  fogueira: { nome: "Fogueira", largura: 4, comprimento: 4, cor: "fogueira", icone: "fogueira", grupo: "apoio" },
+  tanque: { nome: "Tanque de peixes", largura: 5, comprimento: 5, cor: "agua", icone: "tanque", grupo: "animais" },
+
+  // Construções
+  casa: { nome: "Casa", largura: 8, comprimento: 10, cor: "construcao", icone: "casa", grupo: "construcao" },
   galpao: { nome: "Galpão", largura: 4, comprimento: 5, cor: "construcao", icone: "galpao", grupo: "construcao" },
-  plantio: { nome: "Faixa de plantio", largura: 2, comprimento: 6, cor: "cultivo", icone: "fileiras", grupo: "cultivo", existente: true },
-  muda: { nome: "Muda ou árvore", largura: 0, comprimento: 0, cor: "pomar", icone: "muda", grupo: "cultivo", existente: true },
+  deposito: { nome: "Depósito", largura: 3, comprimento: 4, cor: "construcao", icone: "deposito", grupo: "construcao" },
+  estufa: { nome: "Estufa", largura: 4, comprimento: 8, cor: "construcao", icone: "estufa", grupo: "construcao" },
+
+  // Compostagem / bioinsumos: o biodigestor é um complemento de planejamento,
+  // não é apresentado como módulo oficial do Sisteminha Embrapa.
+  compostagem: { nome: "Composteira", largura: 2, comprimento: 2, cor: "pomar", icone: "composteira", grupo: "bioinsumos" },
+  minhocario: { nome: "Minhocário", largura: 2, comprimento: 2, cor: "pomar", icone: "minhocario", grupo: "bioinsumos" },
+  biodigestor: { nome: "Biodigestor", largura: 3, comprimento: 3, cor: "pomar", icone: "biodigestor", grupo: "bioinsumos" },
+
+  // Água e apoio
+  caixaagua: { nome: "Caixa d’água", largura: 2, comprimento: 2, cor: "agua", icone: "caixaagua", grupo: "agua" },
+  cisterna: { nome: "Cisterna", largura: 3, comprimento: 3, cor: "agua", icone: "cisterna", grupo: "agua" },
+
+  // Circulação: manter o id antigo de 'acesso' para não perder desenhos já salvos.
+  acesso: { nome: "Caminho", largura: 3, comprimento: 12, cor: "caminho", icone: "caminho", grupo: "circulacao" },
+  entrada: { nome: "Entrada / portão", largura: 3, comprimento: 3, cor: "caminho", icone: "portao", grupo: "circulacao" },
+  patio: { nome: "Pátio", largura: 5, comprimento: 5, cor: "caminho", icone: "patio", grupo: "circulacao" },
+
+  // Legado: não oferecer novas áreas de manobra, mas manter edição, desenho,
+  // leitura do localStorage/IndexedDB e restauração de backups existentes.
+  manobra: { nome: "Área de manobra (antiga)", largura: 8, comprimento: 8, cor: "caminho", icone: "manobra", grupo: "circulacao", oculto: true },
+
+  // Lazer
+  fogueira: { nome: "Fogueira", largura: 4, comprimento: 4, cor: "fogueira", icone: "fogueira", grupo: "apoio" },
+  pergolado: { nome: "Pergolado", largura: 3, comprimento: 4, cor: "construcao", icone: "pergolado", grupo: "apoio" },
+  redario: { nome: "Redário", largura: 3, comprimento: 4, cor: "pomar", icone: "redario", grupo: "apoio" },
+  piscina: { nome: "Piscina", largura: 4, comprimento: 8, cor: "agua", icone: "piscina", grupo: "apoio" },
+  quadra: { nome: "Campinho / quadra", largura: 10, comprimento: 18, cor: "cultivo", icone: "quadra", grupo: "apoio" },
   outro: { nome: "Outra área", largura: 3, comprimento: 3, cor: "construcao", icone: "outros", grupo: "apoio" },
 };
 
+// Catálogo público para criação; não altera os tipos históricos persistidos.
+export const tiposDeAreaDisponiveis = Object.fromEntries(
+  Object.entries(tiposDeArea).filter(([, ficha]) => !ficha.oculto),
+);
+
 export const gruposDeArea = {
   cultivo: { nome: "Cultivos", icone: "horta" },
-  animais: { nome: "Animais", icone: "codorna" },
+  animais: { nome: "Animais", icone: "galinha" },
   construcao: { nome: "Construções", icone: "casa" },
+  bioinsumos: { nome: "Compostagem", icone: "recycle" },
+  agua: { nome: "Água", icone: "gota" },
+  circulacao: { nome: "Acessos", icone: "caminho" },
   apoio: { nome: "Apoio e lazer", icone: "fogueira" },
 };
 

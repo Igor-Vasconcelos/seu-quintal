@@ -132,3 +132,69 @@
 @media(prefers-reduced-motion:reduce) {
   .area-opcao,.area-categoria { transition: none; }
 }
+
+
+/* Catálogo de áreas 2.1 — ícones legíveis e navegação por categoria.
+   7 categorias com rótulos completos; sem rolagem horizontal obrigatória. */
+.pagina-meu-quintal .area-categorias {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+}
+.pagina-meu-quintal .area-categoria {
+  min-height: 5.3rem;
+  padding: .55rem .25rem;
+  gap: .35rem;
+  font-size: .79rem;
+  overflow-wrap: anywhere;
+}
+.pagina-meu-quintal .area-categoria .icone {
+  width: 1.65rem;
+  height: 1.65rem;
+  stroke-width: 1.75;
+  flex: 0 0 auto;
+}
+.pagina-meu-quintal .area-opcao {
+  min-height: 5.9rem;
+  padding-inline: .4rem;
+  gap: .4rem;
+  font-size: .81rem;
+}
+.pagina-meu-quintal .area-opcao-icone .icone {
+  stroke-width: 1.75;
+}
+.pagina-meu-quintal .area-medidas-aviso {
+  margin: .15rem 0 0;
+  font-size: .75rem;
+  line-height: 1.45;
+}
+@media (min-width: 1024px) and (max-width: 1160px) {
+  .pagina-meu-quintal .area-opcoes {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+}
+@media (max-width: 1023px) and (min-width: 621px) {
+  .pagina-meu-quintal .area-categorias {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+}
+@media (max-width: 620px) {
+  .pagina-meu-quintal .area-categorias,
+  .pagina-meu-quintal .area-opcoes {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .pagina-meu-quintal .area-categoria {
+    flex-direction: row;
+    text-align: left;
+    justify-content: flex-start;
+    min-height: 3.4rem;
+    font-size: .79rem;
+    padding: .5rem .45rem;
+  }
+  .pagina-meu-quintal .area-categoria .icone {
+    width: 1.45rem; height: 1.45rem;
+  }
+}
+@media (max-width: 350px) {
+  .pagina-meu-quintal .area-categoria { font-size: .74rem; gap: .25rem; }
+  .pagina-meu-quintal .area-categoria .icone { width: 1.3rem; height: 1.3rem; }
+}

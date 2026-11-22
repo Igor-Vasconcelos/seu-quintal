@@ -191,6 +191,27 @@ try {
         await codornario.click();
         await pagina.locator('.adicionar-area-ilustrada button[type=submit]').click();
         await pagina.locator('.itens-terreno').getByText("Codornário").first().waitFor({state:"visible",timeout:12000});
+
+        // Catálogo ampliado, com ícones SVG e sem criação de 'Área de manobra'.
+        assert.equal(await pagina.locator(".area-categoria").count(),7,
+          "O planejador deve oferecer sete categorias");
+        await pagina.locator(".area-categoria").filter({hasText:"Acessos"}).click();
+        assert.equal(await pagina.locator(".area-opcao").filter({hasText:"Caminho"}).count(),1);
+        assert.equal(await pagina.locator(".area-opcao").filter({hasText:"Área de manobra"}).count(),0);
+        await pagina.locator(".area-categoria").filter({hasText:"Compostagem"}).click();
+        assert.equal(await pagina.locator(".area-opcao").filter({hasText:"Minhocário"}).count(),1);
+        assert.equal(await pagina.locator(".area-opcao").filter({hasText:"Biodigestor"}).count(),1);
+
+        await pagina.locator(".area-categoria").filter({hasText:"Apoio e lazer"}).click();
+        for (const nomeArea of ["Piscina", "Campinho / quadra"]) {
+          const opcao = pagina.locator(".area-opcao").filter({hasText:nomeArea});
+          await opcao.click();
+          assert.ok(await opcao.locator("svg path,svg rect,svg circle").count() > 0,
+            nomeArea + ": ícone vetorial não renderizado");
+          await pagina.locator('.adicionar-area-ilustrada button[type=submit]').click();
+          await pagina.locator(".itens-terreno").getByText(nomeArea).first()
+            .waitFor({state:"visible",timeout:12000});
+        }
         await pagina.screenshot({
           path: PASTA + "/meu-quintal-editor-" + nome + ".png",
           animations: "disabled",
@@ -199,8 +220,8 @@ try {
         await pagina.locator(".quintal-ultimo-projeto h3").waitFor({ state: "visible", timeout: 20000 });
         assert.match(await pagina.locator(".quintal-ultimo-projeto h3").innerText(), /25 × 40 m/,
           "O projeto criado deve aparecer na visão geral");
-        assert.equal(await pagina.locator(".quintal-indicadores strong").nth(2).innerText(), "1",
-          "A visão geral precisa contar o elemento adicionado ao cenário");
+        assert.equal(await pagina.locator(".quintal-indicadores strong").nth(2).innerText(), "3",
+          "A visão geral precisa contar os três elementos adicionados ao cenário");
       }
       console.log("PASSOU", nome, rota);
       await pagina.close();

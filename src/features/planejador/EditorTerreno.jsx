@@ -6,7 +6,7 @@ import Planta from "./Planta.jsx";
 import {
   arredondarMedida, criarTerreno, distancia, formatarMedida, lerMedida, limitarPosicao, passoDaMalha, pontosEntreBordas,
 } from "./geometria.js";
-import { conflitosEntreItens, criarItem, declives, gruposDeArea, novoId, tiposDeArea } from "./projetos.js";
+import { conflitosEntreItens, criarItem, declives, gruposDeArea, novoId, tiposDeArea, tiposDeAreaDisponiveis } from "./projetos.js";
 
 function ConfigurarTerreno({ terreno, projeto, atualizar, abrirTerreno }) {
   const [frente, definirFrente] = useState(() => String(terreno.largura).replace(".", ","));
@@ -352,7 +352,7 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
                   className="area-categoria"
                   onClick={() => {
                     definirGrupoAtivo(id);
-                    const escolhido = Object.entries(tiposDeArea).find(([,ficha]) => ficha.grupo === id);
+                    const escolhido = Object.entries(tiposDeAreaDisponiveis).find(([,ficha]) => ficha.grupo === id);
                     if (escolhido) definirTipo(escolhido[0]);
                   }}>
                   <Icone nome={grupo.icone}/><span>{grupo.nome}</span>
@@ -360,7 +360,7 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
               ))}
             </div>
             <div className="area-opcoes" role="group" aria-label="O que adicionar ao terreno">
-              {Object.entries(tiposDeArea)
+              {Object.entries(tiposDeAreaDisponiveis)
                 .filter(([, ficha]) => ficha.grupo === grupoAtivo)
                 .map(([id, ficha]) => (
                   <button type="button" key={id} aria-pressed={tipo === id} className="area-opcao"
@@ -382,6 +382,7 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
               <button className="botao" type="submit">
                 <Icone nome="seta"/> {tipo === "muda" ? "Adicionar muda" : "Adicionar ao mapa"}
               </button>
+              <p className="nota area-medidas-aviso">Medidas ilustrativas. Ajuste conforme seu espaço e confirme as exigências de construção e manejo.</p>
             </div>
           </form>
 
