@@ -1,0 +1,46 @@
+/* Visualização educativa do dimensionamento, reutiliza IconeCultura (SVG). */
+.sq-horta-visual {
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface-warm);
+  padding: clamp(.8rem, 2vw, 1.25rem);
+  color: var(--sq-text);
+  font-family: var(--sq-font-ui);
+}
+.sq-horta-visual h4, .sq-horta-visual h5 { margin:0 0 .4rem; font-family:var(--sq-font-ui); line-height:1.3; }
+.sq-horta-visual h4 { font-size:clamp(1.05rem,2vw,1.35rem); }
+.sq-horta-visual h5 { font-size:1rem; }
+.sq-horta-visual p { margin:.4rem 0 .8rem; line-height:1.55; }
+.sq-horta-visual-setores { margin-block:1rem; }
+.sq-horta-mapa { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr)); gap:.7rem; padding:0; margin:.6rem 0; list-style:none; }
+.sq-horta-mapa-canteiro { padding:.7rem; min-width:0; border-radius:var(--sq-radius-control); border:1px solid var(--sq-border); background:var(--sq-surface); }
+.sq-horta-mapa-canteiro > strong, .sq-horta-mapa-area { display:block; }
+.sq-horta-mapa-area {font-size:.78rem; color:var(--sq-text-muted);}
+.sq-horta-mapa-culturas {list-style:none; padding:0; margin:.5rem 0; display:grid; gap:.3rem;}
+.sq-horta-mapa-culturas li {display:flex; align-items:center; gap:.4rem; background:var(--sq-surface-soft); border-radius:var(--sq-radius-control); padding:.4rem; min-width:0;}
+.sq-horta-mapa-culturas svg { flex:none; width:2.1rem; height:2.1rem; }
+.sq-horta-mapa-culturas span { min-width:0; font-size:.77rem; font-weight:700; overflow-wrap:anywhere; }
+.sq-horta-mapa-culturas small {display:block; font-size:.73rem; font-weight:400; color:var(--sq-text-muted);}
+.sq-horta-mapa-vazio {font-size:.8rem;}
+.sq-horta-mapa-canteiro > small {font-size:.73rem; color:var(--sq-text-muted);}
+.sq-horta-linhas {display:grid;gap:.85rem;}
+.sq-horta-linha {border:1px solid var(--sq-border); border-radius:var(--sq-radius-media); background:var(--sq-surface); padding:.65rem; min-width:0;}
+.sq-horta-linha-titulo {display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;}
+.sq-horta-linha-titulo svg {height:2.4rem;width:2.4rem;flex:none;}
+.sq-horta-lotes-visuais {list-style:none;display:grid;gap:.5rem;padding:0;margin:0;}
+.sq-horta-lote-visual {min-width:0; display:grid;grid-template-columns:4rem minmax(0,1fr);align-items:center;gap:.6rem;}
+.sq-horta-lote-visual > strong {font-size:.78rem;}
+.sq-horta-estagios {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.3rem;}
+.sq-horta-estagios > div {display:grid; gap:.2rem; min-width:0; padding:.55rem .35rem; border-radius:var(--sq-radius-control); background:var(--sq-brand-100);text-align:center;font-size:.76rem;}
+.sq-horta-estagios > div:nth-child(2) {background:var(--sq-surface-soft);}
+.sq-horta-estagios > div:nth-child(3) {background:var(--sq-success-bg);}
+.sq-horta-estagios small {color:var(--sq-text-muted); font-size:.7rem; overflow-wrap:anywhere;}
+.sq-horta-estagio-sinal {width:1.3rem;height:1.3rem;border-radius:50%;display:grid;place-items:center;margin:0 auto;font-weight:800;background:var(--sq-primary); color:var(--sq-on-primary);}
+.sq-horta-visual .sq-horta-visual-limites {font-size:.8rem;color:var(--sq-text-muted);}
+.sq-horta-visual a {color:var(--sq-link);text-underline-offset:3px;}
+@media (max-width:700px){
+ .sq-horta-lote-visual{grid-template-columns:minmax(0,1fr);gap:.25rem;}
+ .sq-horta-estagios{grid-template-columns:minmax(0,1fr);gap:.35rem;}
+ .sq-horta-estagios > div{grid-template-columns:1.4rem 1fr auto;align-items:center;text-align:left;gap:.5rem;}
+ .sq-horta-estagios small{text-align:right;}
+}

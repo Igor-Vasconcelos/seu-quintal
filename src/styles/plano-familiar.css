@@ -157,3 +157,27 @@
   .familia-meta { grid-template-columns: minmax(0,1fr); }
   .familia-meta-cultura, .familia-meta label:nth-child(3) { grid-column: auto; }
 }
+
+/* Jornada orientada pelo consumo: descobrir a área antes de definir canteiros. */
+.familia-modo-espaco {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;
+  padding:0;margin:1rem 0;border:0;min-width:0;
+}
+.familia-modo-espaco legend {grid-column:1 / -1;font-weight:750;margin-bottom:.65rem;}
+.familia-modo-espaco label {
+  display:flex;align-items:flex-start;gap:.6rem;min-width:0;
+  background:var(--sq-surface);border:1px solid var(--sq-border);
+  border-radius:var(--sq-radius-control);padding:.8rem;cursor:pointer;
+}
+.familia-modo-espaco label:has(input:checked) {border-color:var(--sq-primary);background:var(--sq-brand-100);}
+.familia-modo-espaco input {flex:none;width:1.1rem;height:1.1rem;margin:.15rem 0;accent-color:var(--sq-primary);}
+.familia-modo-espaco span {display:grid;gap:.25rem;min-width:0;}
+.familia-modo-espaco strong {font-size:.9rem;line-height:1.4;}
+.familia-modo-espaco small {font-size:.8rem;line-height:1.5;color:var(--sq-text-muted);}
+.familia-campos-existentes {padding:.85rem;border-radius:var(--sq-radius-media);background:var(--sq-surface-soft);margin-bottom:.8rem;}
+.familia-subtitulo-resultado {font:400 clamp(1.12rem,2vw,1.35rem)/1.3 var(--sq-font-display);margin:1rem 0 .35rem;}
+.familia-modo-espaco input:focus-visible {outline:3px solid var(--sq-focus);outline-offset:3px;}
+@media(max-width:660px){
+ .familia-modo-espaco {grid-template-columns:minmax(0,1fr);}
+ .familia-campos {grid-template-columns:minmax(0,1fr);}
+}

@@ -121,6 +121,15 @@ export function renderMarkdown(markdown, prefix) {
   for (let i = 0; i < linhas.length; i++) {
     const line = linhas[i];
     if (!line.trim()) { closeParagraph(); closeList(); continue; }
+    if (line.trim() === ":::horta-familiar-interativa") {
+      closeParagraph(); closeList();
+      output.push('<section class="sq-horta-widget" id="experimente-a-horta" aria-labelledby="titulo-horta-interativa">' +
+        '<h3 id="titulo-horta-interativa">Experimente: quanto plantar para sua família?</h3>' +
+        '<div id="simulador-horta-artigo"><p>Ative o JavaScript para usar a simulação interativa. ' +
+        '<a href="' + prefix + 'horta/organizador/#planejamento-familiar">Abrir ferramenta completa de horta contínua</a>.</p></div>' +
+        '</section>');
+      continue;
+    }
     const imagem = line.match(/^!\[([^\]]{8,200})\]\((\/imagens\/artigos\/[a-z0-9-]+\.webp)\)$/);
     if (imagem) {
       closeParagraph(); closeList();
