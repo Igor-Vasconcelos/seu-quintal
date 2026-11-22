@@ -12,6 +12,7 @@ const grupos = [
   },
   {
     id: "ferramentas", rotulo: "Ferramentas", itens: [
+      { titulo: "Ver todas as ferramentas", rota: "ferramentas/", paginas: ["ferramentas"] },
       { titulo: "Planejar o terreno", rota: "meu-quintal/#terreno" },
       { titulo: "Planejador de canteiros", rota: "horta/canteiros/", paginas: ["canteiros"] },
       { titulo: "Organizador da horta", rota: "horta/organizador/", paginas: ["organizador"] },

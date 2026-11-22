@@ -12,6 +12,7 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
       ["Sisteminha Embrapa", "sisteminha.html"],
     ] },
     { titulo: "Planeje", links: [
+      ["Todas as ferramentas", "ferramentas/"],
       ["Calendário de plantio", "horta/calendario-de-plantio/"],
       ["Planejador de canteiros", "horta/canteiros/"],
       ["Organizador de horta", "horta/organizador/"],

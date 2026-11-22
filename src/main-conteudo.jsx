@@ -22,6 +22,7 @@ const canteiroVisual = document.getElementById("canteiro-visual-raiz");
 const calendario = document.getElementById("calendario-raiz");
 const organizador = document.getElementById("organizador-raiz");
 const catalogo = document.getElementById("catalogo-guias");
+const catalogoFerramentas = document.getElementById("catalogo-ferramentas");
 const guia = document.getElementById("guia-interativo");
 const peixes = document.getElementById("calculadora-peixes-raiz");
 const pomar = document.getElementById("planejador-pomar-raiz");
@@ -86,6 +87,12 @@ if (organizador) {
   });
 }
 
+if (catalogoFerramentas) {
+  montarFerramenta(catalogoFerramentas, async () => {
+    const { default: CatalogoFerramentas } = await import("./features/catalogo/CatalogoFerramentas.jsx");
+    return <CatalogoFerramentas raiz={raiz} />;
+  });
+}
 if (catalogo) {
   montarFerramenta(catalogo, async () => {
     const { default: CartoesGuias } = await import("./components/CartoesGuias.jsx");
