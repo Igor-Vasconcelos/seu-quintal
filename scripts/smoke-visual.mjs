@@ -60,6 +60,29 @@ try {
         slug + "/" + nome + ": logomarca não carregou");
 
       if (slug.startsWith("artigo-")) {
+        const abertura = pagina.locator(".sq-article-opening");
+        const box = await abertura.boundingBox();
+        assert.ok(box && box.height < (largura < 700 ? 710 : 520),
+          "Abertura de artigo não deve ocupar quase toda a página: " + JSON.stringify(box));
+        const hero = abertura.locator(".sq-hero-image img");
+        assert.ok(await hero.evaluate(img => img.complete && img.naturalWidth > 0),
+          "Fotografia de abertura não carregou");
+        const imgHeight = await hero.evaluate(img => img.getBoundingClientRect().height);
+        assert.ok(imgHeight <= (largura < 700 ? 155 : 425),
+          "A imagem de abertura está alta demais: " + imgHeight);
+        assert.equal(await pagina.locator(".sq-prose .sq-step-figure img").count(), 2,
+          "Cada artigo precisa de duas ilustrações durante a leitura");
+        await abertura.screenshot({
+          path: PASTA + "/" + slug + "-hero-" + nome + ".png",
+          animations: "disabled",
+        });
+        for(const foto of await pagina.locator(".sq-prose .sq-step-figure img").all()) {
+          await foto.scrollIntoViewIfNeeded();
+          assert.ok(await foto.evaluate(img => img.decode().then(()=>img.naturalWidth>0).catch(()=>false)),
+            "Imagem didática não carregou");
+        }
+        assert.ok(await pagina.locator(".sq-prose .sq-table-wrap").count() >= 1,
+          "Artigo deve apresentar exemplo tabulado");
         const indice = pagina.locator(".sq-toc");
         const painel = indice.locator("details.sq-toc-details");
         await painel.waitFor({ state: "attached", timeout: 12000 });
