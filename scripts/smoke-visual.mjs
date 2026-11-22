@@ -78,6 +78,24 @@ try {
         }
         assert.ok(await pagina.locator(".home-editorial-ferramentas a").count() >= 6);
       }
+      if (slug === "sisteminha") {
+        const hero = await pagina.locator(".sisteminha-abertura").boundingBox();
+        assert.ok(hero && Math.abs(hero.x) <= 1 && Math.abs(hero.width - largura) <= 2,
+          "Hero do Sisteminha deve ocupar toda a largura: " + JSON.stringify(hero));
+        const faixa = await pagina.locator(".sisteminha-nav-local").boundingBox();
+        assert.ok(faixa && faixa.width >= largura * .88 &&
+          Math.abs(faixa.x - (largura - faixa.width) / 2) <= 2,
+          "Faixa de abas deve estar larga e centralizada: " + JSON.stringify(faixa));
+        assert.equal(await pagina.locator(".sisteminha-nav-rolagem .icone-navegacao").count(), 8,
+          "Os 8 ícones dos módulos precisam usar o novo conjunto vetorial");
+      }
+      if (slug === "home") {
+        const hero = await pagina.locator(".home-abertura").boundingBox();
+        assert.ok(hero && Math.abs(hero.x) <= 1 && Math.abs(hero.width - largura) <= 2,
+          "Hero da Home deve continuar full-bleed");
+        assert.equal(await pagina.locator(".home-trilhas .icone-navegacao").count(), 11,
+          "As 11 categorias precisam de ícones vetoriais consistentes");
+      }
       if (slug === "sisteminha" && nome === "celular") {
         const lista = pagina.locator(".sisteminha-nav-rolagem");
         assert.ok(await lista.evaluate(el => el.scrollWidth > el.clientWidth),
@@ -182,6 +200,15 @@ try {
       assert.ok(rect && Math.abs(rect.x) <= 1 && Math.abs(rect.width - largura) <= 2,
         slug + "/" + largura + ": header com margem externa indevida");
 
+      if (slug === "sisteminha") {
+        const hero = await pagina.locator(".sisteminha-abertura").boundingBox();
+        assert.ok(hero && Math.abs(hero.x) <= 1 &&
+          Math.abs(hero.width - largura) <= 2,
+          "Sisteminha/" + largura + ": hero com margem indevida");
+        const faixa = await pagina.locator(".sisteminha-nav-local").boundingBox();
+        assert.ok(faixa && faixa.width >= largura * .88,
+          "Sisteminha/" + largura + ": barra de módulos estreita demais");
+      }
       if (slug === "home") {
         await pagina.screenshot({
           path: PASTA + "/home-" + largura + ".png",

@@ -1,0 +1,187 @@
+/* Sisteminha — mesmo shell visual da Home (Raiz & Caminho 2.0)
+ * A largura total é do hero; os conteúdos continuam com margens de leitura.
+ * Usar width:100% no contêiner, sem 100vw e sem mascarar overflow. */
+.pagina-sisteminha.sisteminha-ds3 > main#conteudo {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+  min-width: 0;
+}
+
+/* Toda a parte educativa/cálculos continua centralizada e legível. */
+.pagina-sisteminha.sisteminha-ds3 > main#conteudo > :not(.sisteminha-abertura):not(.sisteminha-nav-local):not(.sisteminha-visualmente-oculto) {
+  box-sizing: border-box;
+  width: min(100%, 93rem);
+  max-width: none;
+  min-width: 0;
+  margin-inline: auto;
+  padding-inline: var(--sq-gutter);
+}
+
+/* Hero com imagem de ponta a ponta, como o da Home. */
+.pagina-sisteminha.sisteminha-ds3 > main#conteudo > .sisteminha-abertura {
+  display: block;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: none;
+  min-height: clamp(19rem, 25vw, 21rem);
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--sq-forest);
+  overflow: hidden;
+}
+
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-abertura .sisteminha-intro {
+  box-sizing: border-box;
+  width: min(100%, 93rem);
+  max-width: none;
+  min-height: clamp(19rem, 25vw, 21rem);
+  margin-inline: auto;
+  padding: clamp(1.2rem, 2.4vw, 1.85rem) var(--sq-gutter) clamp(2.2rem, 3vw, 2.7rem);
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-abertura h1 {
+  max-width: none;
+  font-size: clamp(2.25rem, 3.45vw, 3.25rem);
+  line-height: 1.07;
+  letter-spacing: -.025em;
+  color: white;
+}
+
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-abertura .sisteminha-intro > p {
+  max-width: 69ch;
+  margin-top: .5rem;
+  color: #fff;
+  font-size: clamp(.96rem, 1.18vw, 1.07rem);
+  line-height: 1.4;
+}
+
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-intro-acoes {
+  margin-top: .8rem;
+  gap: .4rem 1rem;
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-hero-selo {
+  margin-bottom: .5rem;
+  min-height: 2rem;
+  font-size: .77rem;
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-hero-credito {
+  margin-top: .5rem;
+  font-size: .7rem;
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-panorama img {
+  object-position: 64% 50%;
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-panorama::after {
+  background: linear-gradient(90deg,
+    rgb(8 31 17 / .96) 0%,
+    rgb(8 31 17 / .81) 36%,
+    rgb(8 31 17 / .31) 75%,
+    rgb(8 31 17 / .13) 100%);
+}
+
+/* Navegação de módulos: superfície, espaçamento e seleção da faixa da Home. */
+.pagina-sisteminha.sisteminha-ds3 > main#conteudo > .sisteminha-nav-local {
+  box-sizing: border-box;
+  width: min(calc(100% - 2 * var(--sq-gutter)), 93rem);
+  max-width: none;
+  min-width: 0;
+  margin: -1.55rem auto clamp(1.35rem, 2.8vw, 2rem);
+  padding: .4rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+  box-shadow: 0 9px 24px rgb(24 60 43 / .10);
+  position: sticky;
+  top: 0;
+  z-index: 6;
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: .2rem;
+  min-width: 0;
+  padding: .25rem;
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a {
+  min-width: 0;
+  min-height: 4.5rem;
+  gap: .3rem;
+  padding: .45rem .25rem;
+  border-radius: .75rem;
+  font-size: clamp(.73rem,.81vw,.83rem);
+  font-weight: 750;
+  line-height: 1.23;
+  white-space: normal;
+  text-decoration: none;
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a .icone-navegacao {
+  width: 1.83rem;
+  height: 1.83rem;
+  color: var(--sq-primary);
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a[aria-current="page"] {
+  background: var(--sq-brand-100);
+  border-color: var(--sq-border);
+  color: var(--sq-forest);
+  box-shadow: inset 0 -3px 0 var(--sq-primary);
+}
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a:hover {
+  background: var(--sq-surface-soft);
+}
+
+/* Somente a faixa rola no mobile/tablet, sem rolagem da página. */
+@media (max-width: 1120px) {
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem {
+    display: flex;
+    gap: .28rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a {
+    flex: 0 0 8rem;
+    scroll-snap-align: start;
+  }
+}
+@media (max-width: 767px) {
+  .pagina-sisteminha.sisteminha-ds3 > main#conteudo > .sisteminha-abertura {
+    min-height: 22rem;
+  }
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-abertura .sisteminha-intro {
+    min-height: 22rem;
+    padding: 1.4rem var(--sq-gutter) 2.2rem;
+  }
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-abertura h1 {
+    font-size: clamp(2rem, 8.3vw, 2.85rem);
+    line-height: 1.09;
+  }
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-panorama::after {
+    background: linear-gradient(90deg, rgb(8 31 17 / .96), rgb(8 31 17 / .65));
+  }
+  .pagina-sisteminha.sisteminha-ds3 > main#conteudo > .sisteminha-nav-local {
+    margin-top: -1.2rem;
+    margin-bottom: 1.45rem;
+    padding: .4rem;
+  }
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a {
+    flex: 0 0 clamp(6.2rem, 27%, 7.4rem);
+    min-height: 4.85rem;
+    font-size: .76rem;
+    border: 1px solid var(--sq-border);
+  }
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a .icone-navegacao {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+@media (max-width: 359px) {
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a { flex-basis: 6.5rem; }
+}

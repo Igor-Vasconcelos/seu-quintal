@@ -96,3 +96,26 @@ test("cinco módulos possuem imagens e esquemas educativos escaláveis", () => {
   assert.match(css, /sisteminha-modulo-midia/);
   assert.match(css, /sisteminha-foto figcaption/);
 });
+
+
+test("Sisteminha reutiliza linguagem visual da Home sem margens no hero", () => {
+  const cssLargura = arquivo("src/styles/sisteminha-fullbleed.css");
+  const cssIcones = arquivo("src/styles/nav-icons-v2.css");
+  const icones = arquivo("src/components/IconeNavegacao.jsx");
+  const home = arquivo("src/App.jsx");
+  assert.match(cssLargura, /main#conteudo > \.sisteminha-abertura/);
+  assert.match(cssLargura, /border-radius: 0/);
+  assert.match(cssLargura, /width: 100%/);
+  assert.match(cssLargura, /main#conteudo > \.sisteminha-nav-local/);
+  assert.match(cssLargura, /var\(--sq-gutter\)/);
+  assert.match(cssIcones, /\.icone-navegacao/);
+  assert.match(icones, /strokeWidth="1\.8"/);
+  assert.match(main, /<IconeNavegacao nome=\{iconesAbas\[id\]\}/);
+  assert.match(home, /<IconeNavegacao nome="irrigacao"/);
+  assert.equal((home.match(/<IconeNavegacao nome="/g) || []).length, 11);
+  for (const nome of ["grade", "horta", "peixe", "galinha", "codorna", "arvores",
+    "recycle", "irrigacao", "planejamento", "sisteminha", "pequenos",
+    "ciclo", "minhoca", "rede", "livro"]) {
+    assert.match(icones, new RegExp("\\b" + nome + ":"));
+  }
+});

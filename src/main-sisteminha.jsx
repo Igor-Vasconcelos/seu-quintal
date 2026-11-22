@@ -5,6 +5,7 @@ import "@fontsource/dm-serif-text/latin-400.css";
 import Cabecalho from "./components/Cabecalho.jsx";
 import CaixaDialogo from "./components/CaixaDialogo.jsx";
 import Icone from "./components/Icone.jsx";
+import IconeNavegacao from "./components/IconeNavegacao.jsx";
 import Rodape from "./components/Rodape.jsx";
 import Galinheiro from "./features/galinheiro/Galinheiro.jsx";
 import FluxoSisteminha from "./features/sisteminha/FluxoSisteminha.jsx";
@@ -75,7 +76,7 @@ const nomesDasAbas = [
 const idsDasAbas = new Set(nomesDasAbas.map(([id]) => id));
 const iconesAbas = {
   ciclo: "ciclo", tanque: "peixe", galinheiro: "galinha",
-  horta: "muda", compostagem: "recycle", minhocario: "minhoca",
+  horta: "horta", compostagem: "recycle", minhocario: "minhoca",
   integracao: "rede", materiais: "livro",
 };
 
@@ -338,7 +339,7 @@ function Sisteminha() {
               onScroll={atualizarIndicadorAbas}>
               {nomesDasAbas.map(([id, titulo]) => (
                 <a key={id} href={`#${id}`} aria-current={abaAtiva === id ? "page" : undefined}>
-                  <Icone nome={iconesAbas[id]}/><span>{titulo}</span>
+                  <IconeNavegacao nome={iconesAbas[id]}/><span>{titulo}</span>
                 </a>
               ))}
             </div>
@@ -459,3 +460,7 @@ import "./styles/site-raiz-caminho.css";
 import "./styles/layout-shell-v5.css";
 
 import "./styles/sisteminha-swipe.css";
+
+import "./styles/sisteminha-fullbleed.css";
+
+import "./styles/nav-icons-v2.css";

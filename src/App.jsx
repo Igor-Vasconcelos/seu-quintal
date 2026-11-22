@@ -4,6 +4,7 @@ import Cabecalho from "./components/Cabecalho.jsx";
 import Calendario from "./components/Calendario.jsx";
 import DestaquesEditorial from "./components/DestaquesEditorial.jsx";
 import Icone from "./components/Icone.jsx";
+import IconeNavegacao from "./components/IconeNavegacao.jsx";
 import Planejador from "./components/Planejador.jsx";
 import Rodape from "./components/Rodape.jsx";
 import artigosPublicados from "./data/artigos-publicados.json";
@@ -60,17 +61,17 @@ export default function App() {
 
 
         <nav className="home-trilhas home-miolo" aria-label="Explorar assuntos">
-          <a href="./artigos/" className="home-trilha-atual"><Icone nome="outros" /> Todos os conteúdos</a>
-          <a href="./horta/"><Icone nome="muda" /> Horta</a>
-          <a href="./ferramentas/calculadora-peixes/"><Icone nome="peixe" /> Peixes</a>
-          <a href="./sisteminha.html#galinheiro"><Icone nome="galinha" /> Aves</a>
-          <a href="./ferramentas/calculadora-codornas/"><Icone nome="codorna" /> Codornas</a>
-          <a href="./ferramentas/planejador-de-pomar/"><Icone nome="arvores" /> Pomar</a>
-          <a href="./guias/compostagem/"><Icone nome="recycle" /> Compostagem</a>
-          <a href="./guias/irrigacao/"><Icone nome="muda" /> Irrigação</a>
-          <a href="./meu-quintal/"><Icone nome="planta" /> Planejamento</a>
-          <a href="./sisteminha.html"><Icone nome="ciclo" /> Sisteminha</a>
-          <a href="./guias/"><Icone nome="canteiro" /> Pequenos espaços</a>
+          <a href="./artigos/" className="home-trilha-atual"><IconeNavegacao nome="grade" /> Todos os conteúdos</a>
+          <a href="./horta/"><IconeNavegacao nome="horta" /> Horta</a>
+          <a href="./ferramentas/calculadora-peixes/"><IconeNavegacao nome="peixe" /> Peixes</a>
+          <a href="./sisteminha.html#galinheiro"><IconeNavegacao nome="galinha" /> Aves</a>
+          <a href="./ferramentas/calculadora-codornas/"><IconeNavegacao nome="codorna" /> Codornas</a>
+          <a href="./ferramentas/planejador-de-pomar/"><IconeNavegacao nome="arvores" /> Pomar</a>
+          <a href="./guias/compostagem/"><IconeNavegacao nome="recycle" /> Compostagem</a>
+          <a href="./guias/irrigacao/"><IconeNavegacao nome="irrigacao" /> Irrigação</a>
+          <a href="./meu-quintal/"><IconeNavegacao nome="planejamento" /> Planejamento</a>
+          <a href="./sisteminha.html"><IconeNavegacao nome="sisteminha" /> Sisteminha</a>
+          <a href="./guias/"><IconeNavegacao nome="pequenos" /> Pequenos espaços</a>
         </nav>
 
         <section className="home-editorial home-miolo" id="guias" aria-label="Guias, artigos e ferramentas">
