@@ -7,8 +7,8 @@ import { descreverEpocaPlantio } from "../../data/plantio.js";
 import { buscarCulturas, categoriasCulturas, destaquesCulturas, resumoCultura, todasCulturas } from "./catalogoCulturas.js";
 
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
-import { calcularPlanoFamiliar, metaExemplo, sugestoesDeConsumo } from "./planoFamiliar.js";
-import { hojeCivil, janelaDeDatas } from "./escala.js";
+import { calcularPlanoFamiliar, intervaloPadrao, metaExemplo, sugestoesDeConsumo } from "./planoFamiliar.js";
+import { hojeCivil, janelaDeDatas, rotuloData } from "./escala.js";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import "../../styles/plano-familiar.css";
 
@@ -37,6 +37,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
   const [selecionadas, definirSelecionadas] = useState(["Alface de verão", "Cenoura de verão", "Tomate de mesa"]);
   const [metasCasa, definirMetasCasa] = useState({});
   const [metasVenda, definirMetasVenda] = useState({});
+  const [intervalos, definirIntervalos] = useState({});
   const [incluirVenda, definirIncluirVenda] = useState(false);
   const [salvando, definirSalvando] = useState(false);
   const [retorno, definirRetorno] = useState("");
@@ -84,6 +85,7 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
     cultura,
     casa: metasCasa[cultura] === undefined ? metaExemplo(cultura, pessoas) : lerMedida(metasCasa[cultura], 0),
     venda: incluirVenda ? (metasVenda[cultura] === undefined ? 0 : lerMedida(metasVenda[cultura], 0)) : 0,
+    intervalo: intervalos[cultura] === undefined ? intervaloPadrao(cultura) : Number(intervalos[cultura]),
   }));
   const alternativasRotacao = sugestoesRotacao(selecionadas);
   const sugestao = calcularPlanoFamiliar({
@@ -200,7 +202,8 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
             <p className="nota">Os prazos e espaçamentos são referências. Ajuste cultivar, região, temperatura e manejo antes de plantar.</p>
           </aside>
           <div className="familia-metas">
-            <h4>Metas por semana — ajuste ao consumo real</h4>
+            <h4>Metas por semana e frequência de plantio</h4>
+            <p className="nota">Defina quanto quer colher e de quantas em quantas semanas iniciará um novo lote. O intervalo é uma hipótese editável, não uma frequência universal: o resultado e a área estimada serão recalculados automaticamente.</p>
             <label className="familia-venda">
               <input type="checkbox" checked={incluirVenda} onChange={e => definirIncluirVenda(e.target.checked)}/>
               Quero planejar excedentes para venda
@@ -220,13 +223,20 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
                   <input inputMode="decimal" aria-label={"Meta semanal de venda de " + cultura}
                     value={metasVenda[cultura] ?? "0"} onChange={e => definirMetasVenda(atuais => ({ ...atuais, [cultura]: e.target.value }))}/>
                 </label>}
+                <label>Novo lote a cada (semanas)
+                  <input type="number" min="1" max="52" step="1"
+                    aria-label={"Intervalo entre novos lotes de " + cultura + " em semanas"}
+                    value={intervalos[cultura] === undefined ? String(intervaloPadrao(cultura)) : intervalos[cultura]}
+                    onChange={e => definirIntervalos(atuais => ({ ...atuais, [cultura]: e.target.value }))}/>
+                </label>
               </div>
             ))}
           </div>
         </div>
 
         <div className="familia-etapa">
-          <h3><span className="familia-passo">3</span> Sugestão de plantios e canteiros</h3>
+          <h3><span className="familia-passo">3</span> Quanto plantar, quando repetir e quando colher</h3>
+          <p className="nota">As três respostas abaixo usam a sua meta semanal, a frequência escolhida e as referências de ciclo de cada cultura. São estimativas; confira a época regional e o desenvolvimento real das plantas.</p>
           {sugestao.erro ? <p className="erro" role="alert">{sugestao.erro}</p> : <>
             <div className="familia-indicadores">
               <div><span>Área disponível</span><strong>{formatarMedida(sugestao.areaTotal)} m²</strong></div>
@@ -236,19 +246,64 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
             {sugestao.faltaArea > 0 && <p className="aviso" role="status">
               Faltam aproximadamente <strong>{formatarMedida(sugestao.faltaArea)} m²</strong> para reservar o conjunto de cultivos. Aumente os canteiros, reduza as metas ou retire uma cultura.
             </p>}
-            <ol className="familia-previsoes">
-              {sugestao.sugestoes.map(({ plano, area, plantas, experimental, alertaEpoca, reservas, seguintes }) => (
-                <li key={plano.cultura}>
+            <ol className="familia-previsoes" aria-label="Planejamento por cultura">
+              {sugestao.sugestoes.map(({ plano, area, plantas, experimental, alertaEpoca, reservas, seguintes }) => {
+                const ficha = culturasOrganizador[plano.cultura];
+                const primeiro = seguintes[0];
+                const proximo = seguintes[1];
+                const inicioRotulo = plano.origem === "muda" ? "Usar mudas prontas"
+                  : ficha.mudas ? "Semear para formar mudas" : "Semear no canteiro";
+                return <li key={plano.cultura}>
                   <div className="familia-previsao-titulo">
                     <IconeCultura nome={plano.cultura}/>
-                    <div><strong>{plano.cultura}</strong><span>{plantas} {plantas === 1 ? "planta" : "plantas"} por lote · {formatarMedida(area)} m² de reserva simultânea</span></div>
+                    <div>
+                      <strong>{plano.cultura}</strong>
+                      <span>Meta semanal: {formatarMedida(plano.casa)} {ficha.unidade} para casa
+                        {plano.venda > 0 && " + " + formatarMedida(plano.venda) + " " + ficha.unidade + " para venda"}</span>
+                    </div>
                   </div>
-                  <p>Reservas: {reservas.length ? reservas.map(item => item.nome + " (" + formatarMedida(item.area) + " m²)").join(" · ") : "sem área disponível"}</p>
-                  <p>Primeiras colheitas estimadas: {seguintes.map(lote => janelaDeDatas(lote.colheita.de, lote.colheita.ate)).join(" · ")}</p>
-                  {experimental && <p className="familia-alerta">Lote de teste de 2 plantas. A meta em kg depende de medir a produção durante o ciclo.</p>}
-                  {alertaEpoca && <p className="familia-alerta">{alertaEpoca}</p>}
-                </li>
-              ))}
+                  <div className="familia-respostas">
+                    <div>
+                      <span>1. Quanto plantar</span>
+                      <strong>{formatarMedida(plantas)} {plantas === 1 ? "planta" : "plantas"} por lote</strong>
+                      <small>{experimental ? "Lote experimental; produção ainda não conhecida" : "Quantidade estimada a partir da meta informada"}</small>
+                    </div>
+                    <div>
+                      <span>2. Quando plantar novamente</span>
+                      <strong>A cada {plano.intervalo * 7} dias</strong>
+                      <small>Próximo lote: {rotuloData(proximo.inicio)}</small>
+                    </div>
+                    <div>
+                      <span>3. Quando esperar a colheita</span>
+                      <strong>{janelaDeDatas(primeiro.colheita.de, primeiro.colheita.ate)}</strong>
+                      <small>{ficha.colheitasSucessivas ? "Início estimado de colheitas sucessivas" : "Primeira janela estimada de colheita"}</small>
+                    </div>
+                  </div>
+                  <details className="familia-cronograma">
+                    <summary>Ver datas dos três primeiros lotes</summary>
+                    <ol>
+                      {seguintes.map(lote => <li key={lote.inicio}>
+                        <strong>Lote {lote.numero}</strong>
+                        <dl>
+                          <div><dt>{inicioRotulo}</dt><dd>{rotuloData(lote.inicio)}</dd></div>
+                          {ficha.mudas && plano.origem === "semente" && <div>
+                            <dt>Transplantar para o canteiro</dt>
+                            <dd>{janelaDeDatas(lote.canteiro.de, lote.canteiro.ate)}</dd>
+                          </div>}
+                          <div>
+                            <dt>{ficha.colheitasSucessivas ? "Começar a colher" : "Colher"}</dt>
+                            <dd>{janelaDeDatas(lote.colheita.de, lote.colheita.ate)}</dd>
+                          </div>
+                        </dl>
+                      </li>)}
+                    </ol>
+                  </details>
+                  <p>Área simultânea estimada: <strong>{formatarMedida(area)} m²</strong>.
+                    Reservas: {reservas.length ? reservas.map(item => item.nome + " (" + formatarMedida(item.area) + " m²)").join(" · ") : "sem área disponível"}.</p>
+                  {experimental && <p className="familia-alerta">A meta em kg não está validada: acompanhe a produção do lote de teste e ajuste as próximas quantidades.</p>}
+                  {alertaEpoca && <p className="familia-alerta">Atenção à época de plantio: {alertaEpoca} Confira a janela regional dos três primeiros lotes.</p>}
+                </li>;
+              })}
             </ol>
             <section className="sq-rotacao-instrucao" aria-labelledby="sq-rotacao-titulo">
               <h4 id="sq-rotacao-titulo">Depois da colheita: como fazer rotação de culturas?</h4>

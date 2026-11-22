@@ -120,3 +120,40 @@
 .familia :is(.familia-filtro,.familia-cultura-guia):focus-visible { outline: 3px solid var(--sq-focus); outline-offset: 2px; }
 @media (max-width: 800px) { .familia-orientacoes dl { grid-template-columns: minmax(0,1fr); } }
 @media (max-width: 420px) { .familia-filtros { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); } .familia-filtro { font-size: .78rem; padding-inline: .3rem; } .familia-seletor { grid-template-columns: repeat(2,minmax(0,1fr)); } .familia-cultura { gap: .3rem; padding-inline: .35rem; } .familia-cultura svg { width: 2.2rem; height: 2.2rem; } }
+
+/* Horta contínua — três respostas e cronograma progressivo, DS 2.1 */
+.familia-meta {
+  grid-template-columns: minmax(10rem,1.35fr) repeat(3,minmax(7rem,.8fr));
+}
+.familia-meta > label { min-width: 0; }
+.familia-respostas {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: var(--sq-space-3); margin-top: var(--sq-space-4);
+}
+.familia-respostas > div {
+  min-width: 0; padding: var(--sq-space-3);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-control);
+  background: var(--sq-surface-soft);
+}
+.familia-respostas span, .familia-respostas small {
+  display: block; color: var(--sq-text-muted); font-size: .8rem; line-height: 1.45;
+}
+.familia-respostas strong { display: block; margin: .3rem 0; font-size: clamp(1rem,1.8vw,1.15rem); line-height: 1.35; }
+.familia-cronograma { margin-top: var(--sq-space-3); border-top: 1px solid var(--sq-border); padding-top: var(--sq-space-2); }
+.familia-cronograma summary { cursor: pointer; color: var(--sq-primary); font-weight: 700; padding: .45rem; }
+.familia-cronograma ol { display: grid; gap: .75rem; margin: .55rem 0; padding-left: 1.5rem; }
+.familia-cronograma li { padding: .45rem 0; }
+.familia-cronograma dl { display: grid; gap: .35rem; margin: .45rem 0 0; }
+.familia-cronograma dl > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .2rem 1rem; font-size: .86rem; }
+.familia-cronograma dt { color: var(--sq-text-muted); }
+.familia-cronograma dd { margin: 0; font-weight: 700; }
+@media (max-width: 950px) {
+  .familia-meta { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .familia-meta-cultura { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .familia-respostas { grid-template-columns: minmax(0,1fr); }
+  .familia-meta { grid-template-columns: minmax(0,1fr); }
+  .familia-meta-cultura, .familia-meta label:nth-child(3) { grid-column: auto; }
+}

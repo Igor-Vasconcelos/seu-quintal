@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { calcularPlanoFamiliar, metaExemplo, sugestoesDeConsumo } from "../src/features/organizador/planoFamiliar.js";
+import { calcularPlanoFamiliar, intervaloPadrao, metaExemplo, sugestoesDeConsumo } from "../src/features/organizador/planoFamiliar.js";
 import { dimensionarLote, lerPlano, formularioInicial } from "../src/features/organizador/escala.js";
 import { culturasOrganizador } from "../src/features/organizador/culturas.js";
 
@@ -94,4 +94,66 @@ test("linka canteiros e agenda sem tocar na estrutura antiga de persistência", 
   assert.match(formulario, /adicionarSugestoes/);
   assert.match(visual, /#planejamento-familiar/);
   assert.match(memoria, /seu-quintal:organizador-horta:v1/);
+});
+
+test("o assistente aceita frequência personalizada e recalcula quantidade, datas e área", () => {
+  const semanal = calcularPlanoFamiliar(base);
+  const quinzenal = calcularPlanoFamiliar({
+    ...base, preferencias: [{ cultura: "Alface de verão", casa: 2, venda: 0, intervalo: 2 }],
+  });
+  assert.equal(intervaloPadrao("Alface de verão"), 1);
+  assert.equal(intervaloPadrao("Tomate de mesa"), 4);
+  assert.equal(quinzenal.erro, null);
+  const item = quinzenal.sugestoes[0];
+  assert.equal(item.plano.intervalo, 2);
+  assert.equal(item.plantas, 4);
+  assert.equal(item.seguintes[0].inicio, "2026-11-21");
+  assert.equal(item.seguintes[1].inicio, "2026-12-05");
+  assert.equal(item.seguintes[2].inicio, "2026-12-19");
+  assert.ok(item.primeiraColheita.de > item.seguintes[0].inicio);
+  assert.equal(item.area, dimensionarLote(item.plano).areaSimultanea);
+  assert.equal(semanal.sugestoes[0].plantas, 2);
+  assert.equal(lerPlano(formularioInicial(item.plano)).plano.intervalo, 2);
+});
+
+test("datas não perdem dia/mês na virada do ano e intervalos por cultura são independentes", () => {
+  const r = calcularPlanoFamiliar({
+    ...base, inicio: "2026-12-29",
+    preferencias: [
+      { cultura: "Alface de verão", casa: 3, venda: 0, intervalo: 2 },
+      { cultura: "Cenoura de verão", casa: 6, venda: 0, intervalo: 3 },
+    ],
+  });
+  assert.equal(r.erro, null);
+  const [alface, cenoura] = r.sugestoes;
+  assert.equal(alface.seguintes[1].inicio, "2027-01-12");
+  assert.equal(cenoura.seguintes[1].inicio, "2027-01-19");
+  assert.equal(alface.plantas, 6);
+  assert.equal(cenoura.plantas, 18);
+});
+
+test("intervalos fora de 1 a 52 semanas ou decimais mostram erro contextualizado", () => {
+  for (const intervalo of [0, -1, 1.5, 53, Number.NaN, Infinity]) {
+    const r = calcularPlanoFamiliar({
+      ...base, preferencias: [{ cultura: "Rabanete", casa: 2, venda: 0, intervalo }],
+    });
+    assert.match(r.erro, /intervalo de 1 a 52 semanas para Rabanete/);
+  }
+  const limite = calcularPlanoFamiliar({
+    ...base, preferencias: [{ cultura: "Rabanete", casa: 2, venda: 0, intervalo: 52 }],
+  });
+  assert.equal(limite.erro, null);
+});
+
+test("controle acessível e três respostas usam as mesmas projeções persistidas", () => {
+  const root = resolve(import.meta.dirname, "..");
+  const ui = readFileSync(resolve(root, "src/features/organizador/PlanejamentoFamiliar.jsx"), "utf8");
+  assert.match(ui, /Novo lote a cada \(semanas\)/);
+  assert.match(ui, /type="number" min="1" max="52" step="1"/);
+  assert.match(ui, /1\. Quanto plantar/);
+  assert.match(ui, /2\. Quando plantar novamente/);
+  assert.match(ui, /3\. Quando esperar a colheita/);
+  assert.match(ui, /seguintes\.map\(lote/);
+  assert.match(ui, /Adicionar sugestões à minha agenda/);
+  assert.match(ui, /intervalos\[cultura\]/);
 });
