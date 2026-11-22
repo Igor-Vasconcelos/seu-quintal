@@ -31,7 +31,7 @@ test("template reutilizável preserva HTML estático, canônicos, H1 e imagens",
     assert.match(html, new RegExp('rel="canonical" href="https://igor-vasconcelos.github.io/seu-quintal/artigos/'+slug+'/'));
     assert.ok(html.includes("Fontes e leitura complementar"));
     assert.ok(html.includes("Perguntas frequentes"));
-    assert.ok(html.includes("Continue com o Seu Quintal"));
+    assert.ok(html.includes("Coloque em prática com as ferramentas do Seu Quintal"));
     assert.doesNotMatch(html, /"datePublished":"/); // Sem criar datas não documentadas.
   }
 });
