@@ -160,6 +160,8 @@ try {
         await pagina.screenshot({path:PASTA + "/horta-recomendacoes-" + nome + ".png",animations:"disabled"});
         await principais.getByRole("button",{name:/Calcular terra para Tomate-cereja/}).click();
         await pagina.locator(".horta-cultivo-selecionado").getByText("Exemplo para Tomate-cereja").waitFor();
+        assert.match(await pagina.locator(".horta-cultivo-selecionado").innerText(),/terra molhada/);
+        await pagina.screenshot({path:PASTA + "/horta-exemplo-planta-" + nome + ".png",animations:"disabled"});
         const form = pagina.locator(".form-terra");
         assert.equal(await form.locator('input[name="comprimento"]').inputValue(),"45");
         assert.match(await pagina.locator(".horta-resultado-volume").innerText(), /91,125/);
