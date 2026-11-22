@@ -74,7 +74,7 @@ test("CSS é isolado, mantém hero pequeno e reduz imagem em celular", () => {
   const js=ler("src/main-artigos.js");
   assert.match(css,/\.sq-artigos \.sq-article-opening/);
   assert.match(css,/max-width: 700px/);
-  assert.match(css,/9\.5rem/);
+  assert.match(css,/8rem/);
   assert.match(css,/\.sq-step-figure/);
   assert.match(css,/\.sq-table-wrap/);
   assert.match(js,/artigos-guias-v6\.css/);
