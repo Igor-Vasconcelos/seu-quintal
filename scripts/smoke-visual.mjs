@@ -68,8 +68,11 @@ try {
         assert.ok(await hero.evaluate(img => img.complete && img.naturalWidth > 0),
           "Fotografia de abertura não carregou");
         const imgHeight = await hero.evaluate(img => img.getBoundingClientRect().height);
-        assert.ok(imgHeight <= (largura < 700 ? 155 : 515),
+        assert.ok(imgHeight <= (largura < 700 ? 420 : 515),
           "A imagem de abertura está alta demais: " + imgHeight);
+        const heroBox = await abertura.boundingBox();
+        assert.ok(heroBox && Math.abs(heroBox.height - imgHeight) <= 2,
+          "Foto deve preencher o hero sem alterar sua altura");
         assert.equal(await pagina.locator(".sq-prose .sq-step-figure img").count(), 2,
           "Cada artigo precisa de duas ilustrações durante a leitura");
         await abertura.screenshot({
@@ -88,6 +91,31 @@ try {
         await painel.waitFor({ state: "attached", timeout: 12000 });
         assert.equal(await painel.evaluate(el => el.open), largura > 1080,
           "Índice aberto no desktop e recolhido no celular");
+        const faixa = pagina.locator(".sq-article-meta-bar");
+        await faixa.waitFor({ state: "visible" });
+        const metaBox = await faixa.boundingBox();
+        assert.ok(metaBox && Math.abs(metaBox.x) <= 1 &&
+          Math.abs(metaBox.width - largura) <= 2,
+          "Faixa de metadados deve ocupar a viewport");
+        assert.equal(await pagina.locator(".sq-learning-panel li").count(), 3,
+          "O resumo editorial deve ter três aprendizados reais");
+        const aSide = pagina.locator(".sq-article-aside");
+        const mainText = pagina.locator(".sq-prose");
+        const sideBox = await aSide.boundingBox();
+        const textBox = await mainText.boundingBox();
+        if (largura > 1080) {
+          assert.ok(sideBox && textBox && sideBox.x > textBox.x + textBox.width,
+            "Índice e recomendações devem ficar à direita do texto");
+          assert.ok(await pagina.locator(".sq-side-related").isVisible(),
+            "Conteúdo relacionado ausente no desktop");
+        } else {
+          assert.ok(sideBox && textBox && sideBox.y < textBox.y,
+            "Sumário deve preceder o texto em tela pequena");
+        }
+        assert.ok(await pagina.locator(".sq-guide-section").count() >= 7,
+          "Seções semânticas devem preservar todo o guia");
+        assert.ok(await pagina.locator(".sq-guide-step").count() >= 1,
+          "Pelo menos uma etapa deve ter texto e figura lado a lado no desktop");
         const campos = pagina.locator(".sq-article-layout");
         const colunas = await campos.evaluate(el => getComputedStyle(el).gridTemplateColumns.split(" ").length);
         assert.equal(colunas, largura > 1080 ? 2 : 1,
