@@ -63,7 +63,7 @@ test("a transição de escolha para volume tem ação e retorno acessíveis", ()
   assert.match(src,/Calcular terra para \{item\.nome\}/);
   assert.match(src,/Outras \{sugestao\.comCuidados\.length\} opções/);
   assert.match(src,/aria-live="polite"/);
-  assert.match(src,/exemploParaCultivo\(id\)/);
+  assert.match(src,/exemploParaCultivo\(id, espaco\)/);
   assert.match(calc,/useEffect/);
   assert.match(calc,/calcularTerra\(valoresIniciais, "cm"\)/);
   assert.match(calc,/Voltar às plantas/);
