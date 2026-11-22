@@ -1,0 +1,95 @@
+/* Seu Quintal 2.6 — rodapé equilibrado com navegação orientada a tarefas.
+ * Camada incremental carregada depois de site-shell.css. Sem novos tokens.
+ */
+.rodape.rodape-v3 .rodape-conteudo {
+  grid-template-columns: minmax(17rem, 1.4fr) repeat(3, minmax(9rem, 1fr));
+  gap: clamp(1.25rem, 3vw, 3rem);
+  align-items: start;
+  padding-block: clamp(2rem, 3.4vw, 2.8rem);
+}
+.rodape.rodape-v3 .rodape-identidade { min-width: 0; }
+.rodape.rodape-v3 .rodape-identidade p {
+  max-width: 36ch; margin-block: .7rem 0;
+  line-height: 1.55; font-size: .9rem;
+}
+.rodape.rodape-v3 .rodape-apoio {
+  display: inline-flex; align-items: center; gap: .4rem;
+  max-width: 100%; margin-top: 1.05rem;
+  padding: .5rem .65rem; border: 1px solid rgb(255 255 255 / .22);
+  border-radius: var(--sq-radius-control);
+  background: rgb(255 255 255 / .065);
+  font-size: .8rem; line-height: 1.4; color: var(--sq-cream);
+}
+.rodape.rodape-v3 .rodape-apoio .icone { width: 1.1rem; height: 1.1rem; flex: none; }
+.rodape.rodape-v3 .rodape-navegacao { min-width: 0; }
+.rodape.rodape-v3 .rodape-navegacao h2 {
+  margin: .25rem 0 .7rem; font: 750 .96rem/1.4 var(--sq-font-ui);
+  color: #fff;
+}
+.rodape.rodape-v3 .rodape-navegacao h2::after {
+  content: ""; display: block; height: 2px; width: 2rem;
+  margin-top: .6rem; background: var(--sq-cream); opacity: .85;
+}
+.rodape.rodape-v3 .rodape-navegacao ul {
+  display: grid; grid-template-columns: minmax(0,1fr);
+  gap: .1rem; padding: 0; margin: 0; list-style: none;
+}
+.rodape.rodape-v3 .rodape-navegacao a {
+  display: inline-flex; align-items: center; gap: .4rem;
+  min-height: var(--sq-control-min);
+  width: fit-content; max-width: 100%;
+  padding: .25rem .15rem; border-radius: .3rem;
+  line-height: 1.45; font-size: .85rem; text-decoration: none;
+  color: #E2F0E6;
+}
+.rodape.rodape-v3 .rodape-navegacao a:hover,
+.rodape.rodape-v3 .rodape-navegacao a[aria-current="page"] {
+  color: #fff; text-decoration: underline; text-underline-offset: .22em;
+}
+.rodape.rodape-v3 .rodape-navegacao .rodape-link-quintal {
+  font-weight: 750; color: var(--sq-cream);
+}
+.rodape.rodape-v3 .rodape-link-quintal .icone {
+  width: 1.13rem; height: 1.13rem; stroke-width: 1.8; flex: none;
+}
+.rodape.rodape-v3 .rodape-base {
+  gap: .4rem 1.5rem;
+  padding-block: .7rem 1.1rem;
+}
+.rodape.rodape-v3 :is(a,button):focus-visible {
+  outline: 3px solid var(--sq-cream); outline-offset: 3px;
+}
+@media (max-width: 1120px) {
+  .rodape.rodape-v3 .rodape-conteudo {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 1.25rem;
+  }
+  .rodape.rodape-v3 .rodape-identidade {
+    grid-column: 1/-1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.3fr);
+    gap: .35rem 1.5rem; align-items: center;
+  }
+  .rodape.rodape-v3 .rodape-identidade .marca { grid-column: 1; }
+  .rodape.rodape-v3 .rodape-identidade p { grid-column: 2; grid-row: 1 / 3; margin: 0; }
+  .rodape.rodape-v3 .rodape-apoio { grid-column: 1; margin-top: .3rem; justify-self: start; }
+}
+@media (max-width: 767px) {
+  .rodape.rodape-v3 .rodape-conteudo { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .rodape.rodape-v3 .rodape-identidade { grid-column: 1/-1; display: block; }
+  .rodape.rodape-v3 .rodape-identidade p { margin-top: .7rem; }
+  .rodape.rodape-v3 .rodape-navegacao { grid-column: auto; }
+  .rodape.rodape-v3 .rodape-navegacao:last-child { grid-column: 1/-1; }
+  .rodape.rodape-v3 .rodape-apoio { margin-top: .85rem; }
+}
+@media (max-width: 490px) {
+  .rodape.rodape-v3 .rodape-conteudo { grid-template-columns: minmax(0,1fr); gap: 1.2rem; }
+  .rodape.rodape-v3 .rodape-identidade,
+  .rodape.rodape-v3 .rodape-navegacao:last-child { grid-column: 1; }
+  .rodape.rodape-v3 .rodape-navegacao h2 { margin-bottom: .25rem; }
+  .rodape.rodape-v3 .rodape-navegacao h2::after { margin-top: .35rem; }
+  .rodape.rodape-v3 .rodape-navegacao ul { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 .5rem; }
+  .rodape.rodape-v3 .rodape-navegacao a { font-size: .81rem; min-height: 2.8rem; }
+  .rodape.rodape-v3 .rodape-base { align-items: start; }
+}
+@media (max-width: 360px) {
+  .rodape.rodape-v3 .rodape-navegacao ul { grid-template-columns: minmax(0,1fr); }
+}

@@ -172,6 +172,40 @@ const desenhos = {
     <path d="M12 4v16M2 9h4v6H2m20-6h-4v6h4"/>
     <circle cx="12" cy="12" r="3"/>
   </>,
+  // Navegação do Meu Quintal: linguagem única de traço 24×24 e símbolos por função.
+  // Não substituir os ícones técnicos do catálogo de estruturas, usados nos mapas.
+  "visao-quintal": <>
+    <path d="m2.5 11 9.5-7.5 9.5 7.5"/>
+    <path d="M5.5 10.5V20h13V10.5M9 20v-5h4v5"/>
+    <path d="M16 18v-5m0 2c-2-1-3-3-3-4 3 0 3 2 3 4Zm0 1c1-2 3-3 4-3 0 2-2 3-4 3Z"/>
+  </>,
+  "terrenos-menu": <>
+    <rect x="2.75" y="4" width="18.5" height="16" rx="2"/>
+    <path d="M2.75 13h7M10 4v7M10 13c3 0 5 3 5 7"/>
+    <path d="M16.5 13v-4m0 2c-2-1-2-3-2-3 2 0 2 1 2 3Zm0 0c2-1 2-3 2-3-2 0-2 1-2 3Z"/>
+  </>,
+  "canteiros-menu": <>
+    <rect x="3" y="8" width="18" height="13" rx="2"/>
+    <path d="M3 15h18M8 21v-7m8 7v-7"/>
+    <path d="M8 15c-3-1-4-3-4-5 3 0 4 2 4 5Zm0 0c0-3 2-5 4-5 0 3-1 4-4 5Z"/>
+    <path d="M16 15c-3-1-4-3-4-5 3 0 4 2 4 5Zm0 0c0-3 2-5 4-5 0 3-1 4-4 5Z"/>
+  </>,
+  "agenda-menu": <>
+    <rect x="3" y="5" width="18" height="16" rx="2"/>
+    <path d="M7 3v4m10-4v4M3 10h18M8.5 15l2.5 2.5 4.5-5"/>
+  </>,
+  "historico-menu": <>
+    <path d="M4 8a8.5 8.5 0 1 1-.5 7"/>
+    <path d="M4 3v5h5M12 7.5v5l3 1.8"/>
+  </>,
+  "dados-locais": <>
+    <rect x="3" y="5" width="18" height="14" rx="2"/>
+    <path d="M3 13h18M7 16h.01M11 16h6"/>
+  </>,
+  "backup-menu": <>
+    <path d="M5 3h10l4 4v13H5V3ZM15 3v5h4"/>
+    <path d="M12 10v7m-3-3 3 3 3-3"/>
+  </>,
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   fechar: <path d="m6 6 12 12M18 6 6 18" />,
   novaAba: <path d="M13 5h6v6m0-6-8 8m6 0v6H5V7h6" />,

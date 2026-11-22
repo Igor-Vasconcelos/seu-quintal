@@ -1,9 +1,11 @@
 import Icone from "./Icone.jsx";
 import "../styles/rodape.css";
 import "../styles/site-shell.css";
+import "../styles/rodape-v4.css";
 
 export default function Rodape({ inicio = false, sisteminha = false, raiz = "./", pagina, aoVerCreditos }) {
   const home = inicio ? "#inicio" : raiz;
+  // Preservar rotas reais e distribuir o mesmo número de destinos por assunto.
   const grupos = [
     { titulo: "Aprenda", links: [
       ["Horta e jardim", "horta/"],
@@ -16,10 +18,12 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
       ["Calendário de plantio", "horta/calendario-de-plantio/"],
       ["Planejador de canteiros", "horta/canteiros/"],
       ["Organizador de horta", "horta/organizador/"],
+    ] },
+    { titulo: "Cuide e organize", links: [
+      ["Meu Quintal", "meu-quintal/"],
+      ["Planejador de pomar", "ferramentas/planejador-de-pomar/"],
       ["Calculadora de peixes", "ferramentas/calculadora-peixes/"],
       ["Calculadora de codornas", "ferramentas/calculadora-codornas/"],
-      ["Planejador de pomar", "ferramentas/planejador-de-pomar/"],
-      ["Meu Quintal", "meu-quintal/"],
     ] },
   ];
   return (
@@ -33,8 +37,8 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
             </span>
             <span className="site-marca-texto"><strong>Seu Quintal</strong><small>Da primeira muda ao seu sítio.</small></span>
           </a>
-          <p>Conhecimento e ferramentas gratuitas para cultivar, cuidar dos animais e organizar seu espaço produtivo.</p>
-          <span className="rodape-apoio">Aprenda no seu ritmo. Planeje com confiança.</span>
+          <p>Ideias e ferramentas gratuitas para cuidar da sua horta, dos animais e do espaço que você tem — ou sonha em ter.</p>
+          <span className="rodape-apoio"><Icone nome="muda"/> Comece gratuitamente, sem precisar de uma conta.</span>
         </div>
         {grupos.map(grupo => (
           <nav className="rodape-navegacao" key={grupo.titulo} aria-label={grupo.titulo}>
@@ -44,9 +48,14 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
                 const atual = rota === "sisteminha.html" ? sisteminha
                   : rota === "horta/" ? pagina === "horta"
                   : rota === "artigos/" ? pagina === "artigos"
-                  : rota === "guias/" ? pagina === "guias" : false;
-                return <li key={rota}><a href={raiz + rota} aria-current={atual ? "page" : undefined}>
-                  {titulo}
+                  : rota === "guias/" ? pagina === "guias"
+                  : rota === "meu-quintal/" ? pagina === "meu-quintal"
+                  : rota === "ferramentas/" ? pagina === "ferramentas" : false;
+                return <li key={rota}><a href={raiz + rota}
+                  className={rota === "meu-quintal/" ? "rodape-link-quintal" : undefined}
+                  aria-current={atual ? "page" : undefined}>
+                  {rota === "meu-quintal/" && <Icone nome="visao-quintal"/>}
+                  <span>{titulo}</span>
                 </a></li>;
               })}
             </ul>

@@ -11,11 +11,11 @@ const HistoricoCultivo = lazy(() => import("../cultivo/HistoricoCultivo.jsx"));
 const OrganizadorHorta = lazy(() => import("../organizador/OrganizadorHorta.jsx"));
 const PlanejadorVisualCanteiro = lazy(() => import("../organizador/PlanejadorVisualCanteiro.jsx"));
 const secoes = {
-  geral: { nome: "Visão geral", icone: "outros" },
-  terreno: { nome: "Terrenos", icone: "planta" },
-  canteiros: { nome: "Meus canteiros", icone: "canteiro" },
-  horta: { nome: "Agenda da horta", icone: "calendario" },
-  historico: { nome: "Histórico", icone: "historico" },
+  geral: { nome: "Visão geral", icone: "visao-quintal" },
+  terreno: { nome: "Terrenos", icone: "terrenos-menu" },
+  canteiros: { nome: "Meus canteiros", icone: "canteiros-menu" },
+  horta: { nome: "Agenda da horta", icone: "agenda-menu" },
+  historico: { nome: "Histórico", icone: "historico-menu" },
 };
 const raiz = "../";
 
@@ -50,7 +50,7 @@ export default function MeuQuintal() {
             <p>Organize seus terrenos, plantios, canteiros e registros em um só lugar.</p>
           </div>
           <div className="quintal-titulo-acoes">
-            <p className="quintal-salvamento"><Icone nome="historico"/>
+            <p className="quintal-salvamento"><Icone nome="dados-locais"/>
               Armazenamento neste navegador, sem sincronização automática. Faça backups regularmente.
             </p>
             <div className="quintal-acoes-links">
@@ -61,7 +61,7 @@ export default function MeuQuintal() {
                 painel.scrollIntoView({ block: "start" });
                 painel.querySelector("summary")?.focus();
               }}>
-                <Icone nome="historico"/> Fazer backup
+                <Icone nome="backup-menu"/> Fazer backup
               </button>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function MeuQuintal() {
             ))}
           </div>
           <div className="quintal-secoes-rodape">
-            <Icone nome="historico"/><span>Dados neste navegador</span>
+            <Icone nome="dados-locais"/><span>Dados neste navegador</span>
           </div>
         </nav>
         <p className="visualmente-oculto" role="status" aria-live="polite">
