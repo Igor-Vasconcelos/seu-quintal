@@ -140,6 +140,32 @@ try {
     }
     await contexto.close();
   }
+  // Validação adicional de larguras de transição do Design System 2.0.
+  for (const largura of [320, 768, 1024]) {
+    const contexto = await navegador.newContext({
+      viewport: { width: largura, height: 860 }, reducedMotion: "reduce",
+    });
+    for (const [slug, rota] of [
+      ["home", "/"], ["guias", "/guias/"], ["artigos", "/artigos/"],
+      ["ferramentas", "/ferramentas/"], ["sisteminha", "/sisteminha.html"],
+      ["meu-quintal", "/meu-quintal/"],
+    ]) {
+      const pagina = await contexto.newPage();
+      await pagina.goto(URL_BASE + rota, {waitUntil: "networkidle", timeout: 40000});
+      const excedente = await pagina.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      assert.ok(excedente <= 2, slug + "/" + largura + ": overflow de " + excedente + " px");
+      if (slug === "home") {
+        await pagina.screenshot({
+          path: PASTA + "/home-" + largura + ".png",
+          animations: "disabled",
+        });
+      }
+      await pagina.close();
+      casos++;
+    }
+    await contexto.close();
+  }
 } finally {
   await navegador.close();
 }
