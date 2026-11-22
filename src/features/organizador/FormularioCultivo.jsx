@@ -107,7 +107,7 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
     const cultura = evento.target.value;
     const proxima = culturasOrganizador[cultura];
     definirCampos((atuais) => ({
-      ...atuais, cultura, origem: proxima.mudas ? atuais.origem : "semente",
+      ...atuais, cultura, origem: proxima.somenteMuda ? "muda" : proxima.mudas ? atuais.origem : "semente",
       casa: proxima.unidade === ficha.unidade ? atuais.casa : proxima.unidade === "kg" ? "0,5" : "4",
       venda: proxima.unidade === ficha.unidade ? atuais.venda : "0",
       intervalo: proxima.colheitasSucessivas === ficha.colheitasSucessivas ? atuais.intervalo : proxima.colheitasSucessivas ? "4" : "1",
@@ -147,7 +147,7 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
             </label>
             <label className="campo">Como vai começar?
               <select name="origem" value={campos.origem} onChange={mudar}>
-                <option value="semente">{ficha.mudas ? "Semente em bandeja" : "Semente no canteiro"}</option>
+                {!ficha.somenteMuda && <option value="semente">{ficha.mudas ? "Semente em bandeja" : "Semente no canteiro"}</option>}
                 {ficha.mudas && <option value="muda">Muda pronta</option>}
               </select>
             </label>
