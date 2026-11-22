@@ -173,7 +173,7 @@ export default function App() {
 
         <section className="home-miolo home-secao home-projetos" aria-label="Projetos para o quintal">
           <div className="home-meu-quintal" id="meu-quintal">
-            <Icone nome="planta" />
+            <span className="home-meu-quintal-emblema" aria-hidden="true"><Icone nome="meu-quintal" /></span>
             <h2>Meu Quintal</h2>
             <p>Guarde seus terrenos, organize tarefas e acompanhe as colheitas. Por enquanto, os dados ficam salvos neste navegador e podem ser exportados por backup.</p>
             <a className="botao" href="./meu-quintal/">
