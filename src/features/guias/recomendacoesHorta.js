@@ -149,7 +149,7 @@ export function recomendarCultivos(espaco, luz) {
   };
 }
 
-export function exemploParaCultivo(id) {
+export function exemploParaCultivo(id, espaco = "") {
   const item = cultivosPequenosEspacos[id];
   if (!item) return null;
   const [comprimento, largura, profundidade] = item.medidas;
@@ -158,6 +158,8 @@ export function exemploParaCultivo(id) {
     nome: item.nome,
     medidas: { comprimento: String(comprimento), largura: String(largura), profundidade: String(profundidade) },
     recipiente: item.recipiente,
-    aviso: "Medidas ilustrativas para fazer a conta, não exigência mínima nem garantia de bom cultivo.",
+    aviso: "Medidas ilustrativas para fazer a conta, não exigência mínima nem garantia de bom cultivo." +
+      (espaco === "janela" ? " Em janelas, coloque o vaso sobre apoio seguro do lado interno." :
+        espaco === "varanda" ? " Em varandas, confira o peso da terra molhada e a capacidade da estrutura." : ""),
   };
 }
