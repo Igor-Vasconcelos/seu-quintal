@@ -7,6 +7,20 @@ const desenhos = {
     <path d="M6 4h15l-4 16H2L6 4Z" />
     <path d="m11 4-4 16m9-16-4 16M4 12h15" />
   </>,
+  // Meu Quintal: miniatura de uma chácara com casa, muda, canteiros e caminho.
+  // Distinto de "planta", que permanece como grade técnica do planejador.
+  // Simplificado no viewBox 24×24 para permanecer legível no botão da navbar.
+  "meu-quintal": <>
+    <path d="m8.5 9.2 4-3.1 4 3.1" />
+    <path d="M9.5 9.2v5.5h6V9.2M11.5 14.7v-3.6h2v3.6" />
+    <rect x="14.15" y="11.1" width="1.1" height="1.1" rx=".15" fill="currentColor" stroke="none" />
+    <path d="M3 20.5 5.2 14.7H9m6.5 0h3.1l2.4 5.8H3Z" />
+    <path d="M11.5 20.5c-.5-1.7.2-3.4 1.8-5.8" />
+    <path d="M6.7 18.8v-4" />
+    <path d="M6.7 16.5c-2.1-.2-2.9-1.4-3-2.8 1.8.1 2.9 1.2 3 2.8Z" />
+    <path d="M6.7 16c.3-1.9 1.1-2.9 2.8-3-.1 1.6-1.1 2.9-2.8 3Z" />
+    <path d="M15.8 17.5h2.8m-3 2h3.6m-3.1-2v-1m1.3 1v-1m-.4 3v-1" />
+  </>,
   livro: <>
     <path d="M12 6v14m0-14C9 4 6 4 2 5v14c4-1 7-1 10 1 3-2 6-2 10-1V5c-4-1-7-1-10 1Z" />
   </>,
