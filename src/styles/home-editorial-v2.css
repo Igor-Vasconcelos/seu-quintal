@@ -331,3 +331,27 @@
   height: 66%;
   stroke-width: 1.65;
 }
+
+
+/* Crédito de fotografia externa: fora do link do card, sem links aninhados. */
+.pagina-home .home-destaque-com-credito {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pagina-home .home-destaque-com-credito > .home-destaque-card {
+  flex: 1 1 auto;
+}
+.pagina-home .home-destaque-credito {
+  margin: .4rem .15rem 0;
+  color: var(--sq-text-muted);
+  font: 500 .66rem/1.45 var(--sq-font-ui);
+  overflow-wrap: anywhere;
+}
+.pagina-home .home-destaque-credito a {
+  color: var(--sq-link);
+  text-underline-offset: .15em;
+}
+.pagina-home .home-destaque-com-credito .home-destaque-imagem img {
+  object-position: center 48%;
+}
