@@ -38,7 +38,12 @@ export function readArticle(source, file) {
   for (const key of REQUIRED) if (!meta[key]) throw new Error("Metadado ausente em " + file + ": " + key);
   if (!["publicado", "rascunho"].includes(meta.status)) throw new Error("Status inválido: " + meta.status);
   pathOnly(meta.imagem);
-  pathOnly(meta.ferramentaUrl);
+  // Permite âncoras públicas verificadas em ferramentas, sem permitir URLs externas arbitrárias.
+  const [rotaFerramenta, ancoraFerramenta, excesso] = meta.ferramentaUrl.split("#");
+  pathOnly(rotaFerramenta);
+  if (excesso !== undefined || (ancoraFerramenta && !/^[a-z0-9_-]+$/.test(ancoraFerramenta))) {
+    throw new Error("Âncora de ferramenta inválida: " + meta.ferramentaUrl);
+  }
   // Datas editoriais são fornecidas explicitamente pelo autor, nunca inferidas do build.
   for (const campo of ["dataPublicacao", "dataAtualizacao"]) {
     if (!meta[campo]) continue;
@@ -59,7 +64,13 @@ export function readArticle(source, file) {
 }
 
 function linkTarget(value, prefix) {
-  if (value.startsWith("/")) return prefix + pathOnly(value).slice(1);
+  if (value.startsWith("/")) {
+    const [rota, ancora, excesso] = value.split("#");
+    if (excesso !== undefined || (ancora && !/^[a-z0-9_-]+$/.test(ancora))) {
+      throw new Error("Âncora inválida: " + value);
+    }
+    return prefix + pathOnly(rota).slice(1) + (ancora ? "#" + ancora : "");
+  }
   if (/^https:\/\/[^\s"'<>]+$/.test(value)) return value;
   if (/^#[a-z0-9_-]+$/.test(value)) return value;
   throw new Error("Link não suportado: " + value);
@@ -89,8 +100,37 @@ export function renderMarkdown(markdown, prefix) {
     if (list) output.push("</" + list + ">");
     list = "";
   }
-  for (const line of markdown.replace(/\r\n/g, "\n").split("\n")) {
+  const linhas = markdown.replace(/\r\n/g, "\n").split("\n");
+  for (let i = 0; i < linhas.length; i++) {
+    const line = linhas[i];
     if (!line.trim()) { closeParagraph(); closeList(); continue; }
+    const imagem = line.match(/^!\[([^\]]{8,200})\]\((\/imagens\/artigos\/[a-z0-9-]+\.webp)\)$/);
+    if (imagem) {
+      closeParagraph(); closeList();
+      const alvo = linkTarget(imagem[2], prefix);
+      output.push('<figure class="sq-step-figure"><img src="' + escapeHtml(alvo) +
+        '" alt="' + escapeHtml(imagem[1]) +
+        '" width="960" height="640" loading="lazy" decoding="async">' +
+        '<figcaption>Ilustração digital gerada por IA para fins didáticos; não é registro de uma propriedade real.</figcaption></figure>');
+      continue;
+    }
+    if (line.startsWith("![") && !imagem) throw new Error("Imagem deve usar caminho local WebP em /imagens/artigos/ e texto alternativo.");
+    const separador = /^\|(?:\s*:?-{3,}:?\s*\|)+$/;
+    if (/^\|.+\|$/.test(line) && separador.test(linhas[i+1] || "")) {
+      closeParagraph(); closeList();
+      const cabecalhos = line.slice(1,-1).split("|").map(c => c.trim());
+      output.push('<div class="sq-table-wrap" role="region" aria-label="Tabela de exemplo" tabindex="0"><table><thead><tr>' +
+        cabecalhos.map(c => "<th scope=\"col\">" + inlineMarkdown(c,prefix) + "</th>").join("") +
+        "</tr></thead><tbody>");
+      i++;
+      while (i+1 < linhas.length && /^\|.+\|$/.test(linhas[i+1])) {
+        const celulas = linhas[++i].slice(1,-1).split("|").map(c => c.trim());
+        if(celulas.length !== cabecalhos.length) throw new Error("Tabela com quantidade desigual de colunas.");
+        output.push("<tr>" + celulas.map(c => "<td>" + inlineMarkdown(c,prefix) + "</td>").join("") + "</tr>");
+      }
+      output.push("</tbody></table></div>");
+      continue;
+    }
     const heading = line.match(/^(#{2,3})\s+(.+)$/);
     if (heading) {
       closeParagraph(); closeList();
@@ -231,16 +271,19 @@ export function renderArticle(article) {
   const tool = '<aside class="sq-tool"><p class="sq-eyebrow">COLOQUE EM PRÁTICA</p>' +
     '<h2>Experimente uma ferramenta gratuita</h2><p>Transforme o aprendizado em um plano para seu espaço.</p>' +
     '<a class="sq-button" href="' + toolUrl + '">' + escapeHtml(article.ferramentaTexto) + "</a></aside>";
+  const resposta = article.resposta
+    ? '<p class="sq-answer"><strong>Resposta direta:</strong> ' + escapeHtml(article.resposta) + "</p>" : "";
   const body = '<nav class="sq-breadcrumb" aria-label="Você está aqui"><a href="../../">Início</a> / <a href="../">Artigos</a> / ' +
-    escapeHtml(article.categoria) + '</nav><article class="sq-article"><header class="sq-article-header">' +
-    '<p class="sq-eyebrow">' + escapeHtml(article.categoria) + "</p><h1>" + escapeHtml(article.titulo) + "</h1>" +
-    '<p class="sq-lede">' + escapeHtml(article.descricao) + "</p>" +
+    escapeHtml(article.categoria) + '</nav><article class="sq-article"><div class="sq-article-opening">' +
+    '<header class="sq-article-header"><p class="sq-eyebrow">' + escapeHtml(article.categoria) +
+    '</p><h1>' + escapeHtml(article.titulo) + '</h1>' +
+    '<p class="sq-lede">' + escapeHtml(article.descricao) + '</p>' + resposta +
     '<div class="sq-article-info"><p class="sq-byline">Por ' + escapeHtml(article.autor) +
     (date ? " · " + date : "") + '</p><p class="sq-read-meta">' + leitura + '</p>' +
-    '<a class="sq-meta-tool" href="' + toolUrl + '">Ferramenta relacionada</a></div></header>' +
+    '<a class="sq-meta-tool" href="' + toolUrl + '">' + escapeHtml(article.ferramentaTexto) + '</a></div></header>' +
     '<figure class="sq-hero-image"><img src="../../' + article.imagem.slice(1) +
-    '" alt="' + escapeHtml(article.imagemAlt) + '" width="1200" height="675" decoding="async" fetchpriority="high"></figure>' +
-    '<div class="sq-article-layout">' + toc + '<div class="sq-prose" id="inicio-leitura">' +
+    '" alt="' + escapeHtml(article.imagemAlt) + '" width="960" height="640" decoding="async" fetchpriority="high"></figure>' +
+    '</div><div class="sq-article-layout">' + toc + '<div class="sq-prose" id="inicio-leitura">' +
     content.html + tool + "</div></div></article>" +
     '<p class="sq-back"><a href="../">Ver todos os artigos</a></p>';
   const structured = {

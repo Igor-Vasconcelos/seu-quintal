@@ -43,7 +43,7 @@ test("publicação gera catálogo, artigos e sitemap sem depender de React", () 
   assert.match(horta, /rel="canonical" href="https:\/\/igor-vasconcelos.github.io\/seu-quintal\/artigos\/como-planejar-uma-horta-para-colher-com-frequencia\/"/);
   assert.match(horta, /type="application\/ld\+json"/);
   const galinhas = read("artigos/quantas-galinhas-para-ter-ovos-em-casa/index.html");
-  assert.match(galinhas, /href="\.\.\/\.\.\/sisteminha.html"/);
+  assert.match(galinhas, /href="\.\.\/\.\.\/sisteminha.html#calculadora-galinheiro"/);
   const sitemap = read("public/sitemap.xml");
   assert.match(sitemap, /\/seu-quintal\/artigos\/quantas-galinhas-para-ter-ovos-em-casa\/<\/loc>/);
   assert.match(sitemap, /\/seu-quintal\/sisteminha.html<\/loc>/);
