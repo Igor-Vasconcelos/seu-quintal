@@ -21,7 +21,6 @@ function Campo({ rotulo, nome, valor, aoMudar, minimo, maximo, unidade, ajuda })
   return <label className="campo codornas-campo">
     <span>{rotulo}{unidade ? " (" + unidade + ")" : ""}</span>
     <input name={nome} type="text" inputMode="decimal" value={valor} onChange={e => aoMudar(nome,e.target.value)}
-      required={!["precoRacaoKg","precoPoedeira","precoPintinho","custoEstrutura"].includes(nome)}
       aria-describedby={ajuda ? "codornas-ajuda-" + nome : undefined}
       data-min={minimo} data-max={maximo}/>
     {ajuda && <small id={"codornas-ajuda-" + nome}>{ajuda}</small>}
@@ -34,7 +33,7 @@ function Resultado({ resultado }) {
     { titulo: "Ovos por dia, em média", valor: formatar(resultado.ovosPrevistosSemana / 7,1), unidade: "ovos/dia", mostra: resultado.modo !== "corte" },
     { titulo: "Aves de corte em alojamento", valor: formatar(resultado.avesCorteAlojadas,0), unidade: "aves", mostra: resultado.modo !== "ovos" },
     { titulo: "Carne por mês (hipótese)", valor: formatar(resultado.carneMesKg,2), unidade: "kg", mostra: resultado.modo !== "ovos" },
-    { titulo: "Ração por 30 dias", valor: formatar(resultado.racaoMesKg,2), unidade: "kg", mostra: true },
+    { titulo: resultado.modo === "ovos" ? "Ração por 30 dias" : "Ração mensal em regime de lotes", valor: formatar(resultado.racaoMesKg,2), unidade: "kg", mostra: true },
     { titulo: "Água diária no pico", valor: formatar(resultado.aguaDiaL,2), unidade: "L/dia", mostra: true },
     { titulo: "Área de alojamento calculada", valor: formatar(resultado.areaReferenciaM2,2), unidade: "m²", mostra: true },
   ].filter(item => item.mostra);
@@ -49,6 +48,7 @@ function Resultado({ resultado }) {
     </dl>
     <div className="codornas-resumo">
       <h4>Custos que você poderá planejar</h4>
+      {resultado.modo !== "ovos" && <p className="codornas-nota">Na criação de corte, o consumo mensal corresponde ao regime de entradas regulares após os lotes se estabilizarem; o primeiro mês pode ser diferente.</p>}
       <p><strong>Ração por 30 dias:</strong> {resultado.custoRacaoMes === null
         ? "preço não informado" : "R$ " + formatar(resultado.custoRacaoMes,2)}.</p>
       <p><strong>Compra de aves para a ocupação simulada:</strong> {resultado.custoCompraAvesInicial === null
@@ -253,7 +253,7 @@ export default function CalculadoraCodornas() {
       <ul>{fontesCodornas.map(item=><li key={item.url}>
         <a href={item.url} target="_blank" rel="noopener noreferrer">{item.nome}</a>
       </li>)}</ul>
-      <p>Consulte assistência técnica e os requisitos sanitários locais. Em Minas Gerais,
+      <p>Manuseie os ovos com mãos e utensílios limpos; descarte ovos quebrados e consulte orientações específicas para limpeza e armazenamento seguro. Consulte assistência técnica e os requisitos sanitários locais. Em Minas Gerais,
         o IMA informa que até criações avícolas de subsistência devem ser cadastradas.
         Em caso de suspeita sanitária, não movimente, abata ou consuma aves sem orientação oficial.
         Não use fezes frescas nos canteiros: resíduos exigem tratamento adequado.</p>
