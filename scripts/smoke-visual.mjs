@@ -89,6 +89,11 @@ try {
         await pagina.locator('.quintal-secoes a[href="#canteiros"]').click();
         await pagina.locator(".canteiro-visual").waitFor({ state: "visible", timeout: 20000 });
         assert.ok(await pagina.locator("#quintal-backup").count());
+        // O teste começa em navegador vazio: criar um terreno antes de adicionar áreas.
+        await pagina.locator('.quintal-secoes a[href="#terreno"]').click();
+        await pagina.locator('#planejador input[name="frente"]').fill('25');
+        await pagina.locator('#planejador input[name="profundidade"]').fill('40');
+        await pagina.locator('#planejador button[type="submit"]').click();
         await pagina.locator('.area-categoria').filter({hasText:"Animais"}).click();
         const codornario = pagina.locator('.area-opcao').filter({hasText:"Codornário"});
         await codornario.click();
