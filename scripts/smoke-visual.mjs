@@ -152,6 +152,20 @@ try {
         assert.ok(await imagem.evaluate(img => img.complete && img.naturalWidth > 0),
           slug + ": fotografia editorial deve carregar");
       }
+      if (slug === "canteiros") {
+        // A ferramenta independente fica em /horta/canteiros/.
+        const dica = pagina.locator(".canteiro-dica a");
+        await dica.waitFor({ state: "visible", timeout: 20000 });
+        await dica.click();
+        await pagina.waitForURL("**/horta/organizador/#planejamento-familiar");
+        await pagina.locator("#planejamento-familiar[open]").waitFor({ state: "visible", timeout: 20000 });
+      }
+      if (slug === "organizador") {
+        // Links antigos que circulam fora do site não devem mais mostrar 404.
+        await pagina.goto(URL_BASE + "/organizador/#planejamento-familiar", { waitUntil: "networkidle" });
+        await pagina.waitForURL("**/horta/organizador/#planejamento-familiar");
+        await pagina.locator("#planejamento-familiar[open]").waitFor({ state: "visible", timeout: 20000 });
+      }
       if (slug === "codornas") {
         await pagina.locator(".codornas-formulario button[type=submit]").click();
         await pagina.locator("#codornas-resultado").waitFor({ state: "visible", timeout: 12000 });
@@ -222,6 +236,13 @@ try {
           "O projeto criado deve aparecer na visão geral");
         assert.equal(await pagina.locator(".quintal-indicadores strong").nth(2).innerText(), "3",
           "A visão geral precisa contar os três elementos adicionados ao cenário");
+        // Este mesmo componente também é montado em Meu Quintal; a rota é diferente.
+        await pagina.locator('.quintal-secoes a[href="#canteiros"]').click();
+        const dicaDoQuintal = pagina.locator(".canteiro-dica a");
+        await dicaDoQuintal.waitFor({ state: "visible", timeout: 20000 });
+        await dicaDoQuintal.click();
+        await pagina.waitForURL("**/horta/organizador/#planejamento-familiar");
+        await pagina.locator("#planejamento-familiar[open]").waitFor({ state: "visible", timeout: 20000 });
       }
       console.log("PASSOU", nome, rota);
       await pagina.close();
