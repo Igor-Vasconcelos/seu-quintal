@@ -8,3 +8,8 @@ import "./styles/catalogos-v4.css";
 import "./styles/site-raiz-caminho.css";
 
 import "./styles/layout-shell-v5.css";
+
+import "./styles/artigos-leitura-v5.css";
+import { iniciarIndiceAtivo } from "./features/artigos/indiceAtivo.js";
+
+if (document.querySelector(".sq-article")) iniciarIndiceAtivo();
