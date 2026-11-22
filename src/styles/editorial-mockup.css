@@ -83,6 +83,11 @@
 }
 .sisteminha-ds3 .sisteminha-intro p { color: #fff; max-width: 56ch; margin-top: .85rem; line-height: 1.55; }
 .sisteminha-ds3 .sisteminha-panorama { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.sisteminha-ds3 .sisteminha-panorama picture { display: contents; }
+.sisteminha-hero-credito {
+  display: inline-flex; margin-top: .7rem; font-size: .72rem; line-height: 1.4;
+  color: #E2EADC; text-shadow: 0 1px 2px #183C2B;
+}
 .sisteminha-ds3 .sisteminha-panorama img {
   position: absolute; inset: 0; object-fit: cover; object-position: 60% 54%;
 }

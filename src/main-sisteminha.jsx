@@ -290,11 +290,15 @@ function Sisteminha() {
               <a className="botao sisteminha-cta" href="#ciclo">Ver o ciclo <Icone nome="seta" /></a>
               <a className="sisteminha-intro-link" href="#modulos">Conhecer os módulos</a>
             </div>
+            <small className="sisteminha-hero-credito">Cena ilustrativa sintética gerada por IA, não fotografia de instalação real.</small>
           </div>
           <div className="sisteminha-panorama">
-            <img src="./imagens/sisteminha/hero-corrigido.svg" width="1440" height="650"
-              alt="Ilustração educativa de um quintal com tanque de peixes, horta, composteira e duas galinhas em seu galinheiro."
-              fetchPriority="high" />
+            <picture>
+              <source type="image/avif" srcSet="./imagens/sisteminha/hero-realista-v4.avif"/>
+              <img src="./imagens/sisteminha/hero-realista-v4.webp" width="1280" height="720"
+                alt="Cena sintética realista de quintal com tanque de peixes, canteiros de hortaliças, composteira e duas galinhas de anatomia normal junto ao galinheiro."
+                fetchPriority="high" decoding="async"/>
+            </picture>
           </div>
         </section>
 
@@ -402,7 +406,7 @@ function Sisteminha() {
       <Rodape sisteminha aoVerCreditos={(evento) => definirBotaoCreditos(evento.currentTarget)} />
 
       {botaoCreditos && <CaixaDialogo titulo="Sobre as imagens" acionador={botaoCreditos} fechar={() => definirBotaoCreditos(null)}>
-        <p>O panorama e as imagens dos módulos do Sisteminha são ilustrações geradas por IA.</p>
+        <p>O hero utiliza uma cena fotográfica sintética gerada por IA, não um registro de instalação real nem oficial da Embrapa. As demais imagens e diagramas são educativos e devem ser revisados tecnicamente antes de qualquer execução.</p>
       </CaixaDialogo>}
     </div>
   );
