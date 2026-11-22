@@ -6,7 +6,9 @@ const read = p => readFileSync(resolve(import.meta.dirname,"..",p),"utf8");
 test("Home mantém acesso imediato às ferramentas e hero editorial sem eliminar conteúdo",()=>{
  const app=read("src/App.jsx");
  assert.match(app,/className="home-hero-selo"/);
- assert.match(app,/className="home-hero-garantia"/);
+ assert.match(app,/className="home-beneficios"/);
+ assert.match(app,/home-trilhas/);
+ assert.match(app,/DestaquesEditorial/);
  for(const target of ["ferramentas","guias","artigos","meu-quintal","sisteminha"]){
   assert.ok(app.includes(target));
  }
