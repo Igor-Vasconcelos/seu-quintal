@@ -10,6 +10,7 @@ import Galinheiro from "./features/galinheiro/Galinheiro.jsx";
 import FluxoSisteminha from "./features/sisteminha/FluxoSisteminha.jsx";
 import EsquemaModulo from "./features/sisteminha/EsquemaModulo.jsx";
 import SaibaMaisModulo from "./features/sisteminha/SaibaMaisModulo.jsx";
+import FerramentasModulo from "./features/sisteminha/FerramentasModulo.jsx";
 import { fichasSisteminha, etapasImplantacao, materiaisOficiais } from "./features/sisteminha/dadosSisteminha.js";
 import "./styles/tokens.css";
 import "./styles/home.css";
@@ -133,7 +134,7 @@ function DetalheModulo({ id, modulo }) {
 
         <SaibaMaisModulo modulo={id}/>
         <div className="sisteminha-modulo-acoes">
-          {ficha.links.map(link => (
+          {ficha.links.filter(link => link.href.startsWith("https://")).map(link => (
             <a key={link.href} className="botao botao-contorno" href={link.href}
               {...(link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
               {link.titulo} <Icone nome="seta"/>
@@ -376,6 +377,7 @@ function Sisteminha() {
           <h2 id="titulo-modulos">{modulos[abaAtiva]?.titulo ?? "Conheça os módulos"}</h2>
           <p className="sisteminha-orientacao">Estes cinco componentes ilustram uma configuração integrada;
             o Sisteminha inclui outros módulos que podem ser combinados de acordo com recursos e manejo.</p>
+          <FerramentasModulo modulo={abaAtiva}/>
           <div className="sisteminha-detalhes sisteminha-transicao-conteudo" key={abaAtiva}>
             {Object.entries(modulos).filter(([id]) => id === abaAtiva).map(([id, modulo]) => id === "galinheiro" ? (
               <div key={id} className="sisteminha-galinheiro-conjunto">

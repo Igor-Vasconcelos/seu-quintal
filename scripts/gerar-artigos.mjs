@@ -9,7 +9,7 @@ const ORIGIN = "https://igor-vasconcelos.github.io/seu-quintal";
 const REQUIRED = ["titulo", "descricao", "categoria", "autor", "imagem", "imagemAlt", "ferramentaUrl", "ferramentaTexto", "status"];
 const EXISTING = ["/", "/horta/", "/horta/calendario-de-plantio/", "/horta/organizador/", "/horta/canteiros/", "/guias/",
   "/guias/compostagem/", "/guias/irrigacao/", "/meu-quintal/", "/sisteminha.html", "/mapa-do-site/",
-  "/ferramentas/calculadora-peixes/", "/ferramentas/planejador-de-pomar/",
+  "/ferramentas/", "/ferramentas/calculadora-peixes/", "/ferramentas/planejador-de-pomar/",
   "/ferramentas/calculadora-codornas/"];
 
 export function escapeHtml(value) {

@@ -1,0 +1,92 @@
+/* UX v4 — Descoberta de ferramentas e conexões com o Sisteminha.
+   Apenas catálogo público e recomendações do módulo. */
+.ferramentas-catalogo { display: grid; gap: 1.55rem; margin-block: 1rem 3rem; }
+.ferramentas-catalogo-intro h2 { font: 400 clamp(1.5rem,2.4vw,2rem)/1.2 var(--sq-font-display); color: var(--sq-forest); }
+.ferramentas-catalogo-intro p { margin-top: .35rem; color: var(--sq-text-muted); max-width: 70ch; }
+.conteudo-tematico .ferramentas-hero { padding: clamp(1.35rem,3vw,2.5rem); }
+.conteudo-tematico .ferramentas-hero h1 { max-width: 26ch; font-size: clamp(2.1rem,3.6vw,3.1rem); }
+.ferramentas-indice { display: flex; flex-wrap: wrap; gap: .45rem; }
+.ferramentas-indice a {
+  display: inline-flex; align-items: center; gap: .4rem;
+  min-height: 2.75rem; padding: .55rem .8rem;
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-pill);
+  background: var(--sq-surface); color: var(--sq-primary);
+  text-decoration: none; font-weight: 750; font-size: .86rem;
+}
+.ferramentas-indice .icone { width: 1.15rem; height: 1.15rem; }
+.ferramentas-indice a:hover { background: var(--sq-brand-100); border-color: var(--sq-primary); }
+.ferramentas-grupo { scroll-margin-top: 1rem; }
+.ferramentas-grupo-cabecalho { display: flex; align-items: center; gap: .75rem; padding-bottom: .75rem; }
+.ferramentas-grupo-cabecalho h3 { font: 400 clamp(1.4rem,2.5vw,1.9rem)/1.2 var(--sq-font-display); color: var(--sq-forest); }
+.ferramentas-grupo-cabecalho p { color: var(--sq-text-muted); font-size: .88rem; margin-top: .2rem; }
+.ferramentas-grupo-icone, .ferramentas-card-icone, .sisteminha-ferramenta-icone {
+  display: grid; place-items: center; flex: none;
+  border-radius: .75rem; background: var(--sq-brand-100); color: var(--sq-primary);
+}
+.ferramentas-grupo-icone { width: 2.8rem; height: 2.8rem; }
+.ferramentas-grupo-icone .icone { width: 1.7rem; height: 1.7rem; }
+.ferramentas-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .75rem; list-style: none; margin: 0; padding: 0; }
+.ferramentas-card {
+  display: flex; flex-direction: column; align-items: start; gap: .55rem; height: 100%;
+  padding: 1.1rem; border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card); background: var(--sq-surface);
+  color: var(--sq-forest); text-decoration: none;
+}
+.ferramentas-card:hover { border-color: var(--sq-primary); box-shadow: var(--sq-shadow-card); }
+.ferramentas-card-icone { width: 2.75rem; height: 2.75rem; }
+.ferramentas-card-icone .icone { width: 1.75rem; height: 1.75rem; }
+.ferramentas-card strong { font: 400 1.3rem/1.25 var(--sq-font-display); }
+.ferramentas-card > span:nth-child(3) { font-size: .87rem; color: var(--sq-text-muted); line-height: 1.55; }
+.ferramentas-card small {
+  display: block; padding-block: .4rem; color: var(--sq-text-muted); font-size: .8rem; line-height: 1.5;
+}
+.ferramentas-card small b { color: var(--sq-forest); }
+.ferramentas-card-acao {
+  display: inline-flex; align-items: center; gap: .25rem; margin-top: auto;
+  color: var(--sq-primary); font-size: .84rem; font-weight: 800;
+}
+.ferramentas-card-acao .icone { width: 1.05rem; height: 1.05rem; }
+.sisteminha-ferramentas-modulo {
+  display: grid; gap: .8rem; margin: 1.1rem 0 1.5rem;
+  padding: clamp(1rem,2.6vw,1.5rem);
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+  background: var(--sq-surface-warm);
+}
+.sisteminha-ferramentas-cabecalho {
+  display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: .65rem 1rem;
+}
+.sisteminha-ferramentas-cabecalho h3 { font: 400 clamp(1.35rem,2.3vw,1.75rem)/1.2 var(--sq-font-display); color: var(--sq-forest); }
+.sisteminha-ferramentas-cabecalho p:not(.sisteminha-kicker) { color: var(--sq-text-muted); font-size: .86rem; margin-top: .25rem; }
+.sisteminha-ferramentas-todas {
+  display: inline-flex; align-items: center; gap: .25rem;
+  min-height: 2.75rem; color: var(--sq-primary); font-weight: 750; font-size: .84rem;
+}
+.sisteminha-ferramentas-todas .icone { width: 1.05rem; height: 1.05rem; }
+.sisteminha-ferramentas-cards {
+  display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,14rem),1fr));
+  gap: .65rem; list-style: none; margin: 0; padding: 0;
+}
+.sisteminha-ferramentas-cards a {
+  display: flex; gap: .65rem; align-items: center; height: 100%;
+  padding: .8rem; border-radius: var(--sq-radius-media);
+  border: 1px solid var(--sq-border); background: var(--sq-surface);
+  color: var(--sq-forest); text-decoration: none;
+}
+.sisteminha-ferramentas-cards a:hover { border-color: var(--sq-primary); box-shadow: var(--sq-shadow-card); }
+.sisteminha-ferramenta-icone { width: 2.3rem; height: 2.3rem; }
+.sisteminha-ferramenta-icone .icone { width: 1.5rem; height: 1.5rem; }
+.sisteminha-ferramentas-cards a > span:nth-child(2) { display: grid; gap: .2rem; min-width: 0; flex: 1; }
+.sisteminha-ferramentas-cards strong { font-size: .9rem; }
+.sisteminha-ferramentas-cards small { color: var(--sq-text-muted); font-size: .79rem; line-height: 1.45; }
+.sisteminha-ferramentas-cards a > .icone { width: 1.1rem; height: 1.1rem; flex: none; color: var(--sq-primary); }
+.sisteminha-ferramentas-aviso { margin: 0; color: var(--sq-text-muted); font-size: .76rem; line-height: 1.5; }
+@media(max-width: 1020px) {
+  .ferramentas-cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media(max-width: 650px) {
+  .ferramentas-cards { grid-template-columns: minmax(0,1fr); }
+  .ferramentas-indice { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .ferramentas-indice a { font-size: .79rem; padding: .45rem .5rem; }
+  .sisteminha-ferramentas-modulo { padding: .8rem; }
+}
+@media(max-width: 340px) { .ferramentas-indice { grid-template-columns: minmax(0,1fr); } }

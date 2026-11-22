@@ -14,6 +14,7 @@ const rotas = [
   ["organizador", "/horta/organizador/"],
   ["meu-quintal", "/meu-quintal/"],
   ["artigos", "/artigos/"],
+  ["ferramentas", "/ferramentas/"],
   ["peixes", "/ferramentas/calculadora-peixes/"],
   ["pomar", "/ferramentas/planejador-de-pomar/"],
   ["codornas", "/ferramentas/calculadora-codornas/"],
@@ -61,10 +62,17 @@ try {
         assert.equal(await grupo.getAttribute("open"), null,
           "Escape deve fechar o submenu");
       }
+      if (slug === "ferramentas") {
+        await pagina.locator('.ferramentas-catalogo').waitFor({ state: "visible" });
+        assert.ok(await pagina.locator('a[href="../ferramentas/calculadora-peixes/"]').count() >= 1);
+      }
       if (slug === "sisteminha") {
         await pagina.locator('.sisteminha-nav-rolagem a[href="#tanque"]').click();
         await pagina.locator("#modulos h2").first().waitFor({ state: "visible", timeout: 12000 });
         assert.match(await pagina.locator("#modulos h2").first().innerText(), /Tanque/i);
+        const ferramentasPeixes = pagina.locator('.sisteminha-ferramentas-modulo a[href="./ferramentas/calculadora-peixes/"]');
+        await ferramentasPeixes.waitFor({state:"visible",timeout:12000});
+        assert.match(await ferramentasPeixes.innerText(),/Calculadora de peixes/);
         await pagina.locator('.sisteminha-nav-rolagem a[href="#ciclo"]').click();
         await pagina.locator("#ciclo").waitFor({ state: "visible", timeout: 12000 });
       }
