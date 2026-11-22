@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import Icone from "../../components/Icone.jsx";
 import CompararCenarios from "./CompararCenarios.jsx";
 import PainelArea from "./PainelArea.jsx";
 import Planta from "./Planta.jsx";
 import {
   arredondarMedida, criarTerreno, distancia, formatarMedida, lerMedida, limitarPosicao, passoDaMalha, pontosEntreBordas,
 } from "./geometria.js";
-import { conflitosEntreItens, criarItem, declives, novoId, tiposDeArea } from "./projetos.js";
+import { conflitosEntreItens, criarItem, declives, gruposDeArea, novoId, tiposDeArea } from "./projetos.js";
 
 function ConfigurarTerreno({ terreno, projeto, atualizar, abrirTerreno }) {
   const [frente, definirFrente] = useState(() => String(terreno.largura).replace(".", ","));
@@ -128,6 +129,7 @@ function Regua({ modo, mudarModo, limpar, marcas, itensMedidos, pontos, terreno,
 export default function EditorTerreno({ terreno, projeto, definirProjeto, salvamento, abrirTerreno }) {
   const [ativoNaAba, definirAtivoNaAba] = useState(projeto.ativo);
   const [tipo, definirTipo] = useState("canteiro");
+  const [grupoAtivo, definirGrupoAtivo] = useState("cultivo");
   const [selecionado, definirSelecionado] = useState(null);
   const [mostrarExistentes, definirMostrarExistentes] = useState(true);
   const [historico, definirHistorico] = useState([]);
@@ -334,13 +336,53 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
           mostrarExistentes={mostrarExistentes} />
       ) : (
         <div className="terreno-grade">
-          <form className="adicionar-area cartao-planta" onSubmit={adicionarItem}>
-            <label className="campo">O que vai no terreno?
-              <select value={tipo} onChange={(evento) => definirTipo(evento.target.value)}>
-                {Object.entries(tiposDeArea).map(([id, ficha]) => <option key={id} value={id}>{ficha.nome}</option>)}
-              </select>
-            </label>
-            <button className="botao" type="submit">{tipo === "muda" ? "Adicionar muda" : "Adicionar área"}</button>
+          <form className="adicionar-area adicionar-area-ilustrada cartao-planta" onSubmit={adicionarItem}>
+            <div className="adicionar-area-titulo">
+              <div>
+                <h3>Adicionar ao terreno</h3>
+                <p className="nota">Escolha uma categoria e depois um elemento.</p>
+              </div>
+              <span className="adicionar-area-quantidade" aria-label={itens.length + " elementos no cenário"}>
+                {itens.length} na planta
+              </span>
+            </div>
+            <div className="area-categorias" role="group" aria-label="Categorias de elementos">
+              {Object.entries(gruposDeArea).map(([id, grupo]) => (
+                <button type="button" key={id} aria-pressed={grupoAtivo === id}
+                  className="area-categoria"
+                  onClick={() => {
+                    definirGrupoAtivo(id);
+                    const escolhido = Object.entries(tiposDeArea).find(([,ficha]) => ficha.grupo === id);
+                    if (escolhido) definirTipo(escolhido[0]);
+                  }}>
+                  <Icone nome={grupo.icone}/><span>{grupo.nome}</span>
+                </button>
+              ))}
+            </div>
+            <div className="area-opcoes" role="group" aria-label="O que adicionar ao terreno">
+              {Object.entries(tiposDeArea)
+                .filter(([, ficha]) => ficha.grupo === grupoAtivo)
+                .map(([id, ficha]) => (
+                  <button type="button" key={id} aria-pressed={tipo === id} className="area-opcao"
+                    onClick={() => definirTipo(id)}>
+                    <span className="area-opcao-icone" data-cor={ficha.cor} aria-hidden="true">
+                      <Icone nome={ficha.icone}/>
+                    </span>
+                    <span>{ficha.nome}</span>
+                  </button>
+                ))}
+            </div>
+            <div className="area-adicionar-rodape">
+              <p className="nota">
+                <strong>{tiposDeArea[tipo].nome}</strong> · tamanho inicial
+                {tipo === "muda" ? " (ponto no mapa)" :
+                  " " + formatarMedida(tiposDeArea[tipo].largura) + " × " +
+                  formatarMedida(tiposDeArea[tipo].comprimento) + " m"}
+              </p>
+              <button className="botao" type="submit">
+                <Icone nome="seta"/> {tipo === "muda" ? "Adicionar muda" : "Adicionar ao mapa"}
+              </button>
+            </div>
           </form>
 
           <section className="terreno-mapa cartao-planta" aria-labelledby="titulo-planta-terreno">
@@ -388,7 +430,9 @@ export default function EditorTerreno({ terreno, projeto, definirProjeto, salvam
               {itens.map((item) => <li key={item.id}>
                 <button type="button" aria-pressed={modoRegua === "areas" ? marcas.includes(item.id) : selecionado === item.id}
                   onClick={() => selecionarItem(item)}>
-                  <span className="item-terreno-cor" data-cor={tiposDeArea[item.tipo].cor} aria-hidden="true" />
+                  <span className="item-terreno-icone" data-cor={tiposDeArea[item.tipo].cor} aria-hidden="true">
+                    <Icone nome={tiposDeArea[item.tipo].icone}/>
+                  </span>
                   {item.nome}
                   {item.existente && <small>Existente</small>}
                 </button>

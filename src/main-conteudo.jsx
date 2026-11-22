@@ -24,6 +24,7 @@ const catalogo = document.getElementById("catalogo-guias");
 const guia = document.getElementById("guia-interativo");
 const peixes = document.getElementById("calculadora-peixes-raiz");
 const pomar = document.getElementById("planejador-pomar-raiz");
+const codornas = document.getElementById("calculadora-codornas-raiz");
 
 async function montarFerramenta(elemento, carregar) {
   const montagem = createRoot(elemento);
@@ -34,6 +35,12 @@ async function montarFerramenta(elemento, carregar) {
   }
 }
 
+if (codornas) {
+  montarFerramenta(codornas, async () => {
+    const { default: CalculadoraCodornas } = await import("./features/codornas/CalculadoraCodornas.jsx");
+    return <CalculadoraCodornas/>;
+  });
+}
 if (peixes) {
   montarFerramenta(peixes, async () => {
     const { default: CalculadoraPeixes } = await import("./features/peixes/CalculadoraPeixes.jsx");

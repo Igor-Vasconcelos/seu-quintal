@@ -94,6 +94,9 @@ export default function Galinheiro({ modulo }) {
           <div className="galinheiro-acoes">
             <a className="botao" href="#calculadora-galinheiro">Usar calculadora <Icone nome="seta" /></a>
             <a className="home-link" href="#consumo-galinheiro">Consumo e cuidados</a>
+            <a className="home-link" href="./ferramentas/calculadora-codornas/">
+              <Icone nome="codorna"/> Planejar codornas
+            </a>
             <a className="home-link" href="./artigos/quantas-galinhas-para-ter-ovos-em-casa/">Guia: quantas galinhas criar?</a>
           </div>
         </header>

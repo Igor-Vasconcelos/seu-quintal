@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="titulo desc">
+<title id="titulo">Codornas e ovos no ambiente de criação</title>
+<desc id="desc">Ilustração vetorial educativa de três codornas com plumagem marrom e ovos pintados, sobre cama seca em um aviário ventilado, com folhas ao fundo.</desc>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#D9E8CE"/><stop offset="1" stop-color="#FFF4D8"/></linearGradient>
+<linearGradient id="bird" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#B87B42"/><stop offset=".65" stop-color="#8D512F"/><stop offset="1" stop-color="#58351F"/></linearGradient>
+<linearGradient id="wing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#EACD9B"/><stop offset="1" stop-color="#A66A3A"/></linearGradient>
+<pattern id="straw" width="65" height="22" patternUnits="userSpaceOnUse"><path d="M2 12h45m-27-7 34 12M18 18 5 6" stroke="#CDA66A" stroke-width="3" stroke-linecap="round" opacity=".55"/></pattern>
+</defs>
+<rect width="960" height="560" fill="url(#bg)"/>
+<path d="M0 70Q190 140 410 50T960 90v210H0Z" fill="#B1C993" opacity=".45"/>
+<g stroke="#69915F" stroke-width="12" stroke-linecap="round" fill="none" opacity=".65">
+<path d="M36 420V105M95 420V40M858 420V87M920 420V42"/>
+</g>
+<g fill="#7AA36A"><ellipse cx="48" cy="132" rx="70" ry="30" transform="rotate(-27 48 132)"/><ellipse cx="72" cy="225" rx="60" ry="25" transform="rotate(18 72 225)"/><ellipse cx="883" cy="145" rx="77" ry="32" transform="rotate(20 883 145)"/><ellipse cx="910" cy="248" rx="62" ry="27" transform="rotate(-22 910 248)"/></g>
+<path d="M0 415Q335 365 600 418T960 410v150H0Z" fill="#DDBB83"/>
+<path d="M0 424Q400 397 960 421v139H0Z" fill="url(#straw)"/>
+<g transform="translate(265 350)">
+<ellipse cx="0" cy="26" rx="156" ry="108" fill="url(#bird)" stroke="#603920" stroke-width="7"/>
+<path d="M-98-28Q-172-99-166-112L-50-43Z" fill="#775033" stroke="#603920" stroke-width="5"/>
+<path d="M80-28Q111-149 158-137Q192-128 177-77L143-9Z" fill="#B27748" stroke="#603920" stroke-width="6"/>
+<ellipse cx="165" cy="-101" rx="58" ry="48" fill="#AD7143" stroke="#603920" stroke-width="6"/>
+<path d="M210-100 251-87 209-67Z" fill="#E5A74E" stroke="#835B26" stroke-width="4"/>
+<circle cx="182" cy="-117" r="6" fill="#172D1D"/>
+<ellipse cx="5" cy="12" rx="99" ry="52" fill="url(#wing)" stroke="#7D5131" stroke-width="5" transform="rotate(-15 5 12)"/>
+<path d="M-62 14 64-22M-54 33 67 4M-27 53 68 26" stroke="#825334" stroke-width="6" opacity=".65"/>
+<path d="M-30 119v39m84-43 0 42" stroke="#9B6732" stroke-width="10" stroke-linecap="round"/>
+<path d="M-40 157h31m53 0h31" stroke="#9B6732" stroke-width="7" stroke-linecap="round"/>
+</g>
+<g transform="translate(718 388) scale(.66)">
+<ellipse cx="0" cy="0" rx="153" ry="108" fill="url(#bird)" stroke="#603920" stroke-width="8"/>
+<path d="M-102-26-171-91-144-28" fill="#775033" stroke="#603920" stroke-width="6"/>
+<path d="M75-31Q122-140 174-117L176-36" fill="#A36A3A" stroke="#603920" stroke-width="6"/>
+<ellipse cx="174" cy="-91" rx="54" ry="45" fill="#B67A4D" stroke="#603920" stroke-width="6"/>
+<path d="m216-92 42 13-42 20" fill="#E5A74E" stroke="#835B26" stroke-width="4"/>
+<circle cx="188" cy="-106" r="7" fill="#172D1D"/>
+<ellipse cx="-7" cy="6" rx="91" ry="53" fill="url(#wing)" transform="rotate(-12 -7 6)"/>
+<path d="M-67-10 60-31m-120 45 129-28m-118 52 120-21" stroke="#825334" stroke-width="7" opacity=".65"/>
+<path d="M-39 106v54m85-54v54" stroke="#9B6732" stroke-width="12" stroke-linecap="round"/>
+</g>
+<g transform="translate(600 464)">
+<ellipse cx="0" cy="0" rx="35" ry="47" fill="#FFF2D5" stroke="#BCA986" stroke-width="5" transform="rotate(-14)"/>
+<ellipse cx="64" cy="-3" rx="35" ry="47" fill="#F4E0BF" stroke="#BCA986" stroke-width="5" transform="rotate(19 64 -3)"/>
+<ellipse cx="-52" cy="-5" rx="33" ry="46" fill="#F9E9C8" stroke="#BCA986" stroke-width="5" transform="rotate(12 -52 -5)"/>
+<g fill="#916E50"><circle cx="-12" cy="-18" r="5"/><circle cx="13" cy="17" r="4"/><circle cx="-54" cy="-29" r="4"/><circle cx="65" cy="-25" r="5"/><circle cx="89" cy="9" r="3"/><circle cx="-39" cy="16" r="4"/></g>
+</g>
+</svg>

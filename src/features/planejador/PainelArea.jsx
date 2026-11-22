@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Icone from "../../components/Icone.jsx";
+import { tiposDeArea } from "./projetos.js";
 import { cabeNoTerreno, formatarMedida, lerMedida } from "./geometria.js";
 
 function camposDoItem(item) {
@@ -17,6 +19,15 @@ export default function PainelArea({ item, terreno, aoSalvar, aoRemover }) {
   const [erro, definirErro] = useState("");
   const campos = { ...camposDoItem(item), ...edicao };
   const eMuda = item.tipo === "muda";
+  const ficha = tiposDeArea[item.tipo];
+  const linksFerramenta = {
+    codornario: { href: "../ferramentas/calculadora-codornas/", nome: "Calcular ovos, carne, ração e espaço" },
+    tanque: { href: "../ferramentas/calculadora-peixes/", nome: "Simular volume, biomassa e ração" },
+    pomar: { href: "../ferramentas/planejador-de-pomar/", nome: "Calcular posições das árvores" },
+    galinheiro: { href: "../sisteminha.html#galinheiro", nome: "Consultar calculadora do galinheiro" },
+    canteiro: { href: "../horta/canteiros/", nome: "Planejar plantas do canteiro" },
+  };
+  const ferramenta = linksFerramenta[item.tipo];
   const medidas = [
     { nome: "largura", rotulo: "Largura (m)" },
     { nome: "comprimento", rotulo: "Comprimento (m)" },
@@ -51,6 +62,13 @@ export default function PainelArea({ item, terreno, aoSalvar, aoRemover }) {
 
   return (
     <form className="painel-area" onSubmit={salvar} aria-label={eMuda ? "Editar muda" : "Editar área"}>
+      <header className="painel-area-cabecalho">
+        <span className="painel-area-icone" data-cor={ficha.cor} aria-hidden="true"><Icone nome={ficha.icone}/></span>
+        <div><strong>{ficha.nome}</strong><small>Personalize nome, medidas e localização</small></div>
+      </header>
+      {ferramenta && <a className="painel-area-ferramenta" href={ferramenta.href}>
+        {ferramenta.nome} <Icone nome="seta"/>
+      </a>}
       <label className="campo">Nome
         <input name="nome" maxLength={48} required value={campos.nome} onChange={mudarCampo} />
       </label>

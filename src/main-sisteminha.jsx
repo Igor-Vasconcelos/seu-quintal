@@ -291,10 +291,8 @@ function Sisteminha() {
             </div>
           </div>
           <div className="sisteminha-panorama">
-            <img src="./imagens/sisteminha/panorama.webp" width="1248" height="832"
-              srcSet="./imagens/sisteminha/panorama-720.webp 720w, ./imagens/sisteminha/panorama-960.webp 960w, ./imagens/sisteminha/panorama.webp 1248w"
-              sizes="(max-width: 560px) calc(100vw - 1.5rem), (max-width: 767px) 33.5rem, (min-width: 1200px) 41rem, 55vw"
-              alt="Ilustração de um quintal com tanque circular de peixes, canteiros, composteira e galinheiro."
+            <img src="./imagens/sisteminha/hero-corrigido.svg" width="1440" height="650"
+              alt="Ilustração educativa de um quintal com tanque de peixes, horta, composteira e duas galinhas em seu galinheiro."
               fetchPriority="high" />
           </div>
         </section>
