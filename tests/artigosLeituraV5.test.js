@@ -27,7 +27,7 @@ test("template gera índice numerado uma única vez, com navegação e leitura e
   assert.match(html, /<details class="sq-toc-details">/);
   assert.match(html, /href="#1-comece-medindo-o-espaco">Comece medindo o espaço<\/a>/);
   assert.doesNotMatch(html, /href="#1-comece-medindo-o-espaco">1\./);
-  assert.match(html, /6 tópicos/);
+  assert.match(html, /9 tópicos/);
   assert.match(html, /Leitura estimada de \d+ min/);
   assert.match(html, /class="sq-meta-tool" href="\.\.\/\.\.\/horta\/organizador\/"/);
   assert.match(html, /<div class="sq-prose" id="inicio-leitura">/);
