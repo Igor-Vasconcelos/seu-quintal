@@ -45,6 +45,18 @@ try {
       assert.ok(larguraExcedente <= 2,
         slug + "/" + nome + ": conteúdo excede largura por " + larguraExcedente + " px");
       assert.deepEqual(erros, [], slug + "/" + nome + ": erro JavaScript");
+      // Cabeçalho e imagem da marca precisam chegar até as bordas da viewport,
+      // mesmo quando a página usa um main de leitura com largura máxima.
+      const header = pagina.locator(".topo.site-shell, .sq-header").first();
+      const rect = await header.boundingBox();
+      assert.ok(rect && Math.abs(rect.x) <= 1 &&
+        Math.abs(rect.width - largura) <= 2,
+        slug + "/" + nome + ": cabeçalho não ocupa a viewport (" +
+        JSON.stringify(rect) + ")");
+      const logo = pagina.locator('.site-marca-emblema img, .sq-brand img').first();
+      assert.ok(await logo.evaluate(img => img.complete && img.naturalWidth > 0),
+        slug + "/" + nome + ": logomarca não carregou");
+
       if (slug === "home" || slug === "sisteminha" || slug === "meu-quintal") {
         await pagina.screenshot({
           path: PASTA + "/" + slug + "-" + nome + ".png",
@@ -155,6 +167,11 @@ try {
       const excedente = await pagina.evaluate(() =>
         document.documentElement.scrollWidth - document.documentElement.clientWidth);
       assert.ok(excedente <= 2, slug + "/" + largura + ": overflow de " + excedente + " px");
+      const header = pagina.locator(".topo.site-shell, .sq-header").first();
+      const rect = await header.boundingBox();
+      assert.ok(rect && Math.abs(rect.x) <= 1 && Math.abs(rect.width - largura) <= 2,
+        slug + "/" + largura + ": header com margem externa indevida");
+
       if (slug === "home") {
         await pagina.screenshot({
           path: PASTA + "/home-" + largura + ".png",
