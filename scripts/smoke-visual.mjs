@@ -55,6 +55,17 @@ try {
         assert.equal(await pagina.locator('.ferramenta-meta span').count(),3,
           "Ferramenta deve apresentar 3 características claras");
       }
+      if (slug === "home") {
+        assert.equal(await pagina.locator(".home-destaque-card").count(), 4,
+          "Home precisa mostrar quatro cartões editoriais");
+        const imagens = pagina.locator(".home-destaque-imagem img");
+        for (let i = 0; i < await imagens.count(); i++) {
+          await imagens.nth(i).scrollIntoViewIfNeeded();
+          assert.ok(await imagens.nth(i).evaluate(img => img.complete && img.naturalWidth > 0),
+            "Imagem editorial deve carregar: " + i);
+        }
+        assert.ok(await pagina.locator(".home-editorial-ferramentas a").count() >= 6);
+      }
       if (slug === "home" && nome === "celular") {
         const menu = pagina.locator(".menu-alternar");
         await menu.click();
@@ -81,6 +92,8 @@ try {
         const ferramentasPeixes = pagina.locator('.sisteminha-ferramentas-modulo a[href="./ferramentas/calculadora-peixes/"]');
         await ferramentasPeixes.waitFor({state:"visible",timeout:12000});
         assert.match(await ferramentasPeixes.innerText(),/Calculadora de peixes/);
+        assert.ok(await pagina.locator(".sisteminha-guias-modulo a").count() >= 1,
+          "Sisteminha deve conectar guias ao módulo");
         await pagina.locator('.sisteminha-nav-rolagem a[href="#ciclo"]').click();
         await pagina.locator("#ciclo").waitFor({ state: "visible", timeout: 12000 });
       }
@@ -122,6 +135,32 @@ try {
         await pagina.locator('.itens-terreno').getByText("Codornário").first().waitFor({state:"visible",timeout:12000});
       }
       console.log("PASSOU", nome, rota);
+      await pagina.close();
+      casos++;
+    }
+    await contexto.close();
+  }
+  // Validação adicional de larguras de transição do Design System 2.0.
+  for (const largura of [320, 768, 1024]) {
+    const contexto = await navegador.newContext({
+      viewport: { width: largura, height: 860 }, reducedMotion: "reduce",
+    });
+    for (const [slug, rota] of [
+      ["home", "/"], ["guias", "/guias/"], ["artigos", "/artigos/"],
+      ["ferramentas", "/ferramentas/"], ["sisteminha", "/sisteminha.html"],
+      ["meu-quintal", "/meu-quintal/"],
+    ]) {
+      const pagina = await contexto.newPage();
+      await pagina.goto(URL_BASE + rota, {waitUntil: "networkidle", timeout: 40000});
+      const excedente = await pagina.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      assert.ok(excedente <= 2, slug + "/" + largura + ": overflow de " + excedente + " px");
+      if (slug === "home") {
+        await pagina.screenshot({
+          path: PASTA + "/home-" + largura + ".png",
+          animations: "disabled",
+        });
+      }
       await pagina.close();
       casos++;
     }

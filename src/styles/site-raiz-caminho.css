@@ -1,0 +1,218 @@
+/* Seu Quintal — Raiz & Caminho | visual compartilhado 2.1
+   Apenas apresentação: não modifica cálculos, estados ou dados locais.
+   Referência: mockup de Artigos e Guias de 21/11/2026.
+ */
+:root { --sq-ui-outline: 2px solid var(--sq-focus); }
+html { scroll-padding-top: 1rem; }
+body { background: var(--sq-canvas); }
+:where(.conteudo-tematico,.pagina-home,.pagina-meu-quintal,.pagina-sisteminha,.sq-artigos) :where(a,button,input,select,textarea,summary):focus-visible {
+  outline: var(--sq-ui-outline); outline-offset: 3px;
+}
+.topo.site-shell { background: var(--sq-surface-warm); }
+.topo.site-shell .site-marca .marca-simbolo { background: var(--sq-brand-100); border: 1px solid var(--sq-border); }
+.topo.site-shell .menu-links > .site-menu-sisteminha {
+  background: var(--sq-primary); color: var(--sq-on-primary); border-radius: 100px;
+}
+.topo.site-shell .menu-quintal {
+  background: var(--sq-brand-100); color: var(--sq-forest);
+  border: 1px solid var(--sq-border);
+}
+.topo.site-shell .menu-quintal:hover { background: var(--sq-cream); color: var(--sq-forest); }
+.topo.site-shell .site-menu-grupo[data-secao-atual] summary { background: var(--sq-brand-100); }
+.conteudo-tematico { min-width: 0; }
+.conteudo-tematico .trilha-site { font-size: .88rem; }
+.conteudo-tematico .titulo-tematico {
+  position: relative; overflow: hidden;
+  background: linear-gradient(120deg, var(--sq-surface-warm) 0%,var(--sq-cream) 100%);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  box-shadow: 0 5px 18px rgb(24 60 43 / .045);
+}
+.conteudo-tematico .titulo-tematico h1 {
+  max-width: 27ch; letter-spacing: -.022em;
+  font-size: clamp(2rem,3.4vw,3.25rem); line-height: 1.12;
+}
+.conteudo-tematico .titulo-tematico > p:not(.home-sobretitulo):not(.guia-selo),
+.conteudo-tematico .titulo-tematico .ferramenta-topo-texto > p { line-height: 1.6; }
+.conteudo-tematico .conteudo-relacionado,
+.conteudo-tematico .orientacao-tematica {
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+  background: var(--sq-surface); box-shadow: var(--sq-shadow-card);
+}
+.conteudo-tematico .conteudo-relacionado a,
+.conteudo-tematico .orientacao-tematica a {
+  color: var(--sq-link); text-underline-offset: .23em;
+}
+.conteudo-tematico .guia-cartao,
+.ferramentas-card,
+.sisteminha-ferramentas-cards a {
+  border-radius: var(--sq-radius-media); background: var(--sq-surface);
+  border-color: var(--sq-border);
+}
+.conteudo-tematico #catalogo-guias .guia-cartao { background: var(--sq-surface-warm); }
+.conteudo-tematico .guia-cartao > img { object-fit: cover; }
+.conteudo-tematico #catalogo-guias .guia-cartao h2 {
+  font: 700 clamp(1.05rem,1.7vw,1.3rem)/1.28 var(--sq-font-ui);
+}
+.conteudo-tematico #catalogo-guias .guia-cartao p { line-height: 1.55; }
+.ferramentas-grupo-cabecalho h3 { color: var(--sq-forest); }
+.ferramentas-cards { gap: .85rem; }
+.ferramentas-card { box-shadow: 0 3px 14px rgb(24 60 43 / .035); }
+.ferramentas-card strong {
+  font: 700 1.1rem/1.3 var(--sq-font-ui);
+}
+.ferramentas-card:hover,
+.conteudo-tematico .guia-cartao:hover { border-color: var(--sq-primary); }
+.pagina-ferramenta-v4 .titulo-tematico,
+.pagina-ferramenta-v4 .abertura-horta {
+  background: linear-gradient(115deg,var(--sq-cream),var(--sq-surface-warm));
+}
+.pagina-ferramenta-v4 .ferramenta-meta span {
+  border: 1px solid var(--sq-border); background: var(--sq-brand-100);
+  border-radius: 999px; color: var(--sq-forest);
+}
+.pagina-ferramenta-v4 :is(.ferramenta,.simulador-quintal,.codornas-calculadora) {
+  border-radius: var(--sq-radius-card);
+}
+.pagina-ferramenta-v4 .ferramenta-topo-figura img {
+  width: 100%; border-radius: var(--sq-radius-media); object-fit: cover;
+}
+.sisteminha-ds3 .sisteminha-abertura { border-radius: var(--sq-radius-card); }
+.sisteminha-ds3 .sisteminha-nav-local {
+  border-radius: var(--sq-radius-card); background: var(--sq-surface-warm);
+}
+.sisteminha-ds3 .sisteminha-nav-rolagem a[aria-current="page"] {
+  background: var(--sq-brand-100); border-bottom: 3px solid var(--sq-brand-900);
+}
+.sisteminha-ds3 .sisteminha-ferramentas-modulo {
+  background: linear-gradient(120deg,var(--sq-brand-100),var(--sq-surface-warm));
+  border-color: var(--sq-border);
+}
+.sisteminha-ds3 .sisteminha-ferramentas-cards a { background: #fff; }
+.pagina-meu-quintal .quintal-titulo {
+  background: linear-gradient(115deg,var(--sq-cream),var(--sq-surface-warm));
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+}
+.sq-artigos .sq-header { background: var(--sq-surface-warm); }
+.sq-artigos .sq-header-inner { min-height: 3.9rem; }
+.sq-artigos .sq-desktop-nav a { padding-inline: .6rem; border-radius: 100px; }
+.sq-artigos .sq-index-intro {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: clamp(15rem,25vw,18rem); display: flex;
+  flex-direction: column; justify-content: center;
+  margin-block: 0 1.15rem; padding: clamp(1.25rem,3.2vw,2.7rem);
+  color: #fff;
+  background: var(--sq-forest);
+  border-radius: 0 0 var(--sq-radius-card) var(--sq-radius-card);
+}
+.sq-artigos .sq-index-intro::before {
+  content: ""; position: absolute; inset: 0; z-index: -2;
+  background-image: url("/imagens/abertura-horta-1200.webp");
+  background-size: cover; background-position: 65% 45%;
+}
+.sq-artigos .sq-index-intro::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgb(8 31 17 / .95), rgb(9 38 20 / .74) 42%, rgb(9 38 20 / .13));
+}
+.sq-artigos .sq-index-intro h1 {
+  color: #fff; max-width: 26ch; margin: .4rem 0 .55rem;
+  font-size: clamp(2.25rem,3.6vw,3.4rem);
+}
+.sq-artigos .sq-index-intro .sq-eyebrow {
+  align-self: flex-start; background: var(--sq-cream); color: var(--sq-forest);
+  padding: .35rem .85rem; border-radius: 999px; letter-spacing: .03em;
+}
+.sq-artigos .sq-index-intro .sq-lede {
+  color: #fff; line-height: 1.5; max-width: 59ch;
+  font-size: clamp(.98rem,1.25vw,1.1rem);
+}
+.sq-artigos .sq-index-actions { margin-top: 1rem; }
+.sq-artigos .sq-index-actions a { background: rgb(24 60 43 / .7); color: #fff; border-color: #ffffff57; }
+.sq-artigos .sq-index-actions a:first-child { background: var(--sq-cream); border-color: var(--sq-cream); color: var(--sq-forest); }
+.sq-artigos .sq-guide-explain > div { border: 1px solid var(--sq-border); border-left: 3px solid var(--sq-primary); border-radius: .75rem; }
+.sq-artigos .sq-guides-grid { gap: .85rem; }
+.sq-artigos .sq-guide-card {
+  background: var(--sq-surface-warm); border-radius: var(--sq-radius-media);
+  box-shadow: 0 4px 15px rgb(24 60 43 / .045);
+}
+.sq-artigos .sq-guide-card strong {
+  font: 700 1.07rem/1.3 var(--sq-font-ui);
+}
+.sq-artigos .sq-card h4 { font: 700 1.05rem/1.34 var(--sq-font-ui); }
+.sq-artigos .sq-article-header { margin-top: .8rem; }
+.sq-artigos .sq-article-header h1 { color: var(--sq-forest); }
+.sq-artigos .sq-prose h2 { color: var(--sq-forest); }
+.sq-artigos .sq-tool { background: var(--sq-brand-100); }
+@media(max-width:767px) {
+  .sq-artigos .sq-index-intro { min-height: 22rem; border-radius: var(--sq-radius-card); }
+  .sq-artigos .sq-index-intro::after {
+    background: linear-gradient(90deg,rgb(8 31 17 / .97),rgb(8 31 17 / .64));
+  }
+  .sq-artigos .sq-index-actions a { flex: 1 1 10rem; }
+  .conteudo-tematico .titulo-tematico h1 { font-size: clamp(2rem,7vw,2.6rem); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .conteudo-tematico .guia-cartao,
+  .ferramentas-card { transition: none; transform: none !important; }
+}
+
+/* Variação de hero fotográfico para páginas editoriais de descoberta */
+.conteudo-tematico .titulo-tematico.titulo-tematico--foto {
+  isolation: isolate;
+  display: flex; flex-direction: column; align-items: start;
+  justify-content: center; min-height: clamp(14rem,24vw,19rem);
+  padding: clamp(1.2rem,4vw,3rem); background: var(--sq-forest);
+  color: var(--sq-on-primary);
+}
+.conteudo-tematico .titulo-tematico--foto .titulo-tematico-fundo {
+  position: absolute; z-index: -2; inset: 0;
+  display: block; width: 100%; height: 100%; object-fit: cover;
+  object-position: 67% 48%;
+}
+.conteudo-tematico .titulo-tematico--foto::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgb(8 31 17 / .95), rgb(8 31 17 / .75) 43%, rgb(8 31 17 / .22));
+}
+.conteudo-tematico .titulo-tematico--foto h1 { color: #fff; max-width: 25ch; }
+.conteudo-tematico .titulo-tematico--foto > p:not(.home-sobretitulo):not(.guia-selo) {
+  color: #fff; max-width: 62ch; line-height: 1.55;
+}
+.conteudo-tematico .titulo-tematico--foto > .home-sobretitulo,
+.conteudo-tematico .titulo-tematico--foto > .guia-selo {
+  display: inline-flex; align-items: center; width: max-content;
+  min-height: 2rem; padding: .35rem .75rem; border-radius: 100px;
+  background: var(--sq-cream); color: var(--sq-forest);
+  letter-spacing: .035em; font-size: .79rem; font-weight: 750;
+}
+.sisteminha-guias-modulo {
+  padding: clamp(1rem,2vw,1.45rem); margin: 1rem 0 1.6rem;
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+  background: linear-gradient(120deg,var(--sq-surface-warm),var(--sq-brand-100));
+}
+.sisteminha-guias-cabecalho h3 { font: 400 clamp(1.4rem,2.3vw,1.8rem)/1.2 var(--sq-font-display); }
+.sisteminha-guias-cabecalho p { margin: .35rem 0 .75rem; color: var(--sq-muted); line-height: 1.5; }
+.sisteminha-guias-modulo ul {
+  display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,15rem),1fr));
+  gap: .7rem; padding: 0; margin: 0; list-style: none;
+}
+.sisteminha-guias-modulo li a {
+  display: flex; align-items: center; gap: .65rem; min-height: 4.4rem;
+  height: 100%; padding: .7rem; background: var(--sq-surface);
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-media);
+  color: var(--sq-forest); text-decoration: none;
+}
+.sisteminha-guias-modulo li a:hover { border-color: var(--sq-primary); }
+.sisteminha-guias-icone {
+  width: 2.45rem; height: 2.45rem; display: grid; place-items: center;
+  border-radius: .7rem; background: var(--sq-brand-100); color: var(--sq-primary);
+}
+.sisteminha-guias-modulo li a > span:nth-child(2) { flex: 1; display: grid; gap: .15rem; }
+.sisteminha-guias-modulo li strong { font-size: .89rem; line-height: 1.3; }
+.sisteminha-guias-modulo li small { color: var(--sq-muted); font-size: .78rem; line-height: 1.45; }
+.sisteminha-guias-modulo li .icone { width: 1.2rem; height: 1.2rem; }
+@media(max-width:599px){
+  .conteudo-tematico .titulo-tematico--foto { min-height: 20rem; }
+  .conteudo-tematico .titulo-tematico--foto::after {
+    background: linear-gradient(90deg,rgb(8 31 17 / .96),rgb(8 31 17 / .6));
+  }
+}

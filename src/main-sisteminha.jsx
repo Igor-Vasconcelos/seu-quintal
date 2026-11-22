@@ -11,6 +11,7 @@ import FluxoSisteminha from "./features/sisteminha/FluxoSisteminha.jsx";
 import EsquemaModulo from "./features/sisteminha/EsquemaModulo.jsx";
 import SaibaMaisModulo from "./features/sisteminha/SaibaMaisModulo.jsx";
 import FerramentasModulo from "./features/sisteminha/FerramentasModulo.jsx";
+import GuiasModulo from "./features/sisteminha/GuiasModulo.jsx";
 import { fichasSisteminha, etapasImplantacao, materiaisOficiais } from "./features/sisteminha/dadosSisteminha.js";
 import "./styles/tokens.css";
 import "./styles/home.css";
@@ -393,6 +394,7 @@ function Sisteminha() {
               <DetalheModulo key={id} id={id} modulo={modulo} />
             ))}
           </div>
+          <GuiasModulo modulo={abaAtiva}/>
         </section>
 
         {abaAtiva === "integracao" && <div className="sisteminha-transicao-conteudo" key="integracao"><IntegracaoSisteminha/></div>}
@@ -419,3 +421,5 @@ createRoot(document.getElementById("root")).render(
 );
 
 import "./styles/tool-ui-v3.css";
+
+import "./styles/site-raiz-caminho.css";

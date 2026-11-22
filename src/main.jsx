@@ -8,6 +8,7 @@ import "./styles/tokens.css";
 import "./styles/home.css";
 import "./styles/editorial.css";
 import "./styles/editorial-mockup.css";
+import "./styles/home-editorial-v2.css";
 import "./styles/guias-cultivo.css";
 
 createRoot(document.getElementById("root")).render(
@@ -17,3 +18,5 @@ createRoot(document.getElementById("root")).render(
 );
 
 import "./styles/tool-ui-v3.css";
+
+import "./styles/site-raiz-caminho.css";
