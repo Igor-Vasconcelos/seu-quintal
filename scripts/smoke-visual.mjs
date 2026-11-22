@@ -191,6 +191,10 @@ try {
         await codornario.click();
         await pagina.locator('.adicionar-area-ilustrada button[type=submit]').click();
         await pagina.locator('.itens-terreno').getByText("Codornário").first().waitFor({state:"visible",timeout:12000});
+        await pagina.screenshot({
+          path: PASTA + "/meu-quintal-editor-" + nome + ".png",
+          animations: "disabled",
+        });
         await pagina.locator('.quintal-secoes a[href="#geral"]').click();
         await pagina.locator(".quintal-ultimo-projeto h3").waitFor({ state: "visible", timeout: 20000 });
         assert.match(await pagina.locator(".quintal-ultimo-projeto h3").innerText(), /25 × 40 m/,
