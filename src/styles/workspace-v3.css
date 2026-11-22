@@ -213,3 +213,41 @@
   .pagina-meu-quintal .quintal-secoes a { padding-inline: .35rem; gap: .35rem; font-size: .8rem; }
   .pagina-meu-quintal .quintal-navegacao-icone { width: 2rem; height: 2rem; }
 }
+
+
+/* Meu Quintal v2.6: sem ícones técnicos de "outras áreas" na navegação.
+   Uma família vetorial: 24 × 24, traço uniforme, texto sempre visível. */
+.pagina-meu-quintal .quintal-navegacao-icone {
+  width: 2.55rem; height: 2.55rem; flex: 0 0 2.55rem;
+  border-radius: .75rem;
+  background: var(--sq-surface-soft);
+  color: var(--sq-primary);
+}
+.pagina-meu-quintal .quintal-navegacao-icone .icone {
+  width: 1.6rem; height: 1.6rem;
+  stroke-width: 1.75;
+}
+.pagina-meu-quintal .quintal-secoes a {
+  gap: .7rem; min-height: 3.8rem; overflow-wrap: anywhere;
+}
+.pagina-meu-quintal .quintal-secoes a:hover .quintal-navegacao-icone {
+  background: var(--sq-brand-100);
+}
+.pagina-meu-quintal .quintal-secoes a[aria-current] .quintal-navegacao-icone,
+.pagina-meu-quintal .quintal-secoes a[aria-current]:hover .quintal-navegacao-icone {
+  background: var(--sq-primary); color: var(--sq-on-primary);
+}
+.pagina-meu-quintal .quintal-secoes-rodape .icone {
+  width: 1.15rem; height: 1.15rem;
+  stroke-width: 1.75; flex: none;
+}
+.pagina-meu-quintal .quintal-titulo-acoes .icone,
+.pagina-meu-quintal .quintal-salvamento .icone { stroke-width: 1.7; }
+@media (max-width: 359px) {
+  .pagina-meu-quintal .quintal-navegacao-icone {
+    width: 2.25rem; height: 2.25rem; flex-basis: 2.25rem;
+  }
+  .pagina-meu-quintal .quintal-navegacao-icone .icone {
+    width: 1.4rem; height: 1.4rem;
+  }
+}
