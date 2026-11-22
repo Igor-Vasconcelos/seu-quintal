@@ -22,6 +22,8 @@ const calendario = document.getElementById("calendario-raiz");
 const organizador = document.getElementById("organizador-raiz");
 const catalogo = document.getElementById("catalogo-guias");
 const guia = document.getElementById("guia-interativo");
+const peixes = document.getElementById("calculadora-peixes-raiz");
+const pomar = document.getElementById("planejador-pomar-raiz");
 
 async function montarFerramenta(elemento, carregar) {
   const montagem = createRoot(elemento);
@@ -30,6 +32,19 @@ async function montarFerramenta(elemento, carregar) {
   } catch {
     montagem.render(<FalhaAoCarregar />);
   }
+}
+
+if (peixes) {
+  montarFerramenta(peixes, async () => {
+    const { default: CalculadoraPeixes } = await import("./features/peixes/CalculadoraPeixes.jsx");
+    return <CalculadoraPeixes/>;
+  });
+}
+if (pomar) {
+  montarFerramenta(pomar, async () => {
+    const { default: PlanejadorPomar } = await import("./features/pomar/PlanejadorPomar.jsx");
+    return <PlanejadorPomar/>;
+  });
 }
 
 if (canteiroVisual) {
@@ -82,3 +97,4 @@ if (guia) {
 }
 
 import "./styles/tool-ui-v3.css";
+import "./styles/calculadoras-peixes-pomar.css";

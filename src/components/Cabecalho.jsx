@@ -16,6 +16,8 @@ const grupos = [
       { titulo: "Planejador de canteiros", rota: "horta/canteiros/", paginas: ["canteiros"] },
       { titulo: "Organizador da horta", rota: "horta/organizador/", paginas: ["organizador"] },
       { titulo: "Calendário de plantio", rota: "horta/calendario-de-plantio/", paginas: ["calendario"] },
+      { titulo: "Calculadora de peixes", rota: "ferramentas/calculadora-peixes/", paginas: ["peixes"] },
+      { titulo: "Planejador de pomar", rota: "ferramentas/planejador-de-pomar/", paginas: ["pomar"] },
     ],
   },
 ];

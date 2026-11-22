@@ -22,6 +22,8 @@ export default defineConfig({
         "horta/organizador/index.html",
         "horta/canteiros/index.html",
         "horta/calendario-de-plantio/index.html",
+        "ferramentas/calculadora-peixes/index.html",
+        "ferramentas/planejador-de-pomar/index.html",
         "guias/index.html",
         "guias/compostagem/index.html",
         "guias/irrigacao/index.html",

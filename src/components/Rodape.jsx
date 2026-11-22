@@ -15,6 +15,8 @@ export default function Rodape({ inicio = false, sisteminha = false, raiz = "./"
       ["Calendário de plantio", "horta/calendario-de-plantio/"],
       ["Planejador de canteiros", "horta/canteiros/"],
       ["Organizador de horta", "horta/organizador/"],
+      ["Calculadora de peixes", "ferramentas/calculadora-peixes/"],
+      ["Planejador de pomar", "ferramentas/planejador-de-pomar/"],
       ["Meu Quintal", "meu-quintal/"],
     ] },
   ];
