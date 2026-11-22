@@ -59,6 +59,13 @@ test("coentro é colheita por lote em kg: teste obrigatório sem simular rebrota
   const comRendimento = lerPlano({ ...campos, rendimento: "0,05" }).plano;
   assert.equal(dimensionarLote(comRendimento).experimental, false);
 });
+test("morango inicia por muda pronta, sem indicar semeadura inadequada", () => {
+  const campos = formularioInicial(null, "Morango");
+  assert.equal(campos.origem, "muda");
+  const plano = lerPlano({ ...campos, origem: "semente" }).plano;
+  assert.equal(plano.origem, "muda");
+  assert.equal(projetarLote(plano, 0).etapas[0].id, "transplantar");
+});
 test("cálculo familiar não promete meta em kg sem medição de produção", () => {
   const resultado = calcularPlanoFamiliar({
     pessoas: 2, quantidadeCanteiros: 10, largura: 2, comprimento: 3,
