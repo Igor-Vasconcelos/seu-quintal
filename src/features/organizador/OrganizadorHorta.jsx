@@ -255,8 +255,33 @@ export default function OrganizadorHorta({ culturaSugerida }) {
     }), feita ? "Atividade concluída." : "Atividade reaberta.");
   }
 
+  function abrirAssistente() {
+    const painel = document.getElementById("planejamento-familiar");
+    if (!painel) return;
+    painel.open = true;
+    painel.scrollIntoView({ block: "start", behavior: "auto" });
+    painel.querySelector("summary")?.focus({ preventScroll: true });
+  }
+
   return (
     <div className="organizador">
+      <div className="organizador-inicio">
+        <div>
+          <span className="organizador-etiqueta">DA PRIMEIRA MUDA À COLHEITA</span>
+          <h2>Organize sua horta no seu ritmo</h2>
+          <p>Escolha as culturas, planeje lotes com datas estimadas e acompanhe o que precisa fazer.</p>
+          <p className="organizador-inicio-contador" role="status">
+            {dados.planos.length ? `${dados.planos.length} cultivo(s) no seu plano` : "Você ainda não cadastrou cultivos."}
+          </p>
+        </div>
+        <nav aria-label="Etapas do planejamento da horta" className="organizador-atalhos">
+          <button type="button" onClick={abrirAssistente}>1. Escolher culturas</button>
+          <a href="#titulo-form-cultivo">2. Planejar cultivo</a>
+          <a href={dados.planos.length ? "#agenda-horta" : "#plano-horta"}>
+            {dados.planos.length ? "3. Ver minha agenda" : "3. Ver meu plano"}
+          </a>
+        </nav>
+      </div>
       <div className="organizador-barra">
         <ConfiguracaoHorta key={`${dados.regiao}/${dados.area}`} dados={dados}
           aoSalvar={(regiao, area) => atualizar((atuais) => ({ ...atuais, regiao, area }), "Região e espaço salvos.")}

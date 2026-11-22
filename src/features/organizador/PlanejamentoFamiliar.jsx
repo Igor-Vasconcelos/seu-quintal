@@ -1,15 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import IconeCultura from "./IconeCultura.jsx";
+import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas.js";
+import { descreverEpocaPlantio } from "../../data/plantio.js";
+import { buscarCulturas, categoriasCulturas, destaquesCulturas, resumoCultura, todasCulturas } from "./catalogoCulturas.js";
+
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
 import { calcularPlanoFamiliar, metaExemplo, sugestoesDeConsumo } from "./planoFamiliar.js";
 import { hojeCivil, janelaDeDatas } from "./escala.js";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import "../../styles/plano-familiar.css";
 
-const grupos = [
-  { titulo: "Sugestões para o dia a dia", culturas: ["Alface de verão", "Cenoura de verão", "Tomate de mesa"] },
-  { titulo: "Outras culturas disponíveis", culturas: ["Rúcula", "Rabanete", "Beterraba", "Couve", "Abobrinha", "Alface de inverno", "Cenoura de inverno"] },
-];
+function CartaoCultura({ nome, selecionada, aoSelecionar, aoConsultar }) {
+  return <div className="familia-cultura-opcao">
+    <label className="familia-cultura">
+      <input type="checkbox" checked={selecionada} onChange={evento => aoSelecionar(nome, evento.target.checked)} />
+      <IconeCultura nome={nome}/>
+      <span>{nome}</span>
+    </label>
+    <button type="button" className="familia-cultura-guia" onClick={() => aoConsultar(nome)}
+      aria-label={"Ver dicas de cultivo de " + nome}>Dicas</button>
+  </div>;
+}
 
 function textoNumero(n) {
   return String(n).replace(".", ",");
@@ -42,10 +53,29 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
     return () => window.removeEventListener("hashchange", abrirPeloLink);
   }, []);
   const [falha, definirFalha] = useState(false);
+  const [busca, definirBusca] = useState("");
+  const [categoria, definirCategoria] = useState("Todas");
+  const [culturaDetalhe, definirCulturaDetalhe] = useState("Alface de verão");
+  const resultadosBusca = buscarCulturas(busca, categoria);
+  const mostrarDestaques = !busca.trim() && categoria === "Todas";
+  const outrasCulturas = resultadosBusca.filter(nome => !mostrarDestaques || !destaquesCulturas.includes(nome));
+  const orientacao = buscaFichaCultura(culturaDetalhe);
+  function pesquisar(texto) {
+    definirBusca(texto);
+    const primeira = buscarCulturas(texto, categoria)[0];
+    if (primeira) definirCulturaDetalhe(primeira);
+  }
+  function filtrar(grupo) {
+    definirCategoria(grupo);
+    const primeira = buscarCulturas(busca, grupo)[0];
+    if (primeira) definirCulturaDetalhe(primeira);
+  }
+
 
   function selecionar(nome, marcado) {
     definirSelecionadas(atuais => marcado ? [...atuais, nome] : atuais.filter(c => c !== nome));
     definirRetorno("");
+    if (marcado) definirCulturaDetalhe(nome);
   }
 
   const preferencias = selecionadas.map(cultura => ({
@@ -112,29 +142,58 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
 
         <div className="familia-etapa">
           <h3><span className="familia-passo">2</span> O que sua família costuma comer?</h3>
-          <p className="nota">Tomate e cenoura estão entre as hortaliças mais adquiridas no Brasil; cebola também aparece nas pesquisas, mas ainda não tem cálculo nesta ferramenta. A alface é uma opção frequente para hortas domésticas.</p>
-          {grupos.map((grupo, indice) => (
-            <div key={grupo.titulo} className="familia-grupo">
-              {indice === 0 ? <h4>{grupo.titulo}</h4> : <details>
-                <summary>Ver mais culturas disponíveis</summary>
-                <h4>{grupo.titulo}</h4>
-                <div className="familia-seletor">
-                  {grupo.culturas.map(nome => <label key={nome} className="familia-cultura">
-                    <input type="checkbox" checked={selecionadas.includes(nome)} onChange={e => selecionar(nome, e.target.checked)}/>
-                    <IconeCultura nome={nome}/>
-                    <span>{nome}</span>
-                  </label>)}
-                </div>
-              </details>}
-              {indice === 0 && <div className="familia-seletor">
-                {grupo.culturas.map(nome => <label key={nome} className="familia-cultura">
-                  <input type="checkbox" checked={selecionadas.includes(nome)} onChange={e => selecionar(nome, e.target.checked)}/>
-                  <IconeCultura nome={nome}/>
-                  <span>{nome}</span>
-                </label>)}
-              </div>}
+          <p className="nota">Escolha as hortaliças e temperos que sua família realmente utiliza. Use a busca para encontrar novas opções e consulte as dicas antes de planejar o plantio.</p>
+          <div className="familia-busca-cabecalho">
+            <label className="campo">Buscar cultura
+              <input type="search" value={busca} onChange={e => pesquisar(e.target.value)}
+                placeholder="Ex.: brócolis, pepino, salsa…" />
+            </label>
+            <p role="status" className="nota">{todasCulturas.length} culturas disponíveis · {selecionadas.length} selecionadas</p>
+          </div>
+          <div className="familia-filtros" role="group" aria-label="Filtrar por tipo de hortaliça">
+            {["Todas", ...categoriasCulturas].map(nome => (
+              <button type="button" key={nome} className="familia-filtro" aria-pressed={categoria === nome}
+                onClick={() => filtrar(nome)}>{nome}</button>
+            ))}
+          </div>
+          {mostrarDestaques && <div className="familia-grupo">
+            <h4>Sugestões para começar</h4>
+            <div className="familia-seletor">
+              {destaquesCulturas.map(nome => <CartaoCultura key={nome} nome={nome}
+                selecionada={selecionadas.includes(nome)} aoSelecionar={selecionar} aoConsultar={definirCulturaDetalhe}/>)}
             </div>
-          ))}
+          </div>}
+          {mostrarDestaques ? <details className="familia-mais-culturas">
+            <summary>Ver mais {outrasCulturas.length} culturas disponíveis</summary>
+            <div className="familia-seletor">
+              {outrasCulturas.map(nome => <CartaoCultura key={nome} nome={nome}
+                selecionada={selecionadas.includes(nome)} aoSelecionar={selecionar} aoConsultar={definirCulturaDetalhe}/>)}
+            </div>
+          </details> : <div className="familia-grupo">
+            <h4>Resultados ({outrasCulturas.length})</h4>
+            {outrasCulturas.length ? <div className="familia-seletor">
+              {outrasCulturas.map(nome => <CartaoCultura key={nome} nome={nome}
+                selecionada={selecionadas.includes(nome)} aoSelecionar={selecionar} aoConsultar={definirCulturaDetalhe}/>)}
+            </div> : <p role="status" className="nota">Nenhuma cultura encontrada. Tente outro nome ou selecione Todas.</p>}
+          </div>}
+          <aside className="familia-orientacoes" aria-labelledby="familia-orientacoes-titulo">
+            <div className="familia-orientacoes-titulo">
+              <IconeCultura nome={culturaDetalhe}/>
+              <div>
+                <h4 id="familia-orientacoes-titulo">Guia rápido: {culturaDetalhe}</h4>
+                <p className="nota">{resumoCultura(culturaDetalhe)} · Época ({regiao}): {descreverEpocaPlantio(culturaDetalhe, regiao)}</p>
+              </div>
+            </div>
+            <dl>
+              <div><dt>Como começar</dt><dd>{orientacao?.plantio}</dd></div>
+              <div><dt>Cuidados</dt><dd>{orientacao?.cuidados}</dd></div>
+              <div><dt>Quando colher</dt><dd>{orientacao?.colheita}</dd></div>
+            </dl>
+            {orientacao && <a href={fonteFichaCultura(orientacao.pagina)} target="_blank" rel="noopener noreferrer">
+              Consultar ficha Embrapa/Sebrae
+            </a>}
+            <p className="nota">Os prazos e espaçamentos são referências. Ajuste cultivar, região, temperatura e manejo antes de plantar.</p>
+          </aside>
           <div className="familia-metas">
             <h4>Metas por semana — ajuste ao consumo real</h4>
             <label className="familia-venda">
@@ -196,7 +255,8 @@ export default function PlanejamentoFamiliar({ regiao, planosExistentes, bloquea
             <div className="familia-acoes">
               <button type="button" className="botao" disabled={bloqueado || salvando || !sugestao.cabe}
                 onClick={salvarPlano}>{salvando ? "Adicionando…" : "Adicionar sugestões à minha agenda"}</button>
-              <a className="botao botao-contorno" href="../canteiros/">Desenhar um canteiro</a>
+              <a className="botao botao-contorno" href={window.location.pathname.includes("/meu-quintal/")
+                ? "../horta/canteiros/" : "../canteiros/"}>Desenhar um canteiro</a>
             </div>
             <p className="nota">Os novos cultivos serão salvos na agenda deste navegador, sem apagar os existentes. Se a área total da horta ainda não tiver sido definida, ela será preenchida com a soma dos canteiros. Os canteiros recebem nomes e reservas estimadas; a integração automática com o desenho será uma próxima etapa.</p>
           </>}

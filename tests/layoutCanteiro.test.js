@@ -26,9 +26,12 @@ const inicial = () => ({
 
 test("as culturas existentes possuem ícones e nomes inequívocos", () => {
   const grupos = [...new Set(Object.keys(culturasOrganizador).map(iconeDaCultura))];
-  assert.equal(Object.keys(culturasOrganizador).length, 10);
-  assert.equal(grupos.length, 8);
+  assert.equal(Object.keys(culturasOrganizador).length, 27);
+  assert.ok(grupos.length >= 8, "O catálogo deve usar ícones distintos e legíveis");
   assert.equal(grupos.includes("folha"), false);
+  assert.equal(grupos.includes("brotos"), false);
+  assert.equal(iconeDaCultura("Morango"), "morango");
+  assert.equal(iconeDaCultura("Brócolis de verão"), "brocolis");
   assert.equal(iconeDaCultura("Alface de verão"), "alface");
   assert.equal(iconeDaCultura("Alface de inverno"), "alface");
   assert.equal(iconeDaCultura("Cenoura de inverno"), "cenoura");

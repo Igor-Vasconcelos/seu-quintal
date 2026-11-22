@@ -3,6 +3,7 @@ import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas
 import { descreverEpocaPlantio, fontePlantio } from "../../data/plantio.js";
 import { formatarMedida } from "../planejador/geometria.js";
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
+import { categoriasCulturas, gruposCulturas } from "./catalogoCulturas.js";
 import { dimensionarLote, formularioInicial, janelaDeDatas, lerPlano, projetarLote, situacaoDoPlantio } from "./escala.js";
 
 function Quantidade({ nome, rotulo, valor, mudar }) {
@@ -27,7 +28,8 @@ function GuiaDoCultivo({ plano }) {
     <details className="organizador-detalhes">
       <summary>Como plantar, cuidar e colher</summary>
       <dl className="organizador-guia">
-        <div><dt>Começo</dt><dd>{comoComecar}</dd></div>
+        <div><dt>Como começar</dt><dd>{comoComecar}</dd></div>
+        <div><dt>Orientação da cultura</dt><dd>{ficha.plantio}</dd></div>
         <div><dt>Espaçamento usado no plano</dt><dd>{fileiras} cm entre fileiras e {plantas} cm entre plantas.</dd></div>
         <div><dt>Cuidados</dt><dd>{ficha.cuidados}</dd></div>
         <div><dt>Ponto de colheita</dt><dd>{dados.ponto}</dd></div>
@@ -105,7 +107,7 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
     const cultura = evento.target.value;
     const proxima = culturasOrganizador[cultura];
     definirCampos((atuais) => ({
-      ...atuais, cultura, origem: proxima.mudas ? atuais.origem : "semente",
+      ...atuais, cultura, origem: proxima.somenteMuda ? "muda" : proxima.mudas ? atuais.origem : "semente",
       casa: proxima.unidade === ficha.unidade ? atuais.casa : proxima.unidade === "kg" ? "0,5" : "4",
       venda: proxima.unidade === ficha.unidade ? atuais.venda : "0",
       intervalo: proxima.colheitasSucessivas === ficha.colheitasSucessivas ? atuais.intervalo : proxima.colheitasSucessivas ? "4" : "1",
@@ -136,12 +138,16 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
           <div className="organizador-campos">
             <label className="campo">Cultura
               <select name="cultura" value={campos.cultura} onChange={mudarCultura}>
-                {Object.keys(culturasOrganizador).map((nome) => <option key={nome}>{nome}</option>)}
+                {categoriasCulturas.map(grupo => (
+                  <optgroup key={grupo} label={grupo}>
+                    {gruposCulturas[grupo].map(nome => <option key={nome} value={nome}>{nome}</option>)}
+                  </optgroup>
+                ))}
               </select>
             </label>
             <label className="campo">Como vai começar?
               <select name="origem" value={campos.origem} onChange={mudar}>
-                <option value="semente">{ficha.mudas ? "Semente em bandeja" : "Semente no canteiro"}</option>
+                {!ficha.somenteMuda && <option value="semente">{ficha.mudas ? "Semente em bandeja" : "Semente no canteiro"}</option>}
                 {ficha.mudas && <option value="muda">Muda pronta</option>}
               </select>
             </label>
@@ -155,6 +161,11 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
               </span>
             </label>
           </div>
+          <p className="organizador-dica-rapida">
+            <strong>Cuidados com {campos.cultura}</strong>
+            <span>{buscaFichaCultura(campos.cultura)?.cuidados}</span>
+            <small>Confira as orientações e as fontes completas na previsão ao lado (ou abaixo, no celular).</small>
+          </p>
           <fieldset className="organizador-meta">
             <legend>Quanto quer colher por semana?</legend>
             <p className="nota">Informe a meta em {ficha.unidade}.</p>
@@ -163,15 +174,15 @@ export default function FormularioCultivo({ edicao, culturaSugerida, regiao, can
               <Quantidade nome="venda" rotulo="Para venda (opcional)" valor={campos.venda} mudar={mudar} />
             </div>
           </fieldset>
-          {ficha.colheitasSucessivas && (
+          {(ficha.colheitasSucessivas || ficha.planejamentoPorPeso) && (
             <fieldset className="organizador-meta">
-              <legend>Colheitas da mesma planta</legend>
-              <p className="nota">Use o rendimento observado de um ciclo inteiro ou comece com um lote de teste.</p>
+              <legend>{ficha.colheitasSucessivas ? "Colheitas da mesma planta" : "Produção por peso no lote"}</legend>
+              <p className="nota">Use o rendimento real observado por planta no ciclo ou comece com um lote de teste. Sem essa medição, a meta em kg não pode ser garantida.</p>
               <div className="organizador-campos">
                 <Quantidade nome="rendimento" rotulo="Kg por planta no ciclo (opcional)" valor={campos.rendimento} mudar={mudar} />
-                <label className="campo">Semanas de colheita (opcional)
+                {ficha.colheitasSucessivas && <label className="campo">Semanas de colheita (opcional)
                   <input type="number" name="duracao" min="1" max="104" step="1" value={campos.duracao} onChange={mudar} />
-                </label>
+                </label>}
                 {!campos.rendimento && <label className="campo">Plantas no lote de teste
                   <input type="number" name="teste" min="1" step="1" value={campos.teste} onChange={mudar} required />
                 </label>}

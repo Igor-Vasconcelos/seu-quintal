@@ -364,3 +364,21 @@
   .organizador-atividade-data { grid-column: 1 / -1; }
   .organizador-secao-cabecalho { align-items: start; }
 }
+
+/* Informação acionável durante o preenchimento, não escondida no resumo. */
+.organizador-dica-rapida { display: grid; gap: .3rem; padding: .7rem .8rem; background: var(--sq-surface-soft); color: var(--sq-forest); border-inline-start: 3px solid var(--sq-primary); border-radius: .35rem; line-height: 1.45; font-size: .85rem; }
+.organizador-dica-rapida strong { font-size: .9rem; }
+.organizador-dica-rapida small { color: var(--sq-text-muted); font-size: .77rem; }
+
+/* Entrada orientada por tarefas: contexto útil sem um segundo hero gigante. */
+.organizador-inicio { display: flex; align-items: start; justify-content: space-between; gap: 1rem 1.5rem; flex-wrap: wrap; padding: clamp(.85rem,2vw,1.15rem); border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card); background: var(--sq-surface-warm); }
+.organizador-inicio > div { flex: 1 1 17rem; }
+.organizador-etiqueta { color: var(--sq-primary); font-size: .72rem; font-weight: 800; letter-spacing: .08em; }
+.organizador-inicio h2 { font: 400 clamp(1.4rem,2.3vw,1.75rem)/1.2 var(--sq-font-display); color: var(--sq-forest); margin: .25rem 0 .35rem; }
+.organizador-inicio p { font-size: .88rem; color: var(--sq-text-muted); line-height: 1.5; }
+.organizador-inicio .organizador-inicio-contador { color: var(--sq-primary); font-weight: 750; margin-top: .4rem; }
+.organizador-atalhos { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; flex: 0 1 28rem; }
+.organizador-atalhos :is(a,button) { flex: 1 1 8rem; min-height: var(--sq-control-min); display: inline-flex; justify-content: center; align-items: center; text-align: center; border: 1px solid var(--sq-border); border-radius: var(--sq-radius-control); padding: .45rem .65rem; font: 700 .8rem var(--sq-font-ui); color: var(--sq-primary); background: var(--sq-surface); text-decoration: none; cursor: pointer; }
+.organizador-atalhos :is(a,button):focus-visible { outline: 3px solid var(--sq-focus); outline-offset: 2px; }
+.organizador-atalhos :is(a,button):hover { border-color: var(--sq-primary); background: var(--sq-surface-soft); }
+@media (max-width: 580px) { .organizador-atalhos { flex: 1 1 100%; } .organizador-atalhos :is(a,button) { flex: 1 1 100%; } }

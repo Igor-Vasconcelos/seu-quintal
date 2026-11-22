@@ -43,3 +43,13 @@
   .meus-canteiros-editor { display: grid; grid-template-columns: minmax(0,1fr); }
   .meus-canteiros-editor .botao { width: 100%; }
 }
+
+/* Busca por cultura dentro do editor de canteiros, inclusive no celular. */
+.canteiro-catalogo-filtros { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .6rem; margin: .65rem 0 .8rem; }
+.canteiro-catalogo-filtros label { display: grid; gap: .3rem; min-width: 0; font-size: .82rem; font-weight: 750; color: var(--sq-forest); }
+.canteiro-catalogo-filtros input,.canteiro-catalogo-filtros select { min-width: 0; width: 100%; min-height: var(--sq-control-min); padding: .45rem .6rem; border: 1px solid var(--sq-control-border); border-radius: var(--sq-radius-control); background: var(--sq-surface); color: var(--sq-text); font: 500 .93rem var(--sq-font-ui); }
+.canteiro-cultura-conselho { display: grid; gap: .4rem; margin-top: .75rem; padding: .7rem .8rem; border-top: 1px solid var(--sq-border); background: var(--sq-surface-warm); border-radius: var(--sq-radius-control); }
+.canteiro-cultura-conselho strong { color: var(--sq-forest); }
+.canteiro-cultura-conselho p { margin: 0; font-size: .82rem; line-height: 1.5; }
+.canteiro-cultura-conselho a { font-size: .8rem; }
+@media (max-width: 460px) { .canteiro-catalogo-filtros { grid-template-columns: minmax(0,1fr); } }

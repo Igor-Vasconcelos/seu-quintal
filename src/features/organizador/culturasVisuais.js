@@ -10,9 +10,26 @@ const identificacoes = {
   "Couve": "couve",
   "Abobrinha": "abobrinha",
   "Tomate de mesa": "tomate",
+  Acelga: "couve",
+  "Almeirão": "rucula",
+  Chicória: "couve",
+  "Brócolis de verão": "brocolis",
+  "Brócolis de inverno": "brocolis",
+  "Repolho de verão": "repolho",
+  "Repolho de inverno": "repolho",
+  Coentro: "salsa",
+  Cebolinha: "cebolinha",
+  Espinafre: "couve",
+  Salsa: "salsa",
+  "Feijão-vagem": "vagem",
+  Pepino: "pepino",
+  Pimentão: "pimentao",
+  Berinjela: "berinjela",
+  Quiabo: "quiabo",
+  Morango: "morango",
 };
 export function iconeDaCultura(nome) {
-  return identificacoes[nome] ?? "folha";
+  return identificacoes[nome] ?? "brotos";
 }
 export function nomeCurtoDaCultura(nome) {
   if (nome === "Tomate de mesa") return "Tomate";

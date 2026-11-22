@@ -1,6 +1,8 @@
 import { useId, useMemo, useRef, useState } from "react";
 import { formatarMedida, lerMedida } from "../planejador/geometria.js";
 import { culturasOrganizador, fonteEscalonamento } from "./culturas.js";
+import { buscarCulturas, categoriasCulturas } from "./catalogoCulturas.js";
+import { buscaFichaCultura, fonteFichaCultura } from "../../data/fichas-culturas.js";
 import IconeCultura from "./IconeCultura.jsx";
 import { nomeCurtoDaCultura } from "./culturasVisuais.js";
 import { adicionarCanteiro, colecaoInicial, gravarColecaoCanteiros, lerColecaoCanteiros,
@@ -37,6 +39,8 @@ export default function PlanejadorVisualCanteiro() {
   const [cultura, setCultura] = useState("Alface de verão");
   const [girarNovas, setGirarNovas] = useState(false);
   const [mostrarTodas, setMostrarTodas] = useState(false);
+  const [buscaCultura, setBuscaCultura] = useState("");
+  const [categoriaCultura, setCategoriaCultura] = useState("Todas");
   const [selecionado, setSelecionado] = useState(null);
   const [salvo, setSalvo] = useState(() => {
     try { return !inicio.erro && window.localStorage.getItem(chaveCanteiros) !== null; }
@@ -58,7 +62,10 @@ export default function PlanejadorVisualCanteiro() {
   const ocupacao = Math.min(100, (areaOcupadaCm2(plantas) / areaCm2) * 100);
   const capacidade = capacidadeHomogenea(medidas.largura, medidas.comprimento, dimensoes);
   const idNovo = () => "planta-" + (++sequencia.current);
-  const visiveis = mostrarTodas ? nomes : nomes.slice(0, 6);
+  const filtradas = buscarCulturas(buscaCultura, categoriaCultura);
+  const filtroAtivo = Boolean(buscaCultura.trim()) || categoriaCultura !== "Todas";
+  const visiveis = filtroAtivo || mostrarTodas ? filtradas : nomes.slice(0, 6);
+  const orientacaoCultura = buscaFichaCultura(cultura);
 
   function avisar(texto, invalido = false) {
     setErro(invalido);
@@ -411,7 +418,19 @@ export default function PlanejadorVisualCanteiro() {
               <h3><span aria-hidden="true">❧</span> Escolha a cultura</h3>
               <span className="canteiro-cat-contador">{nomes.length} opções</span>
             </div>
-            <p className="canteiro-texto-secundario">Toque em uma cultura para adicioná-la ao desenho.</p>
+            <p className="canteiro-texto-secundario">Pesquise uma cultura ou filtre por grupo. Você pode adicionar várias espécies ao mesmo canteiro, respeitando o espaço.</p>
+            <div className="canteiro-catalogo-filtros">
+              <label>Buscar planta
+                <input type="search" value={buscaCultura} onChange={evento => setBuscaCultura(evento.target.value)}
+                  placeholder="Ex.: brócolis, salsa…" />
+              </label>
+              <label>Tipo de cultura
+                <select value={categoriaCultura} onChange={evento => setCategoriaCultura(evento.target.value)}>
+                  <option value="Todas">Todas</option>
+                  {categoriasCulturas.map(grupo => <option key={grupo} value={grupo}>{grupo}</option>)}
+                </select>
+              </label>
+            </div>
             <div className="canteiro-culturas-grade" role="group" aria-label="Culturas disponíveis">
               {visiveis.map(nome => (
                 <button type="button" key={nome} aria-pressed={cultura === nome}
@@ -423,14 +442,26 @@ export default function PlanejadorVisualCanteiro() {
                 </button>
               ))}
             </div>
-            <button type="button" className="canteiro-ver-mais"
+            {!visiveis.length && <p className="canteiro-texto-secundario" role="status">
+              Não encontramos essa planta. Tente outro termo ou selecione Todas.
+            </p>}
+            {!filtroAtivo && <button type="button" className="canteiro-ver-mais"
               onClick={() => setMostrarTodas(!mostrarTodas)} aria-expanded={mostrarTodas}>
               {mostrarTodas ? "Ver menos culturas" : "Ver todas as culturas"}
-            </button>
+            </button>}
             <div className="canteiro-espacamento">
               <strong>Espaçamento de referência</strong>
               <p>{metros(dimensoes.largura)} m entre fileiras · {metros(dimensoes.comprimento)} m entre plantas</p>
               <small>Capacidade teórica no canteiro vazio: {capacidade} posições</small>
+              {orientacaoCultura && <div className="canteiro-cultura-conselho">
+                <strong>Dicas para {cultura}</strong>
+                <p><b>Plantio:</b> {orientacaoCultura.plantio}</p>
+                <p><b>Cuidados:</b> {orientacaoCultura.cuidados}</p>
+                <p><b>Colheita:</b> {orientacaoCultura.colheita}</p>
+                <a href={fonteFichaCultura(orientacaoCultura.pagina)} target="_blank" rel="noopener noreferrer">
+                  Ver ficha técnica da Embrapa/Sebrae
+                </a>
+              </div>}
             </div>
             <details className="canteiro-mais-opcoes">
               <summary>Orientação e fontes técnicas</summary>

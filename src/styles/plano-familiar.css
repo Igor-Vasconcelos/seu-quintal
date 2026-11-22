@@ -93,3 +93,30 @@
   .familia-indicadores { grid-template-columns: minmax(0,1fr); }
   .familia-acoes .botao { flex: 1 1 100%; }
 }
+
+/* Seleção de culturas v2.3: busca, filtro por uso e ficha educativa. */
+.familia-busca-cabecalho { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: .5rem 1rem; }
+.familia-busca-cabecalho .campo { flex: 1 1 15rem; min-width: 0; display: grid; gap: .3rem; font-size: .875rem; font-weight: 700; }
+.familia-busca-cabecalho input { width: 100%; min-height: var(--sq-control-min); padding: .55rem .7rem; border: 1px solid var(--sq-control-border); border-radius: var(--sq-radius-control); background: var(--sq-surface); font: 500 1rem var(--sq-font-ui); color: var(--sq-text); }
+.familia-filtros { display: flex; flex-wrap: wrap; gap: .4rem; margin: .75rem 0; }
+.familia-filtro { min-height: var(--sq-control-min); padding: .5rem .7rem; border: 1px solid var(--sq-border); border-radius: var(--sq-radius-pill); background: var(--sq-surface); color: var(--sq-forest); font: 650 .82rem var(--sq-font-ui); cursor: pointer; }
+.familia-filtro[aria-pressed="true"] { background: var(--sq-primary); color: var(--sq-on-primary); border-color: var(--sq-primary); }
+.familia-cultura-opcao { display: grid; grid-template-rows: 1fr auto; min-width: 0; border-radius: var(--sq-radius-control); border: 1px solid var(--sq-border); overflow: hidden; background: var(--sq-surface-soft); }
+.familia-cultura-opcao:has(input:checked) { border-color: var(--sq-primary); background: var(--sq-brand-100); }
+.familia-cultura-opcao .familia-cultura { border: 0; border-radius: 0; min-width: 0; margin: 0; background: transparent; }
+.familia-cultura-opcao .familia-cultura:has(input:checked) { border: 0; background: transparent; }
+.familia-cultura-guia { justify-self: end; margin: 0 .45rem .4rem; padding: .25rem .5rem; color: var(--sq-primary); border: 1px solid var(--sq-primary); border-radius: var(--sq-radius-pill); background: var(--sq-surface); font: 700 .74rem var(--sq-font-ui); cursor: pointer; }
+.familia-mais-culturas > summary { padding: .4rem 0; color: var(--sq-primary); font-weight: 750; }
+.familia-mais-culturas > .familia-seletor { margin-top: .8rem; }
+.familia-orientacoes { display: grid; gap: .65rem; padding: clamp(.75rem,1.5vw,1.15rem); border: 1px solid var(--sq-border); border-radius: var(--sq-radius-media); background: var(--sq-surface-warm); }
+.familia-orientacoes-titulo { display: flex; align-items: center; gap: .6rem; }
+.familia-orientacoes-titulo svg { flex: none; width: 3rem; height: 3rem; }
+.familia-orientacoes-titulo h4 { margin: 0 0 .2rem; font-size: 1.05rem; }
+.familia-orientacoes dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .7rem; margin: 0; }
+.familia-orientacoes dl > div { min-width: 0; padding: .65rem; border-radius: var(--sq-radius-control); background: var(--sq-surface); }
+.familia-orientacoes dt { font-weight: 750; color: var(--sq-forest); margin-bottom: .2rem; }
+.familia-orientacoes dd { margin: 0; font-size: .85rem; line-height: 1.55; }
+.familia-orientacoes a { width: fit-content; }
+.familia :is(.familia-filtro,.familia-cultura-guia):focus-visible { outline: 3px solid var(--sq-focus); outline-offset: 2px; }
+@media (max-width: 800px) { .familia-orientacoes dl { grid-template-columns: minmax(0,1fr); } }
+@media (max-width: 420px) { .familia-filtros { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); } .familia-filtro { font-size: .78rem; padding-inline: .3rem; } .familia-seletor { grid-template-columns: repeat(2,minmax(0,1fr)); } .familia-cultura { gap: .3rem; padding-inline: .35rem; } .familia-cultura svg { width: 2.2rem; height: 2.2rem; } }
