@@ -52,7 +52,9 @@ const desenhos = {
     <path d="m2 11 10-8 10 8M5 10v11h14V10M9 21v-8h6v8"/>
   </>,
   caminho: <>
-    <path d="M4 21 9 3h6l5 18M12 4v3m0 4v3m0 4v3"/>
+    <path d="M5 21c.5-4.5 4-7.3 4-11.4C9 6.5 7.4 4.7 7 3"/>
+    <path d="M19 21c-.5-4.5-4-7.3-4-11.4 0-3.1 1.6-4.9 2-6.6"/>
+    <path d="M12 20v-2m0-4v-2m0-4V6"/>
   </>,
   manobra: <>
     <path d="M5 18a8 8 0 1 1 14-5M4 13l1 5 5-2"/>
@@ -99,6 +101,76 @@ const desenhos = {
   outros: <>
     <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
     <rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 18h7m-3-4v7"/>
+  </>,
+  // Ícones de estruturas: mesmo viewBox 24 × 24 e traço do sistema visual.
+  viveiro: <>
+    <path d="M3 20V9l9-6 9 6v11H3Z"/>
+    <path d="M12 3v17M3 10h18"/>
+    <path d="M7 20v-6m0 3c-2-1-2-3-2-3 2 0 2 1 2 3Zm0 0c2-1 2-3 2-3-2 0-2 1-2 3Z"/>
+    <path d="M17 20v-6m0 3c-2-1-2-3-2-3 2 0 2 1 2 3Zm0 0c2-1 2-3 2-3-2 0-2 1-2 3Z"/>
+  </>,
+  deposito: <>
+    <path d="m3 9 9-6 9 6v12H3V9Z"/>
+    <path d="M7 21V11h10v10M7 14h10M7 17h10"/>
+  </>,
+  estufa: <>
+    <path d="M2 21V11L7 4h10l5 7v10H2Z"/>
+    <path d="M7 4v17m10-17v17M2 11h20M12 11v10"/>
+    <path d="M10 18h4m-2 2v-5"/>
+  </>,
+  minhocario: <>
+    <path d="M4 10h16l-1 11H5L4 10ZM3 7h18v3H3V7Z"/>
+    <path d="M7 15c2-3 3 2 5-1s4 1 5-1"/>
+    <circle cx="7" cy="14.5" r=".65" fill="currentColor" stroke="none"/>
+    <path d="M9 18h6"/>
+  </>,
+  biodigestor: <>
+    <path d="M4 20v-8a8 8 0 0 1 16 0v8H4Z"/>
+    <path d="M3 20h18M12 4V2m0 0h5m0 0v5"/>
+    <path d="M7 15h10M10 18h4"/>
+  </>,
+  gota: <>
+    <path d="M12 2c2 4 7 9 7 13a7 7 0 0 1-14 0c0-4 5-9 7-13Z"/>
+    <path d="M8 16a4 4 0 0 0 4 3"/>
+  </>,
+  caixaagua: <>
+    <ellipse cx="12" cy="6" rx="8" ry="3"/>
+    <path d="M4 6v13c0 4 16 4 16 0V6M4 14c5 3 11 3 16 0"/>
+    <path d="M8 20v2m8-2v2"/>
+  </>,
+  cisterna: <>
+    <path d="M3 9h18v12H3V9ZM2 9h20"/>
+    <path d="M8 9V5a4 4 0 0 1 8 0v4M5 15c3-2 5 2 8 0s4-2 6-1"/>
+    <path d="M12 2v3"/>
+  </>,
+  portao: <>
+    <path d="M3 21V5h18v16M3 9l9-5 9 5"/>
+    <path d="M12 8v13M5 11h5v10H5V11Zm9 0h5v10h-5V11Z"/>
+    <path d="M10 16h1m2 0h1"/>
+  </>,
+  patio: <>
+    <rect x="3" y="5" width="18" height="15" rx="1.5"/>
+    <path d="M9 5v15m6-15v15M3 12.5h18"/>
+    <path d="M6 3h12"/>
+  </>,
+  pergolado: <>
+    <path d="M3 9h18M5 9v12m14-12v12M3 5h18"/>
+    <path d="M7 3v6m5-6v6m5-6v6M8 17h8M9 17v4m6-4v4"/>
+  </>,
+  redario: <>
+    <path d="M4 3v18M20 3v18M4 8c5 8 11 8 16 0"/>
+    <path d="M7 9c3 4 7 4 10 0M4 8l3-1m13 1-3-1"/>
+    <path d="M2 21h5m10 0h5"/>
+  </>,
+  piscina: <>
+    <rect x="3" y="5" width="18" height="15" rx="3"/>
+    <path d="M6 12c2-2 4 2 6 0s4-2 6 0M6 16c2-2 4 2 6 0s4-2 6 0"/>
+    <path d="M7 5V2m4 3V2M7 8h4"/>
+  </>,
+  quadra: <>
+    <rect x="2" y="4" width="20" height="16" rx="1.5"/>
+    <path d="M12 4v16M2 9h4v6H2m20-6h-4v6h4"/>
+    <circle cx="12" cy="12" r="3"/>
   </>,
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   fechar: <path d="m6 6 12 12M18 6 6 18" />,
