@@ -85,7 +85,25 @@ export default function App() {
               </div>
               <DestaquesEditorial />
             </section>
-            <section className="home-editorial-artigos" id="artigos" aria-labelledby="titulo-artigos">
+          </div>
+          <aside className="home-editorial-ferramentas" aria-labelledby="titulo-ferramentas-rapidas">
+            <h2 id="titulo-ferramentas-rapidas"><Icone nome="outros" /> Ferramentas para aplicar</h2>
+            <p>Planeje, calcule e organize sua produção com ferramentas gratuitas.</p>
+            <ul>
+              {[
+                { titulo: "Planejador de canteiros", descricao: "Organize suas culturas.", href: "./horta/canteiros/" },
+                { titulo: "Calendário de plantio", descricao: "Saiba o que plantar.", href: "./horta/calendario-de-plantio/" },
+                { titulo: "Calculadora de peixes", descricao: "Volume e planejamento.", href: "./ferramentas/calculadora-peixes/" },
+                { titulo: "Calculadora de codornas", descricao: "Ovos, corte e consumo.", href: "./ferramentas/calculadora-codornas/" },
+                { titulo: "Planejador de pomar", descricao: "Espaçamento e frutíferas.", href: "./ferramentas/planejador-de-pomar/" },
+                { titulo: "Meu Quintal", descricao: "Organize sua propriedade.", href: "./meu-quintal/" },
+              ].map(item => (
+                <li key={item.href}><a href={item.href}><span><strong>{item.titulo}</strong><small>{item.descricao}</small></span><Icone nome="seta" /></a></li>
+              ))}
+            </ul>
+            <a className="botao" href="./ferramentas/">Ver todas as ferramentas <Icone nome="seta" /></a>
+          </aside>
+          <section className="home-editorial-artigos" id="artigos" aria-labelledby="titulo-artigos">
               <div className="home-secao-topo">
                 <div>
                   <h2 id="titulo-artigos"><Icone nome="livro" /> Artigos mais recentes</h2>
@@ -109,24 +127,6 @@ export default function App() {
                 ))}
               </ul>
             </section>
-          </div>
-          <aside className="home-editorial-ferramentas" aria-labelledby="titulo-ferramentas-rapidas">
-            <h2 id="titulo-ferramentas-rapidas"><Icone nome="outros" /> Ferramentas para aplicar</h2>
-            <p>Planeje, calcule e organize sua produção com ferramentas gratuitas.</p>
-            <ul>
-              {[
-                { titulo: "Planejador de canteiros", descricao: "Organize suas culturas.", href: "./horta/canteiros/" },
-                { titulo: "Calendário de plantio", descricao: "Saiba o que plantar.", href: "./horta/calendario-de-plantio/" },
-                { titulo: "Calculadora de peixes", descricao: "Volume e planejamento.", href: "./ferramentas/calculadora-peixes/" },
-                { titulo: "Calculadora de codornas", descricao: "Ovos, corte e consumo.", href: "./ferramentas/calculadora-codornas/" },
-                { titulo: "Planejador de pomar", descricao: "Espaçamento e frutíferas.", href: "./ferramentas/planejador-de-pomar/" },
-                { titulo: "Meu Quintal", descricao: "Organize sua propriedade.", href: "./meu-quintal/" },
-              ].map(item => (
-                <li key={item.href}><a href={item.href}><span><strong>{item.titulo}</strong><small>{item.descricao}</small></span><Icone nome="seta" /></a></li>
-              ))}
-            </ul>
-            <a className="botao" href="./ferramentas/">Ver todas as ferramentas <Icone nome="seta" /></a>
-          </aside>
         </section>
 
         <section className="home-miolo home-secao home-atalhos-secao" aria-labelledby="titulo-atalhos">
