@@ -126,7 +126,7 @@ export default function Cabecalho({ sisteminha = false, raiz = "./", pagina }) {
           <a className="botao menu-quintal"
             href={noPainel ? "#geral" : raiz + "meu-quintal/"}
             aria-current={noPainel ? "page" : undefined}>
-            <Icone nome="planta"/> Meu Quintal
+            <Icone nome="meu-quintal"/> Meu Quintal
           </a>
         </nav>
       </div>
