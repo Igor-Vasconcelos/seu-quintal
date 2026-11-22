@@ -183,7 +183,7 @@ try {
         const assistente = pagina.locator("#planejamento-familiar");
         await assistente.waitFor({ state: "attached", timeout: 15000 });
         if (!(await assistente.evaluate(elemento => elemento.open))) {
-          await assistente.locator("summary").click();
+          await assistente.locator("summary.familia-abrir").click();
         }
         const primeiroLote = assistente.locator(".sq-horta-lote-visual").first();
         await primeiroLote.locator(".sq-horta-etapa-ilustracao").first().waitFor({ state: "visible" });
