@@ -18,7 +18,10 @@ export const fichasSisteminha = {
       { pergunta: "A água do tanque pode ir direto para qualquer planta?", resposta: "Não automaticamente. O reuso depende de tratamento, qualidade da água, tipo de cultura e modo de irrigação. Consulte a orientação técnica antes de aplicar em alimentos consumidos crus." },
       { pergunta: "O que acontece se faltar energia?", resposta: "A circulação e a aeração podem parar. A autonomia e o plano de contingência devem fazer parte do projeto, sobretudo em sistemas de criação intensiva." },
     ],
-    links: [{ href: "https://www.infoteca.cnptia.embrapa.br/handle/doc/1111791", titulo: "Manual técnico do tanque de peixes — Embrapa" }],
+    links: [
+      { href: "./ferramentas/calculadora-peixes/", titulo: "Simular volume, biomassa e ração do tanque" },
+      { href: "https://www.infoteca.cnptia.embrapa.br/handle/doc/1111791", titulo: "Manual técnico do tanque de peixes — Embrapa" },
+    ],
   },
   galinheiro: {
     objetivo: "Oferecer ovos ou carne, conforme o sistema de criação e o bem-estar das aves.",
@@ -58,6 +61,7 @@ export const fichasSisteminha = {
     links: [
       { href: "./horta/canteiros/", titulo: "Planejar os canteiros" },
       { href: "./horta/organizador/", titulo: "Escalonar plantios e colheitas" },
+      { href: "./ferramentas/planejador-de-pomar/", titulo: "Calcular espaçamento das frutíferas" },
     ],
   },
   compostagem: {

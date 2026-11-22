@@ -1,0 +1,183 @@
+/* Ferramentas de peixes e pomar — Seu Quintal, Raiz & Caminho 2.0.
+ * Estilos isolados para não alterar outros formulários nem editores SVG.
+ */
+.simulador-quintal {
+  display: grid; min-width: 0; gap: clamp(1rem,2vw,1.5rem);
+  margin-block: clamp(1rem,2.5vw,2rem);
+  color: var(--sq-text);
+}
+.simulador-apresentacao { max-width: 65ch; display: grid; gap: .35rem; }
+.simulador-apresentacao h2 {
+  font: 400 clamp(1.6rem,3vw,2.3rem)/1.15 var(--sq-font-display);
+  color: var(--sq-forest);
+}
+.simulador-apresentacao > p:last-child {
+  color: var(--sq-text-muted); line-height: 1.65;
+}
+.simulador-selo {
+  display: inline-flex; align-items: center; gap: .4rem;
+  color: var(--sq-primary); font-size: .75rem; font-weight: 800;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+.simulador-selo .icone { width: 1.15rem; height: 1.15rem; }
+.simulador-formulario { display: grid; gap: 1rem; min-width: 0; }
+.simulador-bloco {
+  display: grid; gap: 1rem;
+  min-width: 0; margin: 0; padding: clamp(1rem,2.6vw,1.5rem);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+  box-shadow: var(--sq-shadow-card);
+}
+.simulador-bloco legend {
+  padding-inline: .25rem; color: var(--sq-forest);
+  font: 400 clamp(1.25rem,2vw,1.55rem)/1.2 var(--sq-font-display);
+}
+.simulador-campos {
+  display: grid; gap: .8rem;
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,12rem),1fr));
+  align-items: end;
+}
+.simulador-quintal .campo {
+  display: grid; align-content: end; gap: .35rem;
+  min-width: 0; font-size: .9rem; font-weight: 700;
+  color: var(--sq-forest); line-height: 1.35;
+}
+.simulador-quintal .campo :is(input,select) {
+  display: block; width: 100%; min-width: 0;
+  min-height: var(--sq-control-min);
+  padding: .58rem .75rem;
+  background: var(--sq-surface);
+  border: 1px solid var(--sq-control-border);
+  border-radius: var(--sq-radius-control);
+  font-size: 1rem; font-weight: 500;
+}
+.simulador-quintal .campo :is(input,select):focus-visible,
+.simulador-quintal .simulador-avancado summary:focus-visible,
+.simulador-quintal .simulador-explicacao summary:focus-visible {
+  outline: 3px solid var(--sq-focus); outline-offset: 2px;
+}
+.simulador-quintal .nota { max-width: 77ch; color: var(--sq-text-muted); line-height: 1.55; }
+.simulador-calcular {
+  justify-self: start; min-width: min(100%,15rem);
+  min-height: 3rem; border-radius: var(--sq-radius-pill);
+  text-decoration: none;
+}
+.simulador-calcular .icone { width: 1.2rem; height: 1.2rem; }
+.simulador-avancado,.simulador-explicacao {
+  min-width: 0; border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card); background: var(--sq-surface-warm);
+  overflow: hidden;
+}
+.simulador-avancado > summary,.simulador-explicacao > summary {
+  display: list-item; min-height: var(--sq-control-min);
+  padding: .85rem 1.15rem;
+  cursor: pointer; font-weight: 750; color: var(--sq-primary);
+}
+.simulador-avancado-corpo {
+  display: grid; gap: .65rem; padding: .9rem clamp(.85rem,2vw,1.3rem) 1.3rem;
+  border-top: 1px solid var(--sq-border);
+}
+.simulador-avancado-corpo > label:not(.campo) {
+  display: flex; align-items: start; gap: .55rem;
+  min-height: 2.75rem; padding-block: .3rem; font-size: .9rem; line-height: 1.5;
+}
+.simulador-avancado-corpo > label input[type="checkbox"] {
+  flex: none; width: 1.22rem; height: 1.22rem; margin-top: .12rem;
+  accent-color: var(--sq-primary);
+}
+.simulador-avancado-corpo > p { color: var(--sq-text-muted); font-size: .9rem; line-height: 1.55; }
+.simulador-resultado {
+  min-width: 0; display: grid; gap: 1rem;
+  padding: clamp(1rem,2.7vw,1.7rem);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-brand-100);
+}
+.simulador-resultado h3 {
+  font: 400 clamp(1.45rem,2.5vw,1.9rem)/1.2 var(--sq-font-display);
+  color: var(--sq-forest);
+}
+.simulador-indicadores {
+  display: grid; grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: .65rem; margin: 0;
+}
+.simulador-indicadores > div {
+  display: grid; gap: .5rem; min-width: 0;
+  padding: clamp(.7rem,1.6vw,1rem);
+  border: 1px solid var(--sq-border);
+  background: var(--sq-surface);
+  border-radius: var(--sq-radius-media);
+}
+.simulador-indicadores dt { font-size: .8rem; color: var(--sq-text-muted); line-height: 1.4; }
+.simulador-indicadores dd {
+  min-width: 0; margin: 0; color: var(--sq-forest);
+  font: 700 clamp(1.25rem,2.8vw,1.9rem)/1.2 var(--sq-font-ui);
+  font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
+}
+.simulador-indicadores dd small { font-size: .73rem; font-weight: 600; }
+.simulador-detalhes {
+  display: grid; gap: .6rem; padding-block: .15rem;
+  font-size: .91rem; line-height: 1.55;
+}
+.simulador-detalhes p { margin: 0; }
+.simulador-alerta {
+  padding: .8rem 1rem;
+  background: var(--sq-warning-bg); border: 1px solid #DBC476;
+  border-radius: var(--sq-radius-control);
+  color: var(--sq-warning-text); font-size: .9rem; line-height: 1.55;
+}
+.simulador-resultado-projeto {
+  padding: 1rem; background: var(--sq-surface);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  line-height: 1.55;
+}
+.simulador-resultado-projeto h4 { margin-bottom: .4rem; }
+.simulador-explicacao > p {
+  max-width: 82ch; margin: .6rem 1.1rem 1rem;
+  font-size: .92rem; line-height: 1.6; color: var(--sq-text-muted);
+}
+.simulador-fontes {
+  display: grid; gap: .55rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  padding: clamp(.9rem,2vw,1.5rem);
+  background: var(--sq-surface);
+}
+.simulador-fontes h3 { font: 400 1.4rem/1.3 var(--sq-font-display); }
+.simulador-fontes ul { padding-left: 1.2rem; margin: 0; }
+.simulador-fontes li + li { margin-top: .45rem; }
+.simulador-fontes p { color: var(--sq-text-muted); font-size: .9rem; line-height: 1.55; }
+.simulador-fontes a { color: var(--sq-link); text-underline-offset: .2em; }
+
+.pomar-croqui {
+  display: grid; justify-items: center; min-width: 0;
+  padding: clamp(.65rem,1.8vw,1rem);
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+  background: var(--sq-surface);
+}
+.pomar-croqui svg {
+  width: auto; max-width: 100%; max-height: 25rem;
+  min-height: 7rem; overflow: visible;
+}
+.pomar-croqui figcaption {
+  margin-top: .7rem; max-width: 64ch; font-size: .78rem;
+  line-height: 1.5; color: var(--sq-text-muted); text-align: center;
+}
+@media (max-width: 850px) {
+  .simulador-indicadores { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 500px) {
+  .simulador-indicadores { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .simulador-resultado { padding: .8rem; }
+  .simulador-indicadores > div { padding: .65rem; }
+  .simulador-indicadores dd { font-size: clamp(1rem,5vw,1.4rem); }
+  .simulador-calcular { justify-self: stretch; }
+}
+@media (max-width: 340px) {
+  .simulador-indicadores { grid-template-columns: minmax(0,1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .simulador-quintal * { scroll-behavior: auto; transition: none; }
+}

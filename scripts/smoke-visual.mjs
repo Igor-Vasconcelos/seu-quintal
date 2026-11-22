@@ -14,6 +14,8 @@ const rotas = [
   ["organizador", "/horta/organizador/"],
   ["meu-quintal", "/meu-quintal/"],
   ["artigos", "/artigos/"],
+  ["peixes", "/ferramentas/calculadora-peixes/"],
+  ["pomar", "/ferramentas/planejador-de-pomar/"],
 ];
 
 const navegador = await chromium.launch({ headless: true });
@@ -64,6 +66,16 @@ try {
         assert.match(await pagina.locator("#modulos h2").first().innerText(), /Tanque/i);
         await pagina.locator('.sisteminha-nav-rolagem a[href="#ciclo"]').click();
         await pagina.locator("#ciclo").waitFor({ state: "visible", timeout: 12000 });
+      }
+      if (slug === "peixes") {
+        const form = pagina.locator(".simulador-peixes form");
+        await form.locator('button[type="submit"]').click();
+        await pagina.locator("#resultado-peixes-titulo").waitFor({state:"visible",timeout:12000});
+      }
+      if (slug === "pomar") {
+        const form = pagina.locator(".simulador-pomar form");
+        await form.locator('button[type="submit"]').click();
+        await pagina.locator("#resultado-pomar-titulo").waitFor({state:"visible",timeout:12000});
       }
       if (slug === "meu-quintal") {
         await pagina.locator('.quintal-secoes a[href="#canteiros"]').click();
