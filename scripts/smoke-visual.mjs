@@ -153,6 +153,15 @@ try {
           slug + ": fotografia editorial deve carregar");
       }
       if (slug === "canteiros") {
+        await pagina.locator(".canteiro-catalogo-filtros input[type=search]").fill("pimentao");
+        const culturaFiltrada = pagina.locator(".canteiro-cultura-item").filter({hasText:"Pimentão"});
+        assert.equal(await pagina.locator(".canteiro-cultura-item").count(),1,
+          "Busca do canteiro deve encontrar uma cultura");
+        await culturaFiltrada.click();
+        await pagina.getByText("Dicas para Pimentão").waitFor({state:"visible"});
+        await pagina.locator(".canteiro-catalogo-filtros input[type=search]").fill("");
+        await pagina.locator(".canteiro-catalogo-filtros select").selectOption("Temperos");
+        assert.equal(await pagina.locator(".canteiro-cultura-item").count(),3);
         // A ferramenta independente fica em /horta/canteiros/.
         const dica = pagina.locator(".canteiro-dica a");
         await dica.waitFor({ state: "visible", timeout: 20000 });
@@ -164,7 +173,22 @@ try {
         // Links antigos que circulam fora do site não devem mais mostrar 404.
         await pagina.goto(URL_BASE + "/organizador/#planejamento-familiar", { waitUntil: "networkidle" });
         await pagina.waitForURL("**/horta/organizador/#planejamento-familiar");
-        await pagina.locator("#planejamento-familiar[open]").waitFor({ state: "visible", timeout: 20000 });
+        const planejamento = pagina.locator("#planejamento-familiar[open]");
+        await planejamento.waitFor({ state: "visible", timeout: 20000 });
+        await planejamento.locator("input[type=search]").fill("brocolis");
+        assert.equal(await planejamento.locator(".familia-cultura-opcao").count(),2,
+          "Busca sem acentos deve retornar os dois tipos de brócolis");
+        await planejamento.getByRole("button",{name:"Ver dicas de cultivo de Brócolis de verão"}).click();
+        await planejamento.getByText("Guia rápido: Brócolis de verão").waitFor({state:"visible"});
+        await planejamento.locator("input[type=search]").fill("");
+        await planejamento.getByRole("button", {name:"Temperos",exact:true}).click();
+        assert.equal(await planejamento.locator(".familia-cultura-opcao").count(),3);
+        await pagina.locator(".organizador-form select[name=cultura]").selectOption("Pimentão");
+        await pagina.getByText("Cuidados com Pimentão").waitFor({state:"visible"});
+        await pagina.locator(".organizador-previsao").getByText("Primeiro lote").waitFor({state:"visible"});
+        await pagina.screenshot({
+          path: PASTA + "/organizador-" + nome + ".png", animations:"disabled",
+        });
       }
       if (slug === "codornas") {
         await pagina.locator(".codornas-formulario button[type=submit]").click();
