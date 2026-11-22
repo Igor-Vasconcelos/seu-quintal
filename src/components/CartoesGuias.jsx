@@ -9,9 +9,14 @@ export default function CartoesGuias({ itens = guias, raiz = "./", titulo: Titul
           <a className="guia-cartao" href={`${raiz}${guia.destino}`}>
             <img src={`${raiz}imagens/${guia.id}.webp`} width="792" height="396" alt="" loading="lazy" />
             <div>
+              <span className="guia-cartao-formato">{guia.formato}</span>
               <Titulo>{guia.titulo}</Titulo>
               <p>{guia.resumo}</p>
-              <span className="guia-acao">Abrir guia <Icone nome="seta" /></span>
+              <dl className="guia-cartao-detalhes">
+                <div><dt>Para quem</dt><dd>{guia.paraQuem}</dd></div>
+                <div><dt>O que você vai aprender</dt><dd>{guia.aprende}</dd></div>
+              </dl>
+              <span className="guia-acao">Explorar conteúdo <Icone nome="seta" /></span>
             </div>
           </a>
         </li>

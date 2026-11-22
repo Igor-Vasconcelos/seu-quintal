@@ -183,21 +183,47 @@ function categoryId(text) {
 function renderIndex(articles) {
   const categories = [...new Set(articles.map(x => x.categoria))];
   const sections = categories.map(category => '<section class="sq-category" id="' + categoryId(category) + '">' +
-    "<h2>" + escapeHtml(category) + '</h2><ul class="sq-grid">' +
+    "<h3>" + escapeHtml(category) + '</h3><ul class="sq-grid">' +
     articles.filter(x => x.categoria === category).map(article =>
       '<li><a class="sq-card" href="./' + article.slug + '/">' +
       '<img src="../' + article.imagem.slice(1) + '" alt="" loading="lazy" width="792" height="446">' +
-      '<div><p class="sq-eyebrow">' + escapeHtml(category) + "</p><h3>" + escapeHtml(article.titulo) +
-      "</h3><p>" + escapeHtml(article.descricao) +
-      "</p><span>Leia o artigo →</span></div></a></li>").join("\n") + "</ul></section>").join("\n");
-  const body = '<header class="sq-index-intro"><p class="sq-eyebrow">APRENDA NO SEU RITMO</p>' +
+      '<div><p class="sq-eyebrow">' + escapeHtml(category) + "</p><h4>" + escapeHtml(article.titulo) +
+      "</h4><p>" + escapeHtml(article.descricao) +
+      "</p><span>Entender o assunto →</span></div></a></li>").join("\n") + "</ul></section>").join("\n");
+  const guides = [
+    { href: "../horta/", label: "Horta em pequenos espaços", category: "Horta", desc: "Descubra o que plantar conforme o sol e o espaço que você tem." },
+    { href: "../guias/compostagem/", label: "Checklist de compostagem", category: "Sustentabilidade", desc: "Veja o que pode ir para a composteira e quais materiais exigem atenção." },
+    { href: "../guias/irrigacao/", label: "Como escolher a irrigação", category: "Água e manejo", desc: "Compare opções de rega antes de escolher a sua." },
+    { href: "../sisteminha.html#galinheiro", label: "Começar a criar aves", category: "Animais", desc: "Entenda instalações, alimentação, cuidados e cálculos de criação." },
+  ];
+  const guideCards = guides.map(guide => '<li><a class="sq-guide-card" href="' + guide.href +
+    '"><span class="sq-guide-card-label">' + escapeHtml(guide.category) + '</span>' +
+    '<strong>' + escapeHtml(guide.label) + '</strong><span>' + escapeHtml(guide.desc) +
+    '</span><span class="sq-guide-card-action">Abrir guia →</span></a></li>').join("\n");
+  const body = '<header class="sq-index-intro"><p class="sq-eyebrow">APRENDA E COLOQUE EM PRÁTICA</p>' +
     "<h1>Artigos e guias para seu quintal</h1>" +
-    '<p class="sq-lede">Dúvidas reais, respostas práticas e ferramentas gratuitas para planejar e cultivar seu espaço.</p></header>' +
-    '<nav class="sq-categories" aria-label="Filtrar por assunto">' +
-    categories.map(x => '<a href="#' + categoryId(x) + '">' + escapeHtml(x) + "</a>").join("") + "</nav>" + sections;
+    '<p class="sq-lede">Uma dúvida de cada vez. Leia uma resposta, siga um guia prático e experimente a ferramenta relacionada quando precisar.</p>' +
+    '<nav class="sq-index-actions" aria-label="Escolha como começar">' +
+    '<a href="#artigos-por-tema">Ler artigos</a><a href="#guias-para-comecar">Ver guias práticos</a>' +
+    '<a href="../#ferramentas">Explorar ferramentas</a></nav></header>' +
+    '<section class="sq-guide-explain" aria-label="Escolha o conteúdo certo">' +
+      '<div><strong>Artigos</strong><p>Entenda dúvidas e decisões antes de começar.</p></div>' +
+      '<div><strong>Guias</strong><p>Siga orientações práticas e descubra o primeiro passo.</p></div>' +
+      '<div><strong>Ferramentas</strong><p>Calcule, planeje e organize seu espaço gratuitamente.</p></div>' +
+    '</section>' +
+    '<section class="sq-guides-featured" id="guias-para-comecar"><div class="sq-section-heading">' +
+    '<p class="sq-eyebrow">APRENDA FAZENDO</p><h2>Guias para começar</h2>' +
+    '<p>Veja para quem o conteúdo serve e avance com orientações práticas.</p></div>' +
+    '<ul class="sq-guides-grid">' + guideCards + '</ul>' +
+    '<p class="sq-see-all"><a href="../guias/">Explorar todos os guias →</a></p></section>' +
+    '<section class="sq-articles-list" id="artigos-por-tema"><div class="sq-section-heading">' +
+    '<p class="sq-eyebrow">DÚVIDAS RESPONDIDAS</p><h2>Artigos por assunto</h2>' +
+    '<p>Escolha um tema e encontre respostas para situações do dia a dia.</p></div>' +
+    '<nav class="sq-categories" aria-label="Ir para artigos de um assunto">' +
+    categories.map(x => '<a href="#' + categoryId(x) + '">' + escapeHtml(x) + "</a>").join("") +
+    '</nav>' + sections + '</section>';
   return layout({ title: "Artigos e guias", description: "Artigos práticos sobre horta, animais e planejamento, conectados às ferramentas gratuitas do Seu Quintal.", path: "/artigos/", prefix: "../", body });
 }
-
 export function generateArticles() {
   const files = readdirSync(SOURCE).filter(name => name.endsWith(".md")).sort();
   const articles = files.map(name => {
