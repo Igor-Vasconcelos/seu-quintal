@@ -119,3 +119,17 @@ test("Sisteminha reutiliza linguagem visual da Home sem margens no hero", () => 
     assert.match(icones, new RegExp("\\b" + nome + ":"));
   }
 });
+
+
+test("ícones de compostagem e minhocário têm silhueta identificável", () => {
+  const icones = arquivo("src/components/IconeNavegacao.jsx");
+  const compostagem = icones.slice(icones.indexOf("  recycle: <>"), icones.indexOf("  irrigacao: <>"));
+  const minhocario = icones.slice(icones.indexOf("  minhoca: <>"), icones.indexOf("  rede: <>"));
+  assert.match(compostagem, /<rect x="5" y="8" width="14"/);
+  assert.match(compostagem, /M12 8V5\.2/);
+  assert.match(minhocario, /<rect x="4\.5" y="7\.5" width="15"/);
+  assert.match(minhocario, /<circle cx="8\.7" cy="12\.1"/);
+  assert.match(icones, /strokeWidth="1\.8"/);
+  assert.match(main, /compostagem: "recycle"/);
+  assert.match(main, /minhocario: "minhoca"/);
+});
