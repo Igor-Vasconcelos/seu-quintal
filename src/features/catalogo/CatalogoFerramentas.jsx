@@ -1,6 +1,6 @@
-import Icone from "../components/Icone.jsx";
-import { catalogoFerramentas, gruposFerramentas } from "../data/catalogoFerramentas.js";
-import "../styles/descoberta-ferramentas-v4.css";
+import Icone from "../../components/Icone.jsx";
+import { catalogoFerramentas, gruposFerramentas } from "../../data/catalogoFerramentas.js";
+import "../../styles/descoberta-ferramentas-v4.css";
 
 export default function CatalogoFerramentas({ raiz="../" }) {
   return <section className="ferramentas-catalogo" aria-labelledby="catalogo-ferramentas-titulo">
