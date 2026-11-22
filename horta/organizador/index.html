@@ -8,7 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Organizador de horta e plantio escalonado | Seu Quintal</title>
   </head>
-  <body data-raiz="../../" data-pagina="organizador">
+  <body class="pagina-ferramenta-v4" data-raiz="../../" data-pagina="organizador">
     <div class="pagina" id="inicio">
       <a class="pular" href="#conteudo">Pular para o conteúdo</a>
       <div id="cabecalho"></div>
@@ -25,7 +25,11 @@
           </div>
           <img src="../../imagens/horta.webp" alt="Hortaliças em canteiros de um quintal." width="792" height="396" fetchpriority="high" />
         </header>
-        <section class="orientacao-tematica" aria-labelledby="como-escalonar">
+        <div class="ferramenta-meta" aria-label="Características desta ferramenta">
+          <span>Gratuito</span><span>Sem cadastro</span><span>Salva neste navegador</span>
+        </div>
+        <div id="organizador-raiz"></div>
+                <section class="orientacao-tematica" aria-labelledby="como-escalonar">
           <h2 id="como-escalonar">Como montar um plano de plantio escalonado</h2>
           <ol>
             <li>Escolha a hortaliça e informe se vai começar pela semente ou por uma muda pronta, quando essa opção estiver disponível.</li>
@@ -36,7 +40,6 @@
           <p>Quer visualizar as posições das plantas? <a href="../canteiros/">Use o planejador de canteiros</a>.</p>
           <p>Antes de começar, leia <a href="../../artigos/como-planejar-uma-horta-para-colher-com-frequencia/">como organizar uma horta pequena para colher com frequência</a>.</p>
         </section>
-        <div id="organizador-raiz"></div>
         <noscript>Ative o JavaScript para montar o plano de plantio e consultar a agenda da horta.</noscript>
       </main>
       <div id="rodape"></div>

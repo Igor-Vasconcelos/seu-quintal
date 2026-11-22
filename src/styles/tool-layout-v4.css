@@ -1,0 +1,114 @@
+/* Seu Quintal UX v4 — abertura compacta de ferramentas e área de trabalho em foco.
+ * Não altera formulários, dados, geometria, nem os estados das ferramentas.
+ */
+.pagina-ferramenta-v4 .conteudo-tematico { padding-block: .65rem 2.5rem; }
+.pagina-ferramenta-v4 .trilha-site { margin-block: .15rem .55rem; }
+.pagina-ferramenta-v4 .titulo-tematico {
+  display: grid; gap: .35rem;
+  margin-block: .4rem .8rem;
+  padding: clamp(1.2rem,3vw,2.2rem);
+  min-height: 0;
+  background: linear-gradient(110deg,var(--sq-cream),var(--sq-surface-warm));
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+}
+.pagina-ferramenta-v4 .titulo-tematico h1 {
+  font: 400 clamp(2rem,3.3vw,2.9rem)/1.1 var(--sq-font-display);
+  letter-spacing: -.025em; max-width: 32ch;
+}
+.pagina-ferramenta-v4 .titulo-tematico > p {
+  max-width: 68ch; margin-top: .25rem;
+  font-size: clamp(.94rem,1.4vw,1.03rem); line-height: 1.55;
+}
+.pagina-ferramenta-v4 .abertura-horta {
+  grid-template-columns: minmax(0,1.22fr) minmax(0,.75fr);
+  gap: clamp(.8rem,2vw,1.45rem);
+  margin-block: .35rem .8rem;
+  padding: clamp(.9rem,2vw,1.5rem);
+  min-height: 0;
+}
+.pagina-ferramenta-v4 .abertura-horta > div { padding: .25rem; }
+.pagina-ferramenta-v4 .abertura-horta h1 {
+  font: 400 clamp(1.95rem,3.15vw,2.85rem)/1.1 var(--sq-font-display);
+  max-width: 25ch; letter-spacing: -.025em;
+}
+.pagina-ferramenta-v4 .abertura-horta p:not(.home-sobretitulo) {
+  max-width: 67ch; line-height: 1.52; margin-top: .6rem;
+  font-size: clamp(.93rem,1.2vw,1.03rem);
+}
+.pagina-ferramenta-v4 .abertura-horta img {
+  display: block; width: 100%; height: auto; max-height: 13.5rem;
+  aspect-ratio: 16/9; object-fit: cover;
+  border-radius: var(--sq-radius-media);
+}
+.pagina-ferramenta-v4 .abertura-horta .botao {
+  min-height: var(--sq-control-min); margin-top: .75rem;
+}
+.pagina-ferramenta-v4 .ferramenta-comecar {
+  display: inline-flex; justify-content: center; align-items: center;
+  min-height: var(--sq-control-min);
+  width: max-content; max-width: 100%; text-decoration: none;
+  margin-top: .6rem;
+}
+.pagina-ferramenta-v4 .ferramenta-meta {
+  display: flex; gap: .45rem; flex-wrap: wrap; align-items: center;
+  padding-block: .15rem .9rem;
+  color: var(--sq-forest);
+}
+.pagina-ferramenta-v4 .ferramenta-meta span {
+  display: inline-flex; align-items: center;
+  min-height: 2rem; padding: .35rem .7rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-surface);
+  font-size: .76rem; font-weight: 750; line-height: 1.25;
+}
+.pagina-ferramenta-v4 :is(#canteiro-visual-raiz,#calendario-raiz,#organizador-raiz,
+#calculadora-peixes-raiz,#calculadora-codornas-raiz,#planejador-pomar-raiz) {
+  scroll-margin-top: 1rem;
+}
+.pagina-ferramenta-v4 .orientacao-tematica {
+  width: min(100%,76ch); max-width: none;
+  margin-block: clamp(1.3rem,3vw,2.1rem);
+  padding: clamp(.85rem,1.6vw,1.25rem);
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card); background: var(--sq-surface);
+}
+.pagina-ferramenta-v4 .orientacao-tematica h2 {
+  font: 400 clamp(1.35rem,2vw,1.7rem)/1.2 var(--sq-font-display);
+}
+.pagina-ferramenta-v4 .orientacao-tematica :is(p,ol) {
+  font-size: .91rem; line-height: 1.62;
+}
+.pagina-ferramenta-v4 .simulador-quintal,
+.pagina-ferramenta-v4 .codornas-calculadora { margin-block: .25rem 1.4rem; }
+.pagina-ferramenta-v4 .conteudo-relacionado { margin-top: 1.3rem; }
+.pagina-ferramenta-v4 :is(.canteiro-visual,.organizador-horta) { min-width: 0; }
+.pagina-meu-quintal .quintal-pagina { padding-block: .6rem 2rem; }
+.pagina-meu-quintal .quintal-titulo {
+  padding: clamp(1rem,2.4vw,1.65rem);
+  gap: .75rem 1.4rem;
+}
+.pagina-meu-quintal .quintal-titulo h1 {
+  font: 400 clamp(1.95rem,3vw,2.65rem)/1.1 var(--sq-font-display);
+}
+.pagina-meu-quintal .quintal-etiqueta { margin-bottom: .35rem; }
+.pagina-meu-quintal .quintal-titulo-texto > p:not(.quintal-salvamento) {
+  margin-top: .35rem; font-size: .94rem;
+}
+.pagina-meu-quintal .quintal-salvamento {
+  font-size: .77rem; margin-top: .6rem; padding: .4rem .6rem;
+}
+.pagina-meu-quintal .quintal-titulo-acoes .botao { min-height: var(--sq-control-min); }
+@media (max-width: 900px) {
+  .pagina-ferramenta-v4 .abertura-horta { grid-template-columns: minmax(0,1fr) minmax(0,.72fr); }
+}
+@media (max-width: 740px) {
+  .pagina-ferramenta-v4 .abertura-horta { grid-template-columns: minmax(0,1fr); }
+  .pagina-ferramenta-v4 .abertura-horta img { max-height: 14rem; }
+  .pagina-ferramenta-v4 .titulo-tematico { padding: 1rem; }
+  .pagina-ferramenta-v4 .ferramenta-comecar { width: 100%; }
+  .pagina-meu-quintal .quintal-titulo { padding: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pagina-ferramenta-v4 .ferramenta-comecar { scroll-behavior: auto; }
+}
