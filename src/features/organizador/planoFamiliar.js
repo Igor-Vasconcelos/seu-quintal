@@ -102,7 +102,7 @@ export function calcularPlanoFamiliar({
       return { erro: "Informe metas semanais positivas, em " + ficha.unidade + ", para " + item.cultura + "." };
     const continuo = Boolean(ficha.colheitasSucessivas);
     const plano = {
-      cultura: item.cultura, origem: "semente", inicio,
+      cultura: item.cultura, origem: ficha.somenteMuda ? "muda" : "semente", inicio,
       canteiro: "", casa, venda, intervalo: continuo ? 4 : 1,
       rendimento: null, duracao: null, teste: 2,
     };
