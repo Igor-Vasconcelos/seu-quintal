@@ -10,7 +10,9 @@
     "test": "node --test",
     "gerar:artigos": "node scripts/gerar-artigos.mjs",
     "predev": "npm run gerar:artigos",
-    "prebuild": "npm run gerar:artigos"
+    "prebuild": "npm run gerar:artigos",
+    "postbuild": "node scripts/verificar-seo.mjs",
+    "validar:seo": "node scripts/verificar-seo.mjs"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.2.8",
