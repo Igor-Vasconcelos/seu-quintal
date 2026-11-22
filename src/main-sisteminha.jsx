@@ -462,3 +462,5 @@ import "./styles/layout-shell-v5.css";
 import "./styles/sisteminha-swipe.css";
 
 import "./styles/sisteminha-fullbleed.css";
+
+import "./styles/nav-icons-v2.css";
