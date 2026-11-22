@@ -1,0 +1,44 @@
+/* Ícones de navegação: mesmo sistema visual, traço e tamanho em todo o portal.
+   Aplicado somente às faixas de assuntos da Home e do Sisteminha. */
+.pagina-home .home-trilhas .icone-navegacao,
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem .icone-navegacao {
+  width: 1.8rem;
+  height: 1.8rem;
+  stroke-width: 1.8;
+  color: var(--sq-primary);
+  flex: 0 0 auto;
+}
+.pagina-home .home-trilhas a,
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a {
+  text-decoration: none;
+  transition: background-color .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.pagina-home .home-trilhas a:focus-visible,
+.pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a:focus-visible {
+  outline: 3px solid var(--sq-focus);
+  outline-offset: -3px;
+  position: relative;
+  z-index: 2;
+}
+@media (min-width: 768px) {
+  .pagina-home .home-trilhas a .icone-navegacao {
+    width: 1.95rem;
+    height: 1.95rem;
+  }
+  .pagina-home .home-trilhas a {
+    gap: .45rem;
+  }
+}
+@media (max-width: 767px) {
+  .pagina-home .home-trilhas a .icone-navegacao,
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a .icone-navegacao {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pagina-home .home-trilhas a,
+  .pagina-sisteminha.sisteminha-ds3 .sisteminha-nav-rolagem a {
+    transition: none;
+  }
+}
