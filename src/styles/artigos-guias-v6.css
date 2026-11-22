@@ -1,0 +1,222 @@
+/* Seu Quintal — artigos ilustrados 2.9
+ * Camada opt-in posterior a artigos-leitura-v5. Base: Design System 2.1.
+ * Hero compacto inspirado na Home. Texto indexável e imagens WebP locais.
+ */
+.sq-artigos .sq-article-opening {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-card);
+  background: var(--sq-forest);
+  color: var(--sq-cream);
+  margin: 0 0 clamp(1.25rem, 3vw, 2.3rem);
+  box-shadow: var(--sq-shadow-card);
+}
+.sq-artigos .sq-article-opening .sq-article-header {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0;
+  padding: clamp(1.3rem, 3vw, 2.3rem);
+}
+.sq-artigos .sq-article-opening .sq-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: .25rem .8rem;
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-cream);
+  color: var(--sq-forest);
+  font: 700 .78rem/1.4 var(--sq-font-ui);
+}
+.sq-artigos .sq-article-opening h1 {
+  max-width: 20ch;
+  margin: .65rem 0 .55rem;
+  font: 400 clamp(2.2rem, 3.45vw, 3.5rem)/1.06 var(--sq-font-display);
+  letter-spacing: -.02em;
+  color: var(--sq-cream);
+  text-wrap: balance;
+}
+.sq-artigos .sq-article-opening .sq-lede {
+  max-width: 58ch;
+  color: #F8F8F2;
+  font-size: clamp(.95rem, 1.2vw, 1.06rem);
+  line-height: 1.55;
+  margin: .25rem 0 .55rem;
+}
+.sq-artigos .sq-article-opening .sq-answer {
+  margin: .2rem 0 .6rem;
+  max-width: 60ch;
+  color: #F8F8F2;
+  font-size: clamp(.9rem, 1.1vw, 1rem);
+  line-height: 1.6;
+}
+.sq-artigos .sq-article-opening .sq-answer strong {
+  color: var(--sq-cream);
+}
+.sq-artigos .sq-article-opening .sq-article-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem .8rem;
+  color: #F8F8F2;
+  margin-top: .3rem;
+}
+.sq-artigos .sq-article-opening .sq-byline,
+.sq-artigos .sq-article-opening .sq-read-meta {
+  color: #F8F8F2;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+.sq-artigos .sq-article-opening .sq-meta-tool {
+  background: var(--sq-cream);
+  border-color: var(--sq-cream);
+  color: var(--sq-forest);
+  text-decoration: none;
+  min-height: var(--sq-control-min);
+}
+.sq-artigos .sq-article-opening .sq-meta-tool:hover {
+  background: #FFFFFF;
+  color: var(--sq-forest);
+  border-color: #FFFFFF;
+}
+.sq-artigos .sq-article-opening .sq-hero-image {
+  min-height: 16rem;
+  height: 100%;
+  max-height: 26rem;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 0;
+  align-self: stretch;
+}
+.sq-artigos .sq-article-opening .sq-hero-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 16rem;
+  max-height: 26rem;
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+}
+/* Imagens reais na aparência, com proveniência explicitada.
+ * Evitar figuras maiores que o conteúdo que ilustram. */
+.sq-artigos .sq-prose .sq-step-figure {
+  width: min(100%, 49rem);
+  margin: 1.2rem 0 1.45rem;
+  overflow: hidden;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface-soft);
+}
+.sq-artigos .sq-prose .sq-step-figure img {
+  display: block;
+  width: 100%;
+  max-height: 21rem;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+.sq-artigos .sq-prose .sq-step-figure figcaption {
+  padding: .55rem .8rem;
+  margin: 0;
+  color: var(--sq-text-muted);
+  background: var(--sq-surface-soft);
+  font-size: .79rem;
+  line-height: 1.5;
+}
+/* Tabelas: rolagem somente dentro da região, nunca na página inteira. */
+.sq-artigos .sq-prose .sq-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.15rem 0 1.4rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface);
+  overscroll-behavior-x: contain;
+}
+.sq-artigos .sq-prose .sq-table-wrap:focus-visible {
+  outline: 3px solid var(--sq-focus);
+  outline-offset: 2px;
+}
+.sq-artigos .sq-prose .sq-table-wrap table {
+  width: 100%;
+  min-width: 32rem;
+  margin: 0;
+  border-collapse: collapse;
+  font: 400 .9rem/1.5 var(--sq-font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.sq-artigos .sq-prose .sq-table-wrap th,
+.sq-artigos .sq-prose .sq-table-wrap td {
+  text-align: left;
+  vertical-align: top;
+  padding: .72rem .8rem;
+  border-bottom: 1px solid var(--sq-border);
+}
+.sq-artigos .sq-prose .sq-table-wrap th {
+  color: var(--sq-on-primary);
+  background: var(--sq-primary);
+  font-weight: 700;
+}
+.sq-artigos .sq-prose .sq-table-wrap tr:nth-child(even) td {
+  background: var(--sq-surface-soft);
+}
+.sq-artigos .sq-prose .sq-table-wrap tbody tr:last-child td { border-bottom: 0; }
+/* Passo a passo. Mantém <ol> nativo e funciona sem JavaScript. */
+.sq-artigos .sq-prose > ol {
+  display: grid;
+  gap: .55rem;
+  list-style: decimal;
+  padding: .7rem 1.2rem .7rem 2.6rem;
+  border: 1px solid var(--sq-border);
+  border-radius: var(--sq-radius-media);
+  background: var(--sq-surface-soft);
+}
+.sq-artigos .sq-prose > ol li { margin: 0; padding: .15rem 0; }
+.sq-artigos .sq-prose > ul { padding-left: 1.5rem; }
+.sq-artigos .sq-prose > li, .sq-artigos .sq-prose > p { overflow-wrap: anywhere; }
+.sq-artigos .sq-prose h3 { margin-top: 1.4rem; }
+/* Compactar no tablet; imagem lateral só quando cabe. */
+@media (max-width: 1000px) {
+  .sq-artigos .sq-article-opening { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); }
+  .sq-artigos .sq-article-opening .sq-article-header { padding: 1.25rem; }
+  .sq-artigos .sq-article-opening h1 { font-size: clamp(2rem, 4vw, 2.65rem); }
+  .sq-artigos .sq-article-opening .sq-hero-image,
+  .sq-artigos .sq-article-opening .sq-hero-image img { max-height: 24rem; }
+}
+@media (max-width: 700px) {
+  .sq-artigos .sq-article-opening { grid-template-columns: minmax(0, 1fr); }
+  .sq-artigos .sq-article-opening .sq-article-header { padding: 1.1rem; }
+  .sq-artigos .sq-article-opening h1 { font-size: clamp(1.9rem, 7vw, 2.5rem); max-width: 100%; }
+  .sq-artigos .sq-article-opening .sq-lede { line-height: 1.5; }
+  .sq-artigos .sq-article-opening .sq-hero-image {
+    min-height: 0;
+    max-height: 9.5rem;
+    height: 9.5rem;
+  }
+  .sq-artigos .sq-article-opening .sq-hero-image img {
+    min-height: 0; max-height: 9.5rem; height: 9.5rem;
+    object-position: center 50%;
+  }
+  .sq-artigos .sq-prose .sq-step-figure img { max-height: 17rem; }
+  .sq-artigos .sq-prose .sq-table-wrap table { font-size: .85rem; }
+}
+@media (max-width: 359px) {
+  .sq-artigos .sq-article-opening .sq-article-header { padding: .9rem; }
+  .sq-artigos .sq-article-opening h1 { font-size: 1.9rem; }
+  .sq-artigos .sq-article-opening .sq-article-info { gap: .25rem .6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sq-artigos .sq-article-opening * { scroll-behavior: auto; }
+}
