@@ -33,10 +33,11 @@ test("catálogo, guias, navegação e sitemap têm links indexáveis",()=>{
  assert.match(html,/rel="canonical"/);
  assert.match(html,/catalogo-ferramentas/);
  assert.match(html,/<noscript>/);
- for(const path of ["src/main-conteudo.jsx","src/components/Cabecalho.jsx","src/components/Rodape.jsx",
+ for(const path of ["src/components/Cabecalho.jsx","src/components/Rodape.jsx",
   "vite.config.js","scripts/smoke-visual.mjs","scripts/gerar-artigos.mjs","mapa-do-site/index.html"]){
   assert.ok(read(path).includes("ferramentas/"),path);
  }
+ assert.match(read("src/main-conteudo.jsx"),/catalogo-ferramentas/);
  assert.match(read("src/main-sisteminha.jsx"),/FerramentasModulo/);
  assert.match(read("src/features/sisteminha/FerramentasModulo.jsx"),/ferramentasDoModulo/);
  assert.equal(generateArticles(),2);
