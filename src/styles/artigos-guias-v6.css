@@ -24,7 +24,7 @@
   align-items: flex-start;
   justify-content: center;
   margin: 0;
-  padding: clamp(1.3rem, 3vw, 2.3rem);
+  padding: clamp(1.1rem, 2.5vw, 1.9rem);
 }
 .sq-artigos .sq-article-opening .sq-eyebrow {
   display: inline-flex;
@@ -39,7 +39,7 @@
 .sq-artigos .sq-article-opening h1 {
   max-width: 20ch;
   margin: .65rem 0 .55rem;
-  font: 400 clamp(2.2rem, 3.45vw, 3.5rem)/1.06 var(--sq-font-display);
+  font: 400 clamp(2.05rem, 3.25vw, 3.15rem)/1.05 var(--sq-font-display);
   letter-spacing: -.02em;
   color: var(--sq-cream);
   text-wrap: balance;
@@ -88,9 +88,9 @@
   border-color: #FFFFFF;
 }
 .sq-artigos .sq-article-opening .sq-hero-image {
-  min-height: 16rem;
+  min-height: 0;
   height: 100%;
-  max-height: 26rem;
+  max-height: none;
   min-width: 0;
   width: 100%;
   margin: 0;
@@ -102,8 +102,8 @@
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 16rem;
-  max-height: 26rem;
+  min-height: 100%;
+  max-height: none;
   aspect-ratio: auto;
   object-fit: cover;
   object-position: center;
@@ -193,20 +193,22 @@
   .sq-artigos .sq-article-opening .sq-article-header { padding: 1.25rem; }
   .sq-artigos .sq-article-opening h1 { font-size: clamp(2rem, 4vw, 2.65rem); }
   .sq-artigos .sq-article-opening .sq-hero-image,
-  .sq-artigos .sq-article-opening .sq-hero-image img { max-height: 24rem; }
+  .sq-artigos .sq-article-opening .sq-hero-image img { max-height: none; }
 }
 @media (max-width: 700px) {
   .sq-artigos .sq-article-opening { grid-template-columns: minmax(0, 1fr); }
   .sq-artigos .sq-article-opening .sq-article-header { padding: 1.1rem; }
   .sq-artigos .sq-article-opening h1 { font-size: clamp(1.9rem, 7vw, 2.5rem); max-width: 100%; }
-  .sq-artigos .sq-article-opening .sq-lede { line-height: 1.5; }
+  /* Em tela pequena, a resposta direta substitui o subtítulo redundante
+     para o primeiro passo aparecer mais cedo. A description SEO é preservada. */
+  .sq-artigos .sq-article-opening .sq-lede { display: none; }
   .sq-artigos .sq-article-opening .sq-hero-image {
     min-height: 0;
-    max-height: 9.5rem;
-    height: 9.5rem;
+    max-height: 8rem;
+    height: 8rem;
   }
   .sq-artigos .sq-article-opening .sq-hero-image img {
-    min-height: 0; max-height: 9.5rem; height: 9.5rem;
+    min-height: 0; max-height: 8rem; height: 8rem;
     object-position: center 50%;
   }
   .sq-artigos .sq-prose .sq-step-figure img { max-height: 17rem; }
