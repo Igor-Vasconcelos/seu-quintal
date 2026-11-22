@@ -160,9 +160,27 @@ try {
         await pagina.locator("#codornas-resultado").waitFor({ state: "visible", timeout: 12000 });
       }
       if (slug === "meu-quintal") {
+        // A visão geral é a entrada do workspace; menu e backup precisam funcionar com toque/teclado.
+        await pagina.locator("#quintal-visao-titulo").waitFor({ state: "visible", timeout: 20000 });
+        assert.equal(await pagina.locator(".quintal-secoes-links a").count(),5,
+          "A navegação local deve apresentar os cinco destinos");
+        assert.equal(await pagina.locator(".quintal-titulo").evaluate(el =>
+          getComputedStyle(el).backgroundColor), "rgb(24, 60, 43)",
+          "O banner do workspace precisa seguir o verde-floresta da marca");
+        if (nome === "desktop") {
+          const recolher = pagina.getByRole("button", { name: "Recolher menu lateral" });
+          await recolher.click();
+          assert.equal(await pagina.locator(".pagina-meu-quintal").getAttribute("data-menu-recolhido"),"true");
+          assert.ok(await pagina.locator(".quintal-secoes-links a[href='#terreno']").isVisible(),
+            "O menu recolhido não deve esconder a navegação");
+          await pagina.getByRole("button", { name: "Expandir menu lateral" }).click();
+          assert.equal(await pagina.locator(".pagina-meu-quintal").getAttribute("data-menu-recolhido"),null);
+        }
+        await pagina.getByRole("button", {name: "Fazer backup"}).click();
+        assert.ok(await pagina.locator("#quintal-backup").evaluate(el => el.open),
+          "A ação de backup precisa abrir seu painel");
         await pagina.locator('.quintal-secoes a[href="#canteiros"]').click();
         await pagina.locator(".canteiro-visual").waitFor({ state: "visible", timeout: 20000 });
-        assert.ok(await pagina.locator("#quintal-backup").count());
         // O teste começa em navegador vazio: criar um terreno antes de adicionar áreas.
         await pagina.locator('.quintal-secoes a[href="#terreno"]').click();
         await pagina.locator('#planejador input[name="frente"]').fill('25');
@@ -173,6 +191,16 @@ try {
         await codornario.click();
         await pagina.locator('.adicionar-area-ilustrada button[type=submit]').click();
         await pagina.locator('.itens-terreno').getByText("Codornário").first().waitFor({state:"visible",timeout:12000});
+        await pagina.screenshot({
+          path: PASTA + "/meu-quintal-editor-" + nome + ".png",
+          animations: "disabled",
+        });
+        await pagina.locator('.quintal-secoes a[href="#geral"]').click();
+        await pagina.locator(".quintal-ultimo-projeto h3").waitFor({ state: "visible", timeout: 20000 });
+        assert.match(await pagina.locator(".quintal-ultimo-projeto h3").innerText(), /25 × 40 m/,
+          "O projeto criado deve aparecer na visão geral");
+        assert.equal(await pagina.locator(".quintal-indicadores strong").nth(2).innerText(), "1",
+          "A visão geral precisa contar o elemento adicionado ao cenário");
       }
       console.log("PASSOU", nome, rota);
       await pagina.close();
