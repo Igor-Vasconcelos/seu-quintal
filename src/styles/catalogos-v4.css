@@ -1,0 +1,140 @@
+/* Catálogos e descoberta — Seu Quintal UX v4.
+   Apenas /guias e /artigos. Não alterar calculadoras, cenários ou formulários. */
+.conteudo-tematico:has(#catalogo-guias) .titulo-tematico {
+  margin-block: .5rem 1.2rem;
+  padding: clamp(1.35rem,3vw,2.25rem);
+}
+.conteudo-tematico:has(#catalogo-guias) .titulo-tematico h1 {
+  font-size: clamp(2rem,3.7vw,3rem); max-width: 28ch;
+}
+.conteudo-tematico:has(#catalogo-guias) .titulo-tematico p { max-width: 65ch; }
+.guia-selo { font-size: .75rem !important; font-weight: 800; letter-spacing: .09em; color: var(--sq-primary); }
+.guias-como-usar { margin: 1.2rem 0 2rem; }
+.guias-como-usar h2, .guias-catalogo-cabecalho h2 {
+  font: 400 clamp(1.45rem,2.4vw,1.8rem)/1.2 var(--sq-font-display);
+  margin-bottom: .65rem; color: var(--sq-forest);
+}
+.guias-como-usar ol {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+  list-style: none; padding: 0; margin: 0; gap: .65rem;
+  counter-reset: passo;
+}
+.guias-como-usar li {
+  display: grid; grid-template-columns: auto minmax(0,1fr);
+  align-content: start; gap: .2rem .6rem;
+  min-width: 0; border: 1px solid var(--sq-border);
+  background: var(--sq-surface); border-radius: var(--sq-radius-media);
+  padding: 1rem; font-size: .88rem; line-height: 1.4;
+}
+.guias-como-usar li::before {
+  counter-increment: passo; content: "0" counter(passo);
+  grid-row: span 2; display: grid; place-items: center;
+  width: 2rem; height: 2rem; border-radius: .5rem;
+  background: var(--sq-brand-100); color: var(--sq-primary); font-weight: 800;
+}
+.guias-como-usar li strong { color: var(--sq-forest); }
+.guias-como-usar li span { color: var(--sq-text-muted); }
+.guias-catalogo-cabecalho { margin-bottom: 1rem; }
+.guias-catalogo-cabecalho p { color: var(--sq-text-muted); }
+.conteudo-tematico #catalogo-guias .guias-grade {
+  grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem;
+}
+.conteudo-tematico #catalogo-guias .guia-cartao {
+  display: grid; grid-template-columns: minmax(10rem,.8fr) minmax(0,1fr);
+  height: 100%; overflow: hidden; align-items: stretch;
+}
+.conteudo-tematico #catalogo-guias .guia-cartao > img {
+  width: 100%; height: 100%; min-height: 13rem;
+  border-radius: 0; object-fit: cover; aspect-ratio: auto;
+}
+.conteudo-tematico #catalogo-guias .guia-cartao > div {
+  display: flex; flex-direction: column; align-items: start;
+  min-width: 0; gap: .55rem; padding: clamp(.85rem,1.5vw,1.15rem);
+}
+.guia-cartao-formato {
+  display: inline-flex; max-width: 100%; line-height: 1.4;
+  color: var(--sq-primary); font-size: .72rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .045em;
+}
+.guia-cartao-detalhes { display: grid; gap: .4rem; margin: .25rem 0 0; }
+.guia-cartao-detalhes > div { display: grid; gap: .08rem; }
+.guia-cartao-detalhes dt { color: var(--sq-primary); font-size: .7rem; font-weight: 800; }
+.guia-cartao-detalhes dd { margin: 0; color: var(--sq-text-muted); font-size: .85rem; line-height: 1.45; }
+.conteudo-tematico #catalogo-guias .guia-acao { margin-top: auto; padding-top: .5rem; }
+
+.sq-artigos .sq-index-intro {
+  margin-block: 1rem 1.2rem; padding: clamp(1.4rem,3.1vw,2.65rem);
+}
+.sq-artigos .sq-index-intro h1 {
+  max-width: 28ch; font-size: clamp(2.15rem,4vw,3.65rem);
+}
+.sq-artigos .sq-index-intro .sq-lede { max-width: 65ch; }
+.sq-index-actions {
+  display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.3rem;
+}
+.sq-index-actions a {
+  display: inline-flex; min-height: 2.75rem;
+  justify-content: center; align-items: center;
+  border: 1px solid var(--sq-primary); border-radius: var(--sq-radius-pill);
+  padding: .55rem .95rem; font-size: .88rem; font-weight: 750;
+  background: var(--sq-surface); color: var(--sq-primary); text-decoration: none;
+}
+.sq-index-actions a:first-child { color: #fff; background: var(--sq-primary); }
+.sq-index-actions a:hover { background: var(--sq-brand-100); color: var(--sq-forest); }
+.sq-artigos .sq-guide-explain {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: .65rem; padding-block: .6rem 1.7rem;
+}
+.sq-guide-explain > div {
+  padding: 1rem; min-width: 0;
+  border-left: 3px solid var(--sq-primary);
+  border-radius: .4rem; background: var(--sq-surface);
+}
+.sq-guide-explain strong { color: var(--sq-forest); font-weight: 800; }
+.sq-guide-explain p { margin: .25rem 0 0; color: var(--sq-text-muted); font-size: .85rem; line-height: 1.5; }
+.sq-guides-featured, .sq-articles-list { margin-block: 1rem 2.25rem; scroll-margin-top: 1rem; }
+.sq-section-heading { margin-bottom: .9rem; }
+.sq-section-heading h2 { font: 400 clamp(1.55rem,2.6vw,2.15rem)/1.2 var(--sq-font-display); color: var(--sq-forest); }
+.sq-section-heading p:not(.sq-eyebrow) { color: var(--sq-text-muted); margin-top: .3rem; }
+.sq-guides-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .75rem;
+}
+.sq-guide-card {
+  display: grid; align-content: start; gap: .7rem; height: 100%;
+  border: 1px solid var(--sq-border); border-radius: var(--sq-radius-card);
+  background: var(--sq-surface); padding: 1rem;
+  text-decoration: none; color: var(--sq-forest) !important;
+}
+.sq-guide-card:hover { border-color: var(--sq-primary); box-shadow: var(--sq-shadow-card); }
+.sq-guide-card-label { color: var(--sq-primary); font-size: .72rem; font-weight: 800; text-transform: uppercase; }
+.sq-guide-card strong { font: 400 1.32rem/1.22 var(--sq-font-display); }
+.sq-guide-card > span:nth-last-child(2) { color: var(--sq-text-muted); font-size: .85rem; line-height: 1.55; }
+.sq-guide-card-action { margin-top: auto; color: var(--sq-primary); font-size: .82rem; font-weight: 800; }
+.sq-see-all { margin: .8rem 0 0; font-size: .89rem; font-weight: 750; }
+.sq-articles-list .sq-category { padding-block: .7rem 1.6rem; }
+.sq-articles-list .sq-category > h3 { font: 400 clamp(1.4rem,2.4vw,1.8rem)/1.2 var(--sq-font-display); margin: .2rem 0 .85rem; }
+.sq-articles-list .sq-category .sq-grid { grid-template-columns: repeat(auto-fill,minmax(min(100%,18rem),22rem)); }
+.sq-articles-list .sq-card h4 { font: 400 1.37rem/1.22 var(--sq-font-display); color: var(--sq-forest); margin: .45rem 0; }
+.sq-articles-list .sq-card img { aspect-ratio: 3 / 2; }
+.sq-articles-list .sq-card div { padding: 1rem; }
+@media (max-width: 1100px) {
+  .conteudo-tematico #catalogo-guias .guias-grade { grid-template-columns: minmax(0,1fr); }
+  .sq-guides-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  .guias-como-usar ol { grid-template-columns: minmax(0,1fr); }
+  .sq-artigos .sq-guide-explain { grid-template-columns: minmax(0,1fr); }
+  .sq-articles-list .sq-category .sq-grid { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 540px) {
+  .conteudo-tematico #catalogo-guias .guia-cartao { grid-template-columns: minmax(0,1fr); }
+  .conteudo-tematico #catalogo-guias .guia-cartao > img {
+    height: auto; min-height: 0; aspect-ratio: 3 / 2;
+  }
+  .sq-guides-grid { grid-template-columns: minmax(0,1fr); }
+  .sq-index-actions a { flex: 1 1 auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sq-guide-card, .sq-index-actions a { transition: none; }
+}

@@ -10,6 +10,7 @@ import "./styles/editorial.css";
 import "./styles/guias-cultivo.css";
 import "./styles/conteudo.css";
 import "./styles/editorial-pages-v3.css";
+import "./styles/catalogos-v4.css";
 
 const { raiz, pagina } = document.body.dataset;
 
