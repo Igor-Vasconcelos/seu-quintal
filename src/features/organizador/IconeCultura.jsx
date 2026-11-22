@@ -130,11 +130,80 @@ function Pepino() {
       fill="none" stroke="#79AE56" strokeWidth="1.7"/>
   </g>;
 }
+// Novos pictogramas: formas reconhecíveis em SVG 72×72, não emojis nem fotos.
+function Brotos() {
+  return <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <ellipse cx="36" cy="60" rx="23" ry="4" fill="#3C6A42" opacity=".13" stroke="none"/>
+    <path d="M36 61V27M35 46Q15 51 13 31Q27 27 35 46ZM37 40Q58 45 60 24Q43 23 37 40Z"
+      stroke="#3D8149" strokeWidth="2.2" fill="#7EB955"/>
+    <path d="M36 28Q25 21 30 11Q40 11 36 28Z" fill="#A6C968" stroke="#3D8149" strokeWidth="2"/>
+    <path d="M36 47v14" stroke="#4E7545" strokeWidth="3"/>
+  </g>;
+}
+function Brocolis() {
+  return <g>
+    <path d="M36 58V34m-13-5 13 15 14-15" stroke="#3E7A43" strokeWidth="6" strokeLinecap="round" fill="none"/>
+    {[{x:19,y:25},{x:29,y:16},{x:43,y:16},{x:53,y:26},{x:36,y:27},{x:25,y:35},{x:47,y:35}].map((p,i)=>
+      <circle key={i} cx={p.x} cy={p.y} r="11" fill={i%2?"#5B9F4B":"#73B95C"} stroke="#377344" strokeWidth="1.5"/>)}
+    <path d="M28 59h16" stroke="#2D7040" strokeWidth="4" strokeLinecap="round"/>
+  </g>;
+}
+function Repolho() {
+  return <g>
+    <circle cx="36" cy="37" r="25" fill="#91C76C" stroke="#427E47" strokeWidth="2"/>
+    <path d="M36 17c-18 3-21 20-9 33 4-20 16-26 25-25M21 31c13 1 22 8 28 24M35 11c-5 14-4 32 7 47"
+      stroke="#538D4B" strokeWidth="2.2" fill="none" strokeLinecap="round"/>
+  </g>;
+}
+function Pimentao() {
+  return <g>
+    <path d="M35 22c-3-10 3-15 10-14" stroke="#407945" strokeWidth="3" fill="none" strokeLinecap="round"/>
+    <path d="M36 24c-16-9-26 4-23 21 2 16 16 21 23 13 8 9 22 4 24-12 3-17-7-31-24-22Z"
+      fill="#DB5A3A" stroke="#A43F32" strokeWidth="2.5"/>
+    <path d="M36 24c-8 4-8 13-8 24m8-24c9 4 9 13 8 24" stroke="#EF9673" strokeWidth="2" fill="none"/>
+    <path d="M26 21Q37 16 46 22l-10 8Z" fill="#4B9851" stroke="#2F7042" strokeWidth="1.5"/>
+  </g>;
+}
+function Morango() {
+  return <g>
+    <path d="M36 23C12 10 10 34 23 49l13 16 13-16c13-15 11-39-13-26Z"
+      fill="#E85553" stroke="#B93D40" strokeWidth="2.4"/>
+    <path d="M18 25l12-9 6 7 7-7 11 9-14 3-4-6-5 6Z" fill="#68AB51" stroke="#397A43" strokeWidth="1.5"/>
+    {[{x:27,y:34},{x:42,y:35},{x:36,y:44},{x:27,y:47},{x:44,y:48},{x:35,y:56}].map((p,i)=>
+      <path key={i} d={`M${p.x} ${p.y}l2 3`} stroke="#F7D49B" strokeWidth="2" strokeLinecap="round"/>)}
+    <path d="M36 18V9" stroke="#397A43" strokeWidth="3" strokeLinecap="round"/>
+  </g>;
+}
+function Vagem() {
+  return <g>
+    <path d="M15 26C31 6 53 19 58 38S45 61 25 54C40 51 49 42 43 33S25 26 15 26Z"
+      fill="#77B855" stroke="#3B7B43" strokeWidth="2"/>
+    <path d="M18 27Q33 13 48 35t-18 18" stroke="#C9E495" strokeWidth="2" fill="none"/>
+    <path d="M15 26l-6-4m16 32-4 7" stroke="#477849" strokeWidth="2" strokeLinecap="round"/>
+  </g>;
+}
+function Berinjela() {
+  return <g>
+    <path d="M46 19C35 20 24 29 20 39c-6 17 8 25 24 18 17-8 19-29 2-38Z"
+      fill="#784A95" stroke="#53316C" strokeWidth="2.5"/>
+    <path d="M43 19l-8-8m8 8 11-4m-11 4-6 10" stroke="#468445" strokeWidth="5" strokeLinecap="round"/>
+    <path d="M27 43Q30 28 39 26" stroke="#C18ACB" strokeWidth="3" fill="none" strokeLinecap="round"/>
+  </g>;
+}
+function Quiabo() {
+  return <g>
+    <path d="M34 15l-15 37c-3 8 9 12 13 5l18-39Z" fill="#78B65C" stroke="#3B7C45" strokeWidth="2.5"/>
+    <path d="M34 15l-7-8 10 2 9-4-2 12M29 29l15 4m-19 7 15 4" stroke="#397843" strokeWidth="2" fill="none"/>
+    <path d="M34 18L25 55" stroke="#B4D18B" strokeWidth="2" fill="none"/>
+  </g>;
+}
 const variantes = {
   alface: Alface, rucula: Rucula, couve: Couve, cenoura: Cenoura,
   beterraba: Beterraba, rabanete: Rabanete, cebolinha: Cebolinha, salsa: Salsa,
   manjericao: Manjericao, tomate: Tomate, pepino: Pepino, abobrinha: Abobrinha,
-  folha: Alface,
+  brotos: Brotos, brocolis: Brocolis, repolho: Repolho,
+  pimentao: Pimentao, morango: Morango, vagem: Vagem, berinjela: Berinjela, quiabo: Quiabo,
+  folha: Brotos,
 };
 export default function IconeCultura({ nome, className = "", x, y, width, height }) {
   const Cultura = variantes[iconeDaCultura(nome)] ?? variantes.folha;
